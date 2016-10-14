@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--timestamp-->
+    <timestamp key="bySecond" datePattern="yyyy-MM-dd-HH-mm-ss" />
+    <!---->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} %-5level %-10M %-3L %logger{36} - %msg%n
+            </Pattern>
+        </layout>
+    </appender>
+    <!---->
+    <!--Log file-->
+    <appender name="LOG_FILE_ERROR" class="ch.qos.logback.core.FileAppender">
+        <file>log/ERROR_LOG.log</file>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+        </layout>
+    </appender>
+    <logger name="duyot" level="info">
+        <appender-ref ref="LOG_FILE_ERROR" />
+    </logger>
+
+    <!--sift log-->
+    <appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <!-- in the absence of the class attribute, it is assumed that the
+               desired discriminator type is
+               ch.qos.logback.classic.sift.MDCBasedDiscriminator -->
+        <discriminator>
+            <key>userid</key>
+            <defaultValue>unknown</defaultValue>
+        </discriminator>
+        <sift>
+            <appender name="FILE-${userid}" class="ch.qos.logback.core.FileAppender">
+                <file>log/${userid}.log</file>
+                <append>false</append>
+                <layout class="ch.qos.logback.classic.PatternLayout">
+                    <pattern> %userid %d [%thread] %level %mdc %logger{35} - %msg%n</pattern>
+                </layout>
+            </appender>
+        </sift>
+    </appender>
+    <!--log by time-->
+    <appender name="FILEBYTIME" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/opt/logs/smsmkt_tcb_log/logFile.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>/opt/logs/smsmkt_tcb_log/logFile.%d.log</fileNamePattern>
+            <!--each minutue-->
+            <!--<fileNamePattern>../../logs/smsmkt_tcb_log/logFile.%d{yyyy-MM-dd_HH-mm}.log</fileNamePattern>-->
+            <!--earch hour-->
+            <!--<fileNamePattern>../../logs/smsmkt_tcb_log/logFile.%d{yyyy-MM-dd_HH}.log</fileNamePattern>-->
+            <!--each minute-->
+            <!--<fileNamePattern>log/logFile.%d{yyyy-MM-dd_HH-mm, UTC}.log</fileNamePattern>-->
+            <!-- keep 30 days' worth of history capped at 3GB total size -->
+            <maxHistory>30</maxHistory><!--the maximum number of archive files to keep-->
+            <totalSizeCap>3GB</totalSizeCap><!--total size of all archive files-->
+            <maxFileSize>100MB</maxFileSize>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <!--<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+    <!--<file>log/logFile.log</file>-->
+    <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+    <!--&lt;!&ndash; daily rollover &ndash;&gt;-->
+    <!--<fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>-->
+
+    <!--&lt;!&ndash; keep 30 days' worth of history capped at 3GB total size &ndash;&gt;-->
+    <!--<maxHistory>30</maxHistory>-->
+    <!--<totalSizeCap>3GB</totalSizeCap>-->
+
+    <!--</rollingPolicy>-->
+
+    <!--<encoder>-->
+    <!--<pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>-->
+    <!--</encoder>-->
+    <!--</appender>-->
+
+    <!--ROOT -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+        <!--<appender-ref ref="FILEBYTIME"/>-->
+        <!--<appender-ref ref="LOG_FILE_ERROR" />-->
+        <!--<appender-ref ref="SIFT" />-->
+    </root>
+</configuration>
