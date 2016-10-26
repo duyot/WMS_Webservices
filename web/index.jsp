@@ -11,6 +11,6 @@
     <title>Rest Service</title>
   </head>
   <body>
-  duyot
+  <h3>Runing WMS services...</h3>
   </body>
 </html>

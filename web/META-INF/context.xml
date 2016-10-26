@@ -8,7 +8,7 @@
               connectionTimeout="300000"
               dataSourceClassName="oracle.jdbc.pool.OracleDataSource"
               dataSource.implicitCachingEnabled="true"
-              dataSource.user="sms_ads"
-              dataSource.password="sms123"
-              dataSource.url="jdbc:oracle:thin:@10.84.70.116:1521:DEVMKT"/>
+              dataSource.user="wms_db"
+              dataSource.password="123456"
+              dataSource.url="jdbc:oracle:thin:@localhost:1521:wms"/>
 </Context>

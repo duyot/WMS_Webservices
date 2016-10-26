@@ -1,12 +1,15 @@
 package com.wms.base;
 
+import com.google.common.collect.Lists;
 import org.hibernate.Session;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
  * Created by duyot on 8/29/2016.
  */
+@Transactional
 public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> implements BaseBusinessInterface<T>{
     public TDAO tdao;
     public T tDTO;
@@ -15,6 +18,11 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
     @Override
     public String getSysDate(String pattern) throws Exception {
        return tdao.getSysDate(pattern);
+    }
+
+    @Override
+    public String getSysDate()  {
+        return tdao.getSysDate();
     }
 
     @Override
@@ -44,17 +52,29 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
 
     @Override
     public List<T> getAll() {
-        return tdao.getAll();
+        return listModelToDTO(tdao.getAll());
+    }
+
+    private List<T> listModelToDTO(List<BaseModel> lstModel){
+        List<T> lstResult = Lists.newArrayList();
+        for(BaseModel i: lstModel){
+            lstResult.add((T) i.toDTO());
+        }
+        return lstResult;
     }
 
     @Override
     public List<T> getList(int count) {
-        return tdao.getList(count);
+        return listModelToDTO(tdao.getList(count));
     }
 
     @Override
     public T findById(long id) {
-        return (T)tdao.findById(id).toDTO();
+        BaseModel temp = tdao.findById(id);
+        if(temp != null){
+            return (T)tdao.findById(id).toDTO();
+        }
+        return null;
     }
 
     @Override

@@ -20,16 +20,22 @@ public class AdminUser extends BaseModel {
     private Long userId;
     private String username;
     private String password;
+    private String email;
     private String status;
     private Date createDate;
+    private String  imgUrl;
+    private String  roleName;
 
 
-    public AdminUser(Long userId, String userName, String password, String status, Date createDate) {
+    public AdminUser(Long userId, String username, String password, String status, Date createDate, String email,String imgUrl, String roleName) {
         this.userId = userId;
-        this.username = userName;
+        this.username = username;
         this.password = password;
         this.status = status;
         this.createDate = createDate;
+        this.email = email;
+        this.imgUrl = imgUrl;
+        this.roleName = roleName;
     }
 
     public AdminUser() {
@@ -73,7 +79,7 @@ public class AdminUser extends BaseModel {
         this.status = status;
     }
 
-    @Column(name = "CREATED_DATE", nullable = false)
+    @Column(name = "CREATED_DATE")
     public Date getCreateDate() {
         return createDate;
     }
@@ -82,8 +88,35 @@ public class AdminUser extends BaseModel {
         this.createDate = createDate;
     }
 
+    @Column(name = "EMAIL")
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Column(name = "IMG_URL")
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    @Column(name = "ROLE_NAME")
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
     @Override
     public AdminUserDTO toDTO() {
-        return new AdminUserDTO(userId+"",username,password,status,createDate.toString());
+        return new AdminUserDTO(userId==null?"":userId+"",username,password,status,createDate==null?"":createDate.toString(),email,imgUrl,roleName);
     }
 }

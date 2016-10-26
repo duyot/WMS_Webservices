@@ -10,21 +10,27 @@ import com.wms.utils.StringUtils;
  * Created by duyot on 8/30/2016.
  */
 public class AdminUserDTO extends BaseDTO {
-    private String userId;
-    private String username;
-    private String password;
-    private String status;
-    private String createDate;
+    public String userId;
+    public String username;
+    public String password;
+    public String status;
+    public String createDate;
+    public String email;
+    public String imgUrl;
+    public String roleName;
 
     public AdminUserDTO() {
     }
 
-    public AdminUserDTO(String userId, String username, String password, String status, String createDate) {
+    public AdminUserDTO(String userId, String username, String password, String status, String createDate, String email,String imgUrl, String roleName) {
         this.userId = userId;
         this.username = username;
         this.password = password;
         this.status = status;
         this.createDate = createDate;
+        this.email = email;
+        this.imgUrl = imgUrl;
+        this.roleName = roleName;
     }
 
     public String getUserId() {
@@ -67,15 +73,45 @@ public class AdminUserDTO extends BaseDTO {
         this.createDate = createDate;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
     @Override
     public AdminUser toModel() {
         try {
             return new AdminUser(!StringUtils.validString(userId) ? null:Long.valueOf(userId),
                                  username,password,status,
-                                 !StringUtils.validString(createDate) ? null: DateTimeUtils.convertStringToDate(createDate));
+                                 !StringUtils.validString(createDate) ? null: DateTimeUtils.convertStringToDate(createDate),email,imgUrl,roleName);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "AdminUserDTO{" +
+                "userId='" + userId + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", status='" + status + '\'' +
+                ", createDate='" + createDate + '\'' +
+                ", email='" + email + '\'' +
+                ", imgUrl='" + imgUrl + '\'' +
+                ", roleName='" + roleName + '\'' +
+                '}';
     }
 }

@@ -1,17 +1,24 @@
 package com.wms.base;
 
+import com.wms.dto.Condition;
 import com.wms.enums.Result;
+import com.wms.utils.Constants;
+import com.wms.utils.DataUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
+
+import static com.wms.utils.Constants.*;
 
 /**
  * Created by duyot on 8/24/2016.
@@ -23,6 +30,8 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
 
     private Class<T> modelClass;
 
+    Logger log = LoggerFactory.getLogger(BaseDAOImpl.class);
+
     public void setModelClass(Class modelClass){
         this.modelClass = modelClass;
     }
@@ -31,11 +40,23 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
         return sessionFactory.getCurrentSession();
     }
 
-    public String getSysDate(String pattern) throws Exception {
+    public String getSysDate(String partern) throws Exception {
         String queryString = "SELECT to_char(sysdate,:id)  from dual";
         Query query = getSession().createSQLQuery(queryString);
-        query.setParameter("id", pattern);
+        query.setParameter("id", partern);
         return query.list().get(0).toString();
+    }
+
+    public String getSysDate() {
+        String queryString = "SELECT to_char(sysdate,:id)  from dual";
+        try {
+            Query query = getSession().createSQLQuery(queryString);
+            query.setParameter("id", "dd/MM/yyyy hh24:mi:ss");
+            return query.list().get(0).toString();
+        } catch (Exception e) {
+            log.error("Error when getting sysdate");
+            return "";
+        }
     }
     //crud
     @Transactional
@@ -50,7 +71,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             getSession().delete(obj);
             return Result.SUCCESS.getName();
         } catch (Exception e) {
-            System.out.println(e.toString());
+            log.info(e.toString());
             return e.getMessage();
         }
     }
@@ -61,7 +82,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             getSession().saveOrUpdate(obj);
             return Result.SUCCESS.getName();
         } catch (Exception e) {
-            System.out.println(e.toString());
+            log.info(e.toString());
             return e.getMessage();
         }
     }
@@ -72,7 +93,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             long savedObjectId = (long) getSession().save(obj);
             return savedObjectId +"";
         } catch (Exception e) {
-            System.out.println(e.toString());
+            log.info(e.toString());
             e.printStackTrace();
             return null;
         }
@@ -85,7 +106,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             session.flush();
             return id+"";
         } catch (Exception e) {
-            System.out.println(e.toString());
+            log.info(e.toString());
             return e.getMessage();
         }
     }
@@ -93,7 +114,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
     //GET
     @Transactional(readOnly = true)
     public List<T> getAll() {
-        return getSession().createCriteria(modelClass).list();
+        return (List<T>)getSession().createCriteria(modelClass).list();
     }
 
     @Transactional(readOnly = true)
@@ -118,6 +139,61 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
 
     @Transactional(readOnly = true)
     public List<T> findByProperty(String property,String value) {
-        return getSession().createCriteria(modelClass).add(Restrictions.eq(property,value)).list();
+        return (List<T>)getSession().createCriteria(modelClass).add(Restrictions.eq(property,value)).list();
     }
+
+    @Transactional(readOnly = true)
+    public List<T> findByCondition(List<Condition> lstCondition) {
+        Criteria cr = getSession().createCriteria(modelClass);
+
+        if(DataUtil.isListNullOrEmpty(lstCondition)){
+            return (List<T>)cr.list();
+        }
+
+        cr = initCriteria(cr,lstCondition);
+
+        return (List<T>)cr.list();
+    }
+
+    private Criteria initCriteria(Criteria cr,List<Condition> lstCondition){
+        for(Condition i: lstCondition){
+            String operator = i.getOperator();
+            switch (operator){
+                case "EQUAL":
+                    cr.add(Restrictions.eq(i.getProperty(), i.getValue()));
+                    break;
+                case "NOT_EQUAL":
+                    cr.add(Restrictions.ne(i.getProperty(), i.getValue()));
+                    break;
+                case "GREATER":
+                    cr.add(Restrictions.gt(i.getProperty(), i.getValue()));
+                    break;
+                case "GREATER_EQAL":
+                    cr.add(Restrictions.ge(i.getProperty(), i.getValue()));
+                    break;
+                case "LOWER":
+                    cr.add(Restrictions.lt(i.getProperty(), i.getValue()));
+                    break;
+                case "LOWER_EQUAL":
+                    cr.add(Restrictions.le(i.getProperty(), i.getValue()));
+                    break;
+                case "IN":
+                    String[] inValues = i.getValue().split(",");
+                    cr.add(Restrictions.in(i.getProperty(), inValues));
+                    break;
+                case "LIKE":
+                    cr.add(Restrictions.like(i.getProperty(), i.getValue()));
+                    break;
+                default:
+                    cr.add(Restrictions.eq(i.getProperty(), i.getValue()));
+                    break;
+            }
+        }
+
+        return cr;
+    }
+
+
+
+
 }

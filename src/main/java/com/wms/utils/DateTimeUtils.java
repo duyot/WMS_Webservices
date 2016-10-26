@@ -101,7 +101,7 @@ public class DateTimeUtils {
      * @return String
      * @throws Exception if error
      */
-    public static String convertDateToString(Date date) {
+    public static String convertDateToString(Date date) throws Exception {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         if (date == null) {
             return "";
@@ -184,7 +184,7 @@ public class DateTimeUtils {
      * @return String
      * @throws Exception if error
      */
-    public static String convertDateTimeToString(Date date){
+    public static String convertDateTimeToString(Date date) throws Exception {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         try {
             return dateFormat.format(date);

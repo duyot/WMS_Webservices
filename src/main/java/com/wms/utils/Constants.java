@@ -6,9 +6,25 @@ package com.wms.utils;
 public class Constants {
     public static final String STATUS_OK = "200";
 
+    public static class SQL_OPERATOR{
+        public static String EQUAL = "EQUAL";
+        public static String NOT_EQUAL = "NOT_EQUAL";
+        public static String GREATER = "GREATER";
+        public static String GREATER_EQAL = "GREATER_EQAL";
+        public static String LOWER = "LOWER";
+        public static String LOWER_EQUAL = "LOWER_EQUAL";
+        public static String IN = "IN";
+        public static String LIKE = "LIKE";
+    }
+
     public static class RESULT{
         public static String SUCCESS = "SUCCESS";
         public static String FAIL = "FAIL";
+    }
+
+    public static class STATUS{
+        public static String ACTIVE = "1";
+        public static String INACTIVE = "0";
     }
 
     public static class VIEW{

@@ -10,6 +10,8 @@ import java.util.List;
 public interface BaseBusinessInterface<T extends BaseDTO> {
     public String getSysDate(String pattern) throws Exception;
 
+    public String getSysDate();
+
     public String deleteById(long id);
     public String deleteByObject(T obj);
     public String saveOrUpdate(T obj);

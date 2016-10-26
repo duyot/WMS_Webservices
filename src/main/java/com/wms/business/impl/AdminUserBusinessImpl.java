@@ -1,6 +1,7 @@
 package com.wms.business.impl;
 
 import com.wms.base.BaseBusinessImpl;
+import com.wms.business.interfaces.AdminUserBusinessInterface;
 import com.wms.dto.AdminUserDTO;
 import com.wms.persistents.dao.AdminUserDAO;
 import com.wms.persistents.model.AdminUser;
@@ -13,7 +14,7 @@ import javax.annotation.PostConstruct;
  * Created by duyot on 8/24/2016.
  */
 @Service("adminUserBusiness")
-public class AdminUserBusinessImpl extends BaseBusinessImpl<AdminUserDTO,AdminUserDAO> {
+public class AdminUserBusinessImpl extends BaseBusinessImpl<AdminUserDTO,AdminUserDAO> implements AdminUserBusinessInterface {
     @Autowired
     AdminUserDAO adminUserDAO;
 
@@ -25,10 +26,10 @@ public class AdminUserBusinessImpl extends BaseBusinessImpl<AdminUserDTO,AdminUs
         this.tDTO = new AdminUserDTO();
     }
 
-//    @Override
-//    public List getAlls() {
-//        List<AdminUser> lst = Lists.newArrayList();
-//        lst.add(adminUserDAO.findById(11L,AdminUser.class));
-//        return lst;
-//    }
+
+    @Override
+    public AdminUserDTO login(AdminUserDTO loginUser) {
+        AdminUser  adminUser = adminUserDAO.login(loginUser.toModel());
+        return  adminUser.toDTO();
+    }
 }
