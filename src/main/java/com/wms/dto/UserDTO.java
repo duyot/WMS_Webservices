@@ -2,14 +2,14 @@ package com.wms.dto;
 
 
 import com.wms.base.BaseDTO;
-import com.wms.persistents.model.AdminUser;
+import com.wms.persistents.model.User;
 import com.wms.utils.DateTimeUtils;
 import com.wms.utils.StringUtils;
 
 /**
  * Created by duyot on 8/30/2016.
  */
-public class AdminUserDTO extends BaseDTO {
+public class UserDTO extends BaseDTO {
     public String userId;
     public String username;
     public String password;
@@ -19,10 +19,10 @@ public class AdminUserDTO extends BaseDTO {
     public String imgUrl;
     public String roleName;
 
-    public AdminUserDTO() {
+    public UserDTO() {
     }
 
-    public AdminUserDTO(String userId, String username, String password, String status, String createDate, String email,String imgUrl, String roleName) {
+    public UserDTO(String userId, String username, String password, String status, String createDate, String email, String imgUrl, String roleName) {
         this.userId = userId;
         this.username = username;
         this.password = password;
@@ -90,9 +90,9 @@ public class AdminUserDTO extends BaseDTO {
     }
 
     @Override
-    public AdminUser toModel() {
+    public com.wms.persistents.model.User toModel() {
         try {
-            return new AdminUser(!StringUtils.validString(userId) ? null:Long.valueOf(userId),
+            return new com.wms.persistents.model.User(!StringUtils.validString(userId) ? null:Long.valueOf(userId),
                                  username,password,status,
                                  !StringUtils.validString(createDate) ? null: DateTimeUtils.convertStringToDate(createDate),email,imgUrl,roleName);
         } catch (Exception e) {
@@ -103,7 +103,7 @@ public class AdminUserDTO extends BaseDTO {
 
     @Override
     public String toString() {
-        return "AdminUserDTO{" +
+        return "UserDTO{" +
                 "userId='" + userId + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +

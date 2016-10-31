@@ -1,5 +1,6 @@
 package com.wms.base;
 
+import com.wms.dto.Condition;
 import org.hibernate.Session;
 
 import java.util.List;
@@ -9,14 +10,16 @@ import java.util.List;
  */
 public interface BaseBusinessInterface<T extends BaseDTO> {
     public String getSysDate(String pattern) throws Exception;
-
     public String getSysDate();
 
-    public String deleteById(long id);
-    public String deleteByObject(T obj);
     public String saveOrUpdate(T obj);
     public String save(T obj);
     public String saveBySession(T obj, Session session);
+    public String deleteById(long id);
+
+    public String update(T obj);
+
+    public String deleteByObject(T obj);
 
     public List<T> getAll();
     public List<T> getList(int count);
@@ -24,4 +27,5 @@ public interface BaseBusinessInterface<T extends BaseDTO> {
 
     public T findById(long id);
     public List<T> findByProperty(String property, String value);
+    public List<T> findByCondition(List<Condition> lstCondition);
 }

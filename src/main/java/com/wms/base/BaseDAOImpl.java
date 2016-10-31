@@ -40,6 +40,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
         return sessionFactory.getCurrentSession();
     }
 
+    //--------------------------------------------------------------------
     public String getSysDate(String partern) throws Exception {
         String queryString = "SELECT to_char(sysdate,:id)  from dual";
         Query query = getSession().createSQLQuery(queryString);
@@ -58,7 +59,8 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             return "";
         }
     }
-    //crud
+    //--------------------------------------------------------------------
+    //CURD
     @Transactional
     public String deleteById(long id){
         T object = (T)getSession().get(modelClass,id);
@@ -75,7 +77,18 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             return e.getMessage();
         }
     }
-
+    //--------------------------------------------------------------------
+    @Transactional
+    public String update(T obj) {
+        try {
+            getSession().update(obj);
+            return Result.SUCCESS.getName();
+        } catch (Exception e) {
+            log.info(e.toString());
+            return e.getMessage();
+        }
+    }
+    //--------------------------------------------------------------------
     @Transactional
     public String saveOrUpdate(T obj) {
         try {
@@ -110,7 +123,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             return e.getMessage();
         }
     }
-    //
+    //--------------------------------------------------------------------
     //GET
     @Transactional(readOnly = true)
     public List<T> getAll() {
@@ -130,7 +143,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
         return getSession().createCriteria(modelClass).setMaxResults(count).list();
 
     }
-
+    //--------------------------------------------------------------------
     //find
     @Transactional(readOnly = true)
     public T findById(long id) {
@@ -155,6 +168,9 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
         return (List<T>)cr.list();
     }
 
+
+
+    //------------------------------------------------------------------------------------------------
     private Criteria initCriteria(Criteria cr,List<Condition> lstCondition){
         for(Condition i: lstCondition){
             String operator = i.getOperator();
@@ -182,7 +198,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
                     cr.add(Restrictions.in(i.getProperty(), inValues));
                     break;
                 case "LIKE":
-                    cr.add(Restrictions.like(i.getProperty(), i.getValue()));
+                    cr.add(Restrictions.like(i.getProperty(), "%"+ i.getValue()+"%"));
                     break;
                 default:
                     cr.add(Restrictions.eq(i.getProperty(), i.getValue()));

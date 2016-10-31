@@ -40,4 +40,13 @@ public class Condition {
     public void setValue(String value) {
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return "Condition{" +
+                "property='" + property + '\'' +
+                ", operator='" + operator + '\'' +
+                ", value='" + value + '\'' +
+                '}';
+    }
 }

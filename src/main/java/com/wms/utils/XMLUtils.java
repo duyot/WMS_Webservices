@@ -129,10 +129,10 @@ public class XMLUtils {
 ////        String xmlRR = XMLUtils.objectToXMLString(registerRequest);
 ////        System.out.println(xmlRR);
 ////        System.out.println(xmlToObject(xmlRR).getUserName());
-//        User u = new User("duyot",1,2);
+//        UserDTO u = new UserDTO("duyot",1,2);
 //        String userXML = XMLUtils.objectToXMLString(u);
 //        System.out.println(userXML);
-//        User userFromXML = XMLUtils.xmlToObject(userXML,User.class);
+//        UserDTO userFromXML = XMLUtils.xmlToObject(userXML,UserDTO.class);
 //
 //    }
 }

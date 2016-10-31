@@ -10,5 +10,5 @@
               dataSource.implicitCachingEnabled="true"
               dataSource.user="wms_db"
               dataSource.password="123456"
-              dataSource.url="jdbc:oracle:thin:@localhost:1521:wms"/>
+              dataSource.url="jdbc:oracle:thin:@192.168.10.100:1521:wms"/>
 </Context>

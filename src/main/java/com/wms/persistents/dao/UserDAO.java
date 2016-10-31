@@ -3,13 +3,11 @@ package com.wms.persistents.dao;
 import com.google.common.collect.Lists;
 import com.wms.base.BaseDAOImpl;
 import com.wms.dto.Condition;
-import com.wms.persistents.model.AdminUser;
+import com.wms.persistents.model.User;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +19,7 @@ import java.util.List;
  */
 @Repository
 @Transactional
-public class AdminUserDAO extends BaseDAOImpl<AdminUser,Long> {
+public class UserDAO extends BaseDAOImpl<User,Long> {
     @Autowired
     SessionFactory sessionFactory;
 
@@ -29,7 +27,7 @@ public class AdminUserDAO extends BaseDAOImpl<AdminUser,Long> {
         return sessionFactory.getCurrentSession();
     }
 
-    public AdminUser login(AdminUser loginAdminUser){
+    public User login(User loginAdminUser){
         List<Condition> lstCondition = Lists.newArrayList();
         String email = loginAdminUser.getEmail();
         if(!DataUtil.isStringNullOrEmpty(email)){
@@ -40,9 +38,9 @@ public class AdminUserDAO extends BaseDAOImpl<AdminUser,Long> {
         lstCondition.add(new Condition("password",Constants.SQL_OPERATOR.EQUAL,loginAdminUser.getPassword()));
         lstCondition.add(new Condition("status",Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
 
-        List<AdminUser> lstAdminUser = findByCondition(lstCondition);
+        List<User> lstAdminUser = findByCondition(lstCondition);
         if(DataUtil.isListNullOrEmpty(lstAdminUser)){
-            return new AdminUser();
+            return new User();
         }else{
             return lstAdminUser.get(0);
         }

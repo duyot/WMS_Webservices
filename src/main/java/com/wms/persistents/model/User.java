@@ -2,7 +2,7 @@ package com.wms.persistents.model;
 
 
 import com.wms.base.BaseModel;
-import com.wms.dto.AdminUserDTO;
+import com.wms.dto.UserDTO;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,12 +11,12 @@ import java.util.Date;
  * Created by duyot on 8/24/2016.
  */
 @Entity
-@Table(name = "ADMIN_USER")
+@Table(name = "USERS")
 @javax.persistence.SequenceGenerator(
         name="sequence",
-        sequenceName="SEQ_ADMIN_USER"
+        sequenceName="SEQ_USERS"
 )
-public class AdminUser extends BaseModel {
+public class User extends BaseModel {
     private Long userId;
     private String username;
     private String password;
@@ -26,8 +26,7 @@ public class AdminUser extends BaseModel {
     private String  imgUrl;
     private String  roleName;
 
-
-    public AdminUser(Long userId, String username, String password, String status, Date createDate, String email,String imgUrl, String roleName) {
+    public User(Long userId, String username, String password, String status, Date createDate, String email, String imgUrl, String roleName) {
         this.userId = userId;
         this.username = username;
         this.password = password;
@@ -38,7 +37,7 @@ public class AdminUser extends BaseModel {
         this.roleName = roleName;
     }
 
-    public AdminUser() {
+    public User() {
     }
 
     @Id
@@ -116,7 +115,7 @@ public class AdminUser extends BaseModel {
     }
 
     @Override
-    public AdminUserDTO toDTO() {
-        return new AdminUserDTO(userId==null?"":userId+"",username,password,status,createDate==null?"":createDate.toString(),email,imgUrl,roleName);
+    public UserDTO toDTO() {
+        return new UserDTO(userId==null?"":userId+"",username,password,status,createDate==null?"":createDate.toString(),email,imgUrl,roleName);
     }
 }

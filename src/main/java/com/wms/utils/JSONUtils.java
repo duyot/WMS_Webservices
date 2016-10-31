@@ -1,7 +1,6 @@
 package com.wms.utils;
 
 import com.google.gson.Gson;
-import com.wms.dto.AdminUserDTO;
 
 /**
  * Created by duyot on 7/7/2016.

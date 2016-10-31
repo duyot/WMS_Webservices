@@ -1,6 +1,7 @@
 package com.wms.base;
 
 import com.google.common.collect.Lists;
+import com.wms.dto.Condition;
 import org.hibernate.Session;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +15,7 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
     public TDAO tdao;
     public T tDTO;
     protected Class<T> entityClass;
-
+    //--------------------------------------------------------------------
     @Override
     public String getSysDate(String pattern) throws Exception {
        return tdao.getSysDate(pattern);
@@ -24,7 +25,7 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
     public String getSysDate()  {
         return tdao.getSysDate();
     }
-
+    //--------------------------------------------------------------------
     @Override
     public String deleteById(long id) {
         return tdao.deleteById(id);
@@ -34,10 +35,10 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
     public String deleteByObject(T obj) {
         return tdao.deleteByObject(obj.toModel());
     }
-
+    //--------------------------------------------------------------------
     @Override
     public String saveOrUpdate(T obj) {
-        return null;
+        return tdao.saveOrUpdate(obj.toModel());
     }
 
     @Override
@@ -50,17 +51,16 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
         return tdao.saveBySession(obj.toModel(),session);
     }
 
+    //--------------------------------------------------------------------
+    @Override
+    public String update(T obj) {
+        return tdao.update(obj.toModel());
+    }
+
+    //--------------------------------------------------------------------
     @Override
     public List<T> getAll() {
         return listModelToDTO(tdao.getAll());
-    }
-
-    private List<T> listModelToDTO(List<BaseModel> lstModel){
-        List<T> lstResult = Lists.newArrayList();
-        for(BaseModel i: lstModel){
-            lstResult.add((T) i.toDTO());
-        }
-        return lstResult;
     }
 
     @Override
@@ -68,6 +68,11 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
         return listModelToDTO(tdao.getList(count));
     }
 
+    @Override
+    public List<T> getAllByPage(int pageNum, int countPerPage) {
+        return tdao.getAllByPage(pageNum,countPerPage);
+    }
+    //--------------------------------------------------------------------
     @Override
     public T findById(long id) {
         BaseModel temp = tdao.findById(id);
@@ -79,12 +84,21 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
 
     @Override
     public List<T> findByProperty(String property, String value) {
-        return tdao.findByProperty(property,value);
+        return listModelToDTO(tdao.findByProperty(property,value));
+    }
+
+    @Override
+    public List<T> findByCondition(List<Condition> lstCondition) {
+        return listModelToDTO(tdao.findByCondition(lstCondition));
     }
 
 
-    @Override
-    public List<T> getAllByPage(int pageNum, int countPerPage) {
-        return tdao.getAllByPage(pageNum,countPerPage);
+    //--------------------------------------------------------------------
+    private List<T> listModelToDTO(List<BaseModel> lstModel){
+        List<T> lstResult = Lists.newArrayList();
+        for(BaseModel i: lstModel){
+            lstResult.add((T) i.toDTO());
+        }
+        return lstResult;
     }
 }
