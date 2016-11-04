@@ -29,8 +29,11 @@ import java.util.List;
 public class UserServices {
 
     Logger log = LoggerFactory.getLogger(UserServices.class);
+
     @Autowired
     BaseBusinessInterface userBusiness;
+    @Autowired
+    BaseBusinessInterface roleBusiness;
 
     @Autowired
     UserBusinessInterface userBusinessAdvanced;

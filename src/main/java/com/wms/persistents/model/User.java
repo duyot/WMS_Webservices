@@ -25,8 +25,11 @@ public class User extends BaseModel {
     private Date createDate;
     private String  imgUrl;
     private String  roleName;
+    private String  roleId;
 
-    public User(Long userId, String username, String password, String status, Date createDate, String email, String imgUrl, String roleName) {
+    public User(Long userId, String username, String password, String status,
+                Date createDate, String email, String imgUrl,
+                String roleName,String roleId) {
         this.userId = userId;
         this.username = username;
         this.password = password;
@@ -35,6 +38,7 @@ public class User extends BaseModel {
         this.email = email;
         this.imgUrl = imgUrl;
         this.roleName = roleName;
+        this.roleId = roleId;
     }
 
     public User() {
@@ -114,8 +118,17 @@ public class User extends BaseModel {
         this.roleName = roleName;
     }
 
+    @Column(name = "ROLE_ID")
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
+
     @Override
     public UserDTO toDTO() {
-        return new UserDTO(userId==null?"":userId+"",username,password,status,createDate==null?"":createDate.toString(),email,imgUrl,roleName);
+        return new UserDTO(userId==null?"":userId+"",username,password,status,createDate==null?"":createDate.toString(),email,imgUrl,roleName,roleId);
     }
 }

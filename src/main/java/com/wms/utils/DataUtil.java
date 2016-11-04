@@ -9,6 +9,8 @@ package com.wms.utils;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -22,6 +24,22 @@ import java.util.*;
  */
 @SuppressWarnings("deprecation")
 public class DataUtil {
+    static Logger log = LoggerFactory.getLogger(DataUtil.class);
+
+    public static Long[] convertLongArr(Object input){
+        String inputArr = (String)input;
+        String [] idArr = ((String) input).split(",");
+        Long [] idLong = new Long[idArr.length];
+        for(int i=0;i<idArr.length;i++){
+            try {
+                idLong[i] = Long.parseLong(idArr[i]);
+            } catch (NumberFormatException e) {
+                idLong[i] = 0L;
+                log.info("Error parsing long");
+            }
+        }
+        return idLong;
+    }
     
     //duyot: 22/01: bat truong hop serial truyen sang dang .0
     public static String getQuantity(String quantity) {

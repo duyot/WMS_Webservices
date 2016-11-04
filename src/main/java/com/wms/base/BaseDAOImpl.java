@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.wms.utils.Constants.*;
@@ -194,8 +195,14 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
                     cr.add(Restrictions.le(i.getProperty(), i.getValue()));
                     break;
                 case "IN":
-                    String[] inValues = i.getValue().split(",");
-                    cr.add(Restrictions.in(i.getProperty(), inValues));
+                    if(!DataUtil.isStringNullOrEmpty(i.getPropertyType()) && i.getPropertyType().equals(SQL_PRO_TYPE.LONG)){
+                        List<Long> lstValue = Arrays.asList((Long[])i.getValue());
+                        cr.add(Restrictions.in(i.getProperty(), lstValue));
+                    }else{
+                        String inValue = (String) i.getValue();
+                        String[] inValues = inValue.split(",");
+                        cr.add(Restrictions.in(i.getProperty(), inValues));
+                    }
                     break;
                 case "LIKE":
                     cr.add(Restrictions.like(i.getProperty(), "%"+ i.getValue()+"%"));

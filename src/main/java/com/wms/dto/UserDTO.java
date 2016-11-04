@@ -18,11 +18,14 @@ public class UserDTO extends BaseDTO {
     public String email;
     public String imgUrl;
     public String roleName;
+    private String  roleId;
 
     public UserDTO() {
     }
 
-    public UserDTO(String userId, String username, String password, String status, String createDate, String email, String imgUrl, String roleName) {
+    public UserDTO(String userId, String username, String password, String status,
+                   String createDate, String email, String imgUrl,
+                   String roleName,String  roleId) {
         this.userId = userId;
         this.username = username;
         this.password = password;
@@ -31,6 +34,7 @@ public class UserDTO extends BaseDTO {
         this.email = email;
         this.imgUrl = imgUrl;
         this.roleName = roleName;
+        this.roleId = roleId;
     }
 
     public String getUserId() {
@@ -89,12 +93,30 @@ public class UserDTO extends BaseDTO {
         this.imgUrl = imgUrl;
     }
 
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
+
     @Override
     public com.wms.persistents.model.User toModel() {
         try {
             return new com.wms.persistents.model.User(!StringUtils.validString(userId) ? null:Long.valueOf(userId),
                                  username,password,status,
-                                 !StringUtils.validString(createDate) ? null: DateTimeUtils.convertStringToDate(createDate),email,imgUrl,roleName);
+                                 !StringUtils.validString(createDate) ? null: DateTimeUtils.convertStringToDate(createDate),
+                                email,imgUrl,roleName,roleId);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

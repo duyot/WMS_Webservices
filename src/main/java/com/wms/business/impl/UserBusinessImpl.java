@@ -12,7 +12,7 @@ import javax.annotation.PostConstruct;
 /**
  * Created by duyot on 8/24/2016.
  */
-@Service("adminUserBusiness")
+@Service("userBusiness")
 public class UserBusinessImpl extends BaseBusinessImpl<UserDTO, UserDAO> implements UserBusinessInterface {
     @Autowired
     UserDAO adminUserDAO;
