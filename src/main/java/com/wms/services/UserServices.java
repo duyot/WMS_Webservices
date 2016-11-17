@@ -8,6 +8,7 @@ import com.wms.dto.ResponseObject;
 import com.wms.enums.Responses;
 import com.wms.enums.Result;
 import com.wms.utils.Constants;
+import com.wms.utils.DataUtil;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,25 +35,27 @@ public class UserServices {
     BaseBusinessInterface userBusiness;
     @Autowired
     BaseBusinessInterface roleBusiness;
-
     @Autowired
     UserBusinessInterface userBusinessAdvanced;
 
 
     @RequestMapping(value = "/add",produces = "application/json",method = RequestMethod.POST)
     public ResponseObject  add(@RequestBody UserDTO userDTO){
-        log.info("Add user: "+ userDTO.toString());
+        log.info("-------------------------------");
         userDTO.setCreateDate(userBusiness.getSysDate());
-        userDTO.setStatus(Constants.STATUS.ACTIVE);
-        String id = userBusiness.save(userDTO);
+        try {
+            String id = userBusiness.save(userDTO);
+            if(id == null){
+                log.info("FAIL");
+                return new ResponseObject(Responses.ERROR.getCode(),Responses.ERROR.getName(),"");
+            }
+            log.info("SUCCESS with id: "+ id);
+            return new ResponseObject(Responses.SUCCESS.getCode(),Responses.SUCCESS.getName(),id);
 
-        if(id == null){
-            log.info("FAIL");
-            return new ResponseObject(Responses.ERROR.getCode(),Responses.ERROR.getName(),id);
+        } catch (Exception e) {
+            log.info("ERROR: "+ e.toString());
+            return new ResponseObject(Responses.ERROR_CONSTRAINT.getCode(),Responses.ERROR_CONSTRAINT.getName(),"");
         }
-
-        log.info("SUCCESS with id: "+ id);
-        return new ResponseObject(Responses.SUCCESS.getCode(),Responses.SUCCESS.getName(),id);
     }
 
     @RequestMapping(value = "/update",produces = "application/json",method = RequestMethod.POST)
@@ -69,12 +72,12 @@ public class UserServices {
         return new ResponseObject(Responses.SUCCESS.getCode(),Responses.SUCCESS.getName(), userDTO.getUserId());
     }
 
-    @RequestMapping(value = "/delete/{userId}")
-    public ResponseObject delete(@PathVariable("userId") Long userId ){
+    @RequestMapping(value = "/delete")
+    public ResponseObject delete(@RequestBody Long userId ){
         log.info("Deleting : "+ userId);
         String result = userBusiness.deleteById(userId);
         log.info("Delete result : "+ result);
-        return new ResponseObject(result,Responses.getCodeByName(result),userId+"");
+        return new ResponseObject(Responses.getCodeByName(result),result,userId+"");
     }
 
     @RequestMapping(value = "/find/{userId}",method = RequestMethod.GET)
@@ -96,7 +99,7 @@ public class UserServices {
     }
 
     @CrossOrigin
-        @RequestMapping(value = "/getAlls",method = RequestMethod.GET)
+    @RequestMapping(value = "/getAlls",method = RequestMethod.GET)
         public List<UserDTO> getAlls(@RequestParam("userId") String userId){
             try {
                 Thread.sleep(2000);

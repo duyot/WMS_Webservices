@@ -15,6 +15,7 @@ public class Constants {
         public static String LOWER_EQUAL = "LOWER_EQUAL";
         public static String IN = "IN";
         public static String LIKE = "LIKE";
+        public static String ORDER = "ORDER";
     }
 
     public static class SQL_PRO_TYPE{

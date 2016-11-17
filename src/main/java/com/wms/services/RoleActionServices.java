@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by duyot on 11/3/2016.
@@ -30,10 +31,12 @@ public class RoleActionServices {
 
 
     @RequestMapping(value = "/getUserAction/{roleId}",produces = "application/json",method = RequestMethod.GET)
-    public List<ActionMenuDTO> getUserAction(@PathVariable("roleId") String roleId){
+    public List<ActionMenuDTO> getUserAction(@PathVariable("roleId") String roleId,@RequestHeader Map<String,String> mapHeaders){
         if(!DataUtil.isInteger(roleId)){
             return null;
         }
+
+        log.info(mapHeaders.toString());
 
         List<ActionDTO> lstUserAction = getListUserAction(roleId);
         if(DataUtil.isListNullOrEmpty(lstUserAction)){
@@ -97,6 +100,9 @@ public class RoleActionServices {
         strActionId = strActionId.replaceFirst(",","");
         List<Condition> lstCondition = Lists.newArrayList();
         lstCondition.add(new Condition("id",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.IN,strActionId));
+        //sap xep theo level(menu cha) -> order trong menu
+        lstCondition.add(new Condition("levels",Constants.SQL_OPERATOR.ORDER,"asc"));
+        lstCondition.add(new Condition("orders",Constants.SQL_OPERATOR.ORDER,"asc"));
 
         return actionBusiness.findByCondition(lstCondition);
     }

@@ -91,8 +91,6 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
     public List<T> findByCondition(List<Condition> lstCondition) {
         return listModelToDTO(tdao.findByCondition(lstCondition));
     }
-
-
     //--------------------------------------------------------------------
     private List<T> listModelToDTO(List<BaseModel> lstModel){
         List<T> lstResult = Lists.newArrayList();

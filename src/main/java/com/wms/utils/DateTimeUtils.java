@@ -184,8 +184,8 @@ public class DateTimeUtils {
      * @return String
      * @throws Exception if error
      */
-    public static String convertDateTimeToString(Date date) throws Exception {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    public static String convertDateTimeToString(Date date){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         try {
             return dateFormat.format(date);
         } catch (Exception e) {

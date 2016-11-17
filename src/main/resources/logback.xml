@@ -24,16 +24,13 @@
 
     <!--sift log-->
     <appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
-        <!-- in the absence of the class attribute, it is assumed that the
-               desired discriminator type is
-               ch.qos.logback.classic.sift.MDCBasedDiscriminator -->
         <discriminator>
             <key>userid</key>
             <defaultValue>unknown</defaultValue>
         </discriminator>
         <sift>
             <appender name="FILE-${userid}" class="ch.qos.logback.core.FileAppender">
-                <file>log/${userid}.log</file>
+                <file>log/user-${userid}.log</file>
                 <append>false</append>
                 <layout class="ch.qos.logback.classic.PatternLayout">
                     <pattern> %userid %d [%thread] %level %mdc %logger{35} - %msg%n</pattern>
@@ -43,10 +40,10 @@
     </appender>
     <!--log by time-->
     <appender name="FILEBYTIME" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>/opt/logs/smsmkt_tcb_log/logFile.log</file>
+        <file>/WMS/logs/service/logFile.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>/opt/logs/smsmkt_tcb_log/logFile.%d.log</fileNamePattern>
+            <fileNamePattern>/WMS/logs/service/logFile.%d.log</fileNamePattern>
             <!--each minutue-->
             <!--<fileNamePattern>../../logs/smsmkt_tcb_log/logFile.%d{yyyy-MM-dd_HH-mm}.log</fileNamePattern>-->
             <!--earch hour-->
@@ -83,7 +80,7 @@
     <!--ROOT -->
     <root level="INFO">
         <appender-ref ref="STDOUT" />
-        <!--<appender-ref ref="FILEBYTIME"/>-->
+        <appender-ref ref="FILEBYTIME"/>
         <!--<appender-ref ref="LOG_FILE_ERROR" />-->
         <!--<appender-ref ref="SIFT" />-->
     </root>

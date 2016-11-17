@@ -4,6 +4,7 @@ import com.wms.base.BaseBusinessImpl;
 import com.wms.business.interfaces.UserBusinessInterface;
 import com.wms.dto.UserDTO;
 import com.wms.persistents.dao.UserDAO;
+import com.wms.persistents.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,14 +22,14 @@ public class UserBusinessImpl extends BaseBusinessImpl<UserDTO, UserDAO> impleme
     public void setupService() {
         this.tdao = adminUserDAO;
         this.entityClass = UserDTO.class;
-        this.adminUserDAO.setModelClass(com.wms.persistents.model.User.class);
+        this.adminUserDAO.setModelClass(User.class);
         this.tDTO = new UserDTO();
     }
 
 
     @Override
     public UserDTO login(UserDTO loginUser) {
-        com.wms.persistents.model.User adminUser = adminUserDAO.login(loginUser.toModel());
+        User adminUser = adminUserDAO.login(loginUser.toModel());
         return  adminUser.toDTO();
     }
 }

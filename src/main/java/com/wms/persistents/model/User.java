@@ -3,6 +3,11 @@ package com.wms.persistents.model;
 
 import com.wms.base.BaseModel;
 import com.wms.dto.UserDTO;
+import com.wms.utils.BundleUtils;
+import com.wms.utils.DataUtil;
+import com.wms.utils.DateTimeUtils;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,11 +16,13 @@ import java.util.Date;
  * Created by duyot on 8/24/2016.
  */
 @Entity
+@DynamicUpdate
 @Table(name = "USERS")
-@javax.persistence.SequenceGenerator(
-        name="sequence",
-        sequenceName="SEQ_USERS"
-)
+//@javax.persistence.SequenceGenerator(
+//        name="sequence",
+//        sequenceName="SEQ_USERS",
+//        st
+//)
 public class User extends BaseModel {
     private Long userId;
     private String username;
@@ -45,8 +52,14 @@ public class User extends BaseModel {
     }
 
     @Id
-    @GeneratedValue(generator = "sequence")
     @Column(name = "USER_ID", unique = true, nullable = false)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_USERS")
+    @SequenceGenerator(
+            name="SEQ_USERS",
+            sequenceName="SEQ_USERS",
+            allocationSize = 1,
+            initialValue= 1000
+    )
     public Long getUserId() {
         return userId;
     }
@@ -64,7 +77,7 @@ public class User extends BaseModel {
         this.username = username;
     }
 
-    @Column(name = "PASSWORD", nullable = false)
+    @Column(name = "PASSWORD")
     public String getPassword() {
         return password;
     }
@@ -73,7 +86,7 @@ public class User extends BaseModel {
         this.password = password;
     }
 
-    @Column(name = "STATUS", nullable = false)
+    @Column(name = "STATUS")
     public String getStatus() {
         return status;
     }
@@ -129,6 +142,10 @@ public class User extends BaseModel {
 
     @Override
     public UserDTO toDTO() {
-        return new UserDTO(userId==null?"":userId+"",username,password,status,createDate==null?"":createDate.toString(),email,imgUrl,roleName,roleId);
+//        if(!DataUtil.isStringNullOrEmpty(status)){
+//            status = status.equals("1")? "Hiệu lực": "Hết hiệu lực";
+//        }
+
+        return new UserDTO(userId==null?"":userId+"",username,password,status,createDate==null?"":DateTimeUtils.convertDateTimeToString(createDate),email,imgUrl,roleName,roleId);
     }
 }

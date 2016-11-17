@@ -2,12 +2,13 @@ package com.wms.base;
 
 import com.wms.dto.Condition;
 import com.wms.enums.Result;
-import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
+import com.wms.utils.DateTimeUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
-import static com.wms.utils.Constants.*;
+import static com.wms.utils.Constants.SQL_PRO_TYPE;
 
 /**
  * Created by duyot on 8/24/2016.
@@ -206,6 +208,24 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
                     break;
                 case "LIKE":
                     cr.add(Restrictions.like(i.getProperty(), "%"+ i.getValue()+"%"));
+                    break;
+                case "ORDER":
+                    if(i.getValue().toString().equalsIgnoreCase("asc")){
+                        cr.addOrder(Order.asc(i.getProperty()));
+                    }else{
+                        cr.addOrder(Order.desc(i.getProperty()));
+                    }
+                    break;
+                case "BETWEEN":
+                    String[] arrValue = i.getValue().toString().split("\\|");
+                    try {
+                        String toDateStr = arrValue[1].length() <= 10 ? arrValue[1] + " 23:59:59":arrValue[1];
+                        Date fromDate = DateTimeUtils.convertStringToDate(arrValue[0]);
+                        Date toDate   = DateTimeUtils.convertStringToDate(toDateStr);
+                        cr.add(Restrictions.between(i.getProperty(),fromDate,toDate));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     break;
                 default:
                     cr.add(Restrictions.eq(i.getProperty(), i.getValue()));
