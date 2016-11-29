@@ -11,7 +11,7 @@ import java.util.Date;
  * Created by duyot on 11/1/2016.
  */
 @Entity
-@Table(name = "ROLES")
+@Table(name = "AUTHEN_ROLES")
 @javax.persistence.SequenceGenerator(
         name="sequence",
         sequenceName="SEQ_ROLES"

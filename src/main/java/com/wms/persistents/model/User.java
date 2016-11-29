@@ -17,12 +17,7 @@ import java.util.Date;
  */
 @Entity
 @DynamicUpdate
-@Table(name = "USERS")
-//@javax.persistence.SequenceGenerator(
-//        name="sequence",
-//        sequenceName="SEQ_USERS",
-//        st
-//)
+@Table(name = "AUTHEN_USERS")
 public class User extends BaseModel {
     private Long userId;
     private String username;

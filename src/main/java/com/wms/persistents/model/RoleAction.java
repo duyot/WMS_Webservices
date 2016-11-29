@@ -10,7 +10,7 @@ import javax.persistence.*;
  * Created by duyot on 11/2/2016.
  */
 @Entity
-@Table(name = "ROLE_ACTION")
+@Table(name = "AUTHEN_ROLE_ACTION")
 @javax.persistence.SequenceGenerator(
         name="sequence",
         sequenceName="SEQ_ROLE_ACTION"
