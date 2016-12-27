@@ -28,10 +28,12 @@ public class User extends BaseModel {
     private String  imgUrl;
     private String  roleName;
     private String  roleId;
+    private String  customerId;
+    private String  roleCode;
 
     public User(Long userId, String username, String password, String status,
                 Date createDate, String email, String imgUrl,
-                String roleName,String roleId) {
+                String roleName,String roleId,String customerId,String roleCode) {
         this.userId = userId;
         this.username = username;
         this.password = password;
@@ -41,6 +43,8 @@ public class User extends BaseModel {
         this.imgUrl = imgUrl;
         this.roleName = roleName;
         this.roleId = roleId;
+        this.roleCode = roleCode;
+        this.customerId = customerId;
     }
 
     public User() {
@@ -134,13 +138,28 @@ public class User extends BaseModel {
     public void setRoleId(String roleId) {
         this.roleId = roleId;
     }
+    @Column(name = "CUSTOMER_ID")
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    @Column(name = "ROLE_CODE")
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
 
     @Override
     public UserDTO toDTO() {
-//        if(!DataUtil.isStringNullOrEmpty(status)){
-//            status = status.equals("1")? "Hiệu lực": "Hết hiệu lực";
-//        }
-
-        return new UserDTO(userId==null?"":userId+"",username,password,status,createDate==null?"":DateTimeUtils.convertDateTimeToString(createDate),email,imgUrl,roleName,roleId);
+        return new UserDTO(userId==null?"":userId+"",username,password,status,
+                           createDate==null?"":DateTimeUtils.convertDateTimeToString(createDate),
+                            email,imgUrl,roleName,roleId,customerId,roleCode);
     }
 }

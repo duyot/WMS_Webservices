@@ -4,6 +4,9 @@
  */
 package com.wms.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -16,7 +19,7 @@ import java.util.Date;
  * @version 1.0
  */
 public class DateTimeUtils {
-
+    public static Logger log = LoggerFactory.getLogger(DateTimeUtils.class);
     /**
      * .
      */
@@ -70,14 +73,14 @@ public class DateTimeUtils {
      * @param pattern in converting
      * @return date
      */
-    public static Date convertStringToTime(String date, String pattern) throws Exception {
+    public static Date convertStringToTime(String date, String pattern)  {
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
         try {
             return dateFormat.parse(date);
 
         } catch (ParseException e) {
-            System.out.println("Date ParseException, string value:" + date);
-            throw e;
+            log.error("Date ParseException, string value:" + date);
+            return new Date();
         }
     }
 
@@ -87,7 +90,7 @@ public class DateTimeUtils {
      * @return String
      * @throws Exception if error
      */
-    public static Date convertStringToDate(String date) throws Exception {
+    public static Date convertStringToDate(String date){
         String pattern = "dd/MM/yyyy HH:mm:ss";
         if (date.length() <= 10) {
             date = date + " 00:00:00";

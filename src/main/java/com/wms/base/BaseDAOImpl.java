@@ -1,13 +1,11 @@
 package com.wms.base;
 
+import com.google.common.collect.Lists;
 import com.wms.dto.Condition;
 import com.wms.enums.Result;
 import com.wms.utils.DataUtil;
 import com.wms.utils.DateTimeUtils;
-import org.hibernate.Criteria;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -168,7 +166,12 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
 
         cr = initCriteria(cr,lstCondition);
 
-        return (List<T>)cr.list();
+        try {
+            return (List<T>)cr.list();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            return Lists.newArrayList();
+        }
     }
 
 
@@ -179,7 +182,12 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             String operator = i.getOperator();
             switch (operator){
                 case "EQUAL":
-                    cr.add(Restrictions.eq(i.getProperty(), i.getValue()));
+                    if(!DataUtil.isStringNullOrEmpty(i.getPropertyType()) && i.getPropertyType().equals(SQL_PRO_TYPE.LONG)){
+                        Long value = Long.parseLong(i.getValue()+"");
+                        cr.add(Restrictions.in(i.getProperty(), value));
+                    }else{
+                        cr.add(Restrictions.eq(i.getProperty(), i.getValue()));
+                    }
                     break;
                 case "NOT_EQUAL":
                     cr.add(Restrictions.ne(i.getProperty(), i.getValue()));
@@ -187,7 +195,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
                 case "GREATER":
                     cr.add(Restrictions.gt(i.getProperty(), i.getValue()));
                     break;
-                case "GREATER_EQAL":
+                case "GREATER_EQUAL":
                     cr.add(Restrictions.ge(i.getProperty(), i.getValue()));
                     break;
                 case "LOWER":
@@ -235,8 +243,4 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
 
         return cr;
     }
-
-
-
-
 }

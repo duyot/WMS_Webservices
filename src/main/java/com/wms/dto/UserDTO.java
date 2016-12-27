@@ -19,13 +19,15 @@ public class UserDTO extends BaseDTO {
     public String imgUrl;
     public String roleName;
     private String  roleId;
+    private String  customerId;
+    private String  roleCode;
 
     public UserDTO() {
     }
 
     public UserDTO(String userId, String username, String password, String status,
                    String createDate, String email, String imgUrl,
-                   String roleName,String  roleId) {
+                   String roleName,String  roleId,String customerId,String roleCode) {
         this.userId = userId;
         this.username = username;
         this.password = password;
@@ -35,6 +37,8 @@ public class UserDTO extends BaseDTO {
         this.imgUrl = imgUrl;
         this.roleName = roleName;
         this.roleId = roleId;
+        this.customerId = customerId;
+        this.roleCode = roleCode;
     }
 
     public String getUserId() {
@@ -110,13 +114,30 @@ public class UserDTO extends BaseDTO {
         this.roleId = roleId;
     }
 
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
+
     @Override
     public com.wms.persistents.model.User toModel() {
         try {
             return new com.wms.persistents.model.User(!StringUtils.validString(userId) ? null:Long.valueOf(userId),
                                  username,password,status,
                                  !StringUtils.validString(createDate) ? null: DateTimeUtils.convertStringToDate(createDate),
-                                email,imgUrl,roleName,roleId);
+                                email,imgUrl,roleName,roleId,customerId,roleCode);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -134,6 +155,8 @@ public class UserDTO extends BaseDTO {
                 ", email='" + email + '\'' +
                 ", imgUrl='" + imgUrl + '\'' +
                 ", roleName='" + roleName + '\'' +
+                ", roleId='" + roleId + '\'' +
+                ", customerId='" + customerId + '\'' +
                 '}';
     }
 }

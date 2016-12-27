@@ -21,7 +21,7 @@ public class RoleServices {
     BaseBusinessInterface roleBusiness;
 
     @CrossOrigin
-    @RequestMapping(value = "/getAll",method = RequestMethod.GET)
+    @GetMapping(value = "/getAll")
     public List<RoleDTO> getAll(){
         return roleBusiness.getAll();
     }

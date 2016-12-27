@@ -10,7 +10,7 @@ public class Constants {
         public static String EQUAL = "EQUAL";
         public static String NOT_EQUAL = "NOT_EQUAL";
         public static String GREATER = "GREATER";
-        public static String GREATER_EQAL = "GREATER_EQAL";
+        public static String GREATER_EQAL = "GREATER_EQUAL";
         public static String LOWER = "LOWER";
         public static String LOWER_EQUAL = "LOWER_EQUAL";
         public static String IN = "IN";
