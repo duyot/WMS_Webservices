@@ -34,8 +34,8 @@ public class MjrStockGoodsTotalBusinessImpl extends BaseBusinessImpl<MjrStockGoo
         this.tDTO = new MjrStockGoodsTotalDTO();
     }
 
-    public String updateSession(MjrStockGoodsTotalDTO obj,double changeValue,Session session){
-        return mjrStockGoodsTotalDAO.updateSession(obj.toModel(),changeValue,session);
+    public String updateSession(MjrStockGoodsTotalDTO obj,Session session){
+        return mjrStockGoodsTotalDAO.updateSession(obj.toModel(),session);
     }
 
     @Override

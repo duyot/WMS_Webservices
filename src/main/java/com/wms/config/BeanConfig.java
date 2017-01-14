@@ -40,7 +40,7 @@ public class BeanConfig {
     @Lazy
     public JndiObjectFactoryBean initDataSourceFromJndi() {
         JndiObjectFactoryBean jndiObjectFB = new JndiObjectFactoryBean();
-        jndiObjectFB.setJndiName("jdbc/ConnectionPool");
+        jndiObjectFB.setJndiName("jdbc/ApplicationPool");
         jndiObjectFB.setResourceRef(true);
         jndiObjectFB.setProxyInterface(DataSource.class);
         log.info("Getting datasource with prod profile with jndi");

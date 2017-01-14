@@ -9,7 +9,7 @@ import java.util.List;
  * Created by duyot on 8/29/2016.
  */
 public interface BaseBusinessInterface<T extends BaseDTO> {
-    public String getSysDate(String pattern) throws Exception;
+    public String getSysDate(String pattern);
     public String getSysDate();
 
     public String saveOrUpdate(T obj);

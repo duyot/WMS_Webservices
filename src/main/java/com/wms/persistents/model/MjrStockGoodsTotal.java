@@ -17,26 +17,22 @@ import java.util.Date;
 public class MjrStockGoodsTotal extends BaseModel {
     private Long id;
     private Long custId;
-    private String custName;
     private Long goodsId;
     private String goodsCode;
     private String goodsName;
     private String goodsState;
     private Long stockId;
-    private String stockCode;
     private Double amount;
     private Date changeDate;
 
-    public MjrStockGoodsTotal(Long id, Long custId, String custName, Long goodsId, String goodsCode, String goodsName, String goodsState, Long stockId, String stockCode, Double amount, Date changeDate) {
+    public MjrStockGoodsTotal(Long id, Long custId, Long goodsId, String goodsCode, String goodsName, String goodsState, Long stockId, Double amount, Date changeDate) {
         this.id = id;
         this.custId = custId;
-        this.custName = custName;
         this.goodsId = goodsId;
         this.goodsCode = goodsCode;
         this.goodsName = goodsName;
         this.goodsState = goodsState;
         this.stockId = stockId;
-        this.stockCode = stockCode;
         this.amount = amount;
         this.changeDate = changeDate;
     }
@@ -61,7 +57,7 @@ public class MjrStockGoodsTotal extends BaseModel {
         this.id = id;
     }
 
-    @Column(name = "CUST_ID")
+    @Column(name = "CUST_ID", nullable = false)
     public Long getCustId() {
         return custId;
     }
@@ -70,16 +66,7 @@ public class MjrStockGoodsTotal extends BaseModel {
         this.custId = custId;
     }
 
-    @Column(name = "CUST_NAME")
-    public String getCustName() {
-        return custName;
-    }
-
-    public void setCustName(String custName) {
-        this.custName = custName;
-    }
-
-    @Column(name = "GOODS_ID")
+    @Column(name = "GOODS_ID", nullable = false)
     public Long getGoodsId() {
         return goodsId;
     }
@@ -106,7 +93,7 @@ public class MjrStockGoodsTotal extends BaseModel {
         this.goodsName = goodsName;
     }
 
-    @Column(name = "GOODS_STATE")
+    @Column(name = "GOODS_STATE", nullable = false)
     public String getGoodsState() {
         return goodsState;
     }
@@ -115,23 +102,13 @@ public class MjrStockGoodsTotal extends BaseModel {
         this.goodsState = goodsState;
     }
 
-    @Column(name = "STOCK_ID")
+    @Column(name = "STOCK_ID", nullable = false)
     public Long getStockId() {
         return stockId;
     }
 
     public void setStockId(Long stockId) {
         this.stockId = stockId;
-    }
-
-    @Column(name = "STOCK_CODE")
-    public String getStockCode() {
-        return stockCode;
-    }
-
-
-    public void setStockCode(String stockCode) {
-        this.stockCode = stockCode;
     }
 
     @Column(name = "AMOUNT")
@@ -154,8 +131,8 @@ public class MjrStockGoodsTotal extends BaseModel {
 
     @Override
     public MjrStockGoodsTotalDTO toDTO() {
-        return new MjrStockGoodsTotalDTO(id==null?"":id+"",custId==null?"":custId+"",custName,goodsId==null?"":goodsId+"",
-                goodsCode,goodsName,goodsState,stockId==null?"":stockId+"",stockCode,amount==null?"":amount+"",changeDate==null?"": DateTimeUtils.convertDateTimeToString(changeDate)
+        return new MjrStockGoodsTotalDTO(id==null?"":id+"",custId==null?"":custId+"",goodsId==null?"":goodsId+"",
+                goodsCode,goodsName,goodsState,stockId==null?"":stockId+"",amount==null?"":amount+"",changeDate==null?"": DateTimeUtils.convertDateTimeToString(changeDate)
                 );
     }
 
@@ -164,13 +141,11 @@ public class MjrStockGoodsTotal extends BaseModel {
         return "MjrStockGoodsTotal{" +
                 "id=" + id +
                 ", custId=" + custId +
-                ", custName='" + custName + '\'' +
                 ", goodsId=" + goodsId +
                 ", goodsCode='" + goodsCode + '\'' +
                 ", goodsName='" + goodsName + '\'' +
                 ", goodsState='" + goodsState + '\'' +
                 ", stockId=" + stockId +
-                ", stockCode='" + stockCode + '\'' +
                 ", amount=" + amount +
                 ", changeDate=" + changeDate +
                 '}';

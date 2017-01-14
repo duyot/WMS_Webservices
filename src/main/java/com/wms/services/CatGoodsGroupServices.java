@@ -14,9 +14,9 @@ import javax.annotation.PostConstruct;
  * Created by duyot on 12/7/2016.
  */
 @RestController
-@RequestMapping("/catgoodsgroupservices")
+@RequestMapping("/catGoodsGroupServices")
 public class CatGoodsGroupServices  extends BaseServices<CatGoodsGroupDTO> {
-    Logger log = LoggerFactory.getLogger(CustomerServices.class);
+    Logger log = LoggerFactory.getLogger(CatGoodsGroupServices.class);
     @Autowired
     BaseBusinessInterface catGoodsGroupBusiness;
 

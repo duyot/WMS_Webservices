@@ -17,7 +17,7 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
     protected Class<T> entityClass;
     //--------------------------------------------------------------------
     @Override
-    public String getSysDate(String pattern) throws Exception {
+    public String getSysDate(String pattern){
        return tdao.getSysDate(pattern);
     }
 

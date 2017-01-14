@@ -14,26 +14,22 @@ import java.util.Date;
 public class MjrStockGoodsTotalDTO extends BaseDTO {
     private String id;
     private String custId;
-    private String custName;
     private String goodsId;
     private String goodsCode;
     private String goodsName;
     private String goodsState;
     private String stockId;
-    private String stockCode;
     private String amount;
     private String changeDate;
 
-    public MjrStockGoodsTotalDTO(String id, String custId, String custName, String goodsId, String goodsCode, String goodsName, String goodsState, String stockId, String stockCode, String amount, String changeDate) {
+    public MjrStockGoodsTotalDTO(String id, String custId, String goodsId, String goodsCode, String goodsName, String goodsState, String stockId, String amount, String changeDate) {
         this.id = id;
         this.custId = custId;
-        this.custName = custName;
         this.goodsId = goodsId;
         this.goodsCode = goodsCode;
         this.goodsName = goodsName;
         this.goodsState = goodsState;
         this.stockId = stockId;
-        this.stockCode = stockCode;
         this.amount = amount;
         this.changeDate = changeDate;
     }
@@ -55,14 +51,6 @@ public class MjrStockGoodsTotalDTO extends BaseDTO {
 
     public void setCustId(String custId) {
         this.custId = custId;
-    }
-
-    public String getCustName() {
-        return custName;
-    }
-
-    public void setCustName(String custName) {
-        this.custName = custName;
     }
 
     public String getGoodsId() {
@@ -105,14 +93,6 @@ public class MjrStockGoodsTotalDTO extends BaseDTO {
         this.stockId = stockId;
     }
 
-    public String getStockCode() {
-        return stockCode;
-    }
-
-    public void setStockCode(String stockCode) {
-        this.stockCode = stockCode;
-    }
-
     public String getAmount() {
         return amount;
     }
@@ -132,9 +112,9 @@ public class MjrStockGoodsTotalDTO extends BaseDTO {
     @Override
     public MjrStockGoodsTotal toModel() {
         return new MjrStockGoodsTotal(!StringUtils.validString(id) ? null:Long.valueOf(id),
-                !StringUtils.validString(custId) ? null:Long.valueOf(custId),custName,
+                !StringUtils.validString(custId) ? null:Long.valueOf(custId),
                 !StringUtils.validString(goodsId) ? null:Long.valueOf(goodsId),goodsCode,goodsName,goodsState,
-                !StringUtils.validString(stockId) ? null:Long.valueOf(stockId),stockCode,
+                !StringUtils.validString(stockId) ? null:Long.valueOf(stockId),
                 !StringUtils.validString(amount) ? null:Double.valueOf(amount),!StringUtils.validString(changeDate) ? null: DateTimeUtils.convertStringToDate(changeDate)
         );
     }
@@ -144,13 +124,11 @@ public class MjrStockGoodsTotalDTO extends BaseDTO {
         return "MjrStockGoodsTotalDTO{" +
                 "id='" + id + '\'' +
                 ", custId='" + custId + '\'' +
-                ", custName='" + custName + '\'' +
                 ", goodsId='" + goodsId + '\'' +
                 ", goodsCode='" + goodsCode + '\'' +
                 ", goodsName='" + goodsName + '\'' +
                 ", goodsState='" + goodsState + '\'' +
                 ", stockId='" + stockId + '\'' +
-                ", stockCode='" + stockCode + '\'' +
                 ", amount='" + amount + '\'' +
                 ", changeDate='" + changeDate + '\'' +
                 '}';

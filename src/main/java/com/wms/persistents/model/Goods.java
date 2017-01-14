@@ -15,14 +15,14 @@ import java.util.Date;
  */
 @Entity
 @DynamicUpdate
-@Table(name = "GOODS")
+@Table(name = "CAT_GOODS")
 public class Goods  extends BaseModel {
     private Long id;
+    private Long custId;
     private String code;
     private String name;
     private String status;
     private Date createDate;
-    private Long custId;
     private String unitType;
     private Long goodsGroupId;
     private String serialType;

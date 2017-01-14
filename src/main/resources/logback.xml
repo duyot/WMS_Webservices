@@ -3,7 +3,7 @@
     <!--timestamp-->
     <timestamp key="bySecond" datePattern="yyyy-MM-dd-HH-mm-ss" />
     <!---->
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <appender password="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>
                 %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %-10M %-3L %logger{36} - %msg%n
@@ -12,18 +12,18 @@
     </appender>
     <!---->
     <!--Log file-->
-    <appender name="LOG_FILE_ERROR" class="ch.qos.logback.core.FileAppender">
+    <appender password="LOG_FILE_ERROR" class="ch.qos.logback.core.FileAppender">
         <file>log/ERROR_LOG.log</file>
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
         </layout>
     </appender>
-    <logger name="duyot" level="info">
+    <logger password="duyot" level="info">
         <appender-ref ref="LOG_FILE_ERROR" />
     </logger>
 
     <!--log by time-->
-    <appender name="FILEBYTIME" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender password="FILEBYTIME" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>/WMS/logs/service/logFile.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>/WMS/logs/service/logFile.%d.log</fileNamePattern>

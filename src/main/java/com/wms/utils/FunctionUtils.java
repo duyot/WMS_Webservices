@@ -5,6 +5,7 @@ import com.wms.dto.Condition;
 import com.wms.dto.ErrorLogDTO;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +18,17 @@ import java.util.List;
  * Created by duyot on 12/19/2016.
  */
 public class FunctionUtils {
-    @Autowired
-    public static BaseBusinessInterface errorLogBusiness;
 
     public static void closeSession(Session session){
         if(session != null && session.isOpen()){
             session.close();
         }
     }
+
+    public static void rollBack(Transaction tx){
+        tx.rollback();
+    }
+
 
     public static Criteria initCriteria(Criteria cr, List<Condition> lstCondition){
         for(Condition i: lstCondition){

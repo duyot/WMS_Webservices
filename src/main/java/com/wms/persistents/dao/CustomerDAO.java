@@ -1,7 +1,7 @@
 package com.wms.persistents.dao;
 
 import com.wms.base.BaseDAOImpl;
-import com.wms.persistents.model.Customer;
+import com.wms.persistents.model.CatCustomer;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class CustomerDAO extends BaseDAOImpl<Customer,Long> {
+public class CustomerDAO extends BaseDAOImpl<CatCustomer,Long> {
     @Autowired
     SessionFactory sessionFactory;
 

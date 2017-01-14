@@ -41,24 +41,26 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
         return sessionFactory.getCurrentSession();
     }
 
-    public String updateSession(MjrStockGoodsTotal stockGoodsTotal, double changeValue,Session session) {
+    public String updateSession(MjrStockGoodsTotal stockGoodsTotal,Session session) {
         log.info("Update Total: "+ "cust|"+stockGoodsTotal.getCustId()+ "stockId|"+ stockGoodsTotal.getStockId() + "goodsId|"+ stockGoodsTotal.getGoodsId()
-                + "goodsState|"+ stockGoodsTotal.getGoodsState()+ "amount|"+ changeValue);
+                + "goodsState|"+ stockGoodsTotal.getGoodsState()+ "amount|"+ stockGoodsTotal.getAmount());
 
         StringBuilder sqlUpdateTotal = new StringBuilder();
         sqlUpdateTotal.append(" UPDATE  mjr_stock_goods_total a ");
-        sqlUpdateTotal.append(" SET  a.amount = a.amount + ?");
+        sqlUpdateTotal.append(" SET  a.amount      = a.amount + ?, ");
+        sqlUpdateTotal.append("      a.change_date = ? ");
         sqlUpdateTotal.append(" WHERE a.cust_id = ? ");
-        sqlUpdateTotal.append(" AND a.stock_id = ? ");
-        sqlUpdateTotal.append(" AND a.goods_id = ? ");
-        sqlUpdateTotal.append(" AND a.goods_state = ? ");
+        sqlUpdateTotal.append("   AND a.stock_id = ? ");
+        sqlUpdateTotal.append("   AND a.goods_id = ? ");
+        sqlUpdateTotal.append("   AND a.goods_state = ? ");
 
         Query query = session.createSQLQuery(sqlUpdateTotal.toString());
-        query.setParameter(0, changeValue +"");
-        query.setParameter(1, stockGoodsTotal.getCustId());
-        query.setParameter(2, stockGoodsTotal.getStockId());
-        query.setParameter(3, stockGoodsTotal.getGoodsId());
-        query.setParameter(4, stockGoodsTotal.getGoodsState());
+        query.setParameter(0, stockGoodsTotal.getAmount() +"");
+        query.setParameter(1, stockGoodsTotal.getChangeDate());
+        query.setParameter(2, stockGoodsTotal.getCustId());
+        query.setParameter(3, stockGoodsTotal.getStockId());
+        query.setParameter(4, stockGoodsTotal.getGoodsId());
+        query.setParameter(5, stockGoodsTotal.getGoodsState());
 
         try {
             int updateCount = query.executeUpdate();
@@ -66,15 +68,14 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
                 log.info("Found no row to update, create new one.");
                 String insertedTotalId = saveBySession(stockGoodsTotal,session);
                 log.info("Insert successfully total: "+ insertedTotalId);
-                return Constants.RESULT.SUCCESS;
+                return Result.SUCCESS.getName();
             }
-            errorLogBusiness.save(initErrorInfo("Lỗi",stockGoodsTotal));
-            return Constants.RESULT.SUCCESS;
+            return Result.SUCCESS.getName();
         } catch (Exception e) {
             log.error(e.toString());
             e.printStackTrace();
             errorLogBusiness.save(initErrorInfo(e.toString(),stockGoodsTotal));
-            return Constants.RESULT.FAIL;
+            return Result.ERROR.getName();
         }
     }
 
@@ -104,19 +105,5 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
             return Lists.newArrayList();
         }
     }
-
-    public void test(){
-        String[] str = new String[5];
-        int count = 0;
-        for (String i: str){
-            if(i != null){
-                count +=1;
-            }
-        }
-
-    }
-
-
-
 
 }

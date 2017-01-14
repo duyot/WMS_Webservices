@@ -10,6 +10,6 @@ import java.util.List;
  * Created by duyot on 12/19/2016.
  */
 public interface MjrStockGoodsTotalBusinessInterface {
-    public String updateSession(MjrStockGoodsTotalDTO obj, double changeValue,Session session);
+    public String updateSession(MjrStockGoodsTotalDTO obj,Session session);
     public List<MjrStockGoodsTotalDTO> findByCondition(List<Condition> lstCondition,Session session);
 }

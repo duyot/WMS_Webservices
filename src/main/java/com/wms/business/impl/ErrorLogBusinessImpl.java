@@ -1,11 +1,9 @@
 package com.wms.business.impl;
 
 import com.wms.base.BaseBusinessImpl;
-import com.wms.dto.CustomerDTO;
 import com.wms.dto.ErrorLogDTO;
-import com.wms.persistents.dao.CustomerDAO;
 import com.wms.persistents.dao.ErrorLogDAO;
-import com.wms.persistents.model.Customer;
+import com.wms.persistents.model.CatCustomer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +21,7 @@ public class ErrorLogBusinessImpl extends BaseBusinessImpl<ErrorLogDTO, ErrorLog
     public void setupService() {
         this.tdao = errorLogDAO;
         this.entityClass = ErrorLogDTO.class;
-        this.errorLogDAO.setModelClass(Customer.class);
+        this.errorLogDAO.setModelClass(CatCustomer.class);
         this.tDTO = new ErrorLogDTO();
     }
 }

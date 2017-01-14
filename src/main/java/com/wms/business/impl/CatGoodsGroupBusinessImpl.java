@@ -2,11 +2,8 @@ package com.wms.business.impl;
 
 import com.wms.base.BaseBusinessImpl;
 import com.wms.dto.CatGoodsGroupDTO;
-import com.wms.dto.CustomerDTO;
 import com.wms.persistents.dao.CatGoodsGroupDAO;
-import com.wms.persistents.dao.CustomerDAO;
 import com.wms.persistents.model.CatGoodsGroup;
-import com.wms.persistents.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
