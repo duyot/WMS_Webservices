@@ -12,6 +12,7 @@
     <title>WMS Rest Service</title>
   </head>
   <body>
-  <img src="<c:url value='/images/running.gif'/>"/>
-  </body>
+  <h3>Rest Webservices</h3>
+<img src="<c:url value='/images/running.gif'/>"/>
+</body>
 </html>

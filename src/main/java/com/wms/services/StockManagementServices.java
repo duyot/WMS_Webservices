@@ -19,7 +19,7 @@ import java.util.List;
  * Created by duyot on 12/19/2016.
  */
 @RestController
-@RequestMapping("/stockmanagermentservices")
+@RequestMapping("/services/stockManagementServices")
 public class StockManagementServices {
     Logger log = LoggerFactory.getLogger(StockManagementServices.class);
 

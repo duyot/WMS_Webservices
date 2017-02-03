@@ -14,15 +14,15 @@ import javax.annotation.PostConstruct;
  * Created by duyot on 12/6/2016.
  */
 @RestController
-@RequestMapping("/customerServices")
-public class CustomerServices extends BaseServices<CatCustomerDTO>{
-    Logger log = LoggerFactory.getLogger(CustomerServices.class);
+@RequestMapping("/services/catCustomerServices")
+public class CatCustomerServices extends BaseServices<CatCustomerDTO>{
+    Logger log = LoggerFactory.getLogger(CatCustomerServices.class);
     @Autowired
-    BaseBusinessInterface customerBusiness;
+    BaseBusinessInterface catCustomerBusiness;
 
     @PostConstruct
     public void setupServices(){
-        this.baseBusiness = customerBusiness;
+        this.baseBusiness = catCustomerBusiness;
     }
 
 }

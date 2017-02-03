@@ -1,10 +1,8 @@
 package com.wms.persistents.model;
 
-import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
 import com.wms.dto.MjrStockGoodsTotalDTO;
 import com.wms.utils.DateTimeUtils;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.Date;

@@ -26,10 +26,8 @@ public class CatUserBusinessImpl extends BaseBusinessImpl<CatUserDTO, CatUserDAO
         this.tDTO = new CatUserDTO();
     }
 
-
     @Override
     public CatUserDTO login(CatUserDTO loginUser) {
-        CatUser adminCatUser = catUserDAO.login(loginUser.toModel());
-        return  adminCatUser.toDTO();
+        return catUserDAO.login(loginUser.toModel()).toDTO();
     }
 }

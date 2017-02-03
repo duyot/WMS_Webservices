@@ -2,7 +2,6 @@ package com.wms.services;
 
 import com.wms.base.BaseBusinessInterface;
 import com.wms.base.BaseServices;
-import com.wms.dto.CatGoodsGroupDTO;
 import com.wms.dto.GoodsDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +15,9 @@ import javax.annotation.PostConstruct;
  * Created by duyot on 12/9/2016.
  */
 @RestController
-@RequestMapping("/goodsServices")
-public class GoodsServices  extends BaseServices<GoodsDTO> {
-    Logger log = LoggerFactory.getLogger(GoodsServices.class);
+@RequestMapping("/services/catGoodsServices")
+public class CatGoodsServices extends BaseServices<GoodsDTO> {
+    Logger log = LoggerFactory.getLogger(CatGoodsServices.class);
     @Autowired
     BaseBusinessInterface goodsBusiness;
 

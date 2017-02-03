@@ -4,7 +4,7 @@ import com.wms.base.BaseBusinessInterface;
 import com.wms.business.interfaces.MjrStockGoodsTotalBusinessInterface;
 import com.wms.business.interfaces.StockManagementBusinessInterface;
 import com.wms.dto.*;
-import com.wms.enums.Result;
+import com.wms.enums.Responses;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import com.wms.utils.FunctionUtils;
@@ -62,7 +62,7 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
             String savedStockTransId = mjrStockTransBusiness.saveBySession(mjrStockTransDTO,session);
             if(!DataUtil.isInteger(savedStockTransId)){
                 FunctionUtils.rollBack(transaction);
-                return new ResponseObject(Result.ERROR.getName(), Constants.RESULT_NAME.ERROR_CREATE_STOCK_TRANS,savedStockTransId);
+                return new ResponseObject(Responses.ERROR.getName(), Constants.RESULT_NAME.ERROR_CREATE_STOCK_TRANS,savedStockTransId);
             }
             mjrStockTransDTO.setId(savedStockTransId);
             //
@@ -70,10 +70,10 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
                 //
                 i.setStockTransId(savedStockTransId);
                 String savedStockTransDetailId = mjrStockTransDetailBusiness.saveBySession(i,session);
-                if(Result.ERROR.getName().equalsIgnoreCase(savedStockTransDetailId)){
+                if(Responses.ERROR.getName().equalsIgnoreCase(savedStockTransDetailId)){
                     log.info("Error stock_trans_detail:  "+"stockTransId|"+savedStockTransDetailId+"goodsCode|"+i.getGoodsCode());
                     FunctionUtils.rollBack(transaction);
-                    return new ResponseObject(Result.ERROR.getName(), Constants.RESULT_NAME.ERROR_CREATE_STOCK_TRANS_DETAIL);
+                    return new ResponseObject(Responses.ERROR.getName(), Constants.RESULT_NAME.ERROR_CREATE_STOCK_TRANS_DETAIL);
                 }
                 //update stock_goods||stock_goods_serial
                 String importStockGoodsResult;
@@ -85,23 +85,23 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
                 if(!DataUtil.isInteger(importStockGoodsResult)){
                     log.info("Error stock_goods:  "+"stockTransId|"+savedStockTransDetailId+"goodsCode|"+i.getGoodsCode());
                     FunctionUtils.rollBack(transaction);
-                    return new ResponseObject(Result.ERROR.getName(), importStockGoodsResult,i.getSerial());
+                    return new ResponseObject(Responses.ERROR.getName(), importStockGoodsResult,i.getSerial());
                 }
                 //update total
                 String importTotalResult = importMjrStockGoodsTotal(mjrStockTransDTO,i,session);
-                if(Result.ERROR.getName().equalsIgnoreCase(importTotalResult)){
+                if(Responses.ERROR.getName().equalsIgnoreCase(importTotalResult)){
                     log.info("Error stock_total:  "+"stockTransId|"+savedStockTransDetailId+"goodsCode|"+i.getGoodsCode());
                     FunctionUtils.rollBack(transaction);
-                    return new ResponseObject(Result.ERROR.getName(), Constants.RESULT_NAME.ERROR_CREATE_TOTAL);
+                    return new ResponseObject(Responses.ERROR.getName(), Constants.RESULT_NAME.ERROR_CREATE_TOTAL);
                 }
             }
 
             transaction.commit();
-            return new ResponseObject(Result.SUCCESS.getName(),"",savedStockTransId);
+            return new ResponseObject(Responses.SUCCESS.getName(),"",savedStockTransId);
         } catch (Exception e) {
             e.printStackTrace();
             transaction.rollback();
-            return new ResponseObject(Result.ERROR.getName(), Constants.RESULT_NAME.ERROR_SYSTEM);
+            return new ResponseObject(Responses.ERROR.getName(), Constants.RESULT_NAME.ERROR_SYSTEM);
         }finally {
             FunctionUtils.closeSession(session);
         }

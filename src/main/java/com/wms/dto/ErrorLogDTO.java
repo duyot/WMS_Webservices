@@ -80,6 +80,6 @@ public class ErrorLogDTO extends BaseDTO{
     @Override
     public ErrorLog toModel() {
         return new ErrorLog(!StringUtils.validString(id) ? null:Long.valueOf(id),
-                function,className,parameter,StringUtils.validString(createDate) ? null: DateTimeUtils.convertStringToDate(createDate),errorInfo);
+                function,className,parameter,!StringUtils.validString(createDate) ? null: DateTimeUtils.convertStringToDate(createDate),errorInfo);
     }
 }

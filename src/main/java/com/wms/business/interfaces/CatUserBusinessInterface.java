@@ -6,5 +6,5 @@ import com.wms.dto.CatUserDTO;
  * Created by duyot on 8/24/2016.
  */
 public interface CatUserBusinessInterface {
-    public CatUserDTO login(CatUserDTO loginUser);
+    CatUserDTO login(CatUserDTO loginUser);
 }

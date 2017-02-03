@@ -174,4 +174,25 @@ public class CatUserDTO extends BaseDTO {
                             !StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),imgUrl,roleName,roleCode,logReason
                         );
     }
+
+    @Override
+    public String toString() {
+        return "CatUserDTO{" +
+                "id='" + id + '\'' +
+                ", deptId='" + deptId + '\'' +
+                ", custId='" + custId + '\'' +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", birthDate='" + birthDate + '\'' +
+                ", email='" + email + '\'' +
+                ", telNumber='" + telNumber + '\'' +
+                ", status='" + status + '\'' +
+                ", createdDate='" + createdDate + '\'' +
+                ", imgUrl='" + imgUrl + '\'' +
+                ", roleName='" + roleName + '\'' +
+                ", roleCode='" + roleCode + '\'' +
+                ", logReason='" + logReason + '\'' +
+                '}';
+    }
 }

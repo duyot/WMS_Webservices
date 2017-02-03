@@ -2,12 +2,10 @@ package com.wms.base;
 
 import com.google.common.collect.Lists;
 import com.wms.dto.Condition;
-import com.wms.enums.Result;
+import com.wms.enums.Responses;
 import com.wms.utils.DataUtil;
-import com.wms.utils.DateTimeUtils;
 import com.wms.utils.FunctionUtils;
 import org.hibernate.*;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -17,16 +15,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-
-import static com.wms.utils.Constants.SQL_PRO_TYPE;
 
 /**
  * Created by duyot on 8/24/2016.
  */
 @Repository
+@Transactional
 public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements BaseDAOInteface {
     @Autowired
     SessionFactory sessionFactory;
@@ -67,6 +62,9 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
     @Transactional
     public String deleteById(long id){
         T object = (T)getSession().get(modelClass,id);
+        if(object == null){
+            return Responses.NOT_FOUND.getName();
+        }
         return deleteByObject(object);
     }
 
@@ -74,10 +72,10 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
     public String deleteByObject(T obj) {
         try {
             getSession().delete(obj);
-            return Result.SUCCESS.getName();
+            return Responses.SUCCESS.getName();
         } catch (Exception e) {
             log.info(e.toString());
-            return Result.ERROR.getName();
+            return Responses.ERROR.getName();
         }
     }
     //--------------------------------------------------------------------
@@ -85,10 +83,10 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
     public String update(T obj) {
         try {
             getSession().update(obj);
-            return Result.SUCCESS.getName();
+            return Responses.SUCCESS.getName();
         } catch (Exception e) {
             log.info(e.toString());
-            return Result.ERROR.getName();
+            return Responses.ERROR.getName();
         }
     }
     //--------------------------------------------------------------------
@@ -96,10 +94,10 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
     public String saveOrUpdate(T obj) {
         try {
             getSession().saveOrUpdate(obj);
-            return Result.SUCCESS.getName();
+            return Responses.SUCCESS.getName();
         } catch (Exception e) {
             log.info(e.toString());
-            return Result.ERROR.getName();
+            return Responses.ERROR.getName();
         }
     }
 
@@ -108,10 +106,13 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
         try {
             long savedObjectId = (long) getSession().save(obj);
             return savedObjectId +"";
-        } catch (Exception e) {
+        } catch (ConstraintViolationException e) {
+            log.info(e.toString());
+            return e.getConstraintName();
+        }catch (Exception e) {
             log.info(e.toString());
             e.printStackTrace();
-            return Result.ERROR.getName();
+            return Responses.ERROR.getName();
         }
     }
 
@@ -126,7 +127,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             return e.getConstraintName();
         } catch (Exception e){
             log.info(e.toString());
-            return Result.ERROR.getName();
+            return Responses.ERROR.getName();
         }
     }
     //--------------------------------------------------------------------
@@ -144,7 +145,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
         return c.list();
     }
 
-     @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public List<T> getList(int count) {
         return getSession().createCriteria(modelClass).setMaxResults(count).list();
 

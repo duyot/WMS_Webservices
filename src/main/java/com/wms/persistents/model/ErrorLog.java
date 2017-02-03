@@ -79,7 +79,7 @@ public class ErrorLog extends BaseModel{
         this.parameter = parameter;
     }
 
-    @Column(name = "CREATE_DATE")
+    @Column(name = "CREATED_DATE")
     public Date getCreateDate() {
         return createDate;
     }

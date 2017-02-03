@@ -1,14 +1,12 @@
 package com.wms.utils;
 
-import com.wms.base.BaseBusinessInterface;
+import com.google.common.collect.Lists;
 import com.wms.dto.Condition;
-import com.wms.dto.ErrorLogDTO;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -36,9 +34,11 @@ public class FunctionUtils {
             switch (operator){
                 case "EQUAL":
                     if(!DataUtil.isStringNullOrEmpty(i.getPropertyType()) && i.getPropertyType().equals(Constants.SQL_PRO_TYPE.LONG)){
-                        Long value = Long.parseLong(i.getValue()+"");
-                        cr.add(Restrictions.in(i.getProperty(), value));
+                        Long[] value = new Long[1];
+                        value[0] = Long.parseLong(i.getValue()+"");
+                        cr.add(Restrictions.in(i.getProperty(),Arrays.asList(value)));
                     }else{
+                        cr.add(Restrictions.eq(i.getProperty(), i.getValue()));
                         cr.add(Restrictions.eq(i.getProperty(), i.getValue()));
                     }
                     break;
@@ -59,7 +59,11 @@ public class FunctionUtils {
                     break;
                 case "IN":
                     if(!DataUtil.isStringNullOrEmpty(i.getPropertyType()) && i.getPropertyType().equals(Constants.SQL_PRO_TYPE.LONG)){
-                        List<Long> lstValue = Arrays.asList((Long[])i.getValue());
+                        Long[] value = (Long[]) i.getValue();
+                        List<Long> lstValue = Lists.newArrayList();
+                        for(int j = 0;j<value.length;j++){
+                            lstValue.add(value[j]);
+                        }
                         cr.add(Restrictions.in(i.getProperty(), lstValue));
                     }else{
                         String inValue = (String) i.getValue();

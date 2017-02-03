@@ -18,7 +18,7 @@ import java.util.Map;
  * Created by duyot on 11/3/2016.
  */
 @RestController
-@RequestMapping("/sysRoleMenuServices")
+@RequestMapping("/services/sysRoleMenuServices")
 public class SysRoleMenuServices {
 
     Logger log = LoggerFactory.getLogger(SysRoleMenuServices.class);

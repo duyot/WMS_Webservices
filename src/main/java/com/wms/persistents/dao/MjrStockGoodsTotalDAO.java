@@ -1,15 +1,12 @@
 package com.wms.persistents.dao;
 
 import com.google.common.collect.Lists;
-import com.sun.corba.se.impl.orbutil.closure.Constant;
 import com.wms.base.BaseBusinessInterface;
 import com.wms.base.BaseDAOImpl;
 import com.wms.dto.Condition;
 import com.wms.dto.ErrorLogDTO;
-import com.wms.enums.Result;
-import com.wms.persistents.model.ErrorLog;
+import com.wms.enums.Responses;
 import com.wms.persistents.model.MjrStockGoodsTotal;
-import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import com.wms.utils.FunctionUtils;
 import org.hibernate.*;
@@ -19,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -68,14 +63,14 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
                 log.info("Found no row to update, create new one.");
                 String insertedTotalId = saveBySession(stockGoodsTotal,session);
                 log.info("Insert successfully total: "+ insertedTotalId);
-                return Result.SUCCESS.getName();
+                return Responses.SUCCESS.getName();
             }
-            return Result.SUCCESS.getName();
+            return Responses.SUCCESS.getName();
         } catch (Exception e) {
             log.error(e.toString());
             e.printStackTrace();
             errorLogBusiness.save(initErrorInfo(e.toString(),stockGoodsTotal));
-            return Result.ERROR.getName();
+            return Responses.ERROR.getName();
         }
     }
 

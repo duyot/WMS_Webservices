@@ -35,7 +35,6 @@ public class CatUserDAO extends BaseDAOImpl<CatUser,Long> {
         }else{
             lstCondition.add(new Condition("code",Constants.SQL_OPERATOR.EQUAL, loginAdminCatUser.getCode()));
         }
-        lstCondition.add(new Condition("password",Constants.SQL_OPERATOR.EQUAL, loginAdminCatUser.getPassword()));
         lstCondition.add(new Condition("status",Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
 
         List<CatUser> lstAdminCatUser = findByCondition(lstCondition);
@@ -45,8 +44,8 @@ public class CatUserDAO extends BaseDAOImpl<CatUser,Long> {
             return lstAdminCatUser.get(0);
         }
     }
-
-
-    public static void main(String[] args) {
-    }
+//
+//
+//    public static void main(String[] args) {
+//    }
 }

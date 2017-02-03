@@ -1,11 +1,15 @@
 package com.wms.base;
 
 import com.wms.dto.Condition;
+import com.wms.dto.ErrorLogDTO;
 import com.wms.dto.ResponseObject;
 import com.wms.enums.Responses;
-import com.wms.enums.Result;
+import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,53 +18,71 @@ import java.util.List;
 /**
  * Created by duyot on 12/7/2016.
  */
+@Service
 public class BaseServices<T extends BaseDTO> {
     Logger log = LoggerFactory.getLogger(BaseServices.class);
     public BaseBusinessInterface baseBusiness;
+    @Autowired
+    public BaseBusinessInterface errorLogBusiness;
 
     @RequestMapping(value = "/add",produces = "application/json",method = RequestMethod.POST)
     public ResponseObject add(@RequestBody T dto){
+        String sysDate = errorLogBusiness.getSysDate();
         log.info("-------------------------------");
         log.info("Add: "+ dto.toString());
         try {
             String id = baseBusiness.save(dto);
-            if(id == null){
+            if(id == null || Responses.ERROR.getName().equalsIgnoreCase(id)){
                 log.info("FAIL");
                 return new ResponseObject(Responses.ERROR.getCode(),Responses.ERROR.getName(),"");
             }
-            log.info("SUCCESS with id: "+ id);
+            log.info("SUCCESS id: "+ id);
             return new ResponseObject(Responses.SUCCESS.getCode(),Responses.SUCCESS.getName(),id);
 
-        } catch (Exception e) {
+        }catch (DataIntegrityViolationException e) {
+            log.info(e.toString());
+            errorLogBusiness.save(new ErrorLogDTO(null,"add","BaseServices",dto.toString(),sysDate, e.getMessage()));
+            return new ResponseObject(Responses.ERROR_CONSTRAINT.getCode(),Responses.ERROR_CONSTRAINT.getName(),((ConstraintViolationException) e.getCause()).getConstraintName());
+        }
+        catch (Exception e) {
             log.info("ERROR: "+ e.toString());
-            return new ResponseObject(Responses.ERROR_CONSTRAINT.getCode(),Responses.ERROR_CONSTRAINT.getName(),"");
+            errorLogBusiness.save(new ErrorLogDTO(null,"add","BaseServices",dto.toString(),sysDate,e.toString()));
+            return new ResponseObject(Responses.ERROR.getCode(),Responses.ERROR.getName(),"");
         }
     }
 
     @RequestMapping(value = "/update",produces = "application/json",method = RequestMethod.POST)
     public ResponseObject update(@RequestBody T dto){
+        String sysDate = errorLogBusiness.getSysDate();
         log.info("-------------------------------");
         log.info("Update: "+ dto.toString());
         try {
             String result = baseBusiness.update(dto);
-            if(!result.equalsIgnoreCase(Result.SUCCESS.getName())){
-                log.info("Update fail");
+            if(!result.equalsIgnoreCase(Responses.SUCCESS.getName())){
+                log.info("Fail");
                 return new ResponseObject(Responses.ERROR.getCode(),Responses.ERROR.getName(), "");
             }
-            log.info("Update Success");
+            log.info("Success");
             return new ResponseObject(Responses.SUCCESS.getCode(),Responses.SUCCESS.getName(), "");
-        } catch (Exception e) {
+        }
+        catch (DataIntegrityViolationException e) {
+            log.info(e.toString());
+            errorLogBusiness.save(new ErrorLogDTO(null,"update","BaseServices",dto.toString(),sysDate, e.getMessage()));
+            return new ResponseObject(Responses.ERROR_CONSTRAINT.getCode(),Responses.ERROR_CONSTRAINT.getName(),((ConstraintViolationException) e.getCause()).getConstraintName());
+        }
+        catch (Exception e) {
             log.error("ERROR: "+ e.toString());
-            return new ResponseObject(Responses.ERROR_CONSTRAINT.getCode(),Responses.ERROR_CONSTRAINT.getName(),"");
+            errorLogBusiness.save(new ErrorLogDTO(null,"update","BaseServices",dto.toString(),sysDate,e.toString()));
+            return new ResponseObject(Responses.ERROR.getCode(),Responses.ERROR.getName(),"");
         }
 
     }
 
-    @RequestMapping(value = "/delete")
-    public ResponseObject delete(@RequestBody Long id ){
-        log.info("Deleting : "+ id);
+    @RequestMapping(value = "/delete/{id}",method = RequestMethod.DELETE)
+    public ResponseObject delete(@PathVariable("id") long id ){
+        log.info("Id : "+ id);
         String result = baseBusiness.deleteById(id);
-        log.info("Delete result : "+ result);
+        log.info(result);
         return new ResponseObject(Responses.getCodeByName(result),result,id+"");
     }
 
@@ -69,7 +91,7 @@ public class BaseServices<T extends BaseDTO> {
         return (T) baseBusiness.findById(id);
     }
 
-    @RequestMapping(value = "/findByCondition",produces = "application/json")
+    @RequestMapping(value = "/findByCondition",produces = "application/json",method = RequestMethod.POST)
     public List<T> findByCondition(@RequestBody List<Condition> lstCondition){
         return baseBusiness.findByCondition(lstCondition);
     }
