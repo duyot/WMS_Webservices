@@ -118,7 +118,7 @@ public class MjrStockGoodsTotal extends BaseModel {
         this.amount = amount;
     }
 
-    @Column(name = "CHANGE_DATE")
+    @Column(name = "CHANGED_DATE")
     public Date getChangeDate() {
         return changeDate;
     }

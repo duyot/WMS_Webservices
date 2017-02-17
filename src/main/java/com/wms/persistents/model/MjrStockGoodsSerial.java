@@ -132,7 +132,7 @@ public class MjrStockGoodsSerial extends BaseModel{
         this.serial = serial;
     }
 
-    @Column(name = "IMPORT_DATETIME")
+    @Column(name = "IMPORT_DATE")
     public Date getImportDate() {
         return importDate;
     }
@@ -141,7 +141,7 @@ public class MjrStockGoodsSerial extends BaseModel{
         this.importDate = importDate;
     }
 
-    @Column(name = "CHANGE_DATETIME")
+    @Column(name = "CHANGED_DATE")
     public Date getChangeDate() {
         return changeDate;
     }

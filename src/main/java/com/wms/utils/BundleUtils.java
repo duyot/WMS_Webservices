@@ -23,10 +23,6 @@ public class BundleUtils {
     private static ResourceBundle rsConfig = null;
     public static final String CASCASCAS = "cas";
     
-//     public static String getStringCas(String key) {
-//        rsConfig = ResourceBundle.getBundle(CAS);
-//        return rsConfig.getString(key);
-//    }
      public static String getkey(String key) {
         try {
             InputStream input = null;
