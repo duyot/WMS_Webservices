@@ -2,6 +2,28 @@ package com.wms.dto;
 
 import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
+<<<<<<< HEAD
+import com.wms.utils.StringUtils;
+import com.wms.persistents.model.CatStock;
+/**
+ * Created by doanlv4 on 2/17/2017.
+ */
+public class CatStockDTO extends BaseDTO {
+    private String id;
+    private String name;
+    private String code;
+    private String status;
+    private String custId;
+    private String address;
+
+    public CatStockDTO(String id, String code, String name, String status, String custId, String address ) {
+        this.id = id;
+        this.name = name;
+        this.status = status;
+        this.custId = custId;
+        this.address = address;
+        this.code = code;
+=======
 import com.wms.persistents.model.CatStock;
 import com.wms.utils.StringUtils;
 
@@ -25,6 +47,7 @@ public class CatStockDTO extends BaseDTO {
         this.address = address;
         this.status = status;
         this.managerInfo = managerInfo;
+>>>>>>> f97d1f5817603b7b5087e101d6f6579d2945e4eb
     }
 
     public CatStockDTO() {
@@ -36,6 +59,42 @@ public class CatStockDTO extends BaseDTO {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+<<<<<<< HEAD
+=======
+    public String getCustId() {
+        return custId;
+    }
+
+    public void setCustId(String custId) {
+        this.custId = custId;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+>>>>>>> f97d1f5817603b7b5087e101d6f6579d2945e4eb
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+<<<<<<< HEAD
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getCustId() {
@@ -54,14 +113,22 @@ public class CatStockDTO extends BaseDTO {
         this.code = code;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public BaseModel toModel() {
+        return new CatStock(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,status,custId, address);
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
+    @Override
+    public String toString() {
+        return "CatStockDTO{" +
+                "id='" + id + '\'' +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", status='" + status + '\'' +
+                ", custId='" + custId + '\'' +
+                ", address='" + address + '\'' +
+                '}';
+=======
     public String getAddress() {
         return address;
     }
@@ -91,5 +158,6 @@ public class CatStockDTO extends BaseDTO {
         return new CatStock(!StringUtils.validString(id) ? null:Long.valueOf(id),!StringUtils.validString(custId) ? null:Long.valueOf(custId),
                     code,name,address,status,managerInfo
                 );
+>>>>>>> f97d1f5817603b7b5087e101d6f6579d2945e4eb
     }
 }

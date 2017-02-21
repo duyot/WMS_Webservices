@@ -15,13 +15,13 @@ import javax.annotation.PostConstruct;
 @Service("catGoodsBusiness")
 public class CatGoodsBusinessImpl extends BaseBusinessImpl<CatGoodsDTO, CatGoodsDAO> {
     @Autowired
-    CatGoodsDAO catGoodsDAO;
+    CatGoodsDAO goodsDAO;
 
     @PostConstruct
     public void setupService() {
-        this.tdao = catGoodsDAO;
+        this.tdao = goodsDAO;
         this.entityClass = CatGoodsDTO.class;
-        this.catGoodsDAO.setModelClass(CatGoods.class);
+        this.goodsDAO.setModelClass(CatGoods.class);
         this.tDTO = new CatGoodsDTO();
     }
 }
