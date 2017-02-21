@@ -2,8 +2,7 @@ package com.wms.persistents.model;
 
 import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
-import com.wms.dto.CatGoodsGroupDTO;
-import com.wms.dto.GoodsDTO;
+import com.wms.dto.CatGoodsDTO;
 import com.wms.utils.DateTimeUtils;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -16,34 +15,34 @@ import java.util.Date;
 @Entity
 @DynamicUpdate
 @Table(name = "CAT_GOODS")
-public class Goods  extends BaseModel {
+public class CatGoods extends BaseModel {
     private Long id;
     private Long custId;
+    private Long goodsGroupId;
     private String code;
     private String name;
     private String status;
-    private Date createDate;
+    private Date createdDate;
     private String unitType;
-    private Long goodsGroupId;
-    private String serialType;
+    private String isSerial;
     private String description;
     private Double inPrice;
     private Double outPrice;
     private String brand;
 
-    public Goods() {
+    public CatGoods() {
     }
 
-    public Goods(Long id, String code, String name, String status, Date createDate, Long custId, String unitType, Long goodsGroupId, String serialType, String description, Double inPrice, Double outPrice, String brand) {
+    public CatGoods(Long id, String code, String name, String status, Date createdDate, Long custId, String unitType, Long goodsGroupId, String isSerial, String description, Double inPrice, Double outPrice) {
         this.id = id;
         this.code = code;
         this.name = name;
         this.status = status;
-        this.createDate = createDate;
+        this.createdDate = createdDate;
         this.custId = custId;
         this.unitType = unitType;
         this.goodsGroupId = goodsGroupId;
-        this.serialType = serialType;
+        this.isSerial = isSerial;
         this.description = description;
         this.inPrice = inPrice;
         this.outPrice = outPrice;
@@ -52,10 +51,10 @@ public class Goods  extends BaseModel {
 
     @Id
     @Column(name = "ID", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_GOODS")
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_CAT_GOODS")
     @SequenceGenerator(
-            name="SEQ_GOODS",
-            sequenceName="SEQ_GOODS",
+            name="SEQ_CAT_GOODS",
+            sequenceName="SEQ_CAT_GOODS",
             allocationSize = 1,
             initialValue= 1000
     )
@@ -94,13 +93,13 @@ public class Goods  extends BaseModel {
         this.status = status;
     }
 
-    @Column(name = "CREATE_DATE")
-    public Date getCreateDate() {
-        return createDate;
+    @Column(name = "CREATED_DATE")
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     @Column(name = "CUST_ID")
@@ -130,13 +129,13 @@ public class Goods  extends BaseModel {
         this.goodsGroupId = goodsGroupId;
     }
 
-    @Column(name = "SERIAL_TYPE")
-    public String getSerialType() {
-        return serialType;
+    @Column(name = "IS_SERIAL")
+    public String getIsSerial() {
+        return isSerial;
     }
 
-    public void setSerialType(String serialType) {
-        this.serialType = serialType;
+    public void setIsSerial(String isSerial) {
+        this.isSerial = isSerial;
     }
 
     @Column(name = "DESCRIPTION")
@@ -148,7 +147,7 @@ public class Goods  extends BaseModel {
         this.description = description;
     }
 
-    @Column(name = "IN_PRICE")
+    @Column(name = "INPUT_PRICE")
     public Double getInPrice() {
         return inPrice;
     }
@@ -157,7 +156,7 @@ public class Goods  extends BaseModel {
         this.inPrice = inPrice;
     }
 
-    @Column(name = "OUT_PRICE")
+    @Column(name = "OUTPUT_PRICE")
     public Double getOutPrice() {
         return outPrice;
     }
@@ -166,18 +165,9 @@ public class Goods  extends BaseModel {
         this.outPrice = outPrice;
     }
 
-    @Column(name = "BRAND")
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
-
     @Override
     public BaseDTO toDTO() {
-        return new  GoodsDTO(id==null?"":id+"",code,name,status.equals("1")?"Hiệu lực":"Hết hiệu lực",createDate==null?"": DateTimeUtils.convertDateTimeToString(createDate),custId==null?"":custId+"",unitType,goodsGroupId==null?"":goodsGroupId+"",serialType,description,inPrice==null?"":inPrice+"",outPrice==null?"":outPrice+"",brand);
+        return new CatGoodsDTO(id==null?"":id+"",code,name,status.equals("1")?"Hiệu lực":"Hết hiệu lực", createdDate ==null?"": DateTimeUtils.convertDateTimeToString(createdDate),custId==null?"":custId+"",unitType,goodsGroupId==null?"":goodsGroupId+"", isSerial,description,inPrice==null?"":inPrice+"",outPrice==null?"":outPrice+"");
     }
 
 }

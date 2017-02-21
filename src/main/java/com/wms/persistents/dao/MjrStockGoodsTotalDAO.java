@@ -43,7 +43,7 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
         StringBuilder sqlUpdateTotal = new StringBuilder();
         sqlUpdateTotal.append(" UPDATE  mjr_stock_goods_total a ");
         sqlUpdateTotal.append(" SET  a.amount      = a.amount + ?, ");
-        sqlUpdateTotal.append("      a.change_date = ? ");
+        sqlUpdateTotal.append("      a.changed_date = ? ");
         sqlUpdateTotal.append(" WHERE a.cust_id = ? ");
         sqlUpdateTotal.append("   AND a.stock_id = ? ");
         sqlUpdateTotal.append("   AND a.goods_id = ? ");

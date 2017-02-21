@@ -2,7 +2,6 @@ package com.wms.persistents.dao;
 
 import com.wms.base.BaseDAOImpl;
 import com.wms.persistents.model.ErrorLog;
-import com.wms.persistents.model.Goods;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -8,6 +8,8 @@ public class Constants {
     public static final String IS_SERIAL = "1";
 
     public static class RESULT_NAME{
+        public static String ERROR_NOT_VALID_GOODS_IN_REQUEST = "ERROR_NOT_VALID_GOODS_IN_REQUEST";
+        public static String ERROR_GOODS_INFO_NOT_VALID = "ERROR_GOODS_INFO_NOT_VALID";
         public static String ERROR_CREATE_STOCK_TRANS = "ERROR_CREATE_STOCK_TRANS";
         public static String ERROR_CREATE_STOCK_TRANS_DETAIL = "ERROR_CREATE_STOCK_TRANS_DETAIL";
         public static String ERROR_CREATE_STOCK_GOODS = "ERROR_CREATE_STOCK_GOODS";

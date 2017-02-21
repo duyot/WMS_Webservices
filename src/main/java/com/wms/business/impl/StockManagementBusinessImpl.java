@@ -1,5 +1,6 @@
 package com.wms.business.impl;
 
+import com.google.common.collect.Lists;
 import com.wms.base.BaseBusinessInterface;
 import com.wms.business.interfaces.MjrStockGoodsTotalBusinessInterface;
 import com.wms.business.interfaces.StockManagementBusinessInterface;
@@ -16,7 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by duyot on 12/19/2016.
@@ -33,6 +36,8 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
     BaseBusinessInterface mjrStockGoodsBusiness;
     @Autowired
     BaseBusinessInterface mjrStockGoodsSerialBusiness;
+    @Autowired
+    BaseBusinessInterface catGoodsBusiness;
 
     @Autowired
     MjrStockGoodsTotalBusinessInterface advancedMjrStockGoodsTotalBusiness;
@@ -46,6 +51,33 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
         return mjrStockTransDTO.getCustId() + "_" + mjrStockTransDTO.getType() + "_"+ createdTime;
     }
 
+    private Map getMapGoods(List<MjrStockTransDetailDTO> lstGoods){
+        //
+        String strListGoodsCode = getStrListGoodsCode(lstGoods);
+        List<Condition> lstCondition = Lists.newArrayList();
+        lstCondition.add(new Condition("code",Constants.SQL_OPERATOR.IN,strListGoodsCode));
+        List<CatGoodsDTO> lstImportCatGoods = catGoodsBusiness.findByCondition(lstCondition);
+        //
+        if(DataUtil.isListNullOrEmpty(lstImportCatGoods)){
+            return new HashMap();
+        }
+        //
+        Map<String,CatGoodsDTO> mapGoods = new HashMap();
+        for(CatGoodsDTO i: lstImportCatGoods){
+            mapGoods.put(i.getCode(),i);
+        }
+        //
+        return mapGoods;
+    }
+
+    private String getStrListGoodsCode(List<MjrStockTransDetailDTO> lstGoods){
+        StringBuilder stringBuilder = new StringBuilder();
+        for(MjrStockTransDetailDTO i: lstGoods){
+            stringBuilder.append(i.getGoodsCode()).append(",");
+        }
+        return stringBuilder.substring(0,stringBuilder.lastIndexOf(",")) ;
+    };
+
     @Override
     public ResponseObject importStock(MjrStockTransDTO mjrStockTransDTO, List<MjrStockTransDetailDTO> lstMjrStockTransDetailDTO) {
         Session session = sessionFactory.openSession();
@@ -53,22 +85,36 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
         transaction.begin();
         //
         String createdDate = mjrStockTransBusiness.getSysDate();
-        String createdDatePartition = mjrStockTransBusiness.getSysDate("hh24miss_ddMMyyyy");
+        String createdDatePartition = mjrStockTransBusiness.getSysDate("ddMMyyyy_hh24miss");
 
         try {
             //
             mjrStockTransDTO.setCreatedDate(createdDate);
             mjrStockTransDTO.setCode(initTransCode(mjrStockTransDTO,createdDatePartition));
+            //
             String savedStockTransId = mjrStockTransBusiness.saveBySession(mjrStockTransDTO,session);
             if(!DataUtil.isInteger(savedStockTransId)){
                 FunctionUtils.rollBack(transaction);
                 return new ResponseObject(Responses.ERROR.getName(), Constants.RESULT_NAME.ERROR_CREATE_STOCK_TRANS,savedStockTransId);
             }
             mjrStockTransDTO.setId(savedStockTransId);
+            //get map list of import gooods
+            Map<String,CatGoodsDTO> mapGoods = getMapGoods(lstMjrStockTransDetailDTO);
+            if(mapGoods.size() == 0){
+                return new ResponseObject(Responses.ERROR.getName(), Constants.RESULT_NAME.ERROR_NOT_VALID_GOODS_IN_REQUEST,savedStockTransId);
+            }
             //
             for (MjrStockTransDetailDTO i: lstMjrStockTransDetailDTO) {
                 //
                 i.setStockTransId(savedStockTransId);
+                CatGoodsDTO goods = mapGoods.get(i.getGoodsCode());
+                if(goods == null){
+                    return new ResponseObject(Responses.ERROR.getName(), Constants.RESULT_NAME.ERROR_GOODS_INFO_NOT_VALID,i.getGoodsCode());
+                }
+
+                i.setGoodsId(goods.getId());
+                i.setIsSerial(goods.getIsSerial());
+                //
                 String savedStockTransDetailId = mjrStockTransDetailBusiness.saveBySession(i,session);
                 if(Responses.ERROR.getName().equalsIgnoreCase(savedStockTransDetailId)){
                     log.info("Error stock_trans_detail:  "+"stockTransId|"+savedStockTransDetailId+"goodsCode|"+i.getGoodsCode());

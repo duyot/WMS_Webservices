@@ -1,12 +1,9 @@
 package com.wms.dto;
 
 import com.wms.base.BaseDTO;
-import com.wms.base.BaseModel;
 import com.wms.persistents.model.MjrStockTrans;
 import com.wms.utils.DateTimeUtils;
 import com.wms.utils.StringUtils;
-
-import java.util.Date;
 
 /**
  * Created by duyot on 12/28/2016.
@@ -20,7 +17,7 @@ public class MjrStockTransDTO extends BaseDTO {
     private String custId;
     private String stockId;
     private String contractNumber;
-    private String invoicetNumber;
+    private String invoiceNumber;
     private String type;
     private String status;
     private String createdDate;
@@ -31,17 +28,18 @@ public class MjrStockTransDTO extends BaseDTO {
     private String transMoneyRequire;
     private String transMoneyReceive;
     private String transMoneyResponse;
+    private String description;
 
     public MjrStockTransDTO() {
     }
 
-    public MjrStockTransDTO(String id, String code, String custId, String stockId, String contractNumber, String invoicetNumber, String type, String status, String createdDate, String createdUser, String transMoneyTotal, String transMoneyDiscount, String discountAmount, String transMoneyRequire, String transMoneyReceive, String transMoneyResponse) {
+    public MjrStockTransDTO(String id, String code, String custId, String stockId, String contractNumber, String invoiceNumber, String type, String status, String createdDate, String createdUser, String transMoneyTotal, String transMoneyDiscount, String discountAmount, String transMoneyRequire, String transMoneyReceive, String transMoneyResponse, String description) {
         this.id = id;
         this.code = code;
         this.custId = custId;
         this.stockId = stockId;
         this.contractNumber = contractNumber;
-        this.invoicetNumber = invoicetNumber;
+        this.invoiceNumber = invoiceNumber;
         this.type = type;
         this.status = status;
         this.createdDate = createdDate;
@@ -52,6 +50,7 @@ public class MjrStockTransDTO extends BaseDTO {
         this.transMoneyRequire = transMoneyRequire;
         this.transMoneyReceive = transMoneyReceive;
         this.transMoneyResponse = transMoneyResponse;
+        this.description = description;
     }
 
     public String getId() {
@@ -94,12 +93,12 @@ public class MjrStockTransDTO extends BaseDTO {
         this.contractNumber = contractNumber;
     }
 
-    public String getInvoicetNumber() {
-        return invoicetNumber;
+    public String getInvoiceNumber() {
+        return invoiceNumber;
     }
 
-    public void setInvoicetNumber(String invoicetNumber) {
-        this.invoicetNumber = invoicetNumber;
+    public void setInvoiceNumber(String invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
     }
 
     public String getType() {
@@ -182,14 +181,22 @@ public class MjrStockTransDTO extends BaseDTO {
         this.transMoneyResponse = transMoneyResponse;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public MjrStockTrans toModel() {
         return new MjrStockTrans(!StringUtils.validString(id) ? null:Long.valueOf(id),code,!StringUtils.validString(custId) ? null:Long.valueOf(custId),
-                !StringUtils.validString(stockId) ? null:Long.valueOf(stockId),contractNumber,invoicetNumber,!StringUtils.validString(type) ? null:Long.valueOf(type),
+                !StringUtils.validString(stockId) ? null:Long.valueOf(stockId),contractNumber, invoiceNumber,!StringUtils.validString(type) ? null:Long.valueOf(type),
                 !StringUtils.validString(status) ? null:Long.valueOf(status),!StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),
                 createdUser,!StringUtils.validString(transMoneyTotal) ? null:Float.valueOf(transMoneyTotal),!StringUtils.validString(transMoneyDiscount) ? null:Float.valueOf(transMoneyDiscount),
                 !StringUtils.validString(discountAmount) ? null:Float.valueOf(discountAmount),!StringUtils.validString(transMoneyRequire) ? null:Float.valueOf(transMoneyRequire),
-                !StringUtils.validString(transMoneyReceive) ? null:Float.valueOf(transMoneyReceive),!StringUtils.validString(transMoneyResponse) ? null:Float.valueOf(transMoneyResponse)
+                !StringUtils.validString(transMoneyReceive) ? null:Float.valueOf(transMoneyReceive),!StringUtils.validString(transMoneyResponse) ? null:Float.valueOf(transMoneyResponse),description
                 );
     }
 }

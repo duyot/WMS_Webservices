@@ -2,14 +2,10 @@ package com.wms.business.impl;
 
 import com.google.common.collect.Lists;
 import com.wms.base.BaseBusinessImpl;
-import com.wms.base.BaseModel;
 import com.wms.business.interfaces.MjrStockGoodsTotalBusinessInterface;
 import com.wms.dto.Condition;
-import com.wms.dto.GoodsDTO;
 import com.wms.dto.MjrStockGoodsTotalDTO;
-import com.wms.persistents.dao.GoodsDAO;
 import com.wms.persistents.dao.MjrStockGoodsTotalDAO;
-import com.wms.persistents.model.Goods;
 import com.wms.persistents.model.MjrStockGoodsTotal;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;

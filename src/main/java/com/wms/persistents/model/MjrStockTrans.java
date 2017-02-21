@@ -30,11 +30,12 @@ public class MjrStockTrans extends BaseModel {
     private Float transMoneyRequire;
     private Float transMoneyReceive;
     private Float transMoneyResponse;
+    private String description;
 
     public MjrStockTrans() {
     }
 
-    public MjrStockTrans(Long id, String code, Long custId, Long stockId, String contractNumber, String invoicetNumber, Long type, Long status, Date createdDate, String createdUser, Float transMoneyTotal, Float transMoneyDiscount, Float discountAmount, Float transMoneyRequire, Float transMoneyReceive, Float transMoneyResponse) {
+    public MjrStockTrans(Long id, String code, Long custId, Long stockId, String contractNumber, String invoicetNumber, Long type, Long status, Date createdDate, String createdUser, Float transMoneyTotal, Float transMoneyDiscount, Float discountAmount, Float transMoneyRequire, Float transMoneyReceive, Float transMoneyResponse, String description) {
         this.id = id;
         this.code = code;
         this.custId = custId;
@@ -51,6 +52,7 @@ public class MjrStockTrans extends BaseModel {
         this.transMoneyRequire = transMoneyRequire;
         this.transMoneyReceive = transMoneyReceive;
         this.transMoneyResponse = transMoneyResponse;
+        this.description = description;
     }
 
     @Id
@@ -206,12 +208,21 @@ public class MjrStockTrans extends BaseModel {
         this.transMoneyResponse = transMoneyResponse;
     }
 
+    @Column(name = "DESCRIPTION")
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public MjrStockTransDTO toDTO() {
         return new MjrStockTransDTO(id==null?"":id+"",code,custId==null?"":custId+"",stockId==null?"":stockId+"",
                 contractNumber,invoicetNumber,type==null?"":type+"",status==null?"":status+"",createdDate==null?"": DateTimeUtils.convertDateTimeToString(createdDate),
                 createdUser,transMoneyTotal==null?"":transMoneyTotal+"",transMoneyDiscount==null?"":transMoneyDiscount+"",discountAmount==null?"":discountAmount+"",
-                transMoneyRequire==null?"":transMoneyRequire+"",transMoneyReceive==null?"":transMoneyReceive+"",transMoneyResponse==null?"":transMoneyResponse+""
+                transMoneyRequire==null?"":transMoneyRequire+"",transMoneyReceive==null?"":transMoneyReceive+"",transMoneyResponse==null?"":transMoneyResponse+"",description
         );
     }
 }

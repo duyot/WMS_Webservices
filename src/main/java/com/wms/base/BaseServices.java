@@ -25,6 +25,16 @@ public class BaseServices<T extends BaseDTO> {
     @Autowired
     public BaseBusinessInterface errorLogBusiness;
 
+    @RequestMapping(value = "/getSysDate",produces = "application/json",method = RequestMethod.GET)
+    public String getSysDate(){
+        return baseBusiness.getSysDate();
+    }
+
+    @RequestMapping(value = "/getSysDateWithPattern",produces = "application/json",method = RequestMethod.POST)
+    public String getSysDateWithPattern(@RequestBody String pattern){
+        return baseBusiness.getSysDate(pattern);
+    }
+
     @RequestMapping(value = "/add",produces = "application/json",method = RequestMethod.POST)
     public ResponseObject add(@RequestBody T dto){
         String sysDate = errorLogBusiness.getSysDate();

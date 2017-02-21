@@ -2,7 +2,7 @@ package com.wms.services;
 
 import com.wms.base.BaseBusinessInterface;
 import com.wms.base.BaseServices;
-import com.wms.dto.GoodsDTO;
+import com.wms.dto.CatGoodsDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +16,13 @@ import javax.annotation.PostConstruct;
  */
 @RestController
 @RequestMapping("/services/catGoodsServices")
-public class CatGoodsServices extends BaseServices<GoodsDTO> {
+public class CatGoodsServices extends BaseServices<CatGoodsDTO> {
     Logger log = LoggerFactory.getLogger(CatGoodsServices.class);
     @Autowired
-    BaseBusinessInterface goodsBusiness;
+    BaseBusinessInterface catGoodsBusiness;
 
     @PostConstruct
     public void setupService() {
-        this.baseBusiness = goodsBusiness;
+        this.baseBusiness = catGoodsBusiness;
     }
 }

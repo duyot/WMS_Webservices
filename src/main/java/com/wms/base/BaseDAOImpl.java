@@ -39,11 +39,16 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
     }
 
     //--------------------------------------------------------------------
-    public String getSysDate(String partern){
+    public String getSysDate(String pattern){
         String queryString = "SELECT to_char(sysdate,:id)  from dual";
         Query query = getSession().createSQLQuery(queryString);
-        query.setParameter("id", partern);
-        return query.list().get(0).toString();
+        query.setParameter("id", pattern);
+        try {
+            return query.list().get(0).toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     public String getSysDate() {

@@ -1,6 +1,5 @@
 package com.wms.persistents.model;
 
-import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
 import com.wms.dto.MjrStockGoodsDTO;
 import com.wms.utils.DateTimeUtils;
@@ -22,14 +21,14 @@ public class MjrStockGoods extends BaseModel{
     private String cellCode;
     private Float amount;
     private Date importDate;
-    private Date changeDate;
+    private Date changedDate;
     private String status;
     private Long partnerId;
     private Long importStockTransId;
     private Float inputPrice;
     private Float outputPrice;
 
-    public MjrStockGoods(Long id, Long custId, Long stockId, Long goodsId, String goodsState, String cellCode, Float amount, Date importDate, Date changeDate, String status, Long partnerId, Long importStockTransId, Float inputPrice, Float outputPrice) {
+    public MjrStockGoods(Long id, Long custId, Long stockId, Long goodsId, String goodsState, String cellCode, Float amount, Date importDate, Date changedDate, String status, Long partnerId, Long importStockTransId, Float inputPrice, Float outputPrice) {
         this.id = id;
         this.custId = custId;
         this.stockId = stockId;
@@ -38,7 +37,7 @@ public class MjrStockGoods extends BaseModel{
         this.cellCode = cellCode;
         this.amount = amount;
         this.importDate = importDate;
-        this.changeDate = changeDate;
+        this.changedDate = changedDate;
         this.status = status;
         this.partnerId = partnerId;
         this.importStockTransId = importStockTransId;
@@ -129,13 +128,13 @@ public class MjrStockGoods extends BaseModel{
         this.importDate = importDate;
     }
 
-    @Column(name = "CHANGE_DATE")
-    public Date getChangeDate() {
-        return changeDate;
+    @Column(name = "CHANGED_DATE")
+    public Date getChangedDate() {
+        return changedDate;
     }
 
-    public void setChangeDate(Date changeDate) {
-        this.changeDate = changeDate;
+    public void setChangedDate(Date changedDate) {
+        this.changedDate = changedDate;
     }
 
     @Column(name = "STATUS")
@@ -187,7 +186,7 @@ public class MjrStockGoods extends BaseModel{
     public MjrStockGoodsDTO toDTO() {
         return new MjrStockGoodsDTO(id==null?"":id+"",custId==null?"":custId+"",stockId==null?"":stockId+"",
                 goodsId==null?"":goodsId+"",goodsState,cellCode,amount==null?"":amount+"",importDate==null?"": DateTimeUtils.convertDateTimeToString(importDate),
-                changeDate==null?"": DateTimeUtils.convertDateTimeToString(changeDate),status,partnerId==null?"":partnerId+"",
+                changedDate ==null?"": DateTimeUtils.convertDateTimeToString(changedDate),status,partnerId==null?"":partnerId+"",
                 importStockTransId==null?"":importStockTransId+"",inputPrice==null?"":inputPrice+"",outputPrice==null?"":outputPrice+""
                 );
     }
