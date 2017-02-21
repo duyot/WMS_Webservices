@@ -120,7 +120,7 @@ public class MjrStockGoods extends BaseModel{
         this.amount = amount;
     }
 
-    @Column(name = "IMPORT_DATETIME")
+    @Column(name = "IMPORT_DATE")
     public Date getImportDate() {
         return importDate;
     }
@@ -129,7 +129,7 @@ public class MjrStockGoods extends BaseModel{
         this.importDate = importDate;
     }
 
-    @Column(name = "CHANGE_DATETIME")
+    @Column(name = "CHANGE_DATE")
     public Date getChangeDate() {
         return changeDate;
     }
