@@ -2,41 +2,31 @@ package com.wms.dto;
 
 import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
-import com.wms.persistents.model.CatPartner;
+import com.wms.persistents.model.CatDepartment;
 import com.wms.utils.StringUtils;
 /**
  * Created by doanlv4 on 2/17/2017.
  */
-public class CatPartnerDTO extends BaseDTO {
+public class CatDepartmentDTO extends BaseDTO {
     private String id;
     private String name;
     private String code;
     private String status;
     private String custId;
-    private String address;
-    private String telNumber;
+    private String path;
+    private String parentId;
 
-
-
-    public CatPartnerDTO(String id, String code, String name, String status, String custId, String address,String telNumber ) {
+    public CatDepartmentDTO(String id, String code, String name, String status, String custId, String path, String parentId ) {
         this.id = id;
+        this.code = code;
         this.name = name;
         this.status = status;
         this.custId = custId;
-        this.address = address;
-        this.code = code;
-        this.telNumber = telNumber;
+        this.path = path;
+        this.parentId = parentId;
     }
 
-    public CatPartnerDTO() {
-    }
-
-    public String getTelNumber() {
-        return telNumber;
-    }
-
-    public void setTelNumber(String telNumber) {
-        this.telNumber = telNumber;
+    public CatDepartmentDTO() {
     }
 
     public String getId() {
@@ -79,19 +69,25 @@ public class CatPartnerDTO extends BaseDTO {
         this.code = code;
     }
 
-    public String getAddress() {
-        return address;
+    public String getPath() {
+        return path;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setPath(String path) {
+        this.path = path;
     }
 
+    public String getParentId() {
+        return parentId;
+    }
 
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
 
     @Override
     public BaseModel toModel() {
-        return new CatPartner(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,status,custId, address,telNumber);
+        return new CatDepartment(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,status,custId, path, parentId);
     }
 
     @Override
@@ -102,8 +98,8 @@ public class CatPartnerDTO extends BaseDTO {
                 ", name='" + name + '\'' +
                 ", status='" + status + '\'' +
                 ", custId='" + custId + '\'' +
-                ", address='" + address + '\'' +
-                ", telNumber='" + telNumber + '\'' +
+                ", path='" + path + '\'' +
+                ", parentId='" + parentId + '\'' +
                 '}';
     }
 }

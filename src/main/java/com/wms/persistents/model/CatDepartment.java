@@ -2,7 +2,7 @@ package com.wms.persistents.model;
 
 import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
-import com.wms.dto.CatPartnerDTO;
+import com.wms.dto.CatDepartmentDTO;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -12,35 +12,35 @@ import javax.persistence.*;
  */
 @Entity
 @DynamicUpdate
-@Table(name = "CAT_PARTNER")
-public class CatPartner extends BaseModel {
+@Table(name = "CAT_DEPARTMENT")
+public class CatDepartment  extends BaseModel {
     private Long id;
     private String code;
     private String name;
     private String status;
     private String custId;
-    private String address;
-    private String telNumber;
+    private String path;
+    private String parentId;
 
-    public CatPartner(Long id,String code, String name, String status, String custId, String address, String telNumber) {
+    public CatDepartment(Long id,String code, String name, String status, String custId, String path, String parentId) {
         this.id = id;
         this.code = code;
         this.name = name;
         this.status = status;
         this.custId = custId;
-        this.address = address;
-        this.telNumber = telNumber;
+        this.path = path;
+        this.parentId = parentId;
     }
 
-    public CatPartner() {
+    public CatDepartment() {
     }
 
     @Id
     @Column(name = "ID", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_CAT_PARTNER")
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_CAT_DEPARTMENT")
     @SequenceGenerator(
-            name="SEQ_CAT_PARTNER",
-            sequenceName="SEQ_CAT_PARTNER",
+            name="SEQ_CAT_DEPARTMENT",
+            sequenceName="SEQ_CAT_DEPARTMENT",
             allocationSize = 1,
             initialValue= 1000
     )
@@ -88,26 +88,27 @@ public class CatPartner extends BaseModel {
         this.custId = custId;
     }
 
-    @Column(name = "ADDRESS")
-    public String getAddress() {
-        return address;
+    @Column(name = "PATH")
+    public String getPath() {
+        return path;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setPath(String path) {
+        this.path = path;
     }
 
-    @Column(name = "TEL_NUMBER")
-    public String getTelNumber() {
-        return telNumber;
+    @Column(name = "PARENT_ID")
+    public String getParentId() {
+        return parentId;
     }
 
-    public void setTelNumber(String telNumber) {
-        this.telNumber = telNumber;
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 
     @Override
     public BaseDTO toDTO() {
-        return new CatPartnerDTO(id==null?"":id+"",code,name,status,custId, address,telNumber);
+        return new CatDepartmentDTO(id==null?"":id+"",code,name,status,custId, path, parentId);
     }
 }
+
