@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -38,6 +39,12 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
         return sessionFactory.getCurrentSession();
     }
 
+    //--------------------------------------------------------------------
+    public Long getSequence(String sequense) {
+        String sql = "select " + sequense + ".nextval from dual";
+        Query query = getSession().createSQLQuery(sql);
+        return ((BigDecimal) query.list().get(0)).longValue();
+    }
     //--------------------------------------------------------------------
     public String getSysDate(String pattern){
         String queryString = "SELECT to_char(sysdate,:id)  from dual";

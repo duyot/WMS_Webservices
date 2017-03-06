@@ -18,8 +18,6 @@ public class ResponseObject {
         this.key = key;
     }
 
-
-
     public ResponseObject() {
     }
 

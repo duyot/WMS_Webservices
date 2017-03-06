@@ -15,6 +15,12 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
     public TDAO tdao;
     public T tDTO;
     protected Class<T> entityClass;
+
+    @Override
+    public Long getSequence(String sequenceName) {
+        return tdao.getSequence(sequenceName);
+    }
+
     //--------------------------------------------------------------------
     @Override
     public String getSysDate(String pattern){

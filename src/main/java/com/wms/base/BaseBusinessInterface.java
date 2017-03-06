@@ -9,6 +9,9 @@ import java.util.List;
  * Created by duyot on 8/29/2016.
  */
 public interface BaseBusinessInterface<T extends BaseDTO> {
+
+    public Long getSequence(String sequenceName);
+
     public String getSysDate(String pattern);
     public String getSysDate();
 

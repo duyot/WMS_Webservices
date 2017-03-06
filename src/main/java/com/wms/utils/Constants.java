@@ -6,6 +6,7 @@ package com.wms.utils;
 public class Constants {
     public static final String STATUS_OK = "200";
     public static final String IS_SERIAL = "1";
+    public static final int COMMIT_NUMBER = 200;
 
     public static class RESULT_NAME{
         public static String ERROR_NOT_VALID_GOODS_IN_REQUEST = "ERROR_NOT_VALID_GOODS_IN_REQUEST";

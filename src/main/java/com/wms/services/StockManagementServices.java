@@ -30,7 +30,7 @@ public class StockManagementServices {
     public ResponseObject importStock(@RequestBody StockTransDTO stockTransDTO){
         log.info("-------------------------------");
         ResponseObject importResult = stockManagementBusiness.importStock(stockTransDTO.getMjrStockTransDTO(),stockTransDTO.getLstMjrStockTransDetail());
-        log.info("Return info: "+ importResult);
+        log.info("Result: "+ importResult);
         return importResult;
     }
 }

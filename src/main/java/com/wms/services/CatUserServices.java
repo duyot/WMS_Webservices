@@ -9,7 +9,6 @@ import com.wms.dto.CatCustomerDTO;
 import com.wms.dto.CatUserDTO;
 import com.wms.dto.Condition;
 import com.wms.dto.MapUserCustomerDTO;
-import com.wms.persistents.model.CatCustomer;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import org.apache.commons.io.IOUtils;

@@ -30,10 +30,6 @@ public class MjrStockGoodsTotalBusinessImpl extends BaseBusinessImpl<MjrStockGoo
         this.tDTO = new MjrStockGoodsTotalDTO();
     }
 
-    public String updateSession(MjrStockGoodsTotalDTO obj,Session session){
-        return mjrStockGoodsTotalDAO.updateSession(obj.toModel(),session);
-    }
-
     @Override
     public List<MjrStockGoodsTotalDTO> findByCondition(List<Condition> lstCondition, Session session) {
         return listModelToDTO(mjrStockGoodsTotalDAO.findByConditionSession(lstCondition,session));

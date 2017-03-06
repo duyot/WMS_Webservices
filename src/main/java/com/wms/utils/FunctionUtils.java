@@ -1,30 +1,77 @@
 package com.wms.utils;
 
 import com.google.common.collect.Lists;
+import com.wms.business.impl.StockManagementBusinessImpl;
 import com.wms.dto.Condition;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by duyot on 12/19/2016.
  */
 public class FunctionUtils {
+    public static Logger log = LoggerFactory.getLogger(StockManagementBusinessImpl.class);
 
-    public static void closeSession(Session session){
-        if(session != null && session.isOpen()){
-            session.close();
+    public static void commit(Transaction transaction, Connection con) {
+        try {
+            if (transaction != null) {
+                transaction.commit();
+            }
+            if (con != null) {
+                con.commit();
+            }
+
+        } catch (SQLException ex) {
+            log.info(ex.toString());
         }
     }
 
-    public static void rollBack(Transaction tx){
-        tx.rollback();
+    public static void closeConnection(Session session,Connection connection){
+        try {
+            if (session.isOpen()) {
+                session.close();
+            }
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+            }
+        } catch (SQLException ex) {
+            log.info(ex.toString());
+        }
+    }
+
+
+    //ROLLBACK
+    public static void rollback(Transaction transaction, Connection con) {
+        try {
+            if (con != null) {
+                con.rollback();
+            }
+            if (transaction != null) {
+                transaction.rollback();
+            }
+
+            if (con != null && !con.isClosed()) {
+                con.close();
+            }
+        } catch (SQLException ex) {
+            log.info(ex.toString());
+        }
+    }
+
+    public static String  randomString(){
+        return ThreadLocalRandom.current().nextInt(10000, 99998 + 1)+"";
     }
 
 
