@@ -11,11 +11,22 @@ public class ResponseObject {
     private String statusCode;
     private String statusName;
     private String key;
+    //
+    private String total;
+    private String success;
 
     public ResponseObject(String statusCode, String statusName, String key) {
         this.statusCode = statusCode;
         this.statusName = statusName;
         this.key = key;
+    }
+
+    public ResponseObject(String statusCode, String statusName, String key, String total, String success) {
+        this.statusCode = statusCode;
+        this.statusName = statusName;
+        this.key = key;
+        this.total = total;
+        this.success = success;
     }
 
     public ResponseObject() {
@@ -48,6 +59,22 @@ public class ResponseObject {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getTotal() {
+        return total;
+    }
+
+    public void setTotal(String total) {
+        this.total = total;
+    }
+
+    public String getSuccess() {
+        return success;
+    }
+
+    public void setSuccess(String success) {
+        this.success = success;
     }
 
     @Override

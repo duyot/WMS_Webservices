@@ -1,11 +1,8 @@
 package com.wms.business.impl;
 
 import com.wms.base.BaseBusinessImpl;
-import com.wms.dto.CatCustomerDTO;
 import com.wms.dto.Err$MjrStockGoodsSerialDTO;
-import com.wms.persistents.dao.CatCustomerDAO;
 import com.wms.persistents.dao.Err$MjrStockGoodsSerialDAO;
-import com.wms.persistents.model.CatCustomer;
 import com.wms.persistents.model.Err$MjrStockGoodsSerial;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -90,8 +90,8 @@ public class StockBusinessWithConnectionDAO {
         StringBuilder sqlStockGoods = new StringBuilder();
         //STOCK_TRANS_DETAIL
         sqlStockTransDetail.append(" Insert into MJR_STOCK_TRANS_DETAIL ");
-        sqlStockTransDetail.append(" (ID,STOCK_TRANS_ID,GOODS_ID,GOODS_CODE,GOODS_STATE,IS_SERIAL,AMOUNT,SERIAL,INPUT_PRICE,OUTPUT_PRICE,CELL_CODE)  ");
-        sqlStockTransDetail.append(" values  (SEQ_MJR_STOCK_TRANS_DETAIL.nextval,?,?,?,?,?,?,?,?,?,?) ");
+        sqlStockTransDetail.append(" (ID,STOCK_TRANS_ID,GOODS_ID,GOODS_CODE,GOODS_STATE,IS_SERIAL,AMOUNT,SERIAL,INPUT_PRICE,CELL_CODE)  ");
+        sqlStockTransDetail.append(" values  (SEQ_MJR_STOCK_TRANS_DETAIL.nextval,?,?,?,?,?,?,?,?,?) ");
         //STOCK_GOODS_SERIAL
         sqlStockGoodsSerial.append(" Insert into MJR_STOCK_GOODS_SERIAL  ");
         sqlStockGoodsSerial.append(" (ID,CUST_ID,STOCK_ID,GOODS_ID,GOODS_STATE,CELL_CODE,AMOUNT,SERIAL,IMPORT_DATE,CHANGED_DATE,STATUS,PARTNER_ID,IMPORT_STOCK_TRANS_ID,INPUT_PRICE)  ");
@@ -100,7 +100,7 @@ public class StockBusinessWithConnectionDAO {
         //STOCK_GOODS
         sqlStockGoods.append(" Insert into MJR_STOCK_GOODS ");
         sqlStockGoods.append(" (ID,CUST_ID,STOCK_ID,GOODS_ID,GOODS_STATE,CELL_CODE,AMOUNT,IMPORT_DATE,CHANGED_DATE,STATUS,PARTNER_ID,IMPORT_STOCK_TRANS_ID,INPUT_PRICE)  ");
-        sqlStockGoods.append(" values  (SEQ_MJR_STOCK_GOODS,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?,?,?,?)  ");
+        sqlStockGoods.append(" values  (SEQ_MJR_STOCK_GOODS.nextval,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?,?,?,?)  ");
         sqlStockGoods.append(" LOG ERRORS INTO ERR$_MJR_STOCK_GOODS_SERIAL REJECT LIMIT UNLIMITED ");
         //3. TAO PREPARE STATEMENT
         try {
@@ -114,7 +114,7 @@ public class StockBusinessWithConnectionDAO {
                 //
                 count++;
                 //DETAIL
-                paramsStockTransDetail = setParamsStockTransSerial(goods);
+                paramsStockTransDetail = setParamsStockTransSerial(mjrStockTransDTO,goods);
                 //SET PARAMS AND ADD TO BATCH
                 for (int idx = 0; idx < paramsStockTransDetail.size(); idx++) {
                     prstmtInsertStockTransDetail.setString(idx + 1, DataUtil.nvl(paramsStockTransDetail.get(idx), "").toString());
@@ -169,17 +169,16 @@ public class StockBusinessWithConnectionDAO {
         return Responses.SUCCESS.getName();
     }
 
-    public List setParamsStockTransSerial(MjrStockTransDetailDTO goods) {
+    public List setParamsStockTransSerial(MjrStockTransDTO transDetail, MjrStockTransDetailDTO goods) {
         List paramsStockTrans = new ArrayList();
-        paramsStockTrans.add(goods.getStockTransId());
+        paramsStockTrans.add(transDetail.getId());
         paramsStockTrans.add(goods.getGoodsId());
         paramsStockTrans.add(goods.getGoodsCode());
         paramsStockTrans.add(goods.getGoodsState());
         paramsStockTrans.add(goods.getIsSerial());
         paramsStockTrans.add(goods.getAmount());
-        paramsStockTrans.add(goods.getInputPrice());
         paramsStockTrans.add(goods.getSerial());
-        paramsStockTrans.add(goods.getOutputPrice());
+        paramsStockTrans.add(goods.getInputPrice());
         paramsStockTrans.add(goods.getCellCode());
         return paramsStockTrans;
     }

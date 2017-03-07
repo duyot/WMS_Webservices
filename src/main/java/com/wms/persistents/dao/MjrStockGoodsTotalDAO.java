@@ -79,8 +79,8 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
     }
 
     public String updateTotal(MjrStockGoodsTotalDTO stockGoodsTotal, Connection connection){
-        log.info("Update Total: "+ "cust|"+stockGoodsTotal.getCustId()+ "stockId|"+ stockGoodsTotal.getStockId() + "goodsId|"+ stockGoodsTotal.getGoodsId()
-                + "goodsState|"+ stockGoodsTotal.getGoodsState()+ "amount|"+ stockGoodsTotal.getAmount());
+        log.info("Update Total: "+ "cust-"+stockGoodsTotal.getCustId()+ "|stockId-"+ stockGoodsTotal.getStockId() + "|goodsId-"+ stockGoodsTotal.getGoodsId()
+                + "|goodsState-"+ stockGoodsTotal.getGoodsState()+ "|amount-"+ stockGoodsTotal.getAmount());
 
         StringBuilder sqlUpdateTotal = new StringBuilder();
         sqlUpdateTotal.append(" UPDATE  mjr_stock_goods_total a ");

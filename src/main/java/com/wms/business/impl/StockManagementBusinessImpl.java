@@ -60,6 +60,7 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
         Connection connection = null;
         SessionFactory sessionFactoryBatch = session.getSessionFactory();
         //
+        float totalImportNumber = 0f;
         try {
             connection = sessionFactoryBatch.getSessionFactoryOptions().getServiceRegistry().getService(ConnectionProvider.class).getConnection();
             connection.setAutoCommit(false);
@@ -86,6 +87,8 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
                 }else{
                     mapGoodsAmount.put(key,Float.valueOf(i.getAmount()));
                 }
+                //
+                totalImportNumber += Float.valueOf(i.getAmount());
             }
             strListGoodsCode =  sbGoodsCode.substring(0,sbGoodsCode.lastIndexOf(",")) ;
             //
@@ -110,16 +113,23 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
             log.info("Finished insert transdetail...");
             //3. UPDATE TOTAL
             List<Err$MjrStockGoodsSerialDTO> lstGoodsError = getListRecordsError(savedStockTransId);
+            boolean isError = false;
+            float totalErrorNumber = 0f;
             if(!DataUtil.isListNullOrEmpty(lstGoodsError)){
+                //
+                isError = true;
                 //re-evalueate map goods-number
+                log.info("Found "+ lstGoodsError.size() + " errors...");
                 Map<String,Float> mapGoodsNumberError = new HashMap<>();
                 for(Err$MjrStockGoodsSerialDTO i: lstGoodsError){
                     String key = i.getGoodsId() + "," + i.getGoodsState();
-                    if(mapGoodsAmount.containsKey(key)){
-                        mapGoodsAmount.put(key,mapGoodsAmount.get(key)+ Float.valueOf(i.getAmount()));
+                    if(mapGoodsNumberError.containsKey(key)){
+                        mapGoodsNumberError.put(key,mapGoodsNumberError.get(key)+ Float.valueOf(i.getAmount()));
                     }else{
-                        mapGoodsAmount.put(key,Float.valueOf(i.getAmount()));
+                        mapGoodsNumberError.put(key,Float.valueOf(i.getAmount()));
                     }
+
+                    totalErrorNumber += Float.valueOf(i.getAmount());
                 }
 
                 mapGoodsAmount = updateFinalTotal(mapGoodsAmount,mapGoodsNumberError);
@@ -134,7 +144,11 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
             }
             //4. Commit
             FunctionUtils.commit(transaction,connection);
-            return new ResponseObject(Responses.SUCCESS.getName(),Responses.SUCCESS.getName(),savedStockTransId);
+            if(isError){
+                return new ResponseObject(Responses.SUCCESS_WITH_ERROR.getName(),Responses.SUCCESS_WITH_ERROR.getName(),savedStockTransId,totalImportNumber+"",(totalImportNumber - totalErrorNumber)+"");
+            }else{
+                return new ResponseObject(Responses.SUCCESS.getName(),Responses.SUCCESS.getName(),savedStockTransId,totalImportNumber+"",totalImportNumber+"");
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
