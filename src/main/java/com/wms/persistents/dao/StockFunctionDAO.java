@@ -1,14 +1,14 @@
 package com.wms.persistents.dao;
 
+import com.google.common.collect.Lists;
 import com.wms.business.impl.StockManagementBusinessImpl;
-import com.wms.dto.CatGoodsDTO;
-import com.wms.dto.MjrStockGoodsTotalDTO;
-import com.wms.dto.MjrStockTransDTO;
-import com.wms.dto.MjrStockTransDetailDTO;
+import com.wms.dto.*;
 import com.wms.enums.Responses;
-import com.wms.persistents.model.MjrStockGoodsTotal;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
+import com.wms.utils.DateTimeUtils;
+import com.wms.utils.FunctionUtils;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ import java.util.*;
  */
 @Repository
 @Transactional
-public class StockBusinessWithConnectionDAO {
+public class StockFunctionDAO {
     @Autowired
     SessionFactory sessionFactory;
 
@@ -34,9 +34,78 @@ public class StockBusinessWithConnectionDAO {
     MjrStockGoodsTotalDAO mjrStockGoodsTotalDAO;
 
     @Autowired
+    MjrStockGoodsSerialDAO mjrStockGoodsSerialDAO;
+
+    @Autowired
+    MjrStockGoodsDAO mjrStockGoodsDAO;
+
+    @Autowired
     MjrStockTransDAO mjrStockTransDAO;
 
+    @Autowired
+    MjrStockTransDetailDAO mjrStockTransDetailDAO;
+
     Logger log = LoggerFactory.getLogger(StockManagementBusinessImpl.class);
+    //------------------------------------------------------------------------------------------------------------------
+    public ResponseObject exportStockGoodsDetail(MjrStockTransDTO mjrStockTransDTO, MjrStockTransDetailDTO goodsDetail, Session session){
+        //
+        ResponseObject exportResult = new ResponseObject();
+        //1. save mjr_trans_detail
+        goodsDetail.setStockTransId(mjrStockTransDTO.getId());
+        String savedStockTranDetailId = mjrStockTransDetailDAO.saveBySession(goodsDetail.toModel(),session);
+        if(!DataUtil.isInteger(savedStockTranDetailId)){
+            exportResult.setStatusCode(Responses.ERROR.getName());
+            exportResult.setStatusName(Responses.ERROR_CREATE_STOCK_TRANS_DETAIL.getName());
+            return exportResult;
+        }
+        //
+        if(goodsDetail.isSerial()){
+            exportResult = mjrStockGoodsSerialDAO.exportStockGoodsSerial(mjrStockTransDTO, goodsDetail, session);
+        }else{
+            exportResult = mjrStockGoodsDAO.exportStockGoods(mjrStockTransDTO,goodsDetail,session);
+        }
+        //
+        return exportResult;
+    }
+
+    private MjrStockGoodsTotalDTO initTotalInfo(MjrStockTransDTO mjrStockTransDTO, MjrStockTransDetailDTO goodsDetail){
+        MjrStockGoodsTotalDTO total = new MjrStockGoodsTotalDTO();
+        total.setCustId(mjrStockTransDTO.getCustId());
+        total.setStockId(mjrStockTransDTO.getStockId());
+        total.setGoodsId(goodsDetail.getGoodsId());
+        total.setGoodsState(goodsDetail.getGoodsState());
+        return total;
+    }
+
+    public ResponseObject updateExportStockGoodsTotal(MjrStockTransDTO mjrStockTransDTO, Map<String, Float> mapGoodsNumber, Session session) {
+        Iterator iterator = mapGoodsNumber.entrySet().iterator();
+        String goodsInfo;
+        Float amount;
+        MjrStockGoodsTotalDTO total = new MjrStockGoodsTotalDTO();
+        total.setCustId(mjrStockTransDTO.getCustId());
+        total.setStockId(mjrStockTransDTO.getStockId());
+        total.setChangeDate(mjrStockTransDTO.getCreatedDate());
+        //
+        ResponseObject updateTotalResult;
+        //
+        while (iterator.hasNext()){
+            Map.Entry pair = (Map.Entry)iterator.next();
+            //
+            goodsInfo        = (String) pair.getKey();
+            amount           = (Float) pair.getValue();
+            String[] goodsInfoArr = goodsInfo.split(",");
+            String goodsId    = goodsInfoArr[0];
+            String goodsState = goodsInfoArr[1];
+            total.setAmount(amount+"");
+            total.setGoodsId(goodsId);
+            total.setGoodsState(goodsState);
+            updateTotalResult = mjrStockGoodsTotalDAO.updateExportTotal(total,session);
+            if(!Responses.SUCCESS.getName().equalsIgnoreCase(updateTotalResult.getStatusCode())){
+                return updateTotalResult;
+            }
+        }
+        return new ResponseObject(Responses.SUCCESS.getName(),Responses.SUCCESS.getName());
+    }
 
     public String saveStockTransByConnection(MjrStockTransDTO mjrStockTransDTO,Connection connection){
         return mjrStockTransDAO.saveStockTransByConnection(mjrStockTransDTO,connection);
@@ -65,7 +134,7 @@ public class StockBusinessWithConnectionDAO {
             stockGoodsTotal.setAmount(amount+"");
             stockGoodsTotal.setChangeDate(mjrStockTransDTO.getCreatedDate());
 
-            updateResult = mjrStockGoodsTotalDAO.updateTotal(stockGoodsTotal,connection);
+            updateResult = mjrStockGoodsTotalDAO.updateImportTotal(stockGoodsTotal,connection);
             if(!Responses.SUCCESS.getName().equalsIgnoreCase(updateResult)){
                 return updateResult;
             }
@@ -163,14 +232,14 @@ public class StockBusinessWithConnectionDAO {
 
         } catch (SQLException e) {
             log.info(e.toString());
-            Responses.ERROR.getName();
+            return Responses.ERROR.getName();
         }
 
         return Responses.SUCCESS.getName();
     }
 
-    public List setParamsStockTransSerial(MjrStockTransDTO transDetail, MjrStockTransDetailDTO goods) {
-        List paramsStockTrans = new ArrayList();
+    private List setParamsStockTransSerial(MjrStockTransDTO transDetail, MjrStockTransDetailDTO goods) {
+        List<String> paramsStockTrans = Lists.newArrayList();
         paramsStockTrans.add(transDetail.getId());
         paramsStockTrans.add(goods.getGoodsId());
         paramsStockTrans.add(goods.getGoodsCode());
@@ -183,8 +252,8 @@ public class StockBusinessWithConnectionDAO {
         return paramsStockTrans;
     }
 
-    public List setParamsStockGoodsSerial(MjrStockTransDTO transDetail,MjrStockTransDetailDTO goods) {
-        List paramsStockTrans = new ArrayList();
+    private List setParamsStockGoodsSerial(MjrStockTransDTO transDetail,MjrStockTransDetailDTO goods) {
+        List<String> paramsStockTrans = Lists.newArrayList();
         paramsStockTrans.add(transDetail.getCustId());
         paramsStockTrans.add(transDetail.getStockId());
         paramsStockTrans.add(goods.getGoodsId ());
@@ -200,8 +269,9 @@ public class StockBusinessWithConnectionDAO {
         paramsStockTrans.add(goods.getInputPrice());
         return paramsStockTrans;
     }
-    public List setParamsStockGoods(MjrStockTransDTO transDetail,MjrStockTransDetailDTO goods) {
-        List paramsStockTrans = new ArrayList();
+
+    private List setParamsStockGoods(MjrStockTransDTO transDetail,MjrStockTransDetailDTO goods) {
+        List<String> paramsStockTrans = Lists.newArrayList();
         paramsStockTrans.add(transDetail.getCustId());
         paramsStockTrans.add(transDetail.getStockId());
         paramsStockTrans.add(goods.getGoodsId ());

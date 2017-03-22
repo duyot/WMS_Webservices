@@ -3,6 +3,7 @@ package com.wms.base;
 import com.google.common.collect.Lists;
 import com.wms.dto.Condition;
 import com.wms.enums.Responses;
+import com.wms.persistents.model.MjrStockGoodsTotal;
 import com.wms.utils.DataUtil;
 import com.wms.utils.FunctionUtils;
 import org.hibernate.*;
@@ -90,11 +91,33 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             return Responses.ERROR.getName();
         }
     }
+
+    @Transactional
+    public String deleteByObjectSession(T obj,Session session) {
+        try {
+            session.delete(obj);
+            return Responses.SUCCESS.getName();
+        } catch (Exception e) {
+            log.info(e.toString());
+            return Responses.ERROR.getName();
+        }
+    }
     //--------------------------------------------------------------------
     @Transactional
     public String update(T obj) {
         try {
             getSession().update(obj);
+            return Responses.SUCCESS.getName();
+        } catch (Exception e) {
+            log.info(e.toString());
+            return Responses.ERROR.getName();
+        }
+    }
+    //--------------------------------------------------------------------
+    @Transactional
+    public String updateBySession(T obj,Session session) {
+        try {
+            session.update(obj);
             return Responses.SUCCESS.getName();
         } catch (Exception e) {
             log.info(e.toString());
@@ -169,11 +192,13 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
         return getSession().get(modelClass,id);
     }
 
+    //------------------------------------------------------------------------------------------------
     @Transactional(readOnly = true)
     public List<T> findByProperty(String property,String value) {
         return (List<T>)getSession().createCriteria(modelClass).add(Restrictions.eq(property,value)).list();
     }
 
+    //------------------------------------------------------------------------------------------------
     @Transactional(readOnly = true)
     public List<T> findByCondition(List<Condition> lstCondition) {
         Criteria cr = getSession().createCriteria(modelClass);
@@ -192,4 +217,19 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
         }
     }
     //------------------------------------------------------------------------------------------------
+    public List<T> findByConditionSession(List<Condition> lstCondition, Session session) {
+        Criteria cr = session.createCriteria(modelClass);
+        if(DataUtil.isListNullOrEmpty(lstCondition)){
+            return Lists.newArrayList();
+        }
+
+        cr = FunctionUtils.initCriteria(cr,lstCondition);
+
+        try {
+            return (List<T>)cr.list();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            return Lists.newArrayList();
+        }
+    }
 }

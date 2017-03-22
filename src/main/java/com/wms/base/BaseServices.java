@@ -44,20 +44,20 @@ public class BaseServices<T extends BaseDTO> {
             String id = baseBusiness.save(dto);
             if(id == null || Responses.ERROR.getName().equalsIgnoreCase(id)){
                 log.info("FAIL");
-                return new ResponseObject(Responses.ERROR.getCode(),Responses.ERROR.getName(),"");
+                return new ResponseObject(Responses.ERROR.getName(),Responses.ERROR.getName(),"");
             }
             log.info("SUCCESS id: "+ id);
-            return new ResponseObject(Responses.SUCCESS.getCode(),Responses.SUCCESS.getName(),id);
+            return new ResponseObject(Responses.SUCCESS.getName(),null,id);
 
         }catch (DataIntegrityViolationException e) {
             log.info(e.toString());
             errorLogBusiness.save(new ErrorLogDTO(null,"add","BaseServices",dto.toString(),sysDate, e.getMessage()));
-            return new ResponseObject(Responses.ERROR_CONSTRAINT.getCode(),Responses.ERROR_CONSTRAINT.getName(),((ConstraintViolationException) e.getCause()).getConstraintName());
+            return new ResponseObject(Responses.ERROR.getName(),Responses.ERROR_CONSTRAINT.getName(),((ConstraintViolationException) e.getCause()).getConstraintName());
         }
         catch (Exception e) {
             log.info("ERROR: "+ e.toString());
             errorLogBusiness.save(new ErrorLogDTO(null,"add","BaseServices",dto.toString(),sysDate,e.toString()));
-            return new ResponseObject(Responses.ERROR.getCode(),Responses.ERROR.getName(),"");
+            return new ResponseObject(Responses.ERROR.getName(),Responses.ERROR.getName(),"");
         }
     }
 
@@ -70,20 +70,20 @@ public class BaseServices<T extends BaseDTO> {
             String result = baseBusiness.update(dto);
             if(!result.equalsIgnoreCase(Responses.SUCCESS.getName())){
                 log.info("Fail");
-                return new ResponseObject(Responses.ERROR.getCode(),Responses.ERROR.getName(), "");
+                return new ResponseObject(Responses.ERROR.getName(),Responses.ERROR.getName(), "");
             }
             log.info("Success");
-            return new ResponseObject(Responses.SUCCESS.getCode(),Responses.SUCCESS.getName(), "");
+            return new ResponseObject(Responses.SUCCESS.getName(),null, "");
         }
         catch (DataIntegrityViolationException e) {
             log.info(e.toString());
             errorLogBusiness.save(new ErrorLogDTO(null,"update","BaseServices",dto.toString(),sysDate, e.getMessage()));
-            return new ResponseObject(Responses.ERROR_CONSTRAINT.getCode(),Responses.ERROR_CONSTRAINT.getName(),((ConstraintViolationException) e.getCause()).getConstraintName());
+            return new ResponseObject(Responses.ERROR.getName(),Responses.ERROR_CONSTRAINT.getName(),((ConstraintViolationException) e.getCause()).getConstraintName());
         }
         catch (Exception e) {
             log.error("ERROR: "+ e.toString());
             errorLogBusiness.save(new ErrorLogDTO(null,"update","BaseServices",dto.toString(),sysDate,e.toString()));
-            return new ResponseObject(Responses.ERROR.getCode(),Responses.ERROR.getName(),"");
+            return new ResponseObject(Responses.ERROR.getName(),Responses.ERROR.getName(),"");
         }
 
     }
@@ -93,7 +93,11 @@ public class BaseServices<T extends BaseDTO> {
         log.info("Id : "+ id);
         String result = baseBusiness.deleteById(id);
         log.info(result);
-        return new ResponseObject(Responses.getCodeByName(result),result,id+"");
+        if(!result.equalsIgnoreCase(Responses.SUCCESS.getName())){
+            log.info("Fail");
+            return new ResponseObject(Responses.ERROR.getName(),Responses.ERROR.getName(), "");
+        }
+        return new ResponseObject(Responses.SUCCESS.getName(),null,id+"");
     }
 
     @RequestMapping(value = "/find/{id}",method = RequestMethod.GET)

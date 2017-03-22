@@ -2,6 +2,7 @@ package com.wms.dto;
 
 import com.wms.base.BaseDTO;
 import com.wms.persistents.model.MjrStockTransDetail;
+import com.wms.utils.Constants;
 import com.wms.utils.StringUtils;
 
 /**
@@ -98,6 +99,10 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
 
     public String getSerial() {
         return serial;
+    }
+
+    public boolean isSerial() {
+        return Constants.IS_SERIAL.equalsIgnoreCase(isSerial);
     }
 
     public void setSerial(String serial) {

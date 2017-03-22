@@ -33,4 +33,12 @@ public class StockManagementServices {
         log.info("Result: "+ importResult);
         return importResult;
     }
+    //------------------------------------------------------------------------------------------------------------------
+    @RequestMapping(value = "/export",produces = "application/json")
+    public ResponseObject exportStock(@RequestBody StockTransDTO stockTransDTO){
+        log.info("-------------------------------");
+        ResponseObject importResult = stockManagementBusiness.exportStock(stockTransDTO.getMjrStockTransDTO(),stockTransDTO.getLstMjrStockTransDetail());
+        log.info("Result: "+ importResult);
+        return importResult;
+    }
 }
