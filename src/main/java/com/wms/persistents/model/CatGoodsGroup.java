@@ -75,6 +75,6 @@ public class CatGoodsGroup extends BaseModel{
 
     @Override
     public BaseDTO toDTO() {
-        return new CatGoodsGroupDTO(id==null?"":id+"",name,status.equals("1")?"Hiệu lực":"Hết hiệu lực",custId);
+        return new CatGoodsGroupDTO(id==null?"":id+"",name,status,custId);
     }
 }
