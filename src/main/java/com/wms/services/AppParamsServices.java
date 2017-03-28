@@ -21,11 +21,11 @@ import javax.annotation.PostConstruct;
 public class AppParamsServices extends BaseServices<AppParamsDTO> {
     Logger log = LoggerFactory.getLogger(AppParamsServices.class);
     @Autowired
-    BaseBusinessInterface appParamsServices;
+    BaseBusinessInterface appParamsBusiness;
 
     @PostConstruct
     public void setupService() {
-        this.baseBusiness = appParamsServices;
+        this.baseBusiness = appParamsBusiness;
     }
 }
 

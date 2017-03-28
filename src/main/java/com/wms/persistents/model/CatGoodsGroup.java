@@ -17,9 +17,9 @@ public class CatGoodsGroup extends BaseModel{
     private Long id;
     private String name;
     private String status;
-    private String custId;
+    private Long custId;
 
-    public CatGoodsGroup(Long id, String name, String status, String custId) {
+    public CatGoodsGroup(Long id, String name, String status, Long custId) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -65,16 +65,16 @@ public class CatGoodsGroup extends BaseModel{
     }
 
     @Column(name = "CUST_ID")
-    public String getCustId() {
+    public Long getCustId() {
         return custId;
     }
 
-    public void setCustId(String custId) {
+    public void setCustId(Long custId) {
         this.custId = custId;
     }
 
     @Override
     public BaseDTO toDTO() {
-        return new CatGoodsGroupDTO(id==null?"":id+"",name,status,custId);
+        return new CatGoodsGroupDTO(id==null?"":id+"",name,status,id==null?"":id+"");
     }
 }
