@@ -6,10 +6,13 @@ import com.wms.base.BaseDAOImpl;
 import com.wms.dto.Condition;
 import com.wms.dto.ErrorLogDTO;
 import com.wms.dto.MjrStockGoodsTotalDTO;
+import com.wms.dto.ResponseObject;
 import com.wms.enums.Responses;
 import com.wms.persistents.model.ErrorLog;
 import com.wms.persistents.model.MjrStockGoodsTotal;
+import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
+import com.wms.utils.DateTimeUtils;
 import com.wms.utils.FunctionUtils;
 import org.hibernate.*;
 import org.slf4j.Logger;
@@ -42,6 +45,9 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
         return sessionFactory.getCurrentSession();
     }
 
+
+
+
     public String saveMjrStockGoodsTotal(MjrStockGoodsTotalDTO stockGoodsTotal,Connection connection) {
         StringBuilder sqlInsert = new StringBuilder();
         PreparedStatement prstmtInsertTotal;
@@ -65,7 +71,7 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
     }
 
     public List initSaveTotalParams(MjrStockGoodsTotalDTO stockGoodsTotal){
-        List params = new ArrayList();
+        List<String> params = new ArrayList();
         params.add(stockGoodsTotal.getCustId());
         params.add(stockGoodsTotal.getGoodsId());
         params.add(stockGoodsTotal.getGoodsCode());
@@ -78,7 +84,59 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
         return params;
     }
 
-    public String updateTotal(MjrStockGoodsTotalDTO stockGoodsTotal, Connection connection){
+    public ResponseObject updateExportTotal(MjrStockGoodsTotalDTO stockGoodsTotal, Session session){
+        //
+        ResponseObject responseObject = new ResponseObject();
+        responseObject.setStatusCode(Responses.ERROR.getName());
+        //1. Find match total for goods
+        List<Condition> lstCon = Lists.newArrayList();
+        lstCon.add(new Condition("custId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,stockGoodsTotal.getCustId()));
+        lstCon.add(new Condition("stockId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,stockGoodsTotal.getStockId()));
+        lstCon.add(new Condition("goodsId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,stockGoodsTotal.getGoodsId()));
+        lstCon.add(new Condition("goodsState", Constants.SQL_OPERATOR.EQUAL,stockGoodsTotal.getGoodsState()));
+
+        List<MjrStockGoodsTotal> lstResultTotal = findByConditionSession(lstCon,session);
+        if(DataUtil.isListNullOrEmpty(lstResultTotal)){
+            responseObject.setStatusName(Responses.ERROR_NOT_FOUND_TOTAL.getName());
+            responseObject.setKey(stockGoodsTotal.getGoodsId());
+            return responseObject;
+        }
+        MjrStockGoodsTotal currentTotal = lstResultTotal.get(0);
+        //2. check current amount
+        Double changeAmount = 0d;
+
+        try {
+            changeAmount = Double.valueOf(stockGoodsTotal.getAmount());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            log.info("Error in conver amount value in total" + stockGoodsTotal.toString());
+        }
+        if(changeAmount > currentTotal.getAmount()){
+            responseObject.setStatusName(Responses.ERROR_TOTAL_NOT_ENOUGH.getName());
+            responseObject.setKey(stockGoodsTotal.getGoodsId());
+            responseObject.setTotal(currentTotal.getAmount()+"");
+            responseObject.setSuccess(changeAmount+"");
+            return responseObject;
+        }
+        //update amount
+        currentTotal.setAmount(currentTotal.getAmount() - changeAmount);
+        currentTotal.setChangeDate(DateTimeUtils.convertStringToDate(stockGoodsTotal.getChangeDate()));
+        //
+        String updateTotalResult = updateBySession(currentTotal,session);
+        if(!Responses.SUCCESS.getName().equalsIgnoreCase(updateTotalResult)){
+            responseObject.setStatusName(Responses.ERROR_UPDATE_TOTAL.getName());
+            responseObject.setKey(stockGoodsTotal.getGoodsId());
+            return responseObject;
+    }
+    //
+        log.info("Update export total: "+ currentTotal.getId()+ " current value: "+ (currentTotal.getAmount()+changeAmount) + " export: "+ changeAmount);
+    //
+        responseObject.setStatusCode(Responses.SUCCESS.getName());
+        responseObject.setKey(stockGoodsTotal.getGoodsId());
+        return responseObject;
+    }
+
+    public String updateImportTotal(MjrStockGoodsTotalDTO stockGoodsTotal, Connection connection){
         log.info("Update Total: "+ "cust-"+stockGoodsTotal.getCustId()+ "|stockId-"+ stockGoodsTotal.getStockId() + "|goodsId-"+ stockGoodsTotal.getGoodsId()
                 + "|goodsState-"+ stockGoodsTotal.getGoodsState()+ "|amount-"+ stockGoodsTotal.getAmount());
 
@@ -127,22 +185,6 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
         errorLog.setErrorInfo(error);
 
         return errorLog.toModel();
-    }
-
-    public List<MjrStockGoodsTotal> findByConditionSession(List<Condition> lstCondition,Session session) {
-        Criteria cr = session.createCriteria(MjrStockGoodsTotal.class);
-        if(DataUtil.isListNullOrEmpty(lstCondition)){
-            return Lists.newArrayList();
-        }
-
-        cr = FunctionUtils.initCriteria(cr,lstCondition);
-
-        try {
-            return (List<MjrStockGoodsTotal>)cr.list();
-        } catch (HibernateException e) {
-            e.printStackTrace();
-            return Lists.newArrayList();
-        }
     }
 
 }

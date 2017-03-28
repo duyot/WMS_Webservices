@@ -3,6 +3,7 @@ package com.wms.utils;
 import com.google.common.collect.Lists;
 import com.wms.business.impl.StockManagementBusinessImpl;
 import com.wms.dto.Condition;
+import com.wms.dto.MjrStockTransDetailDTO;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -24,6 +25,15 @@ import java.util.concurrent.ThreadLocalRandom;
 public class FunctionUtils {
     public static Logger log = LoggerFactory.getLogger(StockManagementBusinessImpl.class);
 
+    public static Float convertStringToFloat(MjrStockTransDetailDTO goodsDetail){
+        try {
+            return Float.valueOf(goodsDetail.getOutputPrice());
+        } catch (NumberFormatException e) {
+            log.info("Convert error output price: "+ goodsDetail.getOutputPrice() + "-"+ goodsDetail.getGoodsCode());
+            return null;
+        }
+    }
+
     public static void commit(Transaction transaction, Connection con) {
         try {
             if (transaction != null) {
@@ -38,6 +48,16 @@ public class FunctionUtils {
         }
     }
 
+    public static void commit(Transaction transaction) {
+        try {
+            if (transaction != null) {
+                transaction.commit();
+            }
+        } catch (Exception ex) {
+            log.info(ex.toString());
+        }
+    }
+
     public static void closeConnection(Session session,Connection connection){
         try {
             if (session.isOpen()) {
@@ -47,6 +67,16 @@ public class FunctionUtils {
                 connection.close();
             }
         } catch (SQLException ex) {
+            log.info(ex.toString());
+        }
+    }
+
+    public static void closeSession(Session session){
+        try {
+            if (session.isOpen()) {
+                session.close();
+            }
+        } catch (Exception ex) {
             log.info(ex.toString());
         }
     }
@@ -66,6 +96,17 @@ public class FunctionUtils {
                 con.close();
             }
         } catch (SQLException ex) {
+            log.info(ex.toString());
+        }
+    }
+
+    public static void rollback(Transaction transaction) {
+        try {
+
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        } catch (Exception ex) {
             log.info(ex.toString());
         }
     }
