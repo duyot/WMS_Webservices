@@ -59,7 +59,7 @@ public class CatGoodsGroupDTO  extends BaseDTO {
 
     @Override
     public BaseModel toModel() {
-        return new CatGoodsGroup(!StringUtils.validString(id) ? null:Long.valueOf(id),name,status,custId);
+        return new CatGoodsGroup(!StringUtils.validString(id) ? null:Long.valueOf(id),name,status,!StringUtils.validString(custId) ? null:Long.valueOf(custId));
     }
 
     @Override
