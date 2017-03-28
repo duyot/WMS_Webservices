@@ -17,7 +17,7 @@ import java.util.Date;
 @Table(name = "CAT_GOODS")
 public class CatGoods extends BaseModel {
     private Long id;
-    private Long custId;
+    private String custId;
     private Long goodsGroupId;
     private String code;
     private String name;
@@ -33,7 +33,7 @@ public class CatGoods extends BaseModel {
     public CatGoods() {
     }
 
-    public CatGoods(Long id, String code, String name, String status, Date createdDate, Long custId, String unitType, Long goodsGroupId, String isSerial, String description, Double inPrice, Double outPrice) {
+    public CatGoods(Long id, String code, String name, String status, Date createdDate, String custId, String unitType, Long goodsGroupId, String isSerial, String description, Double inPrice, Double outPrice) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -103,11 +103,11 @@ public class CatGoods extends BaseModel {
     }
 
     @Column(name = "CUST_ID")
-    public Long getCustId() {
+    public String getCustId() {
         return custId;
     }
 
-    public void setCustId(Long custId) {
+    public void setCustId(String custId) {
         this.custId = custId;
     }
 
@@ -167,7 +167,7 @@ public class CatGoods extends BaseModel {
 
     @Override
     public BaseDTO toDTO() {
-        return new CatGoodsDTO(id==null?"":id+"",code,name,status.equals("1")?"Hiệu lực":"Hết hiệu lực", createdDate ==null?"": DateTimeUtils.convertDateTimeToString(createdDate),custId==null?"":custId+"",unitType,goodsGroupId==null?"":goodsGroupId+"", isSerial,description,inPrice==null?"":inPrice+"",outPrice==null?"":outPrice+"");
+        return new CatGoodsDTO(id==null?"":id+"",code,name,status, createdDate ==null?"": DateTimeUtils.convertDateTimeToString(createdDate),custId,unitType,goodsGroupId==null?"":goodsGroupId+"", isSerial,description,inPrice==null?"":inPrice+"",outPrice==null?"":outPrice+"");
     }
 
 }
