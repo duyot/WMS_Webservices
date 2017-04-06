@@ -167,7 +167,11 @@ public class CatGoods extends BaseModel {
 
     @Override
     public BaseDTO toDTO() {
+<<<<<<< HEAD
         return new CatGoodsDTO(id==null?"":id+"",code,name,status.equals("1")?"Hiệu lực":"Hết hiệu lực", createdDate ==null?"": DateTimeUtils.convertDateTimeToString(createdDate),custId==null?"":custId+"",unitType,goodsGroupId==null?"":goodsGroupId+"", isSerial,description,inPrice==null?"":inPrice+"",outPrice==null?"":outPrice+"");
+=======
+        return new CatGoodsDTO(id==null?"":id+"",code,name,status, createdDate ==null?"": DateTimeUtils.convertDateTimeToString(createdDate),String.valueOf(custId),unitType,goodsGroupId==null?"":goodsGroupId+"", isSerial,description,inPrice==null?"":inPrice+"",outPrice==null?"":outPrice+"");
+>>>>>>> db8d26891d94f6ed3225f7694b3419945bc8dac6
     }
 
 }

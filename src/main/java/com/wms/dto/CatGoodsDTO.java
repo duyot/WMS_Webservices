@@ -141,7 +141,11 @@ public class CatGoodsDTO extends BaseDTO{
     public BaseModel toModel() {
         return new CatGoods(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,status,
                 !StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),
+<<<<<<< HEAD
                 !StringUtils.validString(custId) ? null:Long.valueOf(custId),unitType,!StringUtils.validString(goodsGroupId) ? null:Long.valueOf(goodsGroupId),
+=======
+                Long.valueOf(custId),unitType,!StringUtils.validString(goodsGroupId) ? null:Long.valueOf(goodsGroupId),
+>>>>>>> db8d26891d94f6ed3225f7694b3419945bc8dac6
                 isSerial,description,!StringUtils.validString(inPrice) ? null:Double.valueOf(inPrice),!StringUtils.validString(inPrice) ? null:Double.valueOf(inPrice)
         );
     }
