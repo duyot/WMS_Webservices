@@ -15,14 +15,14 @@ import javax.persistence.*;
 @Table(name = "CAT_STOCK")
 public class CatStock  extends BaseModel{
     private Long id;
-    private String custId;
+    private Long custId;
     private String code;
     private String name;
     private String address;
     private String status;
     private String managerInfo;
 
-    public CatStock(Long id, String custId, String code, String name, String address, String status, String managerInfo) {
+    public CatStock(Long id, Long custId, String code, String name, String address, String status, String managerInfo) {
         this.id = id;
         this.custId = custId;
         this.code = code;
@@ -53,11 +53,11 @@ public class CatStock  extends BaseModel{
     }
 
     @Column(name = "CUST_ID")
-    public String getCustId() {
+    public Long getCustId() {
         return custId;
     }
 
-    public void setCustId(String custId) {
+    public void setCustId(Long custId) {
         this.custId = custId;
     }
 

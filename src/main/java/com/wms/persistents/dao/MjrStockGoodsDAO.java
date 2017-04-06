@@ -66,8 +66,10 @@ public class MjrStockGoodsDAO extends BaseDAOImpl<MjrStockGoods,Long> {
             if(exportAmount == currentAmount){
                 //
                 i.setChangedDate(sysDate);
+                i.setExportDate(sysDate);
                 i.setOutputPrice(FunctionUtils.convertStringToFloat(goodsDetail));
                 i.setStatus(Constants.STATUS.EXPORTED);
+                i.setExportStockTransId(Long.valueOf(mjrStockTransDTO.getId()));
                 //
                 updateResult =  updateBySession(i,session);
                 if(!Responses.SUCCESS.getName().equalsIgnoreCase(updateResult)){
@@ -103,6 +105,8 @@ public class MjrStockGoodsDAO extends BaseDAOImpl<MjrStockGoods,Long> {
                 i.setOutputPrice(FunctionUtils.convertStringToFloat(goodsDetail));
                 i.setStatus(Constants.STATUS.EXPORTED);
                 i.setChangedDate(sysDate);
+                i.setExportDate(sysDate);
+                i.setExportStockTransId(Long.valueOf(mjrStockTransDTO.getId()));
                 updateResult = updateBySession(i,session);
                 if(!Responses.SUCCESS.getName().equalsIgnoreCase(updateResult)){
                     responseObject.setStatusName(Responses.ERROR_UPDATE_STOCK_GOODS.getName());
@@ -127,9 +131,11 @@ public class MjrStockGoodsDAO extends BaseDAOImpl<MjrStockGoods,Long> {
         goods.setAmount(exportAmount);
         goods.setImportDate(currentGoodsDetail.getImportDate());
         goods.setChangedDate(changeDate);
+        goods.setExportDate(changeDate);
         goods.setStatus(Constants.STATUS.EXPORTED);
         goods.setPartnerId(currentGoodsDetail.getPartnerId());
         goods.setImportStockTransId(currentGoodsDetail.getImportStockTransId());
+        goods.setExportStockTransId(Long.valueOf(mjrStockTransDTO.getId()));
         goods.setInputPrice(currentGoodsDetail.getInputPrice());
         goods.setOutputPrice(FunctionUtils.convertStringToFloat(exportGoodsDetail));
         return goods;

@@ -34,8 +34,6 @@ public class MjrStockGoodsSerialDAO extends BaseDAOImpl<MjrStockGoodsSerial,Long
     @Autowired
     SessionFactory sessionFactory;
 
-    Logger log = LoggerFactory.getLogger(StockManagementBusinessImpl.class);
-
     public Session getSession(){
         return sessionFactory.getCurrentSession();
     }
@@ -63,6 +61,8 @@ public class MjrStockGoodsSerialDAO extends BaseDAOImpl<MjrStockGoodsSerial,Long
         currentGoodsSerial.setStatus(Constants.STATUS.EXPORTED);
         currentGoodsSerial.setOutputPrice(FunctionUtils.convertStringToFloat(goodsDetail));
         currentGoodsSerial.setChangeDate(DateTimeUtils.convertStringToDate(mjrStockTransDTO.getCreatedDate()));
+        currentGoodsSerial.setExportDate(DateTimeUtils.convertStringToDate(mjrStockTransDTO.getCreatedDate()));
+        currentGoodsSerial.setExportStockTransId(Long.valueOf(mjrStockTransDTO.getId()));
         //
         String updateResult = updateBySession(currentGoodsSerial,session);
         responseObject.setStatusCode(updateResult);

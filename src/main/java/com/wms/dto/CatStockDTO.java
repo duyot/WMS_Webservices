@@ -88,7 +88,7 @@ public class CatStockDTO extends BaseDTO {
 
     @Override
     public CatStock toModel() {
-        return new CatStock(!StringUtils.validString(id) ? null:Long.valueOf(id),custId,
+        return new CatStock(!StringUtils.validString(id) ? null:Long.valueOf(id),!StringUtils.validString(custId) ? null:Long.valueOf(custId),
                 code,name,address,status,managerInfo
         );
     }

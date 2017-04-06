@@ -27,8 +27,12 @@ public class MjrStockGoods extends BaseModel{
     private Long importStockTransId;
     private Float inputPrice;
     private Float outputPrice;
+    private Date exportDate;
+    private Long exportStockTransId;
 
-    public MjrStockGoods(Long id, Long custId, Long stockId, Long goodsId, String goodsState, String cellCode, Float amount, Date importDate, Date changedDate, String status, Long partnerId, Long importStockTransId, Float inputPrice, Float outputPrice) {
+    public MjrStockGoods(Long id, Long custId, Long stockId, Long goodsId, String goodsState, String cellCode,
+                         Float amount, Date importDate, Date changedDate, String status, Long partnerId,
+                         Long importStockTransId, Float inputPrice, Float outputPrice,Date exportDate,Long exportStockTransId) {
         this.id = id;
         this.custId = custId;
         this.stockId = stockId;
@@ -43,6 +47,8 @@ public class MjrStockGoods extends BaseModel{
         this.importStockTransId = importStockTransId;
         this.inputPrice = inputPrice;
         this.outputPrice = outputPrice;
+        this.exportDate = exportDate;
+        this.exportStockTransId = exportStockTransId;
     }
 
     public MjrStockGoods() {
@@ -182,12 +188,33 @@ public class MjrStockGoods extends BaseModel{
         this.outputPrice = outputPrice;
     }
 
+    @Column(name = "EXPORT_DATE")
+    public Date getExportDate() {
+        return exportDate;
+    }
+
+    public void setExportDate(Date exportDate) {
+        this.exportDate = exportDate;
+    }
+
+    @Column(name = "EXPORT_STOCK_TRANS_ID")
+    public Long getExportStockTransId() {
+        return exportStockTransId;
+    }
+
+    public void setExportStockTransId(Long exportStockTransId) {
+        this.exportStockTransId = exportStockTransId;
+    }
+
+
+
     @Override
     public MjrStockGoodsDTO toDTO() {
         return new MjrStockGoodsDTO(id==null?"":id+"",custId==null?"":custId+"",stockId==null?"":stockId+"",
                 goodsId==null?"":goodsId+"",goodsState,cellCode,amount==null?"":amount+"",importDate==null?"": DateTimeUtils.convertDateTimeToString(importDate),
                 changedDate ==null?"": DateTimeUtils.convertDateTimeToString(changedDate),status,partnerId==null?"":partnerId+"",
-                importStockTransId==null?"":importStockTransId+"",inputPrice==null?"":inputPrice+"",outputPrice==null?"":outputPrice+""
+                importStockTransId==null?"":importStockTransId+"",inputPrice==null?"":inputPrice+"",outputPrice==null?"":outputPrice+"",
+                exportDate==null?"": DateTimeUtils.convertDateTimeToString(exportDate),exportStockTransId==null?"":exportStockTransId+""
                 );
     }
 }

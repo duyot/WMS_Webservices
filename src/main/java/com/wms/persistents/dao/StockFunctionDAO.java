@@ -68,15 +68,6 @@ public class StockFunctionDAO {
         return exportResult;
     }
 
-    private MjrStockGoodsTotalDTO initTotalInfo(MjrStockTransDTO mjrStockTransDTO, MjrStockTransDetailDTO goodsDetail){
-        MjrStockGoodsTotalDTO total = new MjrStockGoodsTotalDTO();
-        total.setCustId(mjrStockTransDTO.getCustId());
-        total.setStockId(mjrStockTransDTO.getStockId());
-        total.setGoodsId(goodsDetail.getGoodsId());
-        total.setGoodsState(goodsDetail.getGoodsState());
-        return total;
-    }
-
     public ResponseObject updateExportStockGoodsTotal(MjrStockTransDTO mjrStockTransDTO, Map<String, Float> mapGoodsNumber, Session session) {
         Iterator iterator = mapGoodsNumber.entrySet().iterator();
         String goodsInfo;

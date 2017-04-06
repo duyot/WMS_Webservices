@@ -26,8 +26,12 @@ public class MjrStockGoodsDTO extends BaseDTO {
     private String importStockTransId;
     private String inputPrice;
     private String outputPrice;
+    private String exportDate;
+    private String exportStockTransId;
 
-    public MjrStockGoodsDTO(String id, String custId, String stockId, String goodsId, String goodsState, String cellCode, String amount, String importDate, String changeDate, String status, String partnerId, String importStockTransId, String inputPrice, String outputPrice) {
+    public MjrStockGoodsDTO(String id, String custId, String stockId, String goodsId, String goodsState, String cellCode,
+                            String amount, String importDate, String changeDate, String status, String partnerId,
+                            String importStockTransId, String inputPrice, String outputPrice,String exportDate,String exportStockTransId) {
         this.id = id;
         this.custId = custId;
         this.stockId = stockId;
@@ -42,6 +46,8 @@ public class MjrStockGoodsDTO extends BaseDTO {
         this.importStockTransId = importStockTransId;
         this.inputPrice = inputPrice;
         this.outputPrice = outputPrice;
+        this.exportDate = exportDate;
+        this.exportStockTransId = exportStockTransId;
     }
 
     public MjrStockGoodsDTO() {
@@ -159,6 +165,22 @@ public class MjrStockGoodsDTO extends BaseDTO {
         this.outputPrice = outputPrice;
     }
 
+    public String getExportDate() {
+        return exportDate;
+    }
+
+    public void setExportDate(String exportDate) {
+        this.exportDate = exportDate;
+    }
+
+    public String getExportStockTransId() {
+        return exportStockTransId;
+    }
+
+    public void setExportStockTransId(String exportStockTransId) {
+        this.exportStockTransId = exportStockTransId;
+    }
+
     @Override
     public MjrStockGoods toModel() {
         return new MjrStockGoods(!StringUtils.validString(id) ? null:Long.valueOf(id),!StringUtils.validString(custId) ? null:Long.valueOf(custId),
@@ -166,8 +188,8 @@ public class MjrStockGoodsDTO extends BaseDTO {
                 !StringUtils.validString(amount) ? null:Float.valueOf(amount),!StringUtils.validString(importDate) ? null: DateTimeUtils.convertStringToDate(importDate),
                 !StringUtils.validString(changeDate) ? null: DateTimeUtils.convertStringToDate(changeDate),status,!StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId),
                 !StringUtils.validString(importStockTransId) ? null:Long.valueOf(importStockTransId),
-                !StringUtils.validString(inputPrice) ? null:Float.valueOf(inputPrice),!StringUtils.validString(outputPrice) ? null:Float.valueOf(outputPrice)
-
+                !StringUtils.validString(inputPrice) ? null:Float.valueOf(inputPrice),!StringUtils.validString(outputPrice) ? null:Float.valueOf(outputPrice),
+                !StringUtils.validString(exportDate) ? null: DateTimeUtils.convertStringToDate(exportDate),!StringUtils.validString(exportStockTransId) ? null:Long.valueOf(exportStockTransId)
         );
     }
 }
