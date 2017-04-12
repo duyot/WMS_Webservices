@@ -60,7 +60,7 @@ public class CatUserServices extends BaseServices<CatUserDTO>{
         }
         List<MapUserCustomerDTO> lstMap = getMapUserCustomer(userId);
         if(DataUtil.isListNullOrEmpty(lstMap)){
-            log.info("User: "+ userId + "didn't map to any customer");
+            log.info("User: "+ userId + " didn't map to any customer");
             return new ArrayList<>();
         }
         List<CatCustomerDTO> lstCatCustomers = Lists.newArrayList();
@@ -72,6 +72,34 @@ public class CatUserServices extends BaseServices<CatUserDTO>{
         }
         return lstCatCustomers;
     }
+
+    @RequestMapping(value = "/getUserByCustomerId/{customerId}",produces = "application/json",method = RequestMethod.GET)
+    public List<CatUserDTO> getUserByCustomer(@PathVariable("customerId") String customerId){
+        if(!DataUtil.isInteger(customerId)){
+            log.info("Invalid customerId info");
+            return new ArrayList<>();
+        }
+        List<MapUserCustomerDTO> lstMap = getMapByCustomerId(customerId);
+        if(DataUtil.isListNullOrEmpty(lstMap)){
+            log.info("User: "+ customerId + " didn't map to any customer");
+            return new ArrayList<>();
+        }
+        List<CatUserDTO> lstUser = Lists.newArrayList();
+        for(MapUserCustomerDTO i: lstMap){
+            BaseDTO temp = catUserBusiness.findById(Long.parseLong(i.getUserId()));
+            if(temp != null){
+                lstUser.add((CatUserDTO) temp);
+            }
+        }
+        return lstUser;
+    }
+
+    private List<MapUserCustomerDTO> getMapByCustomerId(String customerId){
+        List<Condition> lstConditions = Lists.newArrayList();
+        lstConditions.add(new Condition("customerId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,customerId));
+        return mapUserCustomerBusiness.findByCondition(lstConditions);
+    }
+
 
     private List<MapUserCustomerDTO> getMapUserCustomer(String userId){
         List<Condition> lstConditions = Lists.newArrayList();
