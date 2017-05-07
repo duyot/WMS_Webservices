@@ -31,8 +31,7 @@ public class SysRoleMenuServices {
 
     @RequestMapping(value = "/getUserAction/{roleCode}",produces = "application/json",method = RequestMethod.GET)
     public List<ActionMenuDTO> getUserAction(@PathVariable("roleCode") String roleCode,@RequestHeader Map<String,String> mapHeaders){
-        log.info(mapHeaders.toString());
-
+        //log.info(mapHeaders.toString());
         List<SysMenuDTO> lstUserAction = getListUserAction(roleCode);
         if(DataUtil.isListNullOrEmpty(lstUserAction)){
             return new ArrayList<>();
@@ -95,6 +94,7 @@ public class SysRoleMenuServices {
         strActionId = strActionId.replaceFirst(",","");
         List<Condition> lstCondition = Lists.newArrayList();
         lstCondition.add(new Condition("id",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.IN,strActionId));
+        lstCondition.add(new Condition("status",Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
         //sap xep theo level(menu cha) -> order trong menu
         lstCondition.add(new Condition("levels",Constants.SQL_OPERATOR.ORDER,"asc"));
         lstCondition.add(new Condition("orders",Constants.SQL_OPERATOR.ORDER,"asc"));

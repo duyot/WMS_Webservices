@@ -81,6 +81,7 @@ public class BaseServices<T extends BaseDTO> {
             return new ResponseObject(Responses.ERROR.getName(),Responses.ERROR_CONSTRAINT.getName(),((ConstraintViolationException) e.getCause()).getConstraintName());
         }
         catch (Exception e) {
+            e.printStackTrace();
             log.error("ERROR: "+ e.toString());
             errorLogBusiness.save(new ErrorLogDTO(null,"update","BaseServices",dto.toString(),sysDate,e.toString()));
             return new ResponseObject(Responses.ERROR.getName(),Responses.ERROR.getName(),"");

@@ -72,19 +72,6 @@
             <version>11.2.0.4</version>
         </dependency>
 
-        <!--logging with slf4j-->
-        <!--<dependency>-->
-            <!--<groupId>org.slf4j</groupId>-->
-            <!--<artifactId>slf4j-api</artifactId>-->
-            <!--<version>1.7.21</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>ch.qos.logback</groupId>-->
-            <!--<artifactId>logback-classic</artifactId>-->
-            <!--<version>1.1.7</version>-->
-        <!--</dependency>-->
-
         <!--apache common-->
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -103,13 +90,6 @@
             <artifactId>gson</artifactId>
             <version>2.6.2</version>
         </dependency>
-
-
-        <!--<dependency>-->
-            <!--<groupId>org.apache.commons</groupId>-->
-            <!--<artifactId>commons-lang3</artifactId>-->
-            <!--<version>3.0</version>-->
-        <!--</dependency>-->
 
     </dependencies>
 
