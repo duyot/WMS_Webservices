@@ -26,14 +26,14 @@ public class CatGoods extends BaseModel {
     private String unitType;
     private String isSerial;
     private String description;
-    private Double inPrice;
-    private Double outPrice;
+    private Long inPrice;
+    private Long outPrice;
     private String brand;
 
     public CatGoods() {
     }
 
-    public CatGoods(Long id, String code, String name, String status, Date createdDate, Long custId, String unitType, Long goodsGroupId, String isSerial, String description, Double inPrice, Double outPrice) {
+    public CatGoods(Long id, String code, String name, String status, Date createdDate, Long custId, String unitType, Long goodsGroupId, String isSerial, String description, Long inPrice, Long outPrice) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -148,20 +148,20 @@ public class CatGoods extends BaseModel {
     }
 
     @Column(name = "INPUT_PRICE")
-    public Double getInPrice() {
+    public Long getInPrice() {
         return inPrice;
     }
 
-    public void setInPrice(Double inPrice) {
+    public void setInPrice(Long inPrice) {
         this.inPrice = inPrice;
     }
 
     @Column(name = "OUTPUT_PRICE")
-    public Double getOutPrice() {
+    public Long getOutPrice() {
         return outPrice;
     }
 
-    public void setOutPrice(Double outPrice) {
+    public void setOutPrice(Long outPrice) {
         this.outPrice = outPrice;
     }
 

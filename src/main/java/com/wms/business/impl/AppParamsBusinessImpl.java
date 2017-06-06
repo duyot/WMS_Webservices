@@ -10,8 +10,8 @@ import com.wms.persistents.dao.AppParamsDAO;
 import com.wms.persistents.model.AppParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.PostConstruct;
+
 @Service("appParamsBusiness")
 public class AppParamsBusinessImpl extends BaseBusinessImpl<AppParamsDTO, AppParamsDAO> {
     @Autowired

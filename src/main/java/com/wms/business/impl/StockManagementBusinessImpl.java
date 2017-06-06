@@ -27,8 +27,8 @@ import java.util.*;
  */
 @Service("stockManagementBusiness")
 public class StockManagementBusinessImpl implements StockManagementBusinessInterface {
-    @Autowired
-    MjrStockGoodsTotalBusinessInterface mjrStockGoodsTotalBusiness;
+//    @Autowired
+//    MjrStockGoodsTotalBusinessInterface mjrStockGoodsTotalBusiness;
     @Autowired
     BaseBusinessInterface mjrStockTransBusiness;
     @Autowired
@@ -37,8 +37,8 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
     @Autowired
     BaseBusinessInterface err$MjrStockGoodsSerialBusiness;
 
-    @Autowired
-    MjrStockGoodsTotalBusinessInterface advancedMjrStockGoodsTotalBusiness;
+//    @Autowired
+//    MjrStockGoodsTotalBusinessInterface advancedMjrStockGoodsTotalBusiness;
 
     @Autowired
     StockFunctionInterface stockFunctionBusiness;

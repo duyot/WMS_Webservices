@@ -678,6 +678,10 @@ public class DataUtil {
         return null;
     }
 
+    public static int parseIntWithEmptyValue(String s){
+        return isStringNullOrEmpty(s) == true?0:Integer.parseInt(s);
+    }
+
     public static String strNvl(String... objs) {
         for (String obj : objs) {
             if (!DataUtil.isNullOrEmpty(obj)) {

@@ -116,6 +116,18 @@ public class DateTimeUtils {
         }
     }
 
+    public static Date getDateCompareToCurrent(int amount){
+        final Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, amount);
+        return cal.getTime();
+    }
+
+    public static Date getFirstDateInMonth(){
+        Calendar c = Calendar.getInstance();   // this takes current date
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        return c.getTime();
+    }
+
     public static String convertDateToString(Date date, String pattern) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
         if (date == null) {

@@ -35,6 +35,7 @@ public class Constants {
         public static String IN = "IN";
         public static String LIKE = "LIKE";
         public static String ORDER = "ORDER";
+        public static String BETWEEN = "BETWEEN";
     }
 
     public static class SQL_PRO_TYPE{
