@@ -180,6 +180,12 @@ public class FunctionUtils {
                         e.printStackTrace();
                     }
                     break;
+                case "LIMIT":
+                    cr.setMaxResults((int)i.getValue());
+                    break;
+                case "OFFSET":
+                    cr.setFirstResult((int)i.getValue());
+                    break;
                 default:
                     cr.add(Restrictions.eq(i.getProperty(), i.getValue()));
                     break;

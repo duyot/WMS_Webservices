@@ -678,8 +678,8 @@ public class DataUtil {
         return null;
     }
 
-    public static int parseIntWithEmptyValue(String s){
-        return isStringNullOrEmpty(s) == true?0:Integer.parseInt(s);
+    public static BigInteger parseIntWithEmptyValue(String s){
+        return isStringNullOrEmpty(s) == true?new BigInteger("0"):new BigInteger(s);
     }
 
     public static String strNvl(String... objs) {

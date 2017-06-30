@@ -20,34 +20,17 @@ public class BeanConfig {
 
     Logger log = LoggerFactory.getLogger(BeanConfig.class);
 
-    /*
-        config profile in web.xml, param name: spring.profiles.default
-     */
 //    @Bean
-//    @Primary
-//    @Profile(value = "dev")
+//    @Profile(value = "prod")
 //    @Lazy
-//    public DataSource dataSource() {
-//        DriverManagerDataSource ds = new DriverManagerDataSource();
-//        ds.setDriverClassName("oracle.jdbc.OracleDriver");
-//        ds.setUrl("jdbc:oracle:thin:@10.84.70.116:1521:DEVMKT");
-//        ds.setUsername("sms_ads");
-//        ds.setPassword("sms123");
-//        log.info("Getting datasource with dev profile");
-//        return ds;
+//    public JndiObjectFactoryBean initDataSourceFromJndi() {
+//        JndiObjectFactoryBean jndiObjectFB = new JndiObjectFactoryBean();
+//        jndiObjectFB.setJndiName("jdbc/ApplicationPool");
+//        jndiObjectFB.setResourceRef(true);
+//        jndiObjectFB.setProxyInterface(DataSource.class);
+//        log.info("Getting datasource with prod profile with jndi");
+//        return jndiObjectFB;
 //    }
-
-    @Bean
-    @Profile(value = "prod")
-    @Lazy
-    public JndiObjectFactoryBean initDataSourceFromJndi() {
-        JndiObjectFactoryBean jndiObjectFB = new JndiObjectFactoryBean();
-        jndiObjectFB.setJndiName("jdbc/ApplicationPool");
-        jndiObjectFB.setResourceRef(true);
-        jndiObjectFB.setProxyInterface(DataSource.class);
-        log.info("Getting datasource with prod profile with jndi");
-        return jndiObjectFB;
-    }
 
     //init datasource fron jndi
     @Bean
@@ -73,13 +56,4 @@ public class BeanConfig {
         sfb.setHibernateProperties(props);
         return sfb;
     }
-
-//    @Bean
-//    public PlatformTransactionManager transactionManager(DataSource dataSource) {
-//        return new HibernateTransactionManager(sessionFactory(dataSource).getObject());
-//    }
-//    @Bean
-//    public HibernateTemplate hibernateTemplate() {
-//        return new HibernateTemplate(sessionFactory(dataSource()).getObject());
-//    }
 }

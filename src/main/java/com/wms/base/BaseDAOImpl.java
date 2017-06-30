@@ -3,7 +3,6 @@ package com.wms.base;
 import com.google.common.collect.Lists;
 import com.wms.dto.Condition;
 import com.wms.enums.Responses;
-import com.wms.persistents.model.MjrStockGoodsTotal;
 import com.wms.utils.DataUtil;
 import com.wms.utils.FunctionUtils;
 import org.hibernate.*;
@@ -41,12 +40,14 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
     }
 
     //--------------------------------------------------------------------
+    @Transactional(readOnly = true)
     public Long getSequence(String sequense) {
         String sql = "select " + sequense + ".nextval from dual";
         Query query = getSession().createSQLQuery(sql);
         return ((BigDecimal) query.list().get(0)).longValue();
     }
     //--------------------------------------------------------------------
+    @Transactional(readOnly = true)
     public String getSysDate(String pattern){
         String queryString = "SELECT to_char(sysdate,:id)  from dual";
         Query query = getSession().createSQLQuery(queryString);
@@ -58,7 +59,8 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             return "";
         }
     }
-
+    //-----------------------------------------------------------------------------------------------------------------
+    @Transactional(readOnly = true)
     public String getSysDate() {
         String queryString = "SELECT to_char(sysdate,:id)  from dual";
         try {

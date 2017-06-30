@@ -10,9 +10,11 @@ import com.wms.dto.SysStatisticTopGoodsDTO;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import com.wms.utils.DateTimeUtils;
+import oracle.sql.CHAR;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -61,7 +63,6 @@ public class StatisticBusinessImpl implements StatisticBusinessInterface {
         List<SysStatisticTopGoodsDTO> lstStatisticTopGoods;
         List<Condition> lstCon = Lists.newArrayList();
         lstCon.add(new Condition("custId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,custId));
-
         lstCon.add(new Condition("type", Constants.SQL_OPERATOR.EQUAL,type+""));
 
         lstStatisticTopGoods = sysStatisticTopGoodsBusiness.findByCondition(lstCon);
@@ -72,21 +73,18 @@ public class StatisticBusinessImpl implements StatisticBusinessInterface {
         return getTopGoodsChartFromData(lstStatisticTopGoods.get(0));
     }
 
-    private List<ChartDTO> getTopGoodsChartFromData(SysStatisticTopGoodsDTO lstSysMailReport){
-//        List<ChartDTO> lstChart = Lists.newArrayList();
-//        //
-//        int size = lstSysMailReport.size();
-//        int[] goodsInfo = new int[size];
-//        String[] xAxisData = new String[size];
-//        //
-//
-//        goodsInfo = getGoodsValueFromData(i.getStatisticInfo());
-//        //
-//
-//
-//        lstChart.add(new ChartDTO("",goodsInfo,xAxisData));
-
-        return null;
+    //1384|300,1361|10
+    private List<ChartDTO> getTopGoodsChartFromData(SysStatisticTopGoodsDTO topGoodsDTO){
+        List<ChartDTO> lstResult = Lists.newArrayList();
+        String [] dataArr = topGoodsDTO.getStatisticInfo().split(",");
+        int itemCount = dataArr.length;
+        for(int i = 0;i< itemCount;i++){
+            ChartDTO data = new ChartDTO();
+            data.setName(dataArr[i].split("\\|")[0]);
+            data.setY(new BigInteger(dataArr[i].split("\\|")[1]));
+            lstResult.add(data);
+        }
+        return lstResult;
     }
 
     private int[] getGoodsValueFromData(String data){
@@ -107,8 +105,8 @@ public class StatisticBusinessImpl implements StatisticBusinessInterface {
         List<ChartDTO> lstChart = Lists.newArrayList();
         //
         int size = lstSysMailReport.size();
-        int[] dataExport = new int[size];
-        int[] dataTotal  = new int[size];
+        BigInteger[] dataExport = new BigInteger[size];
+        BigInteger[] dataTotal  = new BigInteger[size];
         //
         int count = 0;
         for (SysMailReportDTO i: lstSysMailReport)

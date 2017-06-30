@@ -22,14 +22,12 @@ public class StatisticServices {
     //------------------------------------------------------------------------------------------------------------------
     @RequestMapping(value = "/getRevenue",produces = "application/json")
     public List<ChartDTO> getRevenue(@RequestParam("custId") String custId, @RequestParam("type") String type){
-        log.info("-------------------------------");
         return statisticBusinessInterface.getRevenue(custId,Integer.parseInt(type));
     }
 
     //------------------------------------------------------------------------------------------------------------------
     @RequestMapping(value = "/getTopGoods",produces = "application/json")
     public List<ChartDTO> getTopGoods(@RequestParam("custId") String custId, @RequestParam("type") String type){
-        log.info("-------------------------------");
         return statisticBusinessInterface.getTopGoods(custId,Integer.parseInt(type));
     }
 }
