@@ -31,4 +31,5 @@ public interface BaseBusinessInterface<T extends BaseDTO> {
     public T findById(long id);
     public List<T> findByProperty(String property, String value);
     public List<T> findByCondition(List<Condition> lstCondition);
+    public Long countByCondition(List<Condition> lstCondition);
 }

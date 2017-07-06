@@ -1,7 +1,6 @@
 package com.wms.persistents.dao;
 
 import com.google.common.collect.Lists;
-import com.wms.base.BaseBusinessInterface;
 import com.wms.base.BaseDAOImpl;
 import com.wms.dto.Condition;
 import com.wms.dto.ErrorLogDTO;
@@ -13,8 +12,8 @@ import com.wms.persistents.model.MjrStockGoodsTotal;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import com.wms.utils.DateTimeUtils;
-import com.wms.utils.FunctionUtils;
-import org.hibernate.*;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,14 +38,16 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
     @Autowired
     ErrorLogDAO errorLogDAO;
 
+    @Autowired
+    CatGoodsDAO catGoodsDAO;
+    @Autowired
+    MjrStockGoodsSerialDAO mjrStockGoodsSerialDAO;
+
     Logger log = LoggerFactory.getLogger(MjrStockGoodsTotalDAO.class);
 
     public Session getSession(){
         return sessionFactory.getCurrentSession();
     }
-
-
-
 
     public String saveMjrStockGoodsTotal(MjrStockGoodsTotalDTO stockGoodsTotal,Connection connection) {
         StringBuilder sqlInsert = new StringBuilder();

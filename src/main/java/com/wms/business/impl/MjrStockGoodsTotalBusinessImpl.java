@@ -42,4 +42,6 @@ public class MjrStockGoodsTotalBusinessImpl extends BaseBusinessImpl<MjrStockGoo
         }
         return lstResult;
     }
+
+
 }

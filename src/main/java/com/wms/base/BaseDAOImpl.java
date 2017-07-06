@@ -3,9 +3,11 @@ package com.wms.base;
 import com.google.common.collect.Lists;
 import com.wms.dto.Condition;
 import com.wms.enums.Responses;
+import com.wms.persistents.model.MjrStockGoodsTotal;
 import com.wms.utils.DataUtil;
 import com.wms.utils.FunctionUtils;
 import org.hibernate.*;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
@@ -210,14 +212,23 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
         }
 
         cr = FunctionUtils.initCriteria(cr,lstCondition);
-
         try {
             return (List<T>)cr.list();
         } catch (HibernateException e) {
             e.printStackTrace();
             return Lists.newArrayList();
         }
-    }
+    }//
+    public Long countByCondition(List<Condition> lstCondition) {
+        Criteria cr = getSession().createCriteria(modelClass);
+
+        if(DataUtil.isListNullOrEmpty(lstCondition)){
+            return 0l;
+        }
+
+        cr = FunctionUtils.initCriteria(cr,lstCondition);
+        return  (Long)cr.setProjection(Projections.rowCount()).uniqueResult();
+    }//
     //------------------------------------------------------------------------------------------------
     public List<T> findByConditionSession(List<Condition> lstCondition, Session session) {
         Criteria cr = session.createCriteria(modelClass);
