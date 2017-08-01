@@ -25,6 +25,13 @@ public interface StockFunctionInterface {
     ResponseObject exportStockGoodsDetail(MjrStockTransDTO mjrStockTransDTO, MjrStockTransDetailDTO goodsDetail, Session session);
 
     ResponseObject updateExportStockGoodsTotal(MjrStockTransDTO mjrStockTransDTO, Map<String,Float> mapGoodsNumber, Session session);
-
     //
+
+    String getTotalStockTransaction(String stockId, Connection connection);
+    String getTotalStockTransaction(String stockId, Session connection);
+    //cancel Command
+    ResponseObject cancelTransaction(String transId);
+    //
+    List<String> getListSerialInStock(String custId,  String stockId,String goodsId, String goodsState);
+
 }

@@ -15,14 +15,15 @@ public interface BaseBusinessInterface<T extends BaseDTO> {
     public String getSysDate(String pattern);
     public String getSysDate();
 
+    public String deleteByObject(T obj);
+    public String deleteById(long id);
+
     public String saveOrUpdate(T obj);
     public String save(T obj);
     public String saveBySession(T obj, Session session);
-    public String deleteById(long id);
+
 
     public String update(T obj);
-
-    public String deleteByObject(T obj);
 
     public List<T> getAll();
     public List<T> getList(int count);

@@ -6,20 +6,23 @@ import com.wms.dto.*;
 import com.wms.enums.Responses;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
-import com.wms.utils.DateTimeUtils;
-import com.wms.utils.FunctionUtils;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
+import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
+import org.hibernate.procedure.ProcedureCall;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.*;
+import javax.persistence.ParameterMode;
+import javax.persistence.criteria.CriteriaBuilder;
+import java.math.BigDecimal;
+import java.sql.*;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by duyot on 3/6/2017.
@@ -45,7 +48,87 @@ public class StockFunctionDAO {
     @Autowired
     MjrStockTransDetailDAO mjrStockTransDetailDAO;
 
-    Logger log = LoggerFactory.getLogger(StockManagementBusinessImpl.class);
+    private Logger log = LoggerFactory.getLogger(StockManagementBusinessImpl.class);
+    //
+    @Transactional
+    public List<String> getListSerialInStock(String custId, String stockId, String goodsId, String goodsState) {
+        Session session = sessionFactory.getCurrentSession();
+        StringBuilder str = new StringBuilder();
+        str.append("SELECT serial FROM mjr_stock_goods_serial a")
+                .append(" WHERE ")
+                .append("     a.cust_id  = :custId ")
+                .append(" and a.stock_id = :stockId ")
+                .append(" and a.goods_id = :goodsId ")
+                .append(" and a.goods_state = :goodsState ")
+                .append(" and a.status = 1 ")
+                .append(" order by serial desc ");
+        Query ps = session.createSQLQuery(str.toString());
+        ps.setInteger("custId",Integer.parseInt(custId));
+        ps.setInteger("stockId",Integer.parseInt(stockId));
+        ps.setInteger("goodsId",Integer.parseInt(goodsId));
+        ps.setInteger("goodsState",Integer.parseInt(goodsState));
+
+        return ps.list();
+    }
+
+
+    @Transactional
+    public ResponseObject cancelTransaction(String transId) {
+        Session session;
+        try {
+            session = sessionFactory.getCurrentSession();
+            ProcedureCall pc =  session.createStoredProcedureCall("pkg_stock_transaction.f_destroy_command");
+            pc.registerParameter("p_command_id", Integer.class,ParameterMode.IN).bindValue   (Integer.parseInt(transId));
+            pc.registerParameter("v_result", String.class,ParameterMode.OUT);
+
+            String result = (String) pc.getOutputs().getOutputParameterValue("v_result");
+            return getResponseFromResult(result);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return  new ResponseObject(Responses.ERROR.getName(),Responses.ERROR.getName(),"");
+
+    }
+
+    public ResponseObject getResponseFromResult(String result){
+        ResponseObject responseObject = new ResponseObject();
+        String [] resultArr = result.split("\\|");
+        String resultCode = resultArr[0];
+        String resultName = resultArr[1];
+        if("1".equalsIgnoreCase(resultCode)){
+            responseObject.setStatusCode(Responses.SUCCESS.getName());
+        }else{
+            responseObject.setStatusCode(Responses.ERROR.getName());
+            responseObject.setStatusName(resultName);
+        }
+        return responseObject;
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    public String getTotalStockTransaction(String stockId, Connection connection){
+        String sql = " select count(*) trans_num from mjr_stock_trans where type = 1 and stock_id = ? ";
+        int count = 0;
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql.toString());
+            ps.setInt(1,Integer.parseInt(stockId));
+            ResultSet rs =  ps.executeQuery();
+            while(rs.next()){
+                count = rs.getInt("trans_num");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            count = 0;
+        }
+        return String.format("%08d", count);
+    }
+    //
+    public String getTotalStockTransaction(String stockId, Session session){
+        String sql = " select count(*) from MJR_STOCK_TRANS where  type = 2 and stock_id = :stockId ";
+        Query ps = session.createSQLQuery(sql);
+        ps.setInteger("stockId",Integer.parseInt(stockId));
+        BigDecimal countNumber = (BigDecimal) ps.uniqueResult();
+
+        return String.format("%08d",countNumber.intValue());
+    }
     //------------------------------------------------------------------------------------------------------------------
     public ResponseObject exportStockGoodsDetail(MjrStockTransDTO mjrStockTransDTO, MjrStockTransDetailDTO goodsDetail, Session session){
         //

@@ -1,17 +1,12 @@
 package com.wms.services;
 
 import com.wms.business.interfaces.StockManagementBusinessInterface;
-import com.wms.dto.MjrStockTransDTO;
-import com.wms.dto.MjrStockTransDetailDTO;
 import com.wms.dto.ResponseObject;
 import com.wms.dto.StockTransDTO;
-import com.wms.enums.Responses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,19 +21,38 @@ public class StockManagementServices {
     @Autowired
     StockManagementBusinessInterface stockManagementBusiness;
     //------------------------------------------------------------------------------------------------------------------
-    @RequestMapping(value = "/import",produces = "application/json")
+    @RequestMapping(value = "/import",produces = "application/json",method = RequestMethod.POST)
     public ResponseObject importStock(@RequestBody StockTransDTO stockTransDTO){
         log.info("-------------------------------");
         ResponseObject importResult = stockManagementBusiness.importStock(stockTransDTO.getMjrStockTransDTO(),stockTransDTO.getLstMjrStockTransDetail());
-        log.info("Result: "+ importResult);
+        log.info("Import result: "+ importResult);
         return importResult;
     }
     //------------------------------------------------------------------------------------------------------------------
-    @RequestMapping(value = "/export",produces = "application/json")
+    @RequestMapping(value = "/export",produces = "application/json",method = RequestMethod.POST)
     public ResponseObject exportStock(@RequestBody StockTransDTO stockTransDTO){
         log.info("-------------------------------");
         ResponseObject importResult = stockManagementBusiness.exportStock(stockTransDTO.getMjrStockTransDTO(),stockTransDTO.getLstMjrStockTransDetail());
-        log.info("Result: "+ importResult);
+        log.info("Export result: "+ importResult);
         return importResult;
     }
+    //------------------------------------------------------------------------------------------------------------------
+    @RequestMapping(value = "/cancelTransaction",produces = "application/json",method = RequestMethod.POST)
+    public ResponseObject cancelTransaction(@RequestParam("transId") String transId){
+        log.info("-------------------------------");
+        ResponseObject importResult = stockManagementBusiness.cancelTransaction(transId);
+        log.info("Cancel result: "+ importResult);
+        return importResult;
+    }
+    //
+    //------------------------------------------------------------------------------------------------------------------
+    @RequestMapping(value = "/getListSerialInStock",produces = "application/json",method = RequestMethod.GET)
+    public List<String> getListSerialInStock(@RequestParam("custId") String custId, @RequestParam("stockId") String stockId,
+                                             @RequestParam("goodsId") String goodsId, @RequestParam("goodsState") String goodsState
+                                             ){
+        log.info("-------------------------------");
+        List<String> lstSerial = stockManagementBusiness.getListSerialInStock(custId,stockId,goodsId,goodsState);
+        return lstSerial;
+    }
+
 }

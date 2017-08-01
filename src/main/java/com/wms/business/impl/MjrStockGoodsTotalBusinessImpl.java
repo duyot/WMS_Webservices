@@ -3,9 +3,11 @@ package com.wms.business.impl;
 import com.google.common.collect.Lists;
 import com.wms.base.BaseBusinessImpl;
 import com.wms.business.interfaces.MjrStockGoodsTotalBusinessInterface;
+import com.wms.dto.CatGoodsDTO;
 import com.wms.dto.Condition;
 import com.wms.dto.MjrStockGoodsTotalDTO;
 import com.wms.persistents.dao.MjrStockGoodsTotalDAO;
+import com.wms.persistents.model.CatGoods;
 import com.wms.persistents.model.MjrStockGoodsTotal;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,11 @@ public class MjrStockGoodsTotalBusinessImpl extends BaseBusinessImpl<MjrStockGoo
         return listModelToDTO(mjrStockGoodsTotalDAO.findByConditionSession(lstCondition,session));
     }
 
+    @Override
+    public int updateGoods(CatGoodsDTO goods) {
+        return mjrStockGoodsTotalDAO.updateGoods((CatGoods) goods.toModel());
+    }
+
     public List<MjrStockGoodsTotalDTO> listModelToDTO(List<MjrStockGoodsTotal> lstModel){
         List<MjrStockGoodsTotalDTO> lstResult = Lists.newArrayList();
         for(MjrStockGoodsTotal i: lstModel){
@@ -42,6 +49,8 @@ public class MjrStockGoodsTotalBusinessImpl extends BaseBusinessImpl<MjrStockGoo
         }
         return lstResult;
     }
+
+
 
 
 }

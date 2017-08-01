@@ -46,5 +46,25 @@ public class StockFunctionBusinessImpl implements StockFunctionInterface {
         return stockFunctionDAO.updateExportStockGoodsTotal(mjrStockTransDTO,mapGoodsNumber,session);
     }
 
+    @Override
+    public String getTotalStockTransaction(String stockId, Connection connection) {
+        return stockFunctionDAO.getTotalStockTransaction(stockId,connection);
+    }
+
+    @Override
+    public String getTotalStockTransaction(String stockId, Session session) {
+        return stockFunctionDAO.getTotalStockTransaction(stockId,session);
+    }
+
+    @Override
+    public ResponseObject cancelTransaction(String transId) {
+        return stockFunctionDAO.cancelTransaction(transId);
+    }
+
+    @Override
+    public List<String> getListSerialInStock(String custId, String stockId, String goodsId, String goodsState) {
+        return stockFunctionDAO.getListSerialInStock(custId,stockId,goodsId,goodsState);
+    }
+
 
 }

@@ -145,4 +145,22 @@ public class CatGoodsDTO extends BaseDTO{
                 isSerial,description,!StringUtils.validString(inPrice) ? null:Long.valueOf(inPrice),!StringUtils.validString(outPrice) ? null:Long.valueOf(outPrice)
         );
     }
+
+    @Override
+    public String toString() {
+        return "CatGoodsDTO{" +
+                "id='" + id + '\'' +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", status='" + status + '\'' +
+                ", createdDate='" + createdDate + '\'' +
+                ", custId='" + custId + '\'' +
+                ", unitType='" + unitType + '\'' +
+                ", goodsGroupId='" + goodsGroupId + '\'' +
+                ", isSerial='" + isSerial + '\'' +
+                ", description='" + description + '\'' +
+                ", inPrice='" + inPrice + '\'' +
+                ", outPrice='" + outPrice + '\'' +
+                '}';
+    }
 }

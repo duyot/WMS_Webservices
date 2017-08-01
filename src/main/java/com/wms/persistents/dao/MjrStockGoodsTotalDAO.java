@@ -7,11 +7,13 @@ import com.wms.dto.ErrorLogDTO;
 import com.wms.dto.MjrStockGoodsTotalDTO;
 import com.wms.dto.ResponseObject;
 import com.wms.enums.Responses;
+import com.wms.persistents.model.CatGoods;
 import com.wms.persistents.model.ErrorLog;
 import com.wms.persistents.model.MjrStockGoodsTotal;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import com.wms.utils.DateTimeUtils;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -47,6 +49,25 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
 
     public Session getSession(){
         return sessionFactory.getCurrentSession();
+    }
+
+    @Transactional
+    public int updateGoods(CatGoods catGoods){
+        StringBuilder sql = new StringBuilder();
+        sql.append(" UPDATE MJR_STOCK_GOODS_TOTAL SET ");
+        sql.append(" goods_code = :goodsCode, goods_name = :goodsName ");
+        sql.append(" where goods_id = :goodsId ");
+        Query query = getSession().createSQLQuery(sql.toString());
+        query.setParameter("goodsCode", catGoods.getCode());
+        query.setParameter("goodsName", catGoods.getName());
+        query.setParameter("goodsId", catGoods.getId());
+
+        try {
+            return query.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     public String saveMjrStockGoodsTotal(MjrStockGoodsTotalDTO stockGoodsTotal,Connection connection) {

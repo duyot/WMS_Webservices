@@ -1,6 +1,5 @@
 package com.wms.business.interfaces;
 
-import com.wms.dto.MjrStockGoodsTotalDTO;
 import com.wms.dto.MjrStockTransDTO;
 import com.wms.dto.MjrStockTransDetailDTO;
 import com.wms.dto.ResponseObject;
@@ -13,4 +12,7 @@ import java.util.List;
 public interface StockManagementBusinessInterface {
     ResponseObject importStock(MjrStockTransDTO mjrStockTransDTO, List<MjrStockTransDetailDTO> lstMjrStockTransDetailDTO);
     ResponseObject exportStock(MjrStockTransDTO mjrStockTransDTO, List<MjrStockTransDetailDTO> lstMjrStockTransDetailDTO);
+    ResponseObject cancelTransaction(String transId);
+    List<String> getListSerialInStock(String custId,  String stockId,String goodsId, String goodsState);
+
 }

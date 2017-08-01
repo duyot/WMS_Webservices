@@ -2,7 +2,6 @@ package com.wms.business.impl;
 
 import com.google.common.collect.Lists;
 import com.wms.base.BaseBusinessInterface;
-import com.wms.business.interfaces.MjrStockGoodsTotalBusinessInterface;
 import com.wms.business.interfaces.StockFunctionInterface;
 import com.wms.business.interfaces.StockManagementBusinessInterface;
 import com.wms.dto.*;
@@ -27,8 +26,6 @@ import java.util.*;
  */
 @Service("stockManagementBusiness")
 public class StockManagementBusinessImpl implements StockManagementBusinessInterface {
-//    @Autowired
-//    MjrStockGoodsTotalBusinessInterface mjrStockGoodsTotalBusiness;
     @Autowired
     BaseBusinessInterface mjrStockTransBusiness;
     @Autowired
@@ -37,8 +34,8 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
     @Autowired
     BaseBusinessInterface err$MjrStockGoodsSerialBusiness;
 
-//    @Autowired
-//    MjrStockGoodsTotalBusinessInterface advancedMjrStockGoodsTotalBusiness;
+    @Autowired
+    BaseBusinessInterface catStockBusiness;
 
     @Autowired
     StockFunctionInterface stockFunctionBusiness;
@@ -66,7 +63,7 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
             //1. INSERT STOCK_TRANS
             String savedStockTransId = mjrStockTransBusiness.getSequence("SEQ_MJR_STOCK_TRANS")+"";
             mjrStockTransDTO.setId(savedStockTransId);
-            mjrStockTransDTO = initMjrStockTransDTOInfo(mjrStockTransDTO);
+            mjrStockTransDTO = initMjrStockTransDTOInfo(mjrStockTransDTO,null,connection);
             String insertStockTransResult = stockFunctionBusiness.saveStockTransByConnection(mjrStockTransDTO,connection);
             if(!Responses.SUCCESS.getName().equalsIgnoreCase(insertStockTransResult)){
                 FunctionUtils.rollback(transaction,connection);
@@ -198,7 +195,7 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
         float totalExport = 0f;
         try {
             //1. INSERT STOCK_TRANS
-            mjrStockTransDTO = initMjrStockTransDTOInfo(mjrStockTransDTO);
+            mjrStockTransDTO = initMjrStockTransDTOInfo(mjrStockTransDTO,session,null);
             savedStockTranId = mjrStockTransBusiness.saveBySession(mjrStockTransDTO,session);
             if(!DataUtil.isInteger(savedStockTranId)){
                 FunctionUtils.rollback(transaction);
@@ -301,22 +298,18 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
         }
 
     }
-    //@SUPPORT-FUNCTION-------------------------------------------------------------------------------------------------
-    private String initTransCode(MjrStockTransDTO mjrStockTransDTO,String createdTime){
-        StringBuilder stringBuilder = new StringBuilder();
-        if(Constants.TRANSACTION_TYPE.IMPORT.equalsIgnoreCase(mjrStockTransDTO.getType())){
-            stringBuilder.append("IMP");
-        }else{
-            stringBuilder.append("EXP");
-        }
-        stringBuilder.append("_").append(mjrStockTransDTO.getCustId())
-                .append("_")
-                .append(createdTime)
-                .append("_")
-                .append(FunctionUtils.randomString());
-        return  stringBuilder.toString();
+
+    @Override
+    public ResponseObject cancelTransaction(String transId) {
+        return stockFunctionBusiness.cancelTransaction(transId);
     }
 
+    @Override
+    public List<String> getListSerialInStock(String custId, String stockId, String goodsId, String goodsState) {
+        return stockFunctionBusiness.getListSerialInStock(custId,stockId,goodsId,goodsState);
+    }
+
+    //@SUPPORT-FUNCTION-------------------------------------------------------------------------------------------------
     private Map<String,Float> updateFinalTotal(Map<String,Float> mapAllImportAmount,Map<String,Float> mapAmountError){
         Iterator it = mapAmountError.entrySet().iterator();
         String errorKey;
@@ -340,13 +333,44 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
         return err$MjrStockGoodsSerialBusiness.findByCondition(lstCon);
     }
 
-    private MjrStockTransDTO initMjrStockTransDTOInfo(MjrStockTransDTO mjrStockTransDTO){
+    private MjrStockTransDTO initMjrStockTransDTOInfo(MjrStockTransDTO mjrStockTransDTO, Session session, Connection con){
         //
         String createdDate = mjrStockTransBusiness.getSysDate();
-        String createdDatePartition = mjrStockTransBusiness.getSysDate("ddMMyyyy_hh24miss");
+        String createdDatePartition = mjrStockTransBusiness.getSysDate("ddMMyyyy");
         //
         mjrStockTransDTO.setCreatedDate(createdDate);
-        mjrStockTransDTO.setCode(initTransCode(mjrStockTransDTO,createdDatePartition));
+        mjrStockTransDTO.setCode(initTransCode(mjrStockTransDTO,createdDatePartition,session,con));
         return mjrStockTransDTO;
     }
+
+    //
+    //PNK/HNI-CG/17/000006
+    private String initTransCode(MjrStockTransDTO mjrStockTransDTO,String createdTime,Session session,Connection con){
+        //
+        boolean isImport = Constants.TRANSACTION_TYPE.IMPORT.equalsIgnoreCase(mjrStockTransDTO.getType());
+        //
+        String stockCode = "";
+        CatStockDTO stock = (CatStockDTO) catStockBusiness.findById(Long.parseLong(mjrStockTransDTO.getStockId()));
+        if (stock != null) {
+            stockCode = stock.getCode();
+        }
+        //
+        StringBuilder stringBuilder = new StringBuilder();
+        if(isImport){
+            stringBuilder.append("PNK");
+        }else{
+            stringBuilder.append("PXK");
+        }
+        stringBuilder.append("/").append(stockCode)
+                .append("/")
+                .append(createdTime)
+                .append("/");
+        if (isImport) {
+            stringBuilder.append(stockFunctionBusiness.getTotalStockTransaction(mjrStockTransDTO.getStockId(),con));
+        }else{
+            stringBuilder.append(stockFunctionBusiness.getTotalStockTransaction(mjrStockTransDTO.getStockId(),session));
+        }
+        return  stringBuilder.toString();
+    }
+
 }

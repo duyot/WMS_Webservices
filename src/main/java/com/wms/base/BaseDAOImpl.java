@@ -3,7 +3,6 @@ package com.wms.base;
 import com.google.common.collect.Lists;
 import com.wms.dto.Condition;
 import com.wms.enums.Responses;
-import com.wms.persistents.model.MjrStockGoodsTotal;
 import com.wms.utils.DataUtil;
 import com.wms.utils.FunctionUtils;
 import org.hibernate.*;
@@ -15,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,7 +29,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
 
     private Class<T> modelClass;
 
-    Logger log = LoggerFactory.getLogger(BaseDAOImpl.class);
+    private Logger log = LoggerFactory.getLogger(BaseDAOImpl.class);
 
     public void setModelClass(Class modelClass){
         this.modelClass = modelClass;
@@ -41,14 +39,14 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
         return sessionFactory.getCurrentSession();
     }
 
-    //--------------------------------------------------------------------
+    //SEQUENCE----------------------------------------------------------------------------------------------------------
     @Transactional(readOnly = true)
-    public Long getSequence(String sequense) {
-        String sql = "select " + sequense + ".nextval from dual";
+    public Long getSequence(String sequence) {
+        String sql = "select " + sequence + ".nextval from dual";
         Query query = getSession().createSQLQuery(sql);
         return ((BigDecimal) query.list().get(0)).longValue();
     }
-    //--------------------------------------------------------------------
+    //SYSDATE-----------------------------------------------------------------------------------------------------------
     @Transactional(readOnly = true)
     public String getSysDate(String pattern){
         String queryString = "SELECT to_char(sysdate,:id)  from dual";
@@ -61,7 +59,6 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             return "";
         }
     }
-    //-----------------------------------------------------------------------------------------------------------------
     @Transactional(readOnly = true)
     public String getSysDate() {
         String queryString = "SELECT to_char(sysdate,:id)  from dual";
@@ -74,8 +71,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             return "";
         }
     }
-    //--------------------------------------------------------------------
-    //CURD
+    //@DELETE-----------------------------------------------------------------------------------------------------------
     @Transactional
     public String deleteById(long id){
         T object = (T)getSession().get(modelClass,id);
@@ -96,7 +92,6 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
         }
     }
 
-    @Transactional
     public String deleteByObjectSession(T obj,Session session) {
         try {
             session.delete(obj);
@@ -106,7 +101,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             return Responses.ERROR.getName();
         }
     }
-    //--------------------------------------------------------------------
+    //UPDATE-----------------------------------------------------------------------------------------------------------
     @Transactional
     public String update(T obj) {
         try {
@@ -117,8 +112,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             return Responses.ERROR.getName();
         }
     }
-    //--------------------------------------------------------------------
-    @Transactional
+
     public String updateBySession(T obj,Session session) {
         try {
             session.update(obj);
@@ -128,7 +122,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             return Responses.ERROR.getName();
         }
     }
-    //--------------------------------------------------------------------
+    //SAVE-----------------------------------------------------------------------------------------------------------
     @Transactional
     public String saveOrUpdate(T obj) {
         try {
@@ -169,8 +163,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             return Responses.ERROR.getName();
         }
     }
-    //--------------------------------------------------------------------
-    //GET
+    //GET--------------------------------------------------------------------------------------------------------------
     @Transactional(readOnly = true)
     public List<T> getAll() {
         return (List<T>)getSession().createCriteria(modelClass).list();
@@ -189,20 +182,17 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
         return getSession().createCriteria(modelClass).setMaxResults(count).list();
 
     }
-    //--------------------------------------------------------------------
-    //find
+    //FIND--------------------------------------------------------------------------------------------------------------
     @Transactional(readOnly = true)
     public T findById(long id) {
         return getSession().get(modelClass,id);
     }
 
-    //------------------------------------------------------------------------------------------------
     @Transactional(readOnly = true)
     public List<T> findByProperty(String property,String value) {
         return (List<T>)getSession().createCriteria(modelClass).add(Restrictions.eq(property,value)).list();
     }
 
-    //------------------------------------------------------------------------------------------------
     @Transactional(readOnly = true)
     public List<T> findByCondition(List<Condition> lstCondition) {
         Criteria cr = getSession().createCriteria(modelClass);
@@ -218,18 +208,21 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             e.printStackTrace();
             return Lists.newArrayList();
         }
-    }//
+    }
+
+    @Transactional(readOnly = true)
     public Long countByCondition(List<Condition> lstCondition) {
         Criteria cr = getSession().createCriteria(modelClass);
 
         if(DataUtil.isListNullOrEmpty(lstCondition)){
-            return 0l;
+            return 0L;
         }
 
         cr = FunctionUtils.initCriteria(cr,lstCondition);
         return  (Long)cr.setProjection(Projections.rowCount()).uniqueResult();
-    }//
-    //------------------------------------------------------------------------------------------------
+    }
+
+    @Transactional(readOnly = true)
     public List<T> findByConditionSession(List<Condition> lstCondition, Session session) {
         Criteria cr = session.createCriteria(modelClass);
         if(DataUtil.isListNullOrEmpty(lstCondition)){
@@ -245,4 +238,5 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             return Lists.newArrayList();
         }
     }
+    //------------------------------------------------------------------------------------------------
 }

@@ -1,15 +1,11 @@
 package com.wms.services;
 
-/**
- * Created by doanlv4 on 25/03/2017.
- */
 import com.wms.base.BaseBusinessInterface;
 import com.wms.base.BaseServices;
-import com.wms.dto.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.wms.dto.AppParamsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 
@@ -19,7 +15,6 @@ import javax.annotation.PostConstruct;
 @RestController
 @RequestMapping("/services/appParamsServices")
 public class AppParamsServices extends BaseServices<AppParamsDTO> {
-    Logger log = LoggerFactory.getLogger(AppParamsServices.class);
     @Autowired
     BaseBusinessInterface appParamsBusiness;
 

@@ -12,7 +12,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -20,16 +19,19 @@ import java.util.List;
  */
 @Service
 public class BaseServices<T extends BaseDTO> {
-    Logger log = LoggerFactory.getLogger(BaseServices.class);
+    public Logger log = LoggerFactory.getLogger(BaseServices.class);
+
     public BaseBusinessInterface baseBusiness;
+
     @Autowired
     public BaseBusinessInterface errorLogBusiness;
 
+    //SYSDATE-----------------------------------------------------------------------------------------------------------
     @RequestMapping(value = "/getSysDate",produces = "application/json",method = RequestMethod.GET)
     public String getSysDate(){
         return baseBusiness.getSysDate();
     }
-
+    //SAVE-----------------------------------------------------------------------------------------------------------
     @RequestMapping(value = "/getSysDateWithPattern",produces = "application/json",method = RequestMethod.POST)
     public String getSysDateWithPattern(@RequestBody String pattern){
         return baseBusiness.getSysDate(pattern);
@@ -60,7 +62,7 @@ public class BaseServices<T extends BaseDTO> {
             return new ResponseObject(Responses.ERROR.getName(),Responses.ERROR.getName(),"");
         }
     }
-
+    //UPDATE-----------------------------------------------------------------------------------------------------------
     @RequestMapping(value = "/update",produces = "application/json",method = RequestMethod.POST)
     public ResponseObject update(@RequestBody T dto){
         String sysDate = errorLogBusiness.getSysDate();
@@ -102,7 +104,7 @@ public class BaseServices<T extends BaseDTO> {
     }
 
     @RequestMapping(value = "/find/{id}",method = RequestMethod.GET)
-    public T find(@PathVariable("id") Long id, HttpServletRequest request){
+    public T find(@PathVariable("id") Long id){
         return (T) baseBusiness.findById(id);
     }
 
@@ -111,10 +113,9 @@ public class BaseServices<T extends BaseDTO> {
         return baseBusiness.findByCondition(lstCondition);
     }
 
-    @CrossOrigin
-    @RequestMapping(value = "/getAll",method = RequestMethod.GET)
-    public List<T> getAll(){
-        log.info("getAll");
-        return baseBusiness.getAll();
+    @RequestMapping(value = "/countByCondition",produces = "application/json",method = RequestMethod.POST)
+    public Long countByCondition(@RequestBody List<Condition> lstCondition){
+        return baseBusiness.countByCondition(lstCondition);
     }
+
 }
