@@ -43,7 +43,7 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
     @Autowired
     SessionFactory sessionFactory;
 
-    Logger log = LoggerFactory.getLogger(StockManagementBusinessImpl.class);
+    private Logger log = LoggerFactory.getLogger(StockManagementBusinessImpl.class);
 
     @Override
     public ResponseObject importStock(MjrStockTransDTO mjrStockTransDTO, List<MjrStockTransDetailDTO> lstMjrStockTransDetailDTO) {
@@ -299,16 +299,6 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
 
     }
 
-    @Override
-    public ResponseObject cancelTransaction(String transId) {
-        return stockFunctionBusiness.cancelTransaction(transId);
-    }
-
-    @Override
-    public List<String> getListSerialInStock(String custId, String stockId, String goodsId, String goodsState) {
-        return stockFunctionBusiness.getListSerialInStock(custId,stockId,goodsId,goodsState);
-    }
-
     //@SUPPORT-FUNCTION-------------------------------------------------------------------------------------------------
     private Map<String,Float> updateFinalTotal(Map<String,Float> mapAllImportAmount,Map<String,Float> mapAmountError){
         Iterator it = mapAmountError.entrySet().iterator();
@@ -344,7 +334,6 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
     }
 
     //
-    //PNK/HNI-CG/17/000006
     private String initTransCode(MjrStockTransDTO mjrStockTransDTO,String createdTime,Session session,Connection con){
         //
         boolean isImport = Constants.TRANSACTION_TYPE.IMPORT.equalsIgnoreCase(mjrStockTransDTO.getType());

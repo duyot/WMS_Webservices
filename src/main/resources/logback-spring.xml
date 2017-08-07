@@ -7,23 +7,22 @@
             </Pattern>
         </layout>
     </appender>
-    <!--log by time-->
     <appender name="FILEBYTIME" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>/WMS/logs/service/logFile.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/WMS/logs/service/logFile.%d.log</fileNamePattern>
-            <maxHistory>365</maxHistory><!--the maximum number of archive files to keep-->
-            <totalSizeCap>3GB</totalSizeCap><!--total size of all archive files-->
-            <!--<maxFileSize>20MB</maxFileSize>-->
+            <fileNamePattern>/WMS/logs/service/logFile.%d.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>50MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>365</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{35} - %msg%n</pattern>
         </encoder>
     </appender>
-    <!--ROOT -->
     <root level="INFO">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILEBYTIME"/>
-        <!--<appender-ref ref="SIFT"/>-->
     </root>
 </configuration>

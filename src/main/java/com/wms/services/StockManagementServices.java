@@ -1,6 +1,8 @@
 package com.wms.services;
 
+import com.wms.business.interfaces.StockFunctionInterface;
 import com.wms.business.interfaces.StockManagementBusinessInterface;
+import com.wms.dto.MjrStockTransDetailDTO;
 import com.wms.dto.ResponseObject;
 import com.wms.dto.StockTransDTO;
 import org.slf4j.Logger;
@@ -16,10 +18,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/services/stockManagementServices")
 public class StockManagementServices {
-    Logger log = LoggerFactory.getLogger(StockManagementServices.class);
+    private Logger log = LoggerFactory.getLogger(StockManagementServices.class);
 
     @Autowired
     StockManagementBusinessInterface stockManagementBusiness;
+    @Autowired
+    StockFunctionInterface stockFunctionBusiness;
+
     //------------------------------------------------------------------------------------------------------------------
     @RequestMapping(value = "/import",produces = "application/json",method = RequestMethod.POST)
     public ResponseObject importStock(@RequestBody StockTransDTO stockTransDTO){
@@ -38,21 +43,31 @@ public class StockManagementServices {
     }
     //------------------------------------------------------------------------------------------------------------------
     @RequestMapping(value = "/cancelTransaction",produces = "application/json",method = RequestMethod.POST)
-    public ResponseObject cancelTransaction(@RequestParam("transId") String transId){
+    public ResponseObject cancelTransaction(@RequestBody String transId){
         log.info("-------------------------------");
-        ResponseObject importResult = stockManagementBusiness.cancelTransaction(transId);
+        ResponseObject importResult = stockFunctionBusiness.cancelTransaction(transId);
         log.info("Cancel result: "+ importResult);
         return importResult;
     }
-    //
     //------------------------------------------------------------------------------------------------------------------
     @RequestMapping(value = "/getListSerialInStock",produces = "application/json",method = RequestMethod.GET)
     public List<String> getListSerialInStock(@RequestParam("custId") String custId, @RequestParam("stockId") String stockId,
-                                             @RequestParam("goodsId") String goodsId, @RequestParam("goodsState") String goodsState
-                                             ){
+                                             @RequestParam("goodsId") String goodsId, @RequestParam("goodsState") String goodsState){
         log.info("-------------------------------");
-        List<String> lstSerial = stockManagementBusiness.getListSerialInStock(custId,stockId,goodsId,goodsState);
-        return lstSerial;
+        return stockFunctionBusiness.getListSerialInStock(custId,stockId,goodsId,goodsState);
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    @RequestMapping(value = "/getCountGoodsDetail",produces = "application/json",method = RequestMethod.GET)
+    public Long getCountGoodsDetail(String custId,  String stockId,String goodsId, String goodsState, String isSerial){
+        log.info("-------------------------------");
+        return stockFunctionBusiness.getCountGoodsDetail(custId,stockId,goodsId,goodsState,isSerial);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    @RequestMapping(value = "/getTransGoodsDetail",produces = "application/json",method = RequestMethod.GET)
+    public List<MjrStockTransDetailDTO> getTransGoodsDetail(String custId, String stockId, String transId, String transType){
+        log.info("-------------------------------");
+        return stockFunctionBusiness.getTransGoodsDetail(custId,stockId,transId,transType);
     }
 
 }

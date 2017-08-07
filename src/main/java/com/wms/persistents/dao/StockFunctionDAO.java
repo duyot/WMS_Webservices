@@ -6,9 +6,12 @@ import com.wms.dto.*;
 import com.wms.enums.Responses;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
+import oracle.jdbc.OracleTypes;
 import org.hibernate.*;
 import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.hibernate.procedure.ProcedureCall;
+import org.hibernate.result.Output;
+import org.hibernate.result.ResultSetOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +19,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import java.awt.*;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.Date;
@@ -49,6 +54,66 @@ public class StockFunctionDAO {
     MjrStockTransDetailDAO mjrStockTransDetailDAO;
 
     private Logger log = LoggerFactory.getLogger(StockManagementBusinessImpl.class);
+
+    @Transactional
+    public List<MjrStockTransDetailDTO> getTransGoodsDetail(String custId, String stockId, String transId, String transType){
+        Session session;
+        List<Object[]> lstResult = null;
+        try {
+            session = sessionFactory.getCurrentSession();
+            ProcedureCall pc =  session.createStoredProcedureCall("pkg_stock_info.p_get_trans_goods_details");
+            pc.registerParameter("p_cust_id", Integer.class,ParameterMode.IN).bindValue   (Integer.parseInt(custId));
+            pc.registerParameter("p_stock_id", Integer.class,ParameterMode.IN).bindValue   (Integer.parseInt(stockId));
+            pc.registerParameter("p_stock_trans_id", Integer.class,ParameterMode.IN).bindValue   (Integer.parseInt(transId));
+            pc.registerParameter("p_trans_type", Integer.class,ParameterMode.IN).bindValue   (Integer.parseInt(transType));
+            pc.registerParameter("p_result", Class.class,ParameterMode.REF_CURSOR);
+            Output output = pc.getOutputs().getCurrent();
+            if (output.isResultSet()) {
+               lstResult = ((ResultSetOutput) output).getResultList();
+            }
+            return convertToDetail(lstResult);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private List<MjrStockTransDetailDTO> convertToDetail(List<Object[]> lstData){
+        List<MjrStockTransDetailDTO> lstResult = Lists.newArrayList();
+        for(Object[] i: lstData){
+            MjrStockTransDetailDTO temp = new MjrStockTransDetailDTO();
+            temp.setGoodsId((i[0]+""));
+            temp.setGoodsState((String) i[1]);
+            temp.setCellCode((String) i[2]);
+            temp.setAmount(i[3]+"");
+            temp.setSerial((String) i[4]);
+            temp.setInputPrice(i[5]==null?"":i[5]+"");
+            temp.setOutputPrice(i[6]==null?"":i[6]+"");
+            //
+            lstResult.add(temp);
+        }
+        return lstResult;
+    }
+
+    @Transactional
+    public Long getCountGoodsDetail(String custId, String stockId, String goodsId, String goodsState, String isSerial){
+        Session session;
+        try {
+            session = sessionFactory.getCurrentSession();
+            ProcedureCall pc =  session.createStoredProcedureCall("pkg_stock_info.count_goods_details");
+            pc.registerParameter("p_cust_id", Integer.class,ParameterMode.IN).bindValue   (Integer.parseInt(custId));
+            pc.registerParameter("p_stock_id", Integer.class,ParameterMode.IN).bindValue   (Integer.parseInt(stockId));
+            pc.registerParameter("p_goods_id", Integer.class,ParameterMode.IN).bindValue   (Integer.parseInt(goodsId));
+            pc.registerParameter("p_goods_state", Integer.class,ParameterMode.IN).bindValue   (Integer.parseInt(goodsState));
+            pc.registerParameter("p_is_serial", Integer.class,ParameterMode.IN).bindValue   (Integer.parseInt(isSerial));
+            pc.registerParameter("p_total", Long.class,ParameterMode.OUT);
+
+            return (Long) pc.getOutputs().getOutputParameterValue("p_total");
+        }catch (Exception e){
+            e.printStackTrace();
+            return 0L;
+        }
+    }
     //
     @Transactional
     public List<String> getListSerialInStock(String custId, String stockId, String goodsId, String goodsState) {

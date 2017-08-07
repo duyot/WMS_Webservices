@@ -12,7 +12,4 @@ import java.util.List;
 public interface StockManagementBusinessInterface {
     ResponseObject importStock(MjrStockTransDTO mjrStockTransDTO, List<MjrStockTransDetailDTO> lstMjrStockTransDetailDTO);
     ResponseObject exportStock(MjrStockTransDTO mjrStockTransDTO, List<MjrStockTransDetailDTO> lstMjrStockTransDetailDTO);
-    ResponseObject cancelTransaction(String transId);
-    List<String> getListSerialInStock(String custId,  String stockId,String goodsId, String goodsState);
-
 }

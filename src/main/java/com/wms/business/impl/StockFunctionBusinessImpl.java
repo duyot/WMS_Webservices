@@ -66,5 +66,15 @@ public class StockFunctionBusinessImpl implements StockFunctionInterface {
         return stockFunctionDAO.getListSerialInStock(custId,stockId,goodsId,goodsState);
     }
 
+    @Override
+    public Long getCountGoodsDetail(String custId, String stockId, String goodsId, String goodsState, String isSerial) {
+        return stockFunctionDAO.getCountGoodsDetail(custId,stockId,goodsId,goodsState,isSerial);
+    }
+
+    @Override
+    public List<MjrStockTransDetailDTO> getTransGoodsDetail(String custId, String stockId, String transId, String transType) {
+        return stockFunctionDAO.getTransGoodsDetail(custId,stockId,transId,transType);
+    }
+
 
 }

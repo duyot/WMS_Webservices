@@ -33,5 +33,9 @@ public interface StockFunctionInterface {
     ResponseObject cancelTransaction(String transId);
     //
     List<String> getListSerialInStock(String custId,  String stockId,String goodsId, String goodsState);
+    //
+    Long getCountGoodsDetail(String custId,  String stockId,String goodsId, String goodsState, String isSerial);
+    //
+    List<MjrStockTransDetailDTO> getTransGoodsDetail(String custId, String stockId, String transId, String transType);
 
 }
