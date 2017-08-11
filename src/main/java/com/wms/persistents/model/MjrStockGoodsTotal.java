@@ -22,8 +22,9 @@ public class MjrStockGoodsTotal extends BaseModel {
     private Long stockId;
     private Double amount;
     private Date changeDate;
+    private Double preAmount;
 
-    public MjrStockGoodsTotal(Long id, Long custId, Long goodsId, String goodsCode, String goodsName, String goodsState, Long stockId, Double amount, Date changeDate) {
+    public MjrStockGoodsTotal(Long id, Long custId, Long goodsId, String goodsCode, String goodsName, String goodsState, Long stockId, Double amount, Date changeDate,Double preAmount) {
         this.id = id;
         this.custId = custId;
         this.goodsId = goodsId;
@@ -33,6 +34,7 @@ public class MjrStockGoodsTotal extends BaseModel {
         this.stockId = stockId;
         this.amount = amount;
         this.changeDate = changeDate;
+        this.preAmount = preAmount;
     }
 
     public MjrStockGoodsTotal() {
@@ -127,12 +129,24 @@ public class MjrStockGoodsTotal extends BaseModel {
         this.changeDate = changeDate;
     }
 
+    @Column(name = "PRE_AMOUNT")
+    public Double getPreAmount() {
+        return preAmount;
+    }
+
+    public void setPreAmount(Double preAmount) {
+        this.preAmount = preAmount;
+    }
+
     @Override
     public MjrStockGoodsTotalDTO toDTO() {
         return new MjrStockGoodsTotalDTO(id==null?"":id+"",custId==null?"":custId+"",goodsId==null?"":goodsId+"",
-                goodsCode,goodsName,goodsState,stockId==null?"":stockId+"",amount==null?"":amount+"",changeDate==null?"": DateTimeUtils.convertDateTimeToString(changeDate)
+                goodsCode,goodsName,goodsState,stockId==null?"":stockId+"",amount==null?"":amount+"",changeDate==null?"": DateTimeUtils.convertDateTimeToString(changeDate),
+                preAmount==null?"":preAmount+""
                 );
     }
+
+
 
     @Override
     public String toString() {

@@ -74,8 +74,8 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
         StringBuilder sqlInsert = new StringBuilder();
         PreparedStatement prstmtInsertTotal;
         sqlInsert.append(" Insert into MJR_STOCK_GOODS_TOTAL ");
-        sqlInsert.append(" (ID,CUST_ID,GOODS_ID,GOODS_CODE,GOODS_NAME,GOODS_STATE,STOCK_ID,AMOUNT,CHANGED_DATE) ");
-        sqlInsert.append(" Values(SEQ_MJR_STOCK_GOODS_TOTAL.nextval,?,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'))");
+        sqlInsert.append(" (ID,CUST_ID,GOODS_ID,GOODS_CODE,GOODS_NAME,GOODS_STATE,STOCK_ID,AMOUNT,CHANGED_DATE,PRE_AMOUNT) ");
+        sqlInsert.append(" Values(SEQ_MJR_STOCK_GOODS_TOTAL.nextval,?,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),?)");
         List<String> lstParams = initSaveTotalParams(stockGoodsTotal);
         try {
             prstmtInsertTotal = connection.prepareStatement(sqlInsert.toString());
@@ -102,6 +102,7 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
         params.add(stockGoodsTotal.getStockId());
         params.add(stockGoodsTotal.getAmount());
         params.add(stockGoodsTotal.getChangeDate());
+        params.add(stockGoodsTotal.getAmount());
 
         return params;
     }
@@ -141,6 +142,7 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
             return responseObject;
         }
         //update amount
+        currentTotal.setPreAmount(currentTotal.getAmount());
         currentTotal.setAmount(currentTotal.getAmount() - changeAmount);
         currentTotal.setChangeDate(DateTimeUtils.convertStringToDate(stockGoodsTotal.getChangeDate()));
         //
@@ -150,21 +152,21 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
             responseObject.setKey(stockGoodsTotal.getGoodsId());
             return responseObject;
     }
-    //
-        log.info("Update export total: "+ currentTotal.getId()+ " current value: "+ (currentTotal.getAmount()+changeAmount) + " export: "+ changeAmount);
-    //
+        log.info("Update export total: "+ currentTotal.getId()+ " current value: "+ (currentTotal.getPreAmount()) + " export: "+ changeAmount);
+        log.info("Value after: "+ currentTotal.getAmount());
         responseObject.setStatusCode(Responses.SUCCESS.getName());
         responseObject.setKey(stockGoodsTotal.getGoodsId());
         return responseObject;
     }
 
     public String updateImportTotal(MjrStockGoodsTotalDTO stockGoodsTotal, Connection connection){
-        log.info("Update Total: "+ "cust-"+stockGoodsTotal.getCustId()+ "|stockId-"+ stockGoodsTotal.getStockId() + "|goodsId-"+ stockGoodsTotal.getGoodsId()
-                + "|goodsState-"+ stockGoodsTotal.getGoodsState()+ "|amount-"+ stockGoodsTotal.getAmount());
+        log.info("Update import total: "+ "cust="+stockGoodsTotal.getCustId()+ "|stockId="+ stockGoodsTotal.getStockId() + "|goodsId="+ stockGoodsTotal.getGoodsId()
+                + "|goodsState="+ stockGoodsTotal.getGoodsState()+ "|amount="+ stockGoodsTotal.getAmount());
 
         StringBuilder sqlUpdateTotal = new StringBuilder();
         sqlUpdateTotal.append(" UPDATE  mjr_stock_goods_total a ");
-        sqlUpdateTotal.append(" SET  a.amount      = a.amount + ?, ");
+        sqlUpdateTotal.append(" SET  a.pre_amount      = a.amount, ");
+        sqlUpdateTotal.append("      a.amount      = a.amount + ?, ");
         sqlUpdateTotal.append("      a.changed_date = to_date(?,'dd/MM/yyyy hh24:mi:ss') ");
         sqlUpdateTotal.append(" WHERE a.cust_id = ? ");
         sqlUpdateTotal.append("   AND a.stock_id = ? ");

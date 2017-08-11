@@ -127,7 +127,7 @@ public class MjrStockGoodsDAO extends BaseDAOImpl<MjrStockGoods,Long> {
         goods.setStockId(Long.parseLong(mjrStockTransDTO.getStockId()));
         goods.setGoodsId(currentGoodsDetail.getGoodsId());
         goods.setGoodsState(currentGoodsDetail.getGoodsState());
-        goods.setCellCode(currentGoodsDetail.getGoodsState());
+        goods.setCellCode(currentGoodsDetail.getCellCode());
         goods.setAmount(exportAmount);
         goods.setImportDate(currentGoodsDetail.getImportDate());
         goods.setChangedDate(changeDate);

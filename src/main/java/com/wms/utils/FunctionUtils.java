@@ -1,6 +1,7 @@
 package com.wms.utils;
 
 import com.google.common.collect.Lists;
+import com.wms.base.OrderOracleVietnameseSort;
 import com.wms.business.impl.StockManagementBusinessImpl;
 import com.wms.dto.Condition;
 import com.wms.dto.MjrStockTransDetailDTO;
@@ -167,6 +168,13 @@ public class FunctionUtils {
                         cr.addOrder(Order.asc(i.getProperty()));
                     }else{
                         cr.addOrder(Order.desc(i.getProperty()));
+                    }
+                    break;
+                case "VNM_ORDER":
+                    if(i.getValue().toString().equalsIgnoreCase("asc")){
+                        cr.addOrder(OrderOracleVietnameseSort.asc(i.getProperty()));
+                    }else{
+                        cr.addOrder(OrderOracleVietnameseSort.desc(i.getProperty()));
                     }
                     break;
                 case "BETWEEN":

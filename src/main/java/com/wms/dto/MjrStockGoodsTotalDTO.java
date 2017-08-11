@@ -21,8 +21,9 @@ public class MjrStockGoodsTotalDTO extends BaseDTO {
     private String stockId;
     private String amount;
     private String changeDate;
+    private String preAmount;
 
-    public MjrStockGoodsTotalDTO(String id, String custId, String goodsId, String goodsCode, String goodsName, String goodsState, String stockId, String amount, String changeDate) {
+    public MjrStockGoodsTotalDTO(String id, String custId, String goodsId, String goodsCode, String goodsName, String goodsState, String stockId, String amount, String changeDate, String preAmount) {
         this.id = id;
         this.custId = custId;
         this.goodsId = goodsId;
@@ -32,6 +33,7 @@ public class MjrStockGoodsTotalDTO extends BaseDTO {
         this.stockId = stockId;
         this.amount = amount;
         this.changeDate = changeDate;
+        this.preAmount = preAmount;
     }
 
     public MjrStockGoodsTotalDTO() {
@@ -109,13 +111,22 @@ public class MjrStockGoodsTotalDTO extends BaseDTO {
         this.changeDate = changeDate;
     }
 
+    public String getPreAmount() {
+        return preAmount;
+    }
+
+    public void setPreAmount(String preAmount) {
+        this.preAmount = preAmount;
+    }
+
     @Override
     public MjrStockGoodsTotal toModel() {
         return new MjrStockGoodsTotal(!StringUtils.validString(id) ? null:Long.valueOf(id),
                 !StringUtils.validString(custId) ? null:Long.valueOf(custId),
                 !StringUtils.validString(goodsId) ? null:Long.valueOf(goodsId),goodsCode,goodsName,goodsState,
                 !StringUtils.validString(stockId) ? null:Long.valueOf(stockId),
-                !StringUtils.validString(amount) ? null:Double.valueOf(amount),!StringUtils.validString(changeDate) ? null: DateTimeUtils.convertStringToDate(changeDate)
+                !StringUtils.validString(amount) ? null:Double.valueOf(amount),!StringUtils.validString(changeDate) ? null: DateTimeUtils.convertStringToDate(changeDate),
+                !StringUtils.validString(preAmount) ? null:Double.valueOf(preAmount)
         );
     }
 
