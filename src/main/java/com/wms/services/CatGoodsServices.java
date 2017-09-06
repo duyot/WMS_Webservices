@@ -46,7 +46,7 @@ public class CatGoodsServices extends BaseServices<CatGoodsDTO> {
             log.info("Success");
             //update goods name in total
             int updatedTotalNum = totalService.updateGoods(dto);
-            log.info("Updated "+ updatedTotalNum + " goods name "+ dto.getName()+ " in total.");
+            log.info("Updated "+ updatedTotalNum + " "+ dto.getName()+ " in total.");
             //
             return new ResponseObject(Responses.SUCCESS.getName(),null, "");
         }

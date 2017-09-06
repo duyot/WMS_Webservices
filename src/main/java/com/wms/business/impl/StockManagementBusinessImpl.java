@@ -74,7 +74,8 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
             //
             String savedStockTransCode = mjrStockTransDTO.getCode();
             responseObject.setKey(savedStockTransCode);
-            log.info("Starting import transaction: "+ savedStockTransCode + " with: "+ lstMjrStockTransDetailDTO.size() +" items");
+            log.info("Starting import to stock:"+ mjrStockTransDTO.getStockId()+" trans code: "+ savedStockTransCode + " with: "+ lstMjrStockTransDetailDTO.size() +" items");
+            FunctionUtils.writeIEGoodsLog(lstMjrStockTransDetailDTO,log);
             //2. INSERT TRANS_DETAIL -> TRANS_GOODS (SERIAL|GOODS)
             Map<String,CatGoodsDTO> mapImportingGoods = new HashMap<>();
             Map<String,Float>          mapGoodsAmount = new HashMap<>();
@@ -206,7 +207,8 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
             mjrStockTransDTO.setId(savedStockTranId);
             savedStockTranCode = mjrStockTransDTO.getCode();
             response.setKey(savedStockTranCode);
-            log.info("Starting export transaction: "+ savedStockTranCode + " with: "+ lstMjrStockTransDetailDTO.size() +" items");
+            log.info("Starting export from stock:"+ mjrStockTransDTO.getStockId()+" code: "+ savedStockTranCode + " with: "+ lstMjrStockTransDetailDTO.size() +" items");
+            FunctionUtils.writeIEGoodsLog(lstMjrStockTransDetailDTO,log);
             //2. INSERT TRANS_DETAIL|STOCK(GOODS|SERIAL)
             Map<String,CatGoodsDTO> mapImportingGoods = new HashMap<>();
             Map<String,Float>          mapGoodsAmount = new HashMap<>();

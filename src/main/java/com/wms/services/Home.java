@@ -31,7 +31,6 @@ public class Home {
     //------------------------------------------------------------------------------------------------------------------
     @RequestMapping(value = "/login",produces = "application/json")
     public CatUserDTO login(@RequestBody CatUserDTO catUserDTO){
-        log.info("CatUserDTO login: "+ catUserDTO.toString());
         CatUserDTO loggedUser = userBusinessAdvanced.login(catUserDTO);
         log.info("Return info: "+ loggedUser.getCode());
         return loggedUser;

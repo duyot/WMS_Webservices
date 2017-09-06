@@ -26,6 +26,14 @@ import java.util.concurrent.ThreadLocalRandom;
 public class FunctionUtils {
     public static Logger log = LoggerFactory.getLogger(StockManagementBusinessImpl.class);
 
+    public static void writeIEGoodsLog(List<MjrStockTransDetailDTO> lstGoods, Logger log){
+        StringBuilder strLog = new StringBuilder();
+        for(MjrStockTransDetailDTO item: lstGoods){
+            strLog.append("\nItem: "+ item.getGoodsCode()+" serial:"+ item.getSerial()+" state: "+ item.getGoodsState()+ " amount: "+ item.getAmount());
+        }
+        log.info(strLog.toString());
+    }
+
     public static Float convertStringToFloat(MjrStockTransDetailDTO goodsDetail){
         try {
             return Float.valueOf(goodsDetail.getOutputPrice());
@@ -127,8 +135,7 @@ public class FunctionUtils {
                         value[0] = Long.parseLong(i.getValue()+"");
                         cr.add(Restrictions.in(i.getProperty(),Arrays.asList(value)));
                     }else{
-                        cr.add(Restrictions.eq(i.getProperty(), i.getValue()));
-                        cr.add(Restrictions.eq(i.getProperty(), i.getValue()));
+                        cr.add(Restrictions.eq(i.getProperty(), i.getValue()).ignoreCase());
                     }
                     break;
                 case "NOT_EQUAL":
@@ -161,7 +168,7 @@ public class FunctionUtils {
                     }
                     break;
                 case "LIKE":
-                    cr.add(Restrictions.like(i.getProperty(), "%"+ i.getValue()+"%"));
+                    cr.add(Restrictions.like(i.getProperty(), "%"+ i.getValue()+"%").ignoreCase());
                     break;
                 case "ORDER":
                     if(i.getValue().toString().equalsIgnoreCase("asc")){

@@ -76,12 +76,19 @@ public class StatisticBusinessImpl implements StatisticBusinessInterface {
     //1384|300,1361|10
     private List<ChartDTO> getTopGoodsChartFromData(SysStatisticTopGoodsDTO topGoodsDTO){
         List<ChartDTO> lstResult = Lists.newArrayList();
+        if (topGoodsDTO.getStatisticInfo() == null) {
+            return lstResult;
+        }
         String [] dataArr = topGoodsDTO.getStatisticInfo().split(",");
         int itemCount = dataArr.length;
         for(int i = 0;i< itemCount;i++){
             ChartDTO data = new ChartDTO();
             data.setName(dataArr[i].split("\\|")[0]);
-            data.setY(new BigInteger(dataArr[i].split("\\|")[1]));
+            String amount = dataArr[i].split("\\|")[1];
+            if (amount.contains(".")) {
+                amount = "0" + amount;
+            }
+            data.setY(Double.parseDouble(amount));
             lstResult.add(data);
         }
         return lstResult;
@@ -105,14 +112,14 @@ public class StatisticBusinessImpl implements StatisticBusinessInterface {
         List<ChartDTO> lstChart = Lists.newArrayList();
         //
         int size = lstSysMailReport.size();
-        BigInteger[] dataExport = new BigInteger[size];
-        BigInteger[] dataTotal  = new BigInteger[size];
+        Double[] dataExport = new Double[size];
+        Double[] dataTotal  = new Double[size];
         //
         int count = 0;
         for (SysMailReportDTO i: lstSysMailReport)
         {
-            dataExport[count] = (DataUtil.parseIntWithEmptyValue(i.getTotalExportMoney()));
-            dataTotal[count]  = (DataUtil.parseIntWithEmptyValue(i.getTotalMoney()));
+            dataExport[count] = (DataUtil.parseDoubleWithEmptyValue(i.getTotalExportMoney()));
+            dataTotal[count]  = (DataUtil.parseDoubleWithEmptyValue(i.getTotalMoney()));
             //
             count ++;
         }

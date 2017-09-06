@@ -46,27 +46,24 @@ public class StockManagementServices {
     public ResponseObject cancelTransaction(@RequestBody String transId){
         log.info("-------------------------------");
         ResponseObject importResult = stockFunctionBusiness.cancelTransaction(transId);
-        log.info("Cancel result: "+ importResult);
+        log.info("Cancel "+transId+" result: "+ importResult);
         return importResult;
     }
     //------------------------------------------------------------------------------------------------------------------
     @RequestMapping(value = "/getListSerialInStock",produces = "application/json",method = RequestMethod.GET)
     public List<String> getListSerialInStock(@RequestParam("custId") String custId, @RequestParam("stockId") String stockId,
                                              @RequestParam("goodsId") String goodsId, @RequestParam("goodsState") String goodsState){
-        log.info("-------------------------------");
         return stockFunctionBusiness.getListSerialInStock(custId,stockId,goodsId,goodsState);
     }
     //------------------------------------------------------------------------------------------------------------------
     @RequestMapping(value = "/getCountGoodsDetail",produces = "application/json",method = RequestMethod.GET)
     public Long getCountGoodsDetail(String custId,  String stockId,String goodsId, String goodsState, String isSerial){
-        log.info("-------------------------------");
         return stockFunctionBusiness.getCountGoodsDetail(custId,stockId,goodsId,goodsState,isSerial);
     }
 
     //------------------------------------------------------------------------------------------------------------------
     @RequestMapping(value = "/getTransGoodsDetail",produces = "application/json",method = RequestMethod.GET)
     public List<MjrStockTransDetailDTO> getTransGoodsDetail(String custId, String stockId, String transId, String transType){
-        log.info("-------------------------------");
         return stockFunctionBusiness.getTransGoodsDetail(custId,stockId,transId,transType);
     }
 

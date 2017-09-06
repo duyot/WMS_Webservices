@@ -50,7 +50,7 @@ public class OrderOracleVietnameseSort extends Order {
 
             fragment.append(ascending ? " asc" : " desc");
             if (i < columns.length - 1) {
-                fragment.append(", ");
+                fragment.append(",");
             }
         }
         return fragment.toString();
