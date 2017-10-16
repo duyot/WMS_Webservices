@@ -10,11 +10,9 @@ import com.wms.dto.SysStatisticTopGoodsDTO;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import com.wms.utils.DateTimeUtils;
-import oracle.sql.CHAR;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
