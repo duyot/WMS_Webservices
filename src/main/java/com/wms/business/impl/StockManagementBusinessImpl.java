@@ -61,27 +61,22 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
             connection = sessionFactoryBatch.getSessionFactoryOptions().getServiceRegistry().getService(ConnectionProvider.class).getConnection();
             connection.setAutoCommit(false);
             //1. INSERT STOCK_TRANS
-            String savedStockTransId = mjrStockTransBusiness.getSequence("SEQ_MJR_STOCK_TRANS")+"";
-            mjrStockTransDTO.setId(savedStockTransId);
-            mjrStockTransDTO = initMjrStockTransDTOInfo(mjrStockTransDTO,null,connection);
-            String insertStockTransResult = stockFunctionBusiness.saveStockTransByConnection(mjrStockTransDTO,connection);
-            if(!Responses.SUCCESS.getName().equalsIgnoreCase(insertStockTransResult)){
+            mjrStockTransDTO = saveStockTrans(mjrStockTransDTO,connection);
+            if(mjrStockTransDTO == null){
                 FunctionUtils.rollback(transaction,connection);
                 responseObject.setStatusName(Responses.ERROR_CREATE_STOCK_TRANS.getName());
-                responseObject.setKey(savedStockTransId);
                 return responseObject;
             }
             //
             String savedStockTransCode = mjrStockTransDTO.getCode();
+            String savedStockTransId = mjrStockTransDTO.getId();
             responseObject.setKey(savedStockTransCode);
-            log.info("Starting import to stock:"+ mjrStockTransDTO.getStockId()+" trans code: "+ savedStockTransCode + " with: "+ lstMjrStockTransDetailDTO.size() +" items");
+            log.info("Starting import to stock: "+ mjrStockTransDTO.getStockId()+" trans code: "+ savedStockTransCode + " with: "+ lstMjrStockTransDetailDTO.size() +" items");
             FunctionUtils.writeIEGoodsLog(lstMjrStockTransDetailDTO,log);
             //2. INSERT TRANS_DETAIL -> TRANS_GOODS (SERIAL|GOODS)
             Map<String,CatGoodsDTO> mapImportingGoods = new HashMap<>();
             Map<String,Float>          mapGoodsAmount = new HashMap<>();
             //
-            String strListGoodsCode;
-            StringBuilder sbGoodsCode = new StringBuilder();
             Set<String> setGoodsCode = new HashSet<>();
             for(MjrStockTransDetailDTO i: lstMjrStockTransDetailDTO){
                 setGoodsCode.add(i.getGoodsCode());
@@ -101,14 +96,9 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
                 return responseObject;
             }
             //
-            for(String i: setGoodsCode){
-                sbGoodsCode.append(i).append(",");
-            }
-            strListGoodsCode =  sbGoodsCode.substring(0,sbGoodsCode.lastIndexOf(",")) ;
+            String strListGoodsCode =  getStrListGoodsCode(setGoodsCode);
             //
-            List<Condition> lstCondition = Lists.newArrayList();
-            lstCondition.add(new Condition("code",Constants.SQL_OPERATOR.IN,strListGoodsCode));
-            List<CatGoodsDTO> lstImportCatGoods = catGoodsBusiness.findByCondition(lstCondition);
+            List<CatGoodsDTO> lstImportCatGoods = getGoodsFromCode(strListGoodsCode,mjrStockTransDTO.getCustId());
             //
             if(DataUtil.isListNullOrEmpty(lstImportCatGoods)){
                 FunctionUtils.rollback(transaction,connection);
@@ -126,7 +116,7 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
                 responseObject.setStatusName(Responses.ERROR_CREATE_STOCK_TRANS_DETAIL.getName());
                 return responseObject;
             }
-            log.info("Finished insert transdetail...");
+            log.info("Finished insert trans_detail...");
             //3. UPDATE TOTAL
             List<Err$MjrStockGoodsSerialDTO> lstGoodsError = getListRecordsError(savedStockTransId);
             boolean isError = false;
@@ -134,7 +124,7 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
             if(!DataUtil.isListNullOrEmpty(lstGoodsError)){
                 //
                 isError = true;
-                //re-evalueate map goods-number
+                //re-evaluated map goods-number
                 log.info("Found "+ lstGoodsError.size() + " errors...");
                 Map<String,Float> mapGoodsNumberError = new HashMap<>();
                 for(Err$MjrStockGoodsSerialDTO i: lstGoodsError){
@@ -174,7 +164,7 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.info(e.toString());
             FunctionUtils.rollback(transaction,connection);
             responseObject.setStatusName(Responses.ERROR_SYSTEM.getName());
             return responseObject;
@@ -213,8 +203,6 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
             Map<String,CatGoodsDTO> mapImportingGoods = new HashMap<>();
             Map<String,Float>          mapGoodsAmount = new HashMap<>();
             //
-            String strListGoodsCode;
-            StringBuilder sbGoodsCode = new StringBuilder();
             if(DataUtil.isListNullOrEmpty(lstMjrStockTransDetailDTO)){
                 FunctionUtils.rollback(transaction);
                 response.setStatusName(Responses.ERROR_NOT_FOUND_GOODS.getName());
@@ -247,14 +235,9 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
                 return response;
             }
             //
-            for(String i: setGoodsCode){
-                sbGoodsCode.append(i).append(",");
-            }
-            strListGoodsCode =  sbGoodsCode.substring(0,sbGoodsCode.lastIndexOf(",")) ;
+            String strListGoodsCode = getStrListGoodsCode(setGoodsCode);
             //
-            List<Condition> lstCondition = Lists.newArrayList();
-            lstCondition.add(new Condition("code",Constants.SQL_OPERATOR.IN,strListGoodsCode));
-            List<CatGoodsDTO> lstImportCatGoods = catGoodsBusiness.findByCondition(lstCondition);
+            List<CatGoodsDTO> lstImportCatGoods = getGoodsFromCode(strListGoodsCode,mjrStockTransDTO.getCustId());
             //
             if(DataUtil.isListNullOrEmpty(lstImportCatGoods)){
                 FunctionUtils.rollback(transaction);
@@ -273,7 +256,7 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
                     FunctionUtils.rollback(transaction);
                     return transDetailResult;
                 }
-        }
+            }
             log.info("Finished export "+ lstMjrStockTransDetailDTO.size() + " items.");
             //3. UPDATE TOTAL
             ResponseObject updateExportTotalResult = stockFunctionBusiness.updateExportStockGoodsTotal(mjrStockTransDTO,mapGoodsAmount,session);
@@ -364,4 +347,38 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
         return  stringBuilder.toString();
     }
 
+    private MjrStockTransDTO saveStockTrans(MjrStockTransDTO mjrStockTransDTO, Connection connection){
+        if (mjrStockTransDTO == null || connection == null) {
+            return  null;
+        }
+        //
+        String savedStockTransId = mjrStockTransBusiness.getSequence("SEQ_MJR_STOCK_TRANS")+"";
+        mjrStockTransDTO.setId(savedStockTransId);
+        mjrStockTransDTO = initMjrStockTransDTOInfo(mjrStockTransDTO,null,connection);
+        String insertStockTransResult = stockFunctionBusiness.saveStockTransByConnection(mjrStockTransDTO,connection);
+        if(!Responses.SUCCESS.getName().equalsIgnoreCase(insertStockTransResult)){
+            return null;
+        }else{
+            return mjrStockTransDTO;
+        }
+    }
+
+    /*
+        inp: set A -> B -> C
+        out: str: A,B,C
+     */
+    private String getStrListGoodsCode(Set<String> setGoodsCode){
+        StringBuilder sbGoodsCode = new StringBuilder();
+        for(String i: setGoodsCode){
+            sbGoodsCode.append(i).append(",");
+        }
+        return sbGoodsCode.substring(0,sbGoodsCode.lastIndexOf(",")) ;
+    }
+
+    private List getGoodsFromCode(String strListGoodsCode, String custId){
+        List<Condition> lstCondition = Lists.newArrayList();
+        lstCondition.add(new Condition("code",Constants.SQL_OPERATOR.IN,strListGoodsCode));
+        lstCondition.add(new Condition("custId",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,custId));
+        return catGoodsBusiness.findByCondition(lstCondition);
+    }
 }
