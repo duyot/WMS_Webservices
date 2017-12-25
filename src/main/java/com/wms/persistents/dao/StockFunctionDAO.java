@@ -24,6 +24,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -77,6 +78,25 @@ public class StockFunctionDAO {
         }
     }
 
+    @Transactional
+    public List<MjrStockTransDetailDTO> getListTransGoodsDetail(String lstStockTransId){
+
+        Session session = sessionFactory.getCurrentSession();
+        List<Object[]> lstResult = null;
+
+        StringBuilder str = new StringBuilder();
+        str.append(" select a.code,c.NAME,a.type, b.goods_code, b.goods_id, b.goods_state, b.amount, b.goods_id,a.created_date,  a.CREATED_USER")
+                        .append(" from mjr_stock_trans a, mjr_stock_trans_detail b, cat_stock c")
+                        .append(" WHERE ")
+                        .append(" a.id= b.STOCK_TRANS_ID")
+                        .append(" and a.stock_id = c.id")
+                        .append(" and a.id in( 2240,2241)")
+                        .append(" order by a.id desc ");
+        Query ps = session.createSQLQuery(str.toString());
+//        ps.setString("id",lstStockTransId);
+        return convertToStockTransDetail(ps.list());
+    }
+
     private List<MjrStockTransDetailDTO> convertToDetail(List<Object[]> lstData){
         List<MjrStockTransDetailDTO> lstResult = Lists.newArrayList();
         for(Object[] i: lstData){
@@ -88,6 +108,26 @@ public class StockFunctionDAO {
             temp.setSerial((String) i[4]);
             temp.setInputPrice(i[5]==null?"":i[5]+"");
             temp.setOutputPrice(i[6]==null?"":i[6]+"");
+            //
+            lstResult.add(temp);
+        }
+        return lstResult;
+    }
+
+    private List<MjrStockTransDetailDTO> convertToStockTransDetail(List<Object[]> lstData){
+        List<MjrStockTransDetailDTO> lstResult = Lists.newArrayList();
+        for(Object[] i: lstData){
+            MjrStockTransDetailDTO temp = new MjrStockTransDetailDTO();
+            temp.setStockTransCode((i[0]+""));
+            temp.setStockName((String) i[1]);
+            temp.setStockTransType((String) i[2]);
+            temp.setGoodsCode(i[3]+"");
+            temp.setGoodsName((String) i[4]);
+            temp.setGoodsState(i[5]==null?"":i[5]+"");
+            temp.setAmount(i[6]==null?"":i[6]+"");
+            temp.setUnitName(i[7]==null?"":i[7]+"");
+            temp.setStockTransCreatedDate(i[8]==null?"":i[8]+"");
+            temp.setStockTransCreatedUser(i[9]==null?"":i[9]+"");
             //
             lstResult.add(temp);
         }

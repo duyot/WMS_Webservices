@@ -27,6 +27,62 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
     private String importDate;
     private String exportDate;
     private String status;
+    private String stockTransCode;
+    private String stockName;
+    private String stockTransType;
+    private String unitName;
+    private String stockTransCreatedDate;
+    private String stockTransCreatedUser;
+
+    public String getStockTransCode() {
+        return stockTransCode;
+    }
+
+    public void setStockTransCode(String stockTransCode) {
+        this.stockTransCode = stockTransCode;
+    }
+
+    public String getStockName() {
+        return stockName;
+    }
+
+    public void setStockName(String stockName) {
+        this.stockName = stockName;
+    }
+
+    public String getStockTransType() {
+        return stockTransType;
+    }
+
+    public void setStockTransType(String stockTransType) {
+        this.stockTransType = stockTransType;
+    }
+
+
+    public String getUnitName() {
+        return unitName;
+    }
+
+    public void setUnitName(String unitName) {
+        this.unitName = unitName;
+    }
+
+    public String getStockTransCreatedDate() {
+        return stockTransCreatedDate;
+    }
+
+    public void setStockTransCreatedDate(String stockTransCreatedDate) {
+        this.stockTransCreatedDate = stockTransCreatedDate;
+    }
+
+    public String getStockTransCreatedUser() {
+        return stockTransCreatedUser;
+    }
+
+    public void setStockTransCreatedUser(String stockTransCreatedUser) {
+        this.stockTransCreatedUser = stockTransCreatedUser;
+    }
+
 
     public MjrStockTransDetailDTO(String id, String stockTransId, String goodsId, String goodsCode, String goodsState, String isSerial, String amount, String serial, String inputPrice, String outputPrice, String cellCode, String goodsName, String stockId, String importDate, String exportDate, String status) {
         this.id = id;
