@@ -12,6 +12,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.procedure.ProcedureCall;
 import org.hibernate.result.Output;
 import org.hibernate.result.ResultSetOutput;
+import org.hibernate.type.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,15 +86,25 @@ public class StockFunctionDAO {
         List<Object[]> lstResult = null;
 
         StringBuilder str = new StringBuilder();
-        str.append(" select a.code,c.NAME,a.type, b.goods_code, b.goods_id, b.goods_state, b.amount, b.goods_id,a.created_date,  a.CREATED_USER")
-                        .append(" from mjr_stock_trans a, mjr_stock_trans_detail b, cat_stock c")
-                        .append(" WHERE ")
-                        .append(" a.id= b.STOCK_TRANS_ID")
+        str.append(" select a.code,c.name, a.type, b.goods_code,b.goods_id, b.goods_state,b.amount, b.unit_name, a.created_date, a.CREATED_USER ")
+                .append(" from mjr_stock_trans a, mjr_stock_trans_detail b, cat_stock c")
+                        .append(" WHERE 1=1 ")
+                        .append(" and a.id= b.STOCK_TRANS_ID")
                         .append(" and a.stock_id = c.id")
-                        .append(" and a.id in( 2240,2241)")
+                        .append(" and a.id in( :id)")
                         .append(" order by a.id desc ");
-        Query ps = session.createSQLQuery(str.toString());
-//        ps.setString("id",lstStockTransId);
+        Query ps = session.createSQLQuery(str.toString())
+                .addScalar("code", StringType.INSTANCE)
+                .addScalar("name", StringType.INSTANCE)
+                .addScalar("type", LongType.INSTANCE)
+                .addScalar("goods_code", StringType.INSTANCE)
+                .addScalar("goods_id",LongType.INSTANCE)
+                .addScalar("goods_state", StringType.INSTANCE)
+                .addScalar("amount", FloatType.INSTANCE)
+                .addScalar("unit_name", StringType.INSTANCE)
+                .addScalar("created_date", DateType.INSTANCE)
+                .addScalar("CREATED_USER", StringType.INSTANCE);
+        ps.setString("id",lstStockTransId);
         return convertToStockTransDetail(ps.list());
     }
 
@@ -118,16 +129,16 @@ public class StockFunctionDAO {
         List<MjrStockTransDetailDTO> lstResult = Lists.newArrayList();
         for(Object[] i: lstData){
             MjrStockTransDetailDTO temp = new MjrStockTransDetailDTO();
-            temp.setStockTransCode((i[0]+""));
-            temp.setStockName((String) i[1]);
-            temp.setStockTransType((String) i[2]);
-            temp.setGoodsCode(i[3]+"");
-            temp.setGoodsName((String) i[4]);
-            temp.setGoodsState(i[5]==null?"":i[5]+"");
-            temp.setAmount(i[6]==null?"":i[6]+"");
-            temp.setUnitName(i[7]==null?"":i[7]+"");
-            temp.setStockTransCreatedDate(i[8]==null?"":i[8]+"");
-            temp.setStockTransCreatedUser(i[9]==null?"":i[9]+"");
+            temp.setStockTransCode(i[0]==null?"":String.valueOf(i[0]));
+            temp.setStockName( i[1]==null?"":String.valueOf(i[1]));
+            temp.setStockTransType(String.valueOf(i[2]).equals("1")?"Nhập":"Xuất");
+            temp.setGoodsCode( i[3]==null?"":String.valueOf(i[3]));
+            temp.setGoodsName( i[4]==null?"":String.valueOf(i[4]));
+            temp.setGoodsState(String.valueOf(i[5]).equals("1")?"Bình thường":"Hỏng");
+            temp.setAmount( i[6]==null?"":String.valueOf(i[6]));
+            temp.setUnitName( i[7]==null?"":String.valueOf(i[7]));
+            temp.setStockTransCreatedDate( i[8]==null?"":String.valueOf(i[8]));
+            temp.setStockTransCreatedUser( i[9]==null?"":String.valueOf(i[9]));
             //
             lstResult.add(temp);
         }
