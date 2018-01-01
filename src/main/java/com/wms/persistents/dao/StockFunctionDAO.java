@@ -83,7 +83,19 @@ public class StockFunctionDAO {
     public List<MjrStockTransDetailDTO> getListTransGoodsDetail(String lstStockTransId){
 
         Session session = sessionFactory.getCurrentSession();
-        List<Object[]> lstResult = null;
+        String[] ids = lstStockTransId.split(",");
+        int size = ids.length;
+        StringBuilder lstParamIds = new StringBuilder("");
+        if ("".equalsIgnoreCase(lstStockTransId.trim())){
+            lstParamIds.append("?");
+        }else {
+            for (int i = 0; i < size; i++) {
+                lstParamIds.append("?");
+                if(i!=size -1){
+                    lstParamIds.append(",");
+                }
+            }
+        }
 
         StringBuilder str = new StringBuilder();
         str.append(" select a.code,c.name, a.type, b.goods_code,b.goods_id, b.goods_state,b.amount, b.unit_name, a.created_date, a.CREATED_USER ")
@@ -91,7 +103,9 @@ public class StockFunctionDAO {
                         .append(" WHERE 1=1 ")
                         .append(" and a.id= b.STOCK_TRANS_ID")
                         .append(" and a.stock_id = c.id")
-                        .append(" and a.id in( :id)")
+                        .append(" and a.id in( ")
+                        .append(lstParamIds)
+                        .append(" )")
                         .append(" order by a.id desc ");
         Query ps = session.createSQLQuery(str.toString())
                 .addScalar("code", StringType.INSTANCE)
@@ -104,7 +118,13 @@ public class StockFunctionDAO {
                 .addScalar("unit_name", StringType.INSTANCE)
                 .addScalar("created_date", DateType.INSTANCE)
                 .addScalar("CREATED_USER", StringType.INSTANCE);
-        ps.setString("id",lstStockTransId);
+        if ("".equalsIgnoreCase(lstStockTransId.trim())){
+            ps.setString("1","-1");
+        }else{
+            for (int i = 0; i<size;i++){
+                ps.setString(i,ids[i]);
+            }
+        }
         return convertToStockTransDetail(ps.list());
     }
 
