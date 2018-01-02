@@ -37,5 +37,7 @@ public interface StockFunctionInterface {
     Long getCountGoodsDetail(String custId,  String stockId,String goodsId, String goodsState, String isSerial);
     //
     List<MjrStockTransDetailDTO> getTransGoodsDetail(String custId, String stockId, String transId, String transType);
+    //
+    List<MjrStockTransDetailDTO> getListTransGoodsDetail(String lstStockTransId);
 
 }

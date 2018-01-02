@@ -2,6 +2,7 @@ package com.wms.services;
 
 import com.wms.business.interfaces.StockFunctionInterface;
 import com.wms.business.interfaces.StockManagementBusinessInterface;
+import com.wms.dto.Condition;
 import com.wms.dto.MjrStockTransDetailDTO;
 import com.wms.dto.ResponseObject;
 import com.wms.dto.StockTransDTO;
@@ -65,6 +66,11 @@ public class StockManagementServices {
     @RequestMapping(value = "/getTransGoodsDetail",produces = "application/json",method = RequestMethod.GET)
     public List<MjrStockTransDetailDTO> getTransGoodsDetail(String custId, String stockId, String transId, String transType){
         return stockFunctionBusiness.getTransGoodsDetail(custId,stockId,transId,transType);
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    @RequestMapping(value = "/getListTransGoodsDetail",produces = "application/json",method = RequestMethod.GET)
+    public List<MjrStockTransDetailDTO> getListTransGoodsDetail(String lstStockTransId){
+        return stockFunctionBusiness.getListTransGoodsDetail(lstStockTransId);
     }
 
 }
