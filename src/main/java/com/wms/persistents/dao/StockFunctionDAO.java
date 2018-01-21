@@ -6,6 +6,7 @@ import com.wms.dto.*;
 import com.wms.enums.Responses;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
+import com.wms.utils.FunctionUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -98,7 +99,7 @@ public class StockFunctionDAO {
         }
 
         StringBuilder str = new StringBuilder();
-        str.append(" select a.code,c.name, a.type, b.goods_code,b.goods_id, b.goods_state,b.amount, b.unit_name, a.created_date, a.CREATED_USER ")
+        str.append(" select a.code,c.name, a.type, b.goods_code,b.goods_id, b.goods_state,b.amount, b.unit_name, a.created_date, a.CREATED_USER, b.input_price, b.output_price, b.cell_code, b.serial  ")
                 .append(" from mjr_stock_trans a, mjr_stock_trans_detail b, cat_stock c")
                         .append(" WHERE 1=1 ")
                         .append(" and a.id= b.STOCK_TRANS_ID")
@@ -117,7 +118,11 @@ public class StockFunctionDAO {
                 .addScalar("amount", FloatType.INSTANCE)
                 .addScalar("unit_name", StringType.INSTANCE)
                 .addScalar("created_date", DateType.INSTANCE)
-                .addScalar("CREATED_USER", StringType.INSTANCE);
+                .addScalar("CREATED_USER", StringType.INSTANCE)
+                .addScalar("input_price", FloatType.INSTANCE)
+                .addScalar("output_price", FloatType.INSTANCE)
+                .addScalar("cell_code", StringType.INSTANCE)
+                .addScalar("serial", StringType.INSTANCE);
         if ("".equalsIgnoreCase(lstStockTransId.trim())){
             ps.setString("1","-1");
         }else{
@@ -155,10 +160,15 @@ public class StockFunctionDAO {
             temp.setGoodsCode( i[3]==null?"":String.valueOf(i[3]));
             temp.setGoodsName( i[4]==null?"":String.valueOf(i[4]));
             temp.setGoodsState(String.valueOf(i[5]).equals("1")?"Bình thường":"Hỏng");
-            temp.setAmount( i[6]==null?"":String.valueOf(i[6]));
+            temp.setAmount( i[6]==null?"": FunctionUtils.formatNumber(String.valueOf(i[6])));
             temp.setUnitName( i[7]==null?"":String.valueOf(i[7]));
             temp.setStockTransCreatedDate( i[8]==null?"":String.valueOf(i[8]));
             temp.setStockTransCreatedUser( i[9]==null?"":String.valueOf(i[9]));
+            temp.setInputPrice( i[10]==null?"": FunctionUtils.formatNumber(String.valueOf(i[10])));
+            temp.setOutputPrice( i[11]==null?"":FunctionUtils.formatNumber(String.valueOf(i[11])));
+            temp.setCellCode( i[12]==null?"":String.valueOf(i[12]));
+            temp.setSerial( i[13]==null?"":String.valueOf(i[13]));
+
             //
             lstResult.add(temp);
         }
