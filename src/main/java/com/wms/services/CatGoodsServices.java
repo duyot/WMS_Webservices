@@ -34,7 +34,7 @@ public class CatGoodsServices extends BaseServices<CatGoodsDTO> {
 
     @RequestMapping(value = "/update",produces = "application/json",method = RequestMethod.POST)
     public ResponseObject update(@RequestBody CatGoodsDTO dto){
-        String sysDate = errorLogBusiness.getSysDate();
+        String sysDate = baseBusiness.getSysDate();
         log.info("-------------------------------");
         log.info("Update: "+ dto.toString());
         try {

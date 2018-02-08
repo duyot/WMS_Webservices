@@ -20,8 +20,11 @@ public class CatCustomerDTO extends BaseDTO{
     private String bankName;
     private String bankAccountCode;
     private String createdDate;
+    private String mailReport;
 
-    public CatCustomerDTO(String id, String code, String name, String status, String email, String telNumber, String address, String bankName, String bankAccountCode, String createdDate) {
+    public CatCustomerDTO(String id, String code, String name, String status, String email,
+                          String telNumber, String address, String bankName, String bankAccountCode,
+                          String createdDate, String mailReport) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -32,6 +35,7 @@ public class CatCustomerDTO extends BaseDTO{
         this.bankName = bankName;
         this.bankAccountCode = bankAccountCode;
         this.createdDate = createdDate;
+        this.mailReport = mailReport;
     }
 
     public CatCustomerDTO() {
@@ -118,10 +122,19 @@ public class CatCustomerDTO extends BaseDTO{
         this.createdDate = createdDate;
     }
 
+    public String getMailReport() {
+        return mailReport;
+    }
+
+    public void setMailReport(String mailReport) {
+        this.mailReport = mailReport;
+    }
+
     @Override
     public CatCustomer toModel() {
         return new CatCustomer(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,status,email,telNumber,
-                address,bankName,bankAccountCode,!StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate)
+                address,bankName,bankAccountCode,!StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),
+                mailReport==null?0:Integer.parseInt(mailReport)
                 );
     }
 
