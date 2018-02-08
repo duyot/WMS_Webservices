@@ -13,6 +13,7 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -32,6 +33,24 @@ public class FunctionUtils {
             strLog.append("\nItem: "+ item.getGoodsCode()+" serial:"+ item.getSerial()+" state: "+ item.getGoodsState()+ " amount: "+ item.getAmount());
         }
         log.info(strLog.toString());
+    }
+    public static String removeScientificNotation(String number){
+        BigDecimal num = new BigDecimal(number);
+        return num.toPlainString();
+    }
+
+    public static String formatNumber(String number){
+        if (!DataUtil.isStringNullOrEmpty(number)) {
+            String plainNumber = removeScientificNotation(number);
+            double dNumber = Double.valueOf(plainNumber);
+            if (dNumber%1 != 0) {
+                return String.format("%,.4f", dNumber);
+            }else{
+                return String.format("%,.0f", dNumber);
+            }
+        }else{
+            return "";
+        }
     }
 
     public static Float convertStringToFloat(MjrStockTransDetailDTO goodsDetail){
