@@ -11,6 +11,7 @@ import com.wms.utils.DataUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -33,13 +34,14 @@ public class SysRoleMenuServices {
 
 
     @RequestMapping(value = "/getUserAction/{roleCode}",produces = "application/json",method = RequestMethod.GET)
+    @Cacheable("menus")
     public List<ActionMenuDTO> getUserAction(@PathVariable("roleCode") String roleCode,@RequestHeader Map<String,String> mapHeaders){
         //log.info(mapHeaders.toString());
         List<SysMenuDTO> lstUserAction = getListUserAction(roleCode);
         if(DataUtil.isListNullOrEmpty(lstUserAction)){
             return new ArrayList<>();
         }
-
+        log.info("running in here");
         return initActionMenu(lstUserAction);
     }
 

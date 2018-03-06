@@ -46,6 +46,7 @@ public class CatUserServices extends BaseServices<CatUserDTO>{
         this.baseBusiness = catUserBusiness;
     }
 
+
     @RequestMapping(value = "/updateUser",produces = "application/json",method = RequestMethod.POST)
     public ResponseObject updateUser(@RequestBody CatUserDTO updateUser){
         ResponseObject responseObject = new ResponseObject();
@@ -165,11 +166,11 @@ public class CatUserServices extends BaseServices<CatUserDTO>{
             InputStream is = getClass().getClassLoader().getResourceAsStream(fileName);
             IOUtils.copy(is,response.getOutputStream());
             response.flushBuffer();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
     }
 }
 
