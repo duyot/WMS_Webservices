@@ -29,11 +29,13 @@ public class MjrStockTransDTO extends BaseDTO {
     private String transMoneyReceive;
     private String transMoneyResponse;
     private String description;
+    private String partnerId;
+
 
     public MjrStockTransDTO() {
     }
 
-    public MjrStockTransDTO(String id, String code, String custId, String stockId, String contractNumber, String invoiceNumber, String type, String status, String createdDate, String createdUser, String transMoneyTotal, String transMoneyDiscount, String discountAmount, String transMoneyRequire, String transMoneyReceive, String transMoneyResponse, String description) {
+    public MjrStockTransDTO(String id, String code, String custId, String stockId, String contractNumber, String invoiceNumber, String type, String status, String createdDate, String createdUser, String transMoneyTotal, String transMoneyDiscount, String discountAmount, String transMoneyRequire, String transMoneyReceive, String transMoneyResponse, String description, String partnerId) {
         this.id = id;
         this.code = code;
         this.custId = custId;
@@ -51,6 +53,15 @@ public class MjrStockTransDTO extends BaseDTO {
         this.transMoneyReceive = transMoneyReceive;
         this.transMoneyResponse = transMoneyResponse;
         this.description = description;
+        this.partnerId = partnerId;
+    }
+
+    public String getPartnerId() {
+        return partnerId;
+    }
+
+    public void setPartnerId(String partnerId) {
+        this.partnerId = partnerId;
     }
 
     public String getId() {
@@ -196,7 +207,7 @@ public class MjrStockTransDTO extends BaseDTO {
                 !StringUtils.validString(status) ? null:Long.valueOf(status),!StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),
                 createdUser,!StringUtils.validString(transMoneyTotal) ? null:Float.valueOf(transMoneyTotal),!StringUtils.validString(transMoneyDiscount) ? null:Float.valueOf(transMoneyDiscount),
                 !StringUtils.validString(discountAmount) ? null:Float.valueOf(discountAmount),!StringUtils.validString(transMoneyRequire) ? null:Float.valueOf(transMoneyRequire),
-                !StringUtils.validString(transMoneyReceive) ? null:Float.valueOf(transMoneyReceive),!StringUtils.validString(transMoneyResponse) ? null:Float.valueOf(transMoneyResponse),description
+                !StringUtils.validString(transMoneyReceive) ? null:Float.valueOf(transMoneyReceive),!StringUtils.validString(transMoneyResponse) ? null:Float.valueOf(transMoneyResponse),description, !StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId)
                 );
     }
 }

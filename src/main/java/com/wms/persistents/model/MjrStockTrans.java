@@ -31,11 +31,12 @@ public class MjrStockTrans extends BaseModel {
     private Float transMoneyReceive;
     private Float transMoneyResponse;
     private String description;
+    private Long partnerId;
 
     public MjrStockTrans() {
     }
 
-    public MjrStockTrans(Long id, String code, Long custId, Long stockId, String contractNumber, String invoicetNumber, Long type, Long status, Date createdDate, String createdUser, Float transMoneyTotal, Float transMoneyDiscount, Float discountAmount, Float transMoneyRequire, Float transMoneyReceive, Float transMoneyResponse, String description) {
+    public MjrStockTrans(Long id, String code, Long custId, Long stockId, String contractNumber, String invoicetNumber, Long type, Long status, Date createdDate, String createdUser, Float transMoneyTotal, Float transMoneyDiscount, Float discountAmount, Float transMoneyRequire, Float transMoneyReceive, Float transMoneyResponse, String description, Long partnerId) {
         this.id = id;
         this.code = code;
         this.custId = custId;
@@ -53,6 +54,7 @@ public class MjrStockTrans extends BaseModel {
         this.transMoneyReceive = transMoneyReceive;
         this.transMoneyResponse = transMoneyResponse;
         this.description = description;
+        this.partnerId = partnerId;
     }
 
     @Id
@@ -97,6 +99,15 @@ public class MjrStockTrans extends BaseModel {
 
     public void setStockId(Long stockId) {
         this.stockId = stockId;
+    }
+
+    @Column(name = "PARTNER_ID")
+    public Long getPartnerId() {
+        return partnerId;
+    }
+
+    public void setPartnerId(Long partnerId) {
+        this.partnerId = partnerId;
     }
 
     @Column(name = "CONTRACT_NUMBER")
@@ -222,7 +233,8 @@ public class MjrStockTrans extends BaseModel {
         return new MjrStockTransDTO(id==null?"":id+"",code,custId==null?"":custId+"",stockId==null?"":stockId+"",
                 contractNumber,invoicetNumber,type==null?"":type+"",status==null?"":status+"",createdDate==null?"": DateTimeUtils.convertDateTimeToString(createdDate),
                 createdUser,transMoneyTotal==null?"":transMoneyTotal+"",transMoneyDiscount==null?"":transMoneyDiscount+"",discountAmount==null?"":discountAmount+"",
-                transMoneyRequire==null?"":transMoneyRequire+"",transMoneyReceive==null?"":transMoneyReceive+"",transMoneyResponse==null?"":transMoneyResponse+"",description
+                transMoneyRequire==null?"":transMoneyRequire+"",transMoneyReceive==null?"":transMoneyReceive+"",transMoneyResponse==null?"":transMoneyResponse+"",description,
+                partnerId==null?"":partnerId+""
         );
     }
 }
