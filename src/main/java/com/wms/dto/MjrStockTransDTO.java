@@ -30,12 +30,13 @@ public class MjrStockTransDTO extends BaseDTO {
     private String transMoneyResponse;
     private String description;
     private String partnerId;
+    private String partnerName;
 
 
     public MjrStockTransDTO() {
     }
 
-    public MjrStockTransDTO(String id, String code, String custId, String stockId, String contractNumber, String invoiceNumber, String type, String status, String createdDate, String createdUser, String transMoneyTotal, String transMoneyDiscount, String discountAmount, String transMoneyRequire, String transMoneyReceive, String transMoneyResponse, String description, String partnerId) {
+    public MjrStockTransDTO(String id, String code, String custId, String stockId, String contractNumber, String invoiceNumber, String type, String status, String createdDate, String createdUser, String transMoneyTotal, String transMoneyDiscount, String discountAmount, String transMoneyRequire, String transMoneyReceive, String transMoneyResponse, String description, String partnerId, String partnerName) {
         this.id = id;
         this.code = code;
         this.custId = custId;
@@ -54,6 +55,7 @@ public class MjrStockTransDTO extends BaseDTO {
         this.transMoneyResponse = transMoneyResponse;
         this.description = description;
         this.partnerId = partnerId;
+        this.partnerName = partnerName;
     }
 
     public String getPartnerId() {
@@ -207,7 +209,7 @@ public class MjrStockTransDTO extends BaseDTO {
                 !StringUtils.validString(status) ? null:Long.valueOf(status),!StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),
                 createdUser,!StringUtils.validString(transMoneyTotal) ? null:Float.valueOf(transMoneyTotal),!StringUtils.validString(transMoneyDiscount) ? null:Float.valueOf(transMoneyDiscount),
                 !StringUtils.validString(discountAmount) ? null:Float.valueOf(discountAmount),!StringUtils.validString(transMoneyRequire) ? null:Float.valueOf(transMoneyRequire),
-                !StringUtils.validString(transMoneyReceive) ? null:Float.valueOf(transMoneyReceive),!StringUtils.validString(transMoneyResponse) ? null:Float.valueOf(transMoneyResponse),description, !StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId)
+                !StringUtils.validString(transMoneyReceive) ? null:Float.valueOf(transMoneyReceive),!StringUtils.validString(transMoneyResponse) ? null:Float.valueOf(transMoneyResponse),description, !StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId), partnerName
                 );
     }
 }
