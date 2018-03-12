@@ -13,9 +13,9 @@
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>
-        <file>/WMS/logs/service/logFile.log</file>
+        <file>/WMS/logs/service/log/log.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/WMS/logs/service/logFile.%d.%i.log</fileNamePattern>
+            <fileNamePattern>/WMS/logs/service/log/log.%d.%i.log</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>50MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>

@@ -32,11 +32,6 @@ public class CatGoodsServices extends BaseServices<CatGoodsDTO> {
         this.baseBusiness = catGoodsBusiness;
     }
 
-    @PostConstruct
-    public void setupService2() {
-        this.baseBusiness = catGoodsBusiness;
-    }
-
     @RequestMapping(value = "/update",produces = "application/json",method = RequestMethod.POST)
     public ResponseObject update(@RequestBody CatGoodsDTO dto){
         String sysDate = baseBusiness.getSysDate();

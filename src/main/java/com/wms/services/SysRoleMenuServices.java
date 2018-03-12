@@ -12,11 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by duyot on 11/3/2016.
@@ -35,13 +37,12 @@ public class SysRoleMenuServices {
 
     @RequestMapping(value = "/getUserAction/{roleCode}",produces = "application/json",method = RequestMethod.GET)
     @Cacheable("menus")
-    public List<ActionMenuDTO> getUserAction(@PathVariable("roleCode") String roleCode,@RequestHeader Map<String,String> mapHeaders){
-        //log.info(mapHeaders.toString());
+    public List<ActionMenuDTO> getUserAction(@PathVariable("roleCode") String roleCode){
+        log.info("method invoked!");
         List<SysMenuDTO> lstUserAction = getListUserAction(roleCode);
         if(DataUtil.isListNullOrEmpty(lstUserAction)){
             return new ArrayList<>();
         }
-        log.info("running in here");
         return initActionMenu(lstUserAction);
     }
 

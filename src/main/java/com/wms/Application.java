@@ -1,16 +1,12 @@
 package com.wms;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.support.SpringBootServletInitializer;
-import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
-import org.springframework.context.annotation.Bean;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -24,32 +20,20 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan(value = "com.wms")
-@EnableCaching
 @EnableTransactionManagement
-public class Application extends SpringBootServletInitializer {
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        // Customize the application or call application.sources(...) to add sources
-        // Since our example is itself a @Configuration class (via @SpringBootApplication)
-        // we actually don't need to override this method.
-        return application;
-    }
+public class Application   extends SpringBootServletInitializer {
+//    @Override
+//    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+//        // Customize the application or call application.sources(...) to add sources
+//        // Since our example is itself a @Configuration class (via @SpringBootApplication)
+//        // we actually don't need to override this method.
+//        return application;
+//    }
 
-
-    @Configuration
-    public class WebConfig extends WebMvcConfigurerAdapter {
-
-        @Override
-        public void addCorsMappings(CorsRegistry registry) {
-            registry.addMapping("/**")
-                    .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH");
-        }
-    }
-
-    @Bean
-    public CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("menus");
-    }
+//    @Bean
+//    public CacheManager cacheManager() {
+//        return new ConcurrentMapCacheManager("menus");
+//    }
 
 
     public static void main(String[] args) {
