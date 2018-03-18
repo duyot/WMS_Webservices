@@ -62,6 +62,14 @@ public class MjrStockTransDTO extends BaseDTO {
         return partnerId;
     }
 
+    public String getPartnerName() {
+        return partnerName;
+    }
+
+    public void setPartnerName(String partnerName) {
+        this.partnerName = partnerName;
+    }
+
     public void setPartnerId(String partnerId) {
         this.partnerId = partnerId;
     }
