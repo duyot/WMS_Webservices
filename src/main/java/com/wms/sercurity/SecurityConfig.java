@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http    .cors().and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/oauth/token","/login","/WMS_Webservices")
+                .antMatchers(HttpMethod.POST,"/oauth/token","/login","/WMS_Webservices","/services/catUserServices/updateUser")
                 .permitAll()
         ;
     }
