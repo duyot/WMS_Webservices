@@ -32,6 +32,61 @@ public class MjrStockTransDTO extends BaseDTO {
     private String partnerId;
     private String partnerName;
 
+    //DoanLV 26/05/2018 bo sung them thong tin de in phieu xuat
+    private String customerName;
+    private String stockName;
+    private String stockCode;
+    private String partnerCode;
+    private String partnerTelNumber;
+    private String partnerAddress;
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getStockName() {
+        return stockName;
+    }
+
+    public void setStockName(String stockName) {
+        this.stockName = stockName;
+    }
+
+    public String getStockCode() {
+        return stockCode;
+    }
+
+    public void setStockCode(String stockCode) {
+        this.stockCode = stockCode;
+    }
+
+    public String getPartnerCode() {
+        return partnerCode;
+    }
+
+    public void setPartnerCode(String partnerCode) {
+        this.partnerCode = partnerCode;
+    }
+
+    public String getPartnerTelNumber() {
+        return partnerTelNumber;
+    }
+
+    public void setPartnerTelNumber(String partnerTelNumber) {
+        this.partnerTelNumber = partnerTelNumber;
+    }
+
+    public String getPartnerAddress() {
+        return partnerAddress;
+    }
+
+    public void setPartnerAddress(String partnerAddress) {
+        this.partnerAddress = partnerAddress;
+    }
 
     public MjrStockTransDTO() {
     }
@@ -60,6 +115,14 @@ public class MjrStockTransDTO extends BaseDTO {
 
     public String getPartnerId() {
         return partnerId;
+    }
+
+    public String getPartnerName() {
+        return partnerName;
+    }
+
+    public void setPartnerName(String partnerName) {
+        this.partnerName = partnerName;
     }
 
     public void setPartnerId(String partnerId) {

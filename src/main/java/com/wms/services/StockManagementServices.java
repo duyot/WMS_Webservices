@@ -2,10 +2,7 @@ package com.wms.services;
 
 import com.wms.business.interfaces.StockFunctionInterface;
 import com.wms.business.interfaces.StockManagementBusinessInterface;
-import com.wms.dto.Condition;
-import com.wms.dto.MjrStockTransDetailDTO;
-import com.wms.dto.ResponseObject;
-import com.wms.dto.StockTransDTO;
+import com.wms.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +68,12 @@ public class StockManagementServices {
     @RequestMapping(value = "/getListTransGoodsDetail",produces = "application/json",method = RequestMethod.GET)
     public List<MjrStockTransDetailDTO> getListTransGoodsDetail(String lstStockTransId){
         return stockFunctionBusiness.getListTransGoodsDetail(lstStockTransId);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    @RequestMapping(value = "/getStockTransInfo",produces = "application/json",method = RequestMethod.GET)
+    public List<MjrStockTransDTO> getStockTransInfo(String lstStockTransId){
+        return stockFunctionBusiness.getStockTransInfo(lstStockTransId);
     }
 
 }

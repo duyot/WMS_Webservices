@@ -133,6 +133,77 @@ public class StockFunctionDAO {
         return convertToStockTransDetail(ps.list());
     }
 
+    @Transactional
+    public List<MjrStockTransDTO> getStockTransInfo(String lstStockTransId){
+
+        Session session = sessionFactory.getCurrentSession();
+        String[] ids = lstStockTransId.split(",");
+        int size = ids.length;
+        StringBuilder lstParamIds = new StringBuilder("");
+        if ("".equalsIgnoreCase(lstStockTransId.trim())){
+            lstParamIds.append("?");
+        }else {
+            for (int i = 0; i < size; i++) {
+                lstParamIds.append("?");
+                if(i!=size -1){
+                    lstParamIds.append(",");
+                }
+            }
+        }
+
+        StringBuilder str = new StringBuilder();
+        str.append(" select d.name as customer_name, a.code as trans_code,c.name as stock_name, c.code as stock_code, a.created_date, a.description,\n" +
+                "b.code as partner_code, b.name as partner_name, b.tel_number, b.address")
+                .append(" from mjr_stock_trans a, CAT_PARTNER b, cat_stock c, CAT_CUSTOMER d")
+                .append(" WHERE 1=1 ")
+                .append(" and a.partner_id = b.id")
+                .append(" and a.CUST_ID = d.id")
+                .append(" and a.stock_id = c.id")
+                .append(" and a.id in( ")
+                .append(lstParamIds)
+                .append(" )")
+                .append(" order by a.id desc ");
+        Query ps = session.createSQLQuery(str.toString())
+                .addScalar("customer_name", StringType.INSTANCE)
+                .addScalar("trans_code", StringType.INSTANCE)
+                .addScalar("stock_name", StringType.INSTANCE)
+                .addScalar("stock_code", StringType.INSTANCE)
+                .addScalar("created_date",DateType.INSTANCE)
+                .addScalar("description", StringType.INSTANCE)
+                .addScalar("partner_code", StringType.INSTANCE)
+                .addScalar("partner_name", StringType.INSTANCE)
+                .addScalar("tel_number", StringType.INSTANCE)
+                .addScalar("address", StringType.INSTANCE);
+        if ("".equalsIgnoreCase(lstStockTransId.trim())){
+            ps.setString("1","-1");
+        }else{
+            for (int i = 0; i<size;i++){
+                ps.setString(i,ids[i]);
+            }
+        }
+
+        return convertToStockTransInfo(ps.list());
+    }
+
+    private List<MjrStockTransDTO> convertToStockTransInfo(List<Object[]> lstData){
+        List<MjrStockTransDTO> lstResult = Lists.newArrayList();
+        for(Object[] i: lstData){
+            MjrStockTransDTO temp = new MjrStockTransDTO();
+            temp.setCustomerName(i[0]==null?"":String.valueOf(i[0]));
+            temp.setCode( i[1]==null?"":String.valueOf(i[1]));
+            temp.setStockName(i[2]==null?"":String.valueOf(i[2]));
+            temp.setStockCode( i[3]==null?"":String.valueOf(i[3]));
+            temp.setCreatedDate( i[4]==null?"":String.valueOf(i[4]));
+            temp.setDescription(i[5]==null?"":String.valueOf(i[5]));
+            temp.setPartnerCode( i[6]==null?"":String.valueOf(i[6]));
+            temp.setPartnerName( i[7]==null?"":String.valueOf(i[7]));
+            temp.setPartnerTelNumber( i[8]==null?"":String.valueOf(i[8]));
+            temp.setPartnerAddress( i[9]==null?"":String.valueOf(i[9]));
+            lstResult.add(temp);
+        }
+        return lstResult;
+    }
+
     private List<MjrStockTransDetailDTO> convertToDetail(List<Object[]> lstData){
         List<MjrStockTransDetailDTO> lstResult = Lists.newArrayList();
         for(Object[] i: lstData){
@@ -149,6 +220,7 @@ public class StockFunctionDAO {
         }
         return lstResult;
     }
+
 
     private List<MjrStockTransDetailDTO> convertToStockTransDetail(List<Object[]> lstData){
         List<MjrStockTransDetailDTO> lstResult = Lists.newArrayList();
@@ -174,6 +246,8 @@ public class StockFunctionDAO {
         }
         return lstResult;
     }
+
+
 
     @Transactional
     public Long getCountGoodsDetail(String custId, String stockId, String goodsId, String goodsState, String isSerial){
