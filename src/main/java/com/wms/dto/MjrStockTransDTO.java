@@ -202,6 +202,14 @@ public class MjrStockTransDTO extends BaseDTO {
         this.description = description;
     }
 
+    public String getPartnerName() {
+        return partnerName;
+    }
+
+    public void setPartnerName(String partnerName) {
+        this.partnerName = partnerName;
+    }
+
     @Override
     public MjrStockTrans toModel() {
         return new MjrStockTrans(!StringUtils.validString(id) ? null:Long.valueOf(id),code,!StringUtils.validString(custId) ? null:Long.valueOf(custId),
