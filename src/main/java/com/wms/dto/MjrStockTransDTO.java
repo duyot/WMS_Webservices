@@ -265,13 +265,6 @@ public class MjrStockTransDTO extends BaseDTO {
         this.description = description;
     }
 
-    public String getPartnerName() {
-        return partnerName;
-    }
-
-    public void setPartnerName(String partnerName) {
-        this.partnerName = partnerName;
-    }
 
     @Override
     public MjrStockTrans toModel() {
