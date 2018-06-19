@@ -40,6 +40,26 @@ public class MjrStockTransDTO extends BaseDTO {
     private String partnerTelNumber;
     private String partnerAddress;
 
+    //Khach hang nhan trong cac giao dich xuat
+    private String receiveName;
+    private String receiveId;
+
+    public String getReceiveId() {
+        return receiveId;
+    }
+
+    public void setReceiveId(String receiveId) {
+        this.receiveId = receiveId;
+    }
+
+    public String getReceiveName() {
+        return receiveName;
+    }
+
+    public void setReceiveName(String receiveName) {
+        this.receiveName = receiveName;
+    }
+
     public String getCustomerName() {
         return customerName;
     }
@@ -91,7 +111,7 @@ public class MjrStockTransDTO extends BaseDTO {
     public MjrStockTransDTO() {
     }
 
-    public MjrStockTransDTO(String id, String code, String custId, String stockId, String contractNumber, String invoiceNumber, String type, String status, String createdDate, String createdUser, String transMoneyTotal, String transMoneyDiscount, String discountAmount, String transMoneyRequire, String transMoneyReceive, String transMoneyResponse, String description, String partnerId, String partnerName) {
+    public MjrStockTransDTO(String id, String code, String custId, String stockId, String contractNumber, String invoiceNumber, String type, String status, String createdDate, String createdUser, String transMoneyTotal, String transMoneyDiscount, String discountAmount, String transMoneyRequire, String transMoneyReceive, String transMoneyResponse, String description, String partnerId, String partnerName,String receiveId, String receiveName) {
         this.id = id;
         this.code = code;
         this.custId = custId;
@@ -111,6 +131,8 @@ public class MjrStockTransDTO extends BaseDTO {
         this.description = description;
         this.partnerId = partnerId;
         this.partnerName = partnerName;
+        this.receiveId = receiveId;
+        this.receiveName = receiveName;
     }
 
     public String getPartnerId() {
@@ -273,7 +295,7 @@ public class MjrStockTransDTO extends BaseDTO {
                 !StringUtils.validString(status) ? null:Long.valueOf(status),!StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),
                 createdUser,!StringUtils.validString(transMoneyTotal) ? null:Float.valueOf(transMoneyTotal),!StringUtils.validString(transMoneyDiscount) ? null:Float.valueOf(transMoneyDiscount),
                 !StringUtils.validString(discountAmount) ? null:Float.valueOf(discountAmount),!StringUtils.validString(transMoneyRequire) ? null:Float.valueOf(transMoneyRequire),
-                !StringUtils.validString(transMoneyReceive) ? null:Float.valueOf(transMoneyReceive),!StringUtils.validString(transMoneyResponse) ? null:Float.valueOf(transMoneyResponse),description, !StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId), partnerName
+                !StringUtils.validString(transMoneyReceive) ? null:Float.valueOf(transMoneyReceive),!StringUtils.validString(transMoneyResponse) ? null:Float.valueOf(transMoneyResponse),description, !StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId), partnerName,!StringUtils.validString(receiveId) ? null:Long.valueOf(receiveId), receiveName
                 );
     }
 }

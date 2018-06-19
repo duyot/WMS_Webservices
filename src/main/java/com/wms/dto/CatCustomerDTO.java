@@ -21,10 +21,12 @@ public class CatCustomerDTO extends BaseDTO{
     private String bankAccountCode;
     private String createdDate;
     private String mailReport;
+    //DoanLV4 doi tac co bat buoc chon khong khi nhap/xuat kho
+    private String partnerRequire;
 
     public CatCustomerDTO(String id, String code, String name, String status, String email,
                           String telNumber, String address, String bankName, String bankAccountCode,
-                          String createdDate, String mailReport) {
+                          String createdDate, String mailReport , String partnerRequire) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -36,6 +38,7 @@ public class CatCustomerDTO extends BaseDTO{
         this.bankAccountCode = bankAccountCode;
         this.createdDate = createdDate;
         this.mailReport = mailReport;
+        this.partnerRequire = partnerRequire;
     }
 
     public CatCustomerDTO() {
@@ -134,7 +137,7 @@ public class CatCustomerDTO extends BaseDTO{
     public CatCustomer toModel() {
         return new CatCustomer(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,status,email,telNumber,
                 address,bankName,bankAccountCode,!StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),
-                mailReport==null?0:Integer.parseInt(mailReport)
+                mailReport==null?0:Integer.parseInt(mailReport), partnerRequire==null?0:Integer.parseInt(partnerRequire)
                 );
     }
 
