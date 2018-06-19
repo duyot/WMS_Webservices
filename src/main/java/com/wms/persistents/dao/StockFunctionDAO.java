@@ -557,7 +557,7 @@ public class StockFunctionDAO {
         paramsStockTrans.add(transDetail.getCreatedDate());
         paramsStockTrans.add(transDetail.getCreatedDate());
         paramsStockTrans.add(Constants.STATUS.ACTIVE);
-        paramsStockTrans.add("1");
+        paramsStockTrans.add(transDetail.getPartnerId());
         paramsStockTrans.add(transDetail.getId());
         paramsStockTrans.add(goods.getInputPrice());
         return paramsStockTrans;
@@ -574,7 +574,7 @@ public class StockFunctionDAO {
         paramsStockTrans.add(transDetail.getCreatedDate());
         paramsStockTrans.add(transDetail.getCreatedDate());
         paramsStockTrans.add(Constants.STATUS.ACTIVE);
-        paramsStockTrans.add("1");
+        paramsStockTrans.add(transDetail.getPartnerId());
         paramsStockTrans.add(transDetail.getId());
         paramsStockTrans.add(goods.getInputPrice());
         return paramsStockTrans;

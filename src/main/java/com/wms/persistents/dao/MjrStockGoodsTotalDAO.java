@@ -175,7 +175,7 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
 
         try {
             PreparedStatement ps = connection.prepareStatement(sqlUpdateTotal.toString());
-            ps.setString(1, stockGoodsTotal.getAmount() +"");
+            ps.setFloat(1, Float.valueOf(stockGoodsTotal.getAmount()));
             ps.setString(2, stockGoodsTotal.getChangeDate());
             ps.setString(3, stockGoodsTotal.getCustId());
             ps.setString(4, stockGoodsTotal.getStockId());
