@@ -133,6 +133,14 @@ public class CatCustomerDTO extends BaseDTO{
         this.mailReport = mailReport;
     }
 
+    public String getPartnerRequire() {
+        return partnerRequire;
+    }
+
+    public void setPartnerRequire(String partnerRequire) {
+        this.partnerRequire = partnerRequire;
+    }
+
     @Override
     public CatCustomer toModel() {
         return new CatCustomer(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,status,email,telNumber,
