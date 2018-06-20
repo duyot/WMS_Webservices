@@ -541,7 +541,7 @@ public class StockFunctionDAO {
         paramsStockTrans.add(goods.getAmount());
         paramsStockTrans.add(goods.getSerial());
         paramsStockTrans.add(goods.getInputPrice());
-        paramsStockTrans.add(goods.getCellCode());
+        paramsStockTrans.add(goods.getCellCode() != null ? goods.getCellCode():"");
         return paramsStockTrans;
     }
 
