@@ -42,8 +42,8 @@ public class MjrStockTransDAO extends BaseDAOImpl<MjrStockTrans,Long> {
         StringBuilder sql = new StringBuilder();
         List params = initSaveParams(mjrStockTransDTO);
         sql.append("Insert into MJR_STOCK_TRANS ");
-        sql.append(" (ID,CODE,CUST_ID,STOCK_ID,CONTRACT_NUMBER,INVOICE_NUMBER,TYPE,STATUS,CREATED_DATE,CREATED_USER,DESCRIPTION) ");
-        sql.append(" values (?,?,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),?,?) ");
+        sql.append(" (ID,CODE,CUST_ID,STOCK_ID,CONTRACT_NUMBER,INVOICE_NUMBER,TYPE,STATUS,CREATED_DATE,CREATED_USER,DESCRIPTION,PARTNER_ID,PARTNER_NAME) ");
+        sql.append(" values (?,?,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),?,?,?,?) ");
         //
         try {
             PreparedStatement stm = connection.prepareStatement(sql.toString());
@@ -74,6 +74,8 @@ public class MjrStockTransDAO extends BaseDAOImpl<MjrStockTrans,Long> {
         params.add(stockTrans.getCreatedDate());//
         params.add(stockTrans.getCreatedUser());//
         params.add(stockTrans.getDescription());//
+        params.add(stockTrans.getPartnerId());//
+        params.add(stockTrans.getPartnerName());//
         return params;
     }
 }
