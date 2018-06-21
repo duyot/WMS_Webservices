@@ -34,11 +34,15 @@ public class MjrStockTrans extends BaseModel {
     private Long partnerId;
     private String partnerName;
 
+    //Khach hang nhan trong cac giao dich xuat
+    private String receiveName;
+    private Long receiveId;
+
     public MjrStockTrans() {
     }
 
     public MjrStockTrans(Long id, String code, Long custId, Long stockId, String contractNumber, String invoicetNumber, Long type, Long status, Date createdDate, String createdUser, Float transMoneyTotal,
-                         Float transMoneyDiscount, Float discountAmount, Float transMoneyRequire, Float transMoneyReceive, Float transMoneyResponse, String description, Long partnerId, String partnerName) {
+                         Float transMoneyDiscount, Float discountAmount, Float transMoneyRequire, Float transMoneyReceive, Float transMoneyResponse, String description, Long partnerId, String partnerName,Long receiveId, String receiveName) {
         this.id = id;
         this.code = code;
         this.custId = custId;
@@ -58,6 +62,8 @@ public class MjrStockTrans extends BaseModel {
         this.description = description;
         this.partnerId = partnerId;
         this.partnerName = partnerName;
+        this.receiveId  = receiveId;
+        this.receiveName = receiveName;
     }
 
     @Id
@@ -102,15 +108,6 @@ public class MjrStockTrans extends BaseModel {
 
     public void setStockId(Long stockId) {
         this.stockId = stockId;
-    }
-
-    @Column(name = "PARTNER_ID")
-    public Long getPartnerId() {
-        return partnerId;
-    }
-
-    public void setPartnerId(Long partnerId) {
-        this.partnerId = partnerId;
     }
 
     @Column(name = "CONTRACT_NUMBER")
@@ -231,6 +228,15 @@ public class MjrStockTrans extends BaseModel {
         this.description = description;
     }
 
+    @Column(name = "PARTNER_ID")
+    public Long getPartnerId() {
+        return partnerId;
+    }
+
+    public void setPartnerId(Long partnerId) {
+        this.partnerId = partnerId;
+    }
+
     @Column(name = "PARTNER_NAME")
     public String getPartnerName() {
         return partnerName;
@@ -240,13 +246,31 @@ public class MjrStockTrans extends BaseModel {
         this.partnerName = partnerName;
     }
 
+    @Column(name = "RECEIVE_ID")
+    public Long getReceiveId() {
+        return receiveId;
+    }
+
+    public void setReceiveId(Long receiveId) {
+        this.receiveId = receiveId;
+    }
+
+    @Column(name = "RECEIVE_NAME")
+    public String getReceiveName() {
+        return receiveName;
+    }
+
+    public void setReceiveName(String receiveName) {
+        this.receiveName = receiveName;
+    }
+
     @Override
     public MjrStockTransDTO toDTO() {
         return new MjrStockTransDTO(id==null?"":id+"",code,custId==null?"":custId+"",stockId==null?"":stockId+"",
                 contractNumber,invoicetNumber,type==null?"":type+"",status==null?"":status+"",createdDate==null?"": DateTimeUtils.convertDateTimeToString(createdDate),
                 createdUser,transMoneyTotal==null?"":transMoneyTotal+"",transMoneyDiscount==null?"":transMoneyDiscount+"",discountAmount==null?"":discountAmount+"",
                 transMoneyRequire==null?"":transMoneyRequire+"",transMoneyReceive==null?"":transMoneyReceive+"",transMoneyResponse==null?"":transMoneyResponse+"",description,
-                partnerId==null?"":partnerId+"", partnerName
+                partnerId==null?"":partnerId+"", partnerName,receiveId==null?"":receiveId+"", receiveName
         );
     }
 }
