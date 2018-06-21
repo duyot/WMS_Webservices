@@ -1,6 +1,7 @@
 package com.wms.business.impl;
 
 import com.wms.base.BaseBusinessImpl;
+import com.wms.business.interfaces.SysMenuBusinessInterface;
 import com.wms.dto.SysMenuDTO;
 import com.wms.persistents.dao.SysMenuDAO;
 import com.wms.persistents.model.SysMenu;
@@ -12,8 +13,8 @@ import javax.annotation.PostConstruct;
 /**
  * Created by duyot on 11/2/2016.
  */
-@Service("sysMenuBusiness")
-public class SysMenuBusinessImpl extends BaseBusinessImpl<SysMenuDTO, SysMenuDAO> {
+@Service("sysMenuBusinessImpl")
+public class SysMenuBusinessImpl extends BaseBusinessImpl<SysMenuDTO, SysMenuDAO> implements SysMenuBusinessInterface {
     @Autowired
     SysMenuDAO sysMenuDAO;
 

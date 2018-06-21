@@ -2,6 +2,7 @@ package com.wms.services;
 
 import com.google.common.collect.Lists;
 import com.wms.base.BaseBusinessInterface;
+import com.wms.business.interfaces.SysMenuBusinessInterface;
 import com.wms.dto.ActionMenuDTO;
 import com.wms.dto.Condition;
 import com.wms.dto.SysMenuDTO;
@@ -30,7 +31,7 @@ public class SysRoleMenuServices {
     Logger log = LoggerFactory.getLogger(SysRoleMenuServices.class);
 
     @Autowired
-    BaseBusinessInterface sysMenuBusiness;
+    SysMenuBusinessInterface sysMenuBusinessImpl;
     @Autowired
     BaseBusinessInterface sysRoleMenuBusiness;
 
@@ -105,7 +106,7 @@ public class SysRoleMenuServices {
         lstCondition.add(new Condition("levels",Constants.SQL_OPERATOR.ORDER,"asc"));
         lstCondition.add(new Condition("orders",Constants.SQL_OPERATOR.ORDER,"asc"));
 
-        return sysMenuBusiness.findByCondition(lstCondition);
+        return sysMenuBusinessImpl.findByCondition(lstCondition);
     }
 
     private List<SysRoleMenuDTO> getRoleActionByRole(String roleCode){
