@@ -33,6 +33,6 @@ public class Home {
     public CatUserDTO login(@RequestBody CatUserDTO catUserDTO){
         CatUserDTO loggedUser = userBusinessAdvanced.login(catUserDTO);
         log.info("Return info: "+ loggedUser.getCode());
-        return loggedUser;
+        return loggedUser;//
     }
 }

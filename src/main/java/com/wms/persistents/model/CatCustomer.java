@@ -155,6 +155,7 @@ public class CatCustomer extends BaseModel{
     public void setMailReport(int mailReport) {
         this.mailReport = mailReport;
     }
+
     @Column(name = "PARTNER_REQUIRE")
     public int getPartnerRequire() {
         return partnerRequire;
