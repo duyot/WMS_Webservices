@@ -1,6 +1,7 @@
 package com.wms.business.impl;
 
 import com.wms.base.BaseBusinessImpl;
+import com.wms.business.interfaces.SysRoleBusinessInterface;
 import com.wms.dto.SysRoleDTO;
 import com.wms.persistents.dao.SysRoleDAO;
 import com.wms.persistents.model.SysRole;
@@ -12,8 +13,8 @@ import javax.annotation.PostConstruct;
 /**
  * Created by duyot on 11/2/2016.
  */
-@Service("sysRoleBusiness")
-public class SysRoleBusinessImpl extends BaseBusinessImpl<SysRoleDTO, SysRoleDAO> {
+@Service("sysRoleBusinessImpl")
+public class SysRoleBusinessImpl extends BaseBusinessImpl<SysRoleDTO, SysRoleDAO> implements SysRoleBusinessInterface{
     @Autowired
     SysRoleDAO sysRoleDAO;
 

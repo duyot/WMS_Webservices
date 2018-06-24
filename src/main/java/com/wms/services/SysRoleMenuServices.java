@@ -2,6 +2,7 @@ package com.wms.services;
 
 import com.google.common.collect.Lists;
 import com.wms.base.BaseBusinessInterface;
+import com.wms.base.BaseServices;
 import com.wms.business.interfaces.SysMenuBusinessInterface;
 import com.wms.dto.ActionMenuDTO;
 import com.wms.dto.Condition;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +28,10 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/services/sysRoleMenuServices")
-public class SysRoleMenuServices {
+public class SysRoleMenuServices extends BaseServices<SysRoleMenuDTO> {
 
     Logger log = LoggerFactory.getLogger(SysRoleMenuServices.class);
+
 
     @Autowired
     SysMenuBusinessInterface sysMenuBusinessImpl;
@@ -36,11 +39,16 @@ public class SysRoleMenuServices {
     BaseBusinessInterface sysRoleMenuBusiness;
 
 
-    @RequestMapping(value = "/getUserAction/{roleCode}",produces = "application/json",method = RequestMethod.GET)
+    @PostConstruct
+    public void setupService() {
+        this.baseBusiness = sysRoleMenuBusiness;
+    }
+
+    @RequestMapping(value = "/getUserAction/{roleCode}/{cusId}",produces = "application/json",method = RequestMethod.GET)
     @Cacheable("menus")
-    public List<ActionMenuDTO> getUserAction(@PathVariable("roleCode") String roleCode){
+    public List<ActionMenuDTO> getUserAction(@PathVariable("roleCode") String roleCode,@PathVariable("cusId") String cusId){
         log.info("method invoked!");
-        List<SysMenuDTO> lstUserAction = getListUserAction(roleCode);
+        List<SysMenuDTO> lstUserAction = getListUserAction(roleCode,cusId);
         if(DataUtil.isListNullOrEmpty(lstUserAction)){
             return new ArrayList<>();
         }
@@ -84,9 +92,9 @@ public class SysRoleMenuServices {
         return lstActionMenu;
     }
 
-    private List<SysMenuDTO> getListUserAction(String roleCode){
+    private List<SysMenuDTO> getListUserAction(String roleCode,String cusId){
 
-        List<SysRoleMenuDTO> lstRoleAction = getRoleActionByRole(roleCode);
+        List<SysRoleMenuDTO> lstRoleAction = getRoleActionByRole(roleCode,cusId);
 
         if(DataUtil.isListNullOrEmpty(lstRoleAction)){
             return null;
@@ -109,10 +117,10 @@ public class SysRoleMenuServices {
         return sysMenuBusinessImpl.findByCondition(lstCondition);
     }
 
-    private List<SysRoleMenuDTO> getRoleActionByRole(String roleCode){
+    private List<SysRoleMenuDTO> getRoleActionByRole(String roleCode,String custId){
         List<Condition> lstCondition = Lists.newArrayList();
         lstCondition.add(new Condition("roleCode",Constants.SQL_OPERATOR.EQUAL,roleCode));
-
+        lstCondition.add(new Condition("custId",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,custId));
         return sysRoleMenuBusiness.findByCondition(lstCondition);
     }
 

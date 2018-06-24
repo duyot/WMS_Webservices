@@ -18,11 +18,13 @@ public class SysRoleMenu extends BaseModel{
     private Long id;
     private String roleCode;
     private Long menuId;
+    private Long custId;
 
-    public SysRoleMenu(Long id, String roleCode, Long actionId) {
+    public SysRoleMenu(Long id, String roleCode, Long actionId ,Long custId) {
         this.id = id;
         this.roleCode = roleCode;
         this.menuId = actionId;
+        this.custId = custId;
     }
 
     public SysRoleMenu() {
@@ -56,10 +58,17 @@ public class SysRoleMenu extends BaseModel{
     public void setMenuId(Long menuId) {
         this.menuId = menuId;
     }
+    @Column(name = "CUST_ID",nullable = false)
+    public Long getCustId() {
+        return custId;
+    }
 
+    public void setCustId(Long custId) {
+        this.custId = custId;
+    }
 
     @Override
     public SysRoleMenuDTO toDTO() {
-        return new SysRoleMenuDTO(id==null?"":id+"", roleCode , menuId ==null?"": menuId +"");
+        return new SysRoleMenuDTO(id==null?"":id+"", roleCode , menuId ==null?"": menuId +"",custId+"");
     }
 }

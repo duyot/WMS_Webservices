@@ -19,12 +19,14 @@ public class SysRole extends BaseModel{
     private String code;
     private String name;
     private String status;
+    private Long custId;
 
-    public SysRole(Long id, String code, String name, String status) {
+    public SysRole(Long id, String code, String name, String status,Long custId ) {
         this.id = id;
         this.code = code;
         this.name = name;
         this.status = status;
+        this.custId = custId;
     }
 
     public SysRole() {
@@ -67,9 +69,17 @@ public class SysRole extends BaseModel{
     public void setStatus(String status) {
         this.status = status;
     }
+    @Column(name = "CUST_ID",nullable = false )
+    public Long getCustId() {
+        return custId;
+    }
+
+    public void setCustId(Long custId) {
+        this.custId = custId;
+    }
 
     @Override
     public SysRoleDTO toDTO() {
-        return new SysRoleDTO(id==null?"":id+"",code, name, status);
+        return new SysRoleDTO(id==null?"":id+"",code, name, status,custId != null?String.valueOf(custId):null);
     }
 }
