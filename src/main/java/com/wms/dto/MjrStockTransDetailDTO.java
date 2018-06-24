@@ -33,6 +33,24 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
     private String unitName;
     private String stockTransCreatedDate;
     private String stockTransCreatedUser;
+    private String partnerId;
+    private String partnerName;
+
+    public String getPartnerId() {
+        return partnerId;
+    }
+
+    public void setPartnerId(String partnerId) {
+        this.partnerId = partnerId;
+    }
+
+    public String getPartnerName() {
+        return partnerName;
+    }
+
+    public void setPartnerName(String partnerName) {
+        this.partnerName = partnerName;
+    }
 
     public String getStockTransCode() {
         return stockTransCode;
@@ -103,7 +121,7 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
         this.status = status;
     }
 
-    public MjrStockTransDetailDTO(String id, String stockTransId, String goodsId, String goodsCode, String goodsState, String isSerial, String amount, String serial, String inputPrice, String outputPrice, String cellCode) {
+    public MjrStockTransDetailDTO(String id, String stockTransId, String goodsId, String goodsCode, String goodsState, String isSerial, String amount, String serial, String inputPrice, String outputPrice, String cellCode, String partnerId) {
         this.id = id;
         this.stockTransId = stockTransId;
         this.goodsId = goodsId;
@@ -115,6 +133,7 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
         this.inputPrice = inputPrice;
         this.outputPrice = outputPrice;
         this.cellCode = cellCode;
+        this.partnerId = partnerId;
     }
 
     public MjrStockTransDetailDTO() {
@@ -225,7 +244,7 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
         return new MjrStockTransDetail(!StringUtils.validString(id) ? null:Long.valueOf(id),!StringUtils.validString(stockTransId) ? null:Long.valueOf(stockTransId),
                 !StringUtils.validString(goodsId) ? null:Long.valueOf(goodsId),goodsCode,goodsState,!StringUtils.validString(isSerial) ? null:Long.valueOf(isSerial),
                 !StringUtils.validString(amount) ? null:Float.valueOf(amount),serial,
-                !StringUtils.validString(inputPrice) ? null:Float.valueOf(inputPrice),!StringUtils.validString(outputPrice) ? null:Float.valueOf(outputPrice),cellCode
+                !StringUtils.validString(inputPrice) ? null:Float.valueOf(inputPrice),!StringUtils.validString(outputPrice) ? null:Float.valueOf(outputPrice),cellCode,!StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId)
         );
     }
 
