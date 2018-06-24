@@ -1,5 +1,6 @@
 package com.wms.business.interfaces;
 
+import com.wms.dto.CatStockDTO;
 import com.wms.dto.CatUserDTO;
 
 /**
@@ -7,4 +8,6 @@ import com.wms.dto.CatUserDTO;
  */
 public interface CatUserBusinessInterface {
     CatUserDTO login(CatUserDTO loginUser);
+
+
 }

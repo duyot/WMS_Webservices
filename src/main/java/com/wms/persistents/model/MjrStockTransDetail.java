@@ -23,11 +23,12 @@ public class MjrStockTransDetail extends BaseModel{
     private Float inputPrice;
     private Float outputPrice;
     private String cellCode;
+    private Long partnerId;
 
     public MjrStockTransDetail() {
     }
 
-    public MjrStockTransDetail(Long id, Long stockTransId, Long goodsId, String goodsCode, String goodsState, Long isSerial, Float amount, String serial, Float inputPrice, Float outputPrice, String cellCode) {
+    public MjrStockTransDetail(Long id, Long stockTransId, Long goodsId, String goodsCode, String goodsState, Long isSerial, Float amount, String serial, Float inputPrice, Float outputPrice, String cellCode, Long partnerId) {
         this.id = id;
         this.stockTransId = stockTransId;
         this.goodsId = goodsId;
@@ -39,6 +40,7 @@ public class MjrStockTransDetail extends BaseModel{
         this.inputPrice = inputPrice;
         this.outputPrice = outputPrice;
         this.cellCode = cellCode;
+        this.partnerId = partnerId;
     }
 
     @Id
@@ -148,11 +150,20 @@ public class MjrStockTransDetail extends BaseModel{
         this.cellCode = cellCode;
     }
 
+    @Column(name = "PARTNER_ID",nullable = false)
+    public Long getPartnerId() {
+        return partnerId;
+    }
+
+    public void setPartnerId(Long partnerId) {
+        this.partnerId = partnerId;
+    }
+
     @Override
     public MjrStockTransDetailDTO toDTO() {
         return new MjrStockTransDetailDTO(id==null?"":id+"",stockTransId==null?"":stockTransId+"",goodsId==null?"":goodsId+"",
                 goodsCode,goodsState,isSerial==null?"":isSerial+"",amount==null?"":amount+"",serial,inputPrice==null?"":inputPrice+"",outputPrice==null?"":outputPrice+"",
-                cellCode
+                cellCode, partnerId==null?"":partnerId+""
                 );
     }
 }

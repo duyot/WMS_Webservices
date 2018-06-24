@@ -171,7 +171,7 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
         sqlUpdateTotal.append(" WHERE a.cust_id = ? ");
         sqlUpdateTotal.append("   AND a.stock_id = ? ");
         sqlUpdateTotal.append("   AND a.goods_id = ? ");
-        sqlUpdateTotal.append("   AND a.goods_state = ? ");
+        sqlUpdateTotal.append("   AND a.goods_state = ? ");/////////////////////////////////////////////////
 
         try {
             PreparedStatement ps = connection.prepareStatement(sqlUpdateTotal.toString());

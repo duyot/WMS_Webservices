@@ -4,13 +4,11 @@ import com.google.common.collect.Lists;
 import com.wms.base.BaseBusinessInterface;
 import com.wms.base.BaseServices;
 import com.wms.dto.*;
+import com.wms.persistents.model.MjrStockGoodsTotal;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -60,6 +58,17 @@ public class MjrStockGoodsTotalServices extends BaseServices<MjrStockGoodsTotalD
             return convertGoodsToDetail(mjrStockGoodsBusiness.findByCondition(lstCon));
         }
     }
+    @RequestMapping(value = "/findMoreCondition",method = RequestMethod.GET)
+    public List<MjrStockGoodsTotalDTO> findMoreCondition(@RequestBody MjrStockGoodsTotalDTO searchGoodsTotalDTO){
+        //
+        List<MjrStockGoodsTotalDTO> lstResult = Lists.newArrayList();
+        MjrStockGoodsTotalDTO bo = new MjrStockGoodsTotalDTO();
+        bo.setCustId(searchGoodsTotalDTO.getCustId());
+        bo.setGoodsId("1");
+        bo.setAmount("100");
+        lstResult.add(bo);
+        return lstResult;
+    }
 
     @RequestMapping(value = "/getCountGoodsDetail",method = RequestMethod.GET)
     public Long getCountGoodsDetail(@RequestParam("custId")String custId,@RequestParam("stockId")String stockId, @RequestParam("goodsId")String goodsId,@RequestParam("isSerial")String isSerial,
@@ -97,6 +106,7 @@ public class MjrStockGoodsTotalServices extends BaseServices<MjrStockGoodsTotalD
                 temp.setExportDate(i.getExportDate());
                 temp.setInputPrice(i.getInputPrice());
                 temp.setOutputPrice(i.getOutputPrice());
+                temp.setPartnerId(i.getPartnerId());
                 //
                 lstResult.add(temp);
             }
@@ -120,6 +130,7 @@ public class MjrStockGoodsTotalServices extends BaseServices<MjrStockGoodsTotalD
                 temp.setInputPrice(i.getInputPrice());
                 temp.setOutputPrice(i.getOutputPrice());
                 temp.setStockId(i.getStockId());
+                temp.setPartnerId(i.getPartnerId());
                 //
                 lstResult.add(temp);
             }
