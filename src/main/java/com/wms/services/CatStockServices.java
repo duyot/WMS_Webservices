@@ -1,14 +1,9 @@
 package com.wms.services;
 
-import com.google.common.collect.Lists;
 import com.wms.base.BaseBusinessInterface;
-import com.wms.base.BaseDTO;
 import com.wms.base.BaseServices;
 import com.wms.business.interfaces.CatStockBusinessInterface;
-import com.wms.business.interfaces.CatUserBusinessInterface;
 import com.wms.dto.CatStockDTO;
-import com.wms.dto.CatUserDTO;
-import com.wms.dto.MapUserCustomerDTO;
 import com.wms.utils.DataUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;

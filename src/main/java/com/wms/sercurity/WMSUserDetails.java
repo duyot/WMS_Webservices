@@ -24,7 +24,9 @@ public class WMSUserDetails implements UserDetails,CredentialsContainer {
 
     public WMSUserDetails(CatUserDTO catUserDTO) {
         this.catUserDTO = catUserDTO;
-        this.lstAuthorities = getLstAuthorities(catUserDTO.getRoleCode());
+        //todo test
+//        this.lstAuthorities = getLstAuthorities(catUserDTO.getRoleCode());
+        this.lstAuthorities = null;
     }
 
     public Set<GrantedAuthority> getLstAuthorities(String roleCode){

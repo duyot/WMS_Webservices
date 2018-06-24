@@ -44,15 +44,45 @@ public class SysRoleMenuServices extends BaseServices<SysRoleMenuDTO> {
         this.baseBusiness = sysRoleMenuBusiness;
     }
 
-    @RequestMapping(value = "/getUserAction/{roleCode}/{cusId}",produces = "application/json",method = RequestMethod.GET)
+    @RequestMapping(value = "/getUserAction/{roleId}/{cusId}",produces = "application/json",method = RequestMethod.GET)
     @Cacheable("menus")
-    public List<ActionMenuDTO> getUserAction(@PathVariable("roleCode") String roleCode,@PathVariable("cusId") String cusId){
-        log.info("method invoked!");
-        List<SysMenuDTO> lstUserAction = getListUserAction(roleCode,cusId);
-        if(DataUtil.isListNullOrEmpty(lstUserAction)){
+    public List<ActionMenuDTO> getUserAction(@PathVariable("roleId") String roleId,@PathVariable("cusId") String cusId){
+        List<SysMenuDTO> menus = getListUserAction(roleId,cusId);
+        if(DataUtil.isListNullOrEmpty(menus)){
             return new ArrayList<>();
         }
-        return initActionMenu(lstUserAction);
+        return initActionMenu(menus);
+    }
+
+    private List<SysMenuDTO> getListUserAction(String roleId,String cusId){
+
+        List<SysRoleMenuDTO> lstRoleAction = getRoleActionByRole(roleId);
+
+        if(DataUtil.isListNullOrEmpty(lstRoleAction)){
+            return null;
+        }
+
+        StringBuilder strBuilderActionId = new StringBuilder();
+        for(SysRoleMenuDTO i: lstRoleAction){
+            strBuilderActionId.append(",").append(i.getMenuId());
+        }
+
+        String strActionId = strBuilderActionId.toString();
+        strActionId = strActionId.replaceFirst(",","");
+        List<Condition> lstCondition = Lists.newArrayList();
+        lstCondition.add(new Condition("id",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.IN,strActionId));
+        lstCondition.add(new Condition("status",Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
+        //sap xep theo level(menu cha) -> order trong menu
+        lstCondition.add(new Condition("levels",Constants.SQL_OPERATOR.ORDER,"asc"));
+        lstCondition.add(new Condition("orders",Constants.SQL_OPERATOR.ORDER,"asc"));
+
+        return sysMenuBusinessImpl.findByCondition(lstCondition);
+    }
+
+    private List<SysRoleMenuDTO> getRoleActionByRole(String roleId){
+        List<Condition> lstCondition = Lists.newArrayList();
+        lstCondition.add(new Condition("roleId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,roleId));
+        return sysRoleMenuBusiness.findByCondition(lstCondition);
     }
 
     private List<ActionMenuDTO> initActionMenu(List<SysMenuDTO> lstAction){
@@ -92,36 +122,8 @@ public class SysRoleMenuServices extends BaseServices<SysRoleMenuDTO> {
         return lstActionMenu;
     }
 
-    private List<SysMenuDTO> getListUserAction(String roleCode,String cusId){
 
-        List<SysRoleMenuDTO> lstRoleAction = getRoleActionByRole(roleCode,cusId);
 
-        if(DataUtil.isListNullOrEmpty(lstRoleAction)){
-            return null;
-        }
 
-        StringBuilder strBuilderActionId = new StringBuilder();
-        for(SysRoleMenuDTO i: lstRoleAction){
-            strBuilderActionId.append(",").append(i.getMenuId());
-        }
-
-        String strActionId = strBuilderActionId.toString();
-        strActionId = strActionId.replaceFirst(",","");
-        List<Condition> lstCondition = Lists.newArrayList();
-        lstCondition.add(new Condition("id",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.IN,strActionId));
-        lstCondition.add(new Condition("status",Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
-        //sap xep theo level(menu cha) -> order trong menu
-        lstCondition.add(new Condition("levels",Constants.SQL_OPERATOR.ORDER,"asc"));
-        lstCondition.add(new Condition("orders",Constants.SQL_OPERATOR.ORDER,"asc"));
-
-        return sysMenuBusinessImpl.findByCondition(lstCondition);
-    }
-
-    private List<SysRoleMenuDTO> getRoleActionByRole(String roleCode,String custId){
-        List<Condition> lstCondition = Lists.newArrayList();
-        lstCondition.add(new Condition("roleCode",Constants.SQL_OPERATOR.EQUAL,roleCode));
-        lstCondition.add(new Condition("custId",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,custId));
-        return sysRoleMenuBusiness.findByCondition(lstCondition);
-    }
 
 }

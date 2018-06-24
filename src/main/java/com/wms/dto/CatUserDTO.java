@@ -23,10 +23,12 @@ public class CatUserDTO extends BaseDTO {
     private String createdDate;
     private String imgUrl;
     private String roleName;
-    private String roleCode;
     private String logReason;
+    //
+    private String roleId;
+    private String block;
 
-    public CatUserDTO(String id, String deptId, String custId, String code, String name, String password, String birthDate, String email, String telNumber, String status, String createdDate, String imgUrl, String roleName, String roleCode, String logReason) {
+    public CatUserDTO(String id, String deptId, String custId, String code, String name, String password, String birthDate, String email, String telNumber, String status, String createdDate, String imgUrl, String roleName, String logReason, String roleId, String block) {
         this.id = id;
         this.deptId = deptId;
         this.custId = custId;
@@ -40,8 +42,9 @@ public class CatUserDTO extends BaseDTO {
         this.createdDate = createdDate;
         this.imgUrl = imgUrl;
         this.roleName = roleName;
-        this.roleCode = roleCode;
         this.logReason = logReason;
+        this.roleId = roleId;
+        this.block = block;
     }
 
     public CatUserDTO() {
@@ -151,14 +154,6 @@ public class CatUserDTO extends BaseDTO {
         this.roleName = roleName;
     }
 
-    public String getRoleCode() {
-        return roleCode;
-    }
-
-    public void setRoleCode(String roleCode) {
-        this.roleCode = roleCode;
-    }
-
     public String getLogReason() {
         return logReason;
     }
@@ -167,11 +162,29 @@ public class CatUserDTO extends BaseDTO {
         this.logReason = logReason;
     }
 
+
+    public String getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getBlock() {
+        return block;
+    }
+
+    public void setBlock(String block) {
+        this.block = block;
+    }
+
     @Override
     public CatUser toModel() {
         return new CatUser(!StringUtils.validString(id) ? null:Long.valueOf(id),!StringUtils.validString(deptId) ? null:Long.valueOf(deptId),!StringUtils.validString(custId) ? null:Long.valueOf(custId),
                             code,name,password,!StringUtils.validString(birthDate) ? null: DateTimeUtils.convertStringToDate(birthDate),email,telNumber,status,
-                            !StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),imgUrl,roleName,roleCode,logReason
+                            !StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),imgUrl,roleName,logReason,
+                            !StringUtils.validString(roleId) ? null:Long.valueOf(roleId),!StringUtils.validString(block) ? null:Long.valueOf(block)
                         );
     }
 
@@ -191,8 +204,9 @@ public class CatUserDTO extends BaseDTO {
                 ", createdDate='" + createdDate + '\'' +
                 ", imgUrl='" + imgUrl + '\'' +
                 ", roleName='" + roleName + '\'' +
-                ", roleCode='" + roleCode + '\'' +
                 ", logReason='" + logReason + '\'' +
+                ", roleId='" + roleId + '\'' +
+                ", block='" + block + '\'' +
                 '}';
     }
 }

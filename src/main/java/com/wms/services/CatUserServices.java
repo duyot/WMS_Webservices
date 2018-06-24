@@ -35,8 +35,6 @@ public class CatUserServices extends BaseServices<CatUserDTO>{
     BaseBusinessInterface catUserBusiness;
     @Autowired
     BaseBusinessInterface catCustomerBusiness;
-    @Autowired
-    BaseBusinessInterface mapUserCustomerBusiness;
 
     @Autowired
     CatUserBusinessInterface userBusinessAdvanced;
@@ -102,62 +100,22 @@ public class CatUserServices extends BaseServices<CatUserDTO>{
     }
 
 
-    @RequestMapping(value = "/getCustomer/{userId}",produces = "application/json",method = RequestMethod.GET)
-    public List<CatCustomerDTO> getCustomer(@PathVariable("userId") String userId){
-        if(!DataUtil.isInteger(userId)){
-            log.info("Invalid userId info");
-            return new ArrayList<>();
-        }
-        List<MapUserCustomerDTO> lstMap = getMapUserCustomer(userId);
-        if(DataUtil.isListNullOrEmpty(lstMap)){
-            log.info("User: "+ userId + " didn't map to any customer");
-            return new ArrayList<>();
-        }
-        List<CatCustomerDTO> lstCatCustomers = Lists.newArrayList();
-        for(MapUserCustomerDTO i: lstMap){
-            BaseDTO temp = catCustomerBusiness.findById(Long.parseLong(i.getCustomerId()));
-            if(temp != null){
-                lstCatCustomers.add((CatCustomerDTO) temp);
-            }
-        }
-        return lstCatCustomers;
-    }
-
     @RequestMapping(value = "/getUserByCustomerId/{customerId}",produces = "application/json",method = RequestMethod.GET)
     public List<CatUserDTO> getUserByCustomer(@PathVariable("customerId") String customerId){
         if(!DataUtil.isInteger(customerId)){
             log.info("Invalid customerId info");
             return new ArrayList<>();
         }
-        List<MapUserCustomerDTO> lstMap = getMapByCustomerId(customerId);
-        if(DataUtil.isListNullOrEmpty(lstMap)){
-            log.info("User: "+ customerId + " didn't map to any customer");
-            return new ArrayList<>();
-        }
-        List<CatUserDTO> lstUser = Lists.newArrayList();
-        for(MapUserCustomerDTO i: lstMap){
-            BaseDTO temp = catUserBusiness.findById(Long.parseLong(i.getUserId()));
-            if(temp != null){
-                lstUser.add((CatUserDTO) temp);
-            }
-        }
+        //
+        List<Condition> lstConditions = Lists.newArrayList();
+        lstConditions.add(new Condition("customerId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,Long.parseLong(customerId)));
+        lstConditions.add(new Condition("status",Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
+
+        //
+        List<CatUserDTO> lstUser = catUserBusiness.findByCondition(lstConditions);
+        //
         return lstUser;
     }
-
-    private List<MapUserCustomerDTO> getMapByCustomerId(String customerId){
-        List<Condition> lstConditions = Lists.newArrayList();
-        lstConditions.add(new Condition("customerId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,customerId));
-        return mapUserCustomerBusiness.findByCondition(lstConditions);
-    }
-
-
-    private List<MapUserCustomerDTO> getMapUserCustomer(String userId){
-        List<Condition> lstConditions = Lists.newArrayList();
-        lstConditions.add(new Condition("userId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,userId));
-        return mapUserCustomerBusiness.findByCondition(lstConditions);
-    }
-
-
 
     @RequestMapping(value = "/getFile/{fileName:.+}")
     public void find(@PathVariable("fileName") String fileName,HttpServletResponse response){

@@ -16,15 +16,13 @@ import javax.persistence.*;
 )
 public class SysRoleMenu extends BaseModel{
     private Long id;
-    private String roleCode;
     private Long menuId;
-    private Long custId;
+    private Long roleId;
 
-    public SysRoleMenu(Long id, String roleCode, Long actionId ,Long custId) {
+    public SysRoleMenu(Long id, Long menuId, Long roleId) {
         this.id = id;
-        this.roleCode = roleCode;
-        this.menuId = actionId;
-        this.custId = custId;
+        this.menuId = menuId;
+        this.roleId = roleId;
     }
 
     public SysRoleMenu() {
@@ -41,15 +39,6 @@ public class SysRoleMenu extends BaseModel{
         this.id = id;
     }
 
-    @Column(name = "ROLE_CODE")
-    public String getRoleCode() {
-        return roleCode;
-    }
-
-    public void setRoleCode(String roleCode) {
-        this.roleCode = roleCode;
-    }
-
     @Column(name = "MENU_ID")
     public Long getMenuId() {
         return menuId;
@@ -58,17 +47,23 @@ public class SysRoleMenu extends BaseModel{
     public void setMenuId(Long menuId) {
         this.menuId = menuId;
     }
-    @Column(name = "CUST_ID",nullable = false)
-    public Long getCustId() {
-        return custId;
+
+    @Column(name = "ROLE_ID",nullable = false)
+    public Long getRoleId() {
+        return roleId;
     }
 
-    public void setCustId(Long custId) {
-        this.custId = custId;
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
+
+
+
+
+
 
     @Override
     public SysRoleMenuDTO toDTO() {
-        return new SysRoleMenuDTO(id==null?"":id+"", roleCode , menuId ==null?"": menuId +"",custId+"");
+        return new SysRoleMenuDTO(id==null?"":id+"", menuId ==null?"": menuId +"", roleId ==null?"": roleId +"");
     }
 }

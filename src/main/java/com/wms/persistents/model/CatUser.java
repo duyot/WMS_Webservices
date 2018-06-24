@@ -29,10 +29,13 @@ public class CatUser extends BaseModel {
     private Date createdDate;
     private String  imgUrl;
     private String  roleName;
-    private String  roleCode;
     private String  logReason;
+    //
+    private Long block;
+    private Long roleId;
 
-    public CatUser(Long id, Long deptId, Long custId, String code, String name, String password, Date birthDate, String email, String telNumber, String status, Date createdDate, String imgUrl, String roleName, String roleCode, String logReason) {
+
+    public CatUser(Long id, Long deptId, Long custId, String code, String name, String password, Date birthDate, String email, String telNumber, String status, Date createdDate, String imgUrl, String roleName, String logReason, Long roleId, Long block) {
         this.id = id;
         this.deptId = deptId;
         this.custId = custId;
@@ -46,8 +49,9 @@ public class CatUser extends BaseModel {
         this.createdDate = createdDate;
         this.imgUrl = imgUrl;
         this.roleName = roleName;
-        this.roleCode = roleCode;
         this.logReason = logReason;
+        this.block = block;
+        this.roleId = roleId;
     }
 
     public CatUser() {
@@ -178,14 +182,6 @@ public class CatUser extends BaseModel {
         this.roleName = roleName;
     }
 
-    @Column(name = "ROLE_CODE")
-    public String getRoleCode() {
-        return roleCode;
-    }
-
-    public void setRoleCode(String roleCode) {
-        this.roleCode = roleCode;
-    }
 
     @Column(name = "LOG_REASON")
     public String getLogReason() {
@@ -196,12 +192,30 @@ public class CatUser extends BaseModel {
         this.logReason = logReason;
     }
 
+    @Column(name = "BLOCK")
+    public Long getBlock() {
+        return block;
+    }
+
+    public void setBlock(Long block) {
+        this.block = block;
+    }
+
+    @Column(name = "ROLE_ID")
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
+    }
+
     @Override
     public CatUserDTO toDTO() {
         return new CatUserDTO(id==null?"":id+"",deptId==null?"":deptId+"",custId==null?"":custId+"",
                 code,name,password,birthDate==null?"": DateTimeUtils.convertDateTimeToString(birthDate),
                 email,telNumber,status,createdDate==null?"": DateTimeUtils.convertDateTimeToString(createdDate),
-                imgUrl,roleName,roleCode,logReason
+                imgUrl,roleName,logReason,roleId==null?"":roleId+"",block==null?"":block+""
         );
     }
 }
