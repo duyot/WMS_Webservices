@@ -2,10 +2,7 @@ package com.wms.persistents.dao;
 
 import com.google.common.collect.Lists;
 import com.wms.base.BaseDAOImpl;
-import com.wms.dto.Condition;
-import com.wms.dto.ErrorLogDTO;
-import com.wms.dto.MjrStockGoodsTotalDTO;
-import com.wms.dto.ResponseObject;
+import com.wms.dto.*;
 import com.wms.enums.Responses;
 import com.wms.persistents.model.CatGoods;
 import com.wms.persistents.model.ErrorLog;
@@ -13,9 +10,14 @@ import com.wms.persistents.model.MjrStockGoodsTotal;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import com.wms.utils.DateTimeUtils;
+import com.wms.utils.FunctionUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.type.DateType;
+import org.hibernate.type.FloatType;
+import org.hibernate.type.LongType;
+import org.hibernate.type.StringType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +92,57 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
 
 
         return Responses.SUCCESS.getName();
+    }
+
+
+    @Transactional
+    public List<MjrStockGoodsTotalDTO> findMoreCondition(MjrStockGoodsTotalDTO stockGoodsTotal) {
+        List<MjrStockGoodsTotalDTO> lstResult = new ArrayList<MjrStockGoodsTotalDTO>();
+
+        StringBuilder str = new StringBuilder();
+        str.append(" \n" +
+                " select a.goods_id, b.code as goods_code,b.name as goods_name, a.cust_id, a.goods_state, a.stock_id, c.name as stock_name, sum (a.amount) as amount, max (a.changed_date)\n" +
+                " from MJR_STOCK_GOODS a, \n" +
+                " cat_goods b,\n" +
+                " cat_stock c\n" +
+                " where 1=1 and a.partner_id =1046 \n" +
+                " and a.goods_id = b.id\n" +
+                " and a.stock_id = c.id\n" +
+                " group by a.goods_id, b.code, b.name, a.cust_id, a.goods_state, a.stock_id, c.name\n" +
+                "\n" +
+                " union all\n" +
+                "\n" +
+                " select a.goods_id, b.code as goods_code,b.name as goods_name, a.cust_id, a.goods_state, a.stock_id, c.name as stock_name, sum (a.amount) as amount, max (a.changed_date)\n" +
+                " from MJR_STOCK_GOODS_SERIAL a, \n" +
+                " cat_goods b,\n" +
+                " cat_stock c\n" +
+                " where 1=1 and a.partner_id =1046 \n" +
+                " and a.goods_id = b.id\n" +
+                " and a.stock_id = c.id\n" +
+                " group by a.goods_id, b.code, b.name, a.cust_id, a.goods_state, a.stock_id, c.name");
+        Query ps = getSession().createSQLQuery(str.toString());
+
+        return  convertToStockGoodsTotal(ps.list());
+    }
+
+
+    private List<MjrStockGoodsTotalDTO> convertToStockGoodsTotal(List<Object[]> lstData){
+        List<MjrStockGoodsTotalDTO> lstResult = Lists.newArrayList();
+        for(Object[] i: lstData){
+            MjrStockGoodsTotalDTO temp = new MjrStockGoodsTotalDTO();
+            temp.setGoodsId( i[0]==null?"":String.valueOf(i[0]));
+            temp.setGoodsCode( i[1]==null?"":String.valueOf(i[1]));
+            temp.setGoodsName( i[2]==null?"":String.valueOf(i[2]));
+            temp.setCustId( i[3]==null?"":String.valueOf(i[3]));
+            temp.setGoodsState(String.valueOf(i[4]).equals("1")?"Bình thường":"Hỏng");
+            temp.setStockId( i[5]==null?"": String.valueOf(i[5]));
+            temp.setStockName( i[6]==null?"":String.valueOf(i[6]));
+            temp.setAmount( i[7]==null?"":String.valueOf(i[7]));
+            temp.setChangeDate( i[8]==null?"":String.valueOf(i[8]));
+
+            lstResult.add(temp);
+        }
+        return lstResult;
     }
 
     public List initSaveTotalParams(MjrStockGoodsTotalDTO stockGoodsTotal){

@@ -60,15 +60,11 @@ public class MjrStockGoodsTotalServices extends BaseServices<MjrStockGoodsTotalD
     }
     @RequestMapping(value = "/findMoreCondition",method = RequestMethod.GET)
     public List<MjrStockGoodsTotalDTO> findMoreCondition(@RequestBody MjrStockGoodsTotalDTO searchGoodsTotalDTO){
-        //
-        List<MjrStockGoodsTotalDTO> lstResult = Lists.newArrayList();
-        MjrStockGoodsTotalDTO bo = new MjrStockGoodsTotalDTO();
-        bo.setCustId(searchGoodsTotalDTO.getCustId());
-        bo.setGoodsId("1");
-        bo.setAmount("100");
-        lstResult.add(bo);
-        return lstResult;
+      //return mjrStockGoodsTotalBusiness.findMoreCondition(searchGoodsTotalDTO);
+        return null;
+
     }
+
 
     @RequestMapping(value = "/getCountGoodsDetail",method = RequestMethod.GET)
     public Long getCountGoodsDetail(@RequestParam("custId")String custId,@RequestParam("stockId")String stockId, @RequestParam("goodsId")String goodsId,@RequestParam("isSerial")String isSerial,

@@ -41,6 +41,10 @@ public class MjrStockGoodsTotalBusinessImpl extends BaseBusinessImpl<MjrStockGoo
     public int updateGoods(CatGoodsDTO goods) {
         return mjrStockGoodsTotalDAO.updateGoods((CatGoods) goods.toModel());
     }
+    @Override
+    public List<MjrStockGoodsTotalDTO> findMoreCondition(MjrStockGoodsTotalDTO searchGoodsTotalDTO) {
+        return mjrStockGoodsTotalDAO.findMoreCondition(searchGoodsTotalDTO);
+    }
 
     public List<MjrStockGoodsTotalDTO> listModelToDTO(List<MjrStockGoodsTotal> lstModel){
         List<MjrStockGoodsTotalDTO> lstResult = Lists.newArrayList();
