@@ -14,16 +14,18 @@ public class SysRoleDTO extends BaseDTO{
     private String name;
     private String status;
     private String custId;
+    private String type;
 
     public SysRoleDTO() {
     }
 
-    public SysRoleDTO(String id, String code, String name, String status,String cusId) {
+    public SysRoleDTO(String id, String code, String name, String status,String cusId,String type) {
         this.id = id;
         this.code = code;
         this.name = name;
         this.status = status;
         this.custId = cusId;
+        this.type = type;
     }
 
     public String getId() {
@@ -66,10 +68,18 @@ public class SysRoleDTO extends BaseDTO{
         this.custId = custId;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public SysRole toModel() {
         try {
-            return new SysRole(!StringUtils.validString(id) ? null:Long.valueOf(id), code, name,status,!StringUtils.validString(custId)? null: Long.valueOf(custId));
+            return new SysRole(!StringUtils.validString(id) ? null:Long.valueOf(id), code, name,status,!StringUtils.validString(custId)? null: Long.valueOf(custId),!StringUtils.validString(type) ? null:Long.valueOf(type));
         } catch (Exception e) {
             e.printStackTrace();
             return null;

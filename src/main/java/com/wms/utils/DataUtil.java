@@ -26,19 +26,19 @@ import java.util.*;
 public class DataUtil {
     static Logger log = LoggerFactory.getLogger(DataUtil.class);
 
-    public static Long[] convertLongArr(Object input){
+    public static    List<Integer> convertIntergerArr(Object input){
         String inputArr = (String)input;
         String [] idArr = ((String) input).split(",");
-        Long [] idLong = new Long[idArr.length];
+        List<Integer>lstInt = new ArrayList<>();
         for(int i=0;i<idArr.length;i++){
             try {
-                idLong[i] = Long.parseLong(idArr[i]);
+                lstInt.add(Integer.parseInt(idArr[i]));
             } catch (NumberFormatException e) {
-                idLong[i] = 0L;
-                log.info("Error parsing long");
+
+                log.info("Error parsing interger");
             }
         }
-        return idLong;
+        return lstInt;
     }
     
     //duyot: 22/01: bat truong hop serial truyen sang dang .0
@@ -717,7 +717,7 @@ public class DataUtil {
 
     public static Long[] parseInputListLong(String input) {
 
-        List<String> lstString = parseInputList(input);
+        List<String> lstString = parseInputList(input.replaceAll("\\[","").replaceAll("\\]",""));
         Long[] lstLong = new Long[lstString.size()];
         for (int i = 0; i < lstString.size(); i++) {
             lstLong[i] = (Long.parseLong(lstString.get(i)));

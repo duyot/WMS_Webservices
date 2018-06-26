@@ -22,6 +22,7 @@ public class Condition {
         this.property = property;
         this.operator = operator;
         this.value = value;
+        this.propertyType = Constants.SQL_PRO_TYPE.STRING;
     }
 
     public Condition(String property, String propertyType, String operator, Object value) {
@@ -30,7 +31,7 @@ public class Condition {
         this.operator = operator;
         if(this.propertyType.equals(Constants.SQL_PRO_TYPE.LONG)){
             if(operator.equals(Constants.SQL_OPERATOR.IN)){
-                this.value = DataUtil.convertLongArr(value);
+                this.value = DataUtil.convertIntergerArr(value);
             }else{
                 try {
                     this.value = Long.parseLong((String)value);

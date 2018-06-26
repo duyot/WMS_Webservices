@@ -4,6 +4,8 @@
  */
 package com.wms.utils;
 
+import com.wms.dto.Condition;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -78,7 +80,7 @@ public final class StringUtils {
      *
      * @param lng Long
      * @return String
-     * @throws abc Exception
+     * @throws  Exception
      */
     public static String convertFromLongToString(Long lng) throws Exception {
         return Long.toString(lng);
@@ -233,6 +235,56 @@ public final class StringUtils {
         }
         return input.substring(0, 1).toUpperCase() + input.substring(1);
     }
+
+    public static String convertTypeOperator(String operator) {
+        String opConvert = "";
+        if (StringUtils.isNullOrEmpty(operator)) {
+            return opConvert;
+        }
+        switch (operator){
+            case "EQUAL":
+                opConvert =  Constants.SQL_OP.OP_EQUAL;
+                break;
+            case "NOT_EQUAL":
+                opConvert = Constants.SQL_OP.OP_NOT_EQUAL;
+                break;
+            case "GREATER":
+                opConvert = Constants.SQL_OP.OP_GREATER;
+                break;
+            case "GREATER_EQUAL":
+                opConvert =  Constants.SQL_OP.OP_GREATER_EQUAL;
+                break;
+            case "LOWER":
+                opConvert =  Constants.SQL_OP.OP_LESS;
+                break;
+            case "LOWER_EQUAL":
+                opConvert =  Constants.SQL_OP.OP_LESS_EQUAL;
+                break;
+            case "IN":
+                opConvert =  Constants.SQL_OP.OP_IN;
+                break;
+            case "LIKE":
+                opConvert =  Constants.SQL_OP.OP_LIKE;
+                break;
+            default:
+                opConvert = "";
+                break;
+        }
+        return opConvert;
+    }
+    public static List<Condition>  convertCondition(List<Condition> lstCondition){
+
+        for (Condition con : lstCondition) {
+            if (con.getPropertyType().equalsIgnoreCase(Constants.SQL_PRO_TYPE.DATE)) {
+                con.setProperty(StringUtils.formatFunction("trunc", con.getProperty()));
+            }
+            con.setOperator(StringUtils.convertTypeOperator(con.getOperator()));
+            con.setProperty(" " + con.getProperty()+" ");
+            con.setValue(con.getValue());
+        }
+        return lstCondition;
+    }
+
 
     public static boolean isNullOrEmpty(String obj1) {
         return (obj1 == null || "".equals(obj1.trim()));
