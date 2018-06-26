@@ -1,6 +1,7 @@
 package com.wms.services;
 
 import com.google.common.collect.Lists;
+import com.wms.business.interfaces.MjrStockGoodsTotalBusinessInterface;
 import com.wms.base.BaseBusinessInterface;
 import com.wms.base.BaseServices;
 import com.wms.dto.*;
@@ -21,6 +22,10 @@ import java.util.List;
 public class MjrStockGoodsTotalServices extends BaseServices<MjrStockGoodsTotalDTO> {
     @Autowired
     BaseBusinessInterface mjrStockGoodsTotalBusiness;
+
+    @Autowired
+    MjrStockGoodsTotalBusinessInterface mjrStockGoodsTotalServices;
+
     @Autowired
     BaseBusinessInterface mjrStockGoodsSerialBusiness;
     @Autowired
@@ -58,10 +63,9 @@ public class MjrStockGoodsTotalServices extends BaseServices<MjrStockGoodsTotalD
             return convertGoodsToDetail(mjrStockGoodsBusiness.findByCondition(lstCon));
         }
     }
-    @RequestMapping(value = "/findMoreCondition",method = RequestMethod.GET)
+    @RequestMapping(value = "/findMoreCondition",method = RequestMethod.POST)
     public List<MjrStockGoodsTotalDTO> findMoreCondition(@RequestBody MjrStockGoodsTotalDTO searchGoodsTotalDTO){
-      //return mjrStockGoodsTotalBusiness.findMoreCondition(searchGoodsTotalDTO);
-        return null;
+      return mjrStockGoodsTotalServices.findMoreCondition(searchGoodsTotalDTO);
 
     }
 
