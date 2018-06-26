@@ -38,6 +38,7 @@ public class Constants {
         public static String BETWEEN = "BETWEEN";
         public static String LIMIT = "LIMIT";
         public static String OFFSET = "OFFSET";
+
     }
 
     public static class SQL_PRO_TYPE{
@@ -45,7 +46,20 @@ public class Constants {
         public static String LONG   = "long";
         public static String DATE   = "date";
     }
-
+    public static class SQL_LOGIC{
+        public static String OR = " or ";
+        public static String AND = " and ";
+    }
+    public  static class SQL_OP{
+        public static final String OP_EQUAL = " = ";
+        public static final String OP_NOT_EQUAL = " != ";
+        public static final String OP_GREATER = " > ";
+        public static final String OP_GREATER_EQUAL = " >= ";
+        public static final String OP_LESS = " < ";
+        public static final String OP_LESS_EQUAL = " <= ";
+        public static final String OP_LIKE = " like ";
+        public static final String OP_IN = " in ";
+    }
     public static class TRANSACTION_TYPE{
         public static String IMPORT = "1";
         public static String EXPORT = "2";
@@ -56,5 +70,8 @@ public class Constants {
         public static String INACTIVE = "0";
         public static String EXPORTED = "2";
     }
-
+   public static class DATETIME_FORMAT{
+        public static final String ddMMyyyy = "dd/MM/yyyy";
+        public static final String ddMMyyyyHHmmss = "dd/MM/yyyy HH:mm:ss";
+    }
 }

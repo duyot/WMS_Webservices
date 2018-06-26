@@ -2,6 +2,7 @@ package com.wms.base;
 
 import com.google.common.collect.Lists;
 import com.wms.dto.Condition;
+import com.wms.utils.StringUtils;
 import org.hibernate.Session;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,6 +100,11 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
     }
 
     @Override
+    public String deleteByCondition(List<Condition> lstCondition) {
+      return  tdao.deleteByCondition(StringUtils.convertCondition(lstCondition));
+    }
+
+    @Override
     public Long countByCondition(List<Condition> lstCondition) {
         return tdao.countByCondition(lstCondition);
     }
@@ -109,5 +115,17 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
             lstResult.add((T) i.toDTO());
         }
         return lstResult;
+    }
+
+    private List<BaseModel> listDTOToModel(List<T> lstDTO){
+        List<BaseModel> lstResult = Lists.newArrayList();
+        for(T i: lstDTO){
+            lstResult.add((BaseModel) i.toModel());
+        }
+        return lstResult;
+    }
+    @Override
+    public String save(List<T> lstObj) {
+        return tdao.save(listDTOToModel(lstObj));
     }
 }
