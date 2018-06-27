@@ -62,6 +62,17 @@ public class BaseServices<T extends BaseDTO> {
             return new ResponseObject(Responses.ERROR.getName(),Responses.ERROR.getName(),"");
         }
     }
+
+    @RequestMapping(value = "/addList",produces = "application/json",method = RequestMethod.POST)
+    public ResponseObject add(@RequestBody List<T> dto){
+        String sysDate = errorLogBusiness.getSysDate();
+        log.info("-------------------------------");
+        log.info("Add: "+ dto.toString());
+
+            String result = baseBusiness.save(dto);
+
+            return new ResponseObject(result,result,null);
+    }
     //UPDATE-----------------------------------------------------------------------------------------------------------
     @RequestMapping(value = "/update",produces = "application/json",method = RequestMethod.POST)
     public ResponseObject update(@RequestBody T dto){
@@ -111,6 +122,10 @@ public class BaseServices<T extends BaseDTO> {
     @RequestMapping(value = "/findByCondition",produces = "application/json",method = RequestMethod.POST)
     public List<T> findByCondition(@RequestBody List<Condition> lstCondition){
         return baseBusiness.findByCondition(lstCondition);
+    }
+    @RequestMapping(value = "/deleteByCondition",produces = "application/json",method = RequestMethod.POST)
+    public String deleteByCondition(@RequestBody List<Condition> lstCondition){
+        return baseBusiness.deleteByCondition(lstCondition);
     }
 
     @RequestMapping(value = "/countByCondition",produces = "application/json",method = RequestMethod.POST)

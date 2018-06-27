@@ -3,9 +3,9 @@ package com.wms.base;
 import com.google.common.collect.Lists;
 import com.wms.dto.Condition;
 import com.wms.enums.Responses;
-import com.wms.utils.DataUtil;
-import com.wms.utils.FunctionUtils;
+import com.wms.utils.*;
 import org.hibernate.*;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
@@ -16,6 +16,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -150,6 +152,23 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
     }
 
     @Transactional
+    public String save(List<T> lstObj) {
+        try {
+            for (T obj :lstObj){
+                getSession().save(obj);
+            }
+            return Responses.SUCCESS.getName();
+        } catch (ConstraintViolationException e) {
+            log.info(e.toString());
+            return e.getConstraintName();
+        }catch (Exception e) {
+            log.info(e.toString());
+            e.printStackTrace();
+            return Responses.ERROR.getName();
+        }
+    }
+
+    @Transactional
     public String saveBySession(T obj,Session session) {
         try {
             long id = (long) session.save(obj);
@@ -238,5 +257,72 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             return Lists.newArrayList();
         }
     }
-    //------------------------------------------------------------------------------------------------
+    public void buildConditionQueryList(StringBuilder sql, List<Condition> lstCondition) {
+        int index = 0;
+        for (Condition con : lstCondition) {
+            sql.append(Constants.SQL_LOGIC.AND);
+            sql.append(con.getProperty());
+            sql.append(con.getOperator());
+            if (con.getPropertyType().equals(Constants.SQL_PRO_TYPE.LONG)){
+                if (!con.getOperator().equals(Constants.SQL_OP.OP_IN)){
+                    sql.append(" :idx").append(String.valueOf(index++));
+                }else{
+                    sql.append("( :idx").append(String.valueOf(index++)).append(" )");
+                }
+            }else if (con.getPropertyType().equals(Constants.SQL_PRO_TYPE.DATE)){
+                sql.append(" to_date(:idx").append(String.valueOf(index++))
+                        .append(", '").append(Constants.DATETIME_FORMAT.ddMMyyyy).append("')");
+            }else if (con.getPropertyType().equals(Constants.SQL_PRO_TYPE.STRING)){
+                sql.append(":idx").append(String.valueOf(index++));
+                if (con.getOperator().equals(Constants.SQL_OP.OP_LIKE)) {
+                    sql.append(" ESCAPE '\\' ");
+                }
+            }
+
+        }
+    }
+
+
+    public void fillConditionQuery(Query query, List<Condition> lstCondition) {
+        int index = 0;
+        for (Condition con : lstCondition) {
+            if (con.getPropertyType().equals(Constants.SQL_PRO_TYPE.LONG)) {
+                if (!con.getOperator().equals(Constants.SQL_OP.OP_IN)) {
+                    query.setParameter("idx" + String.valueOf(index++), Long.parseLong(con.getValue().toString()));
+                } else {
+                    query.setParameterList("idx" + String.valueOf(index++), DataUtil.parseInputListLong(con.getValue().toString()));
+                }
+
+            }else if (con.getPropertyType().equals(Constants.SQL_PRO_TYPE.STRING)) {
+                if (con.getOperator().equals(Constants.SQL_OP.OP_IN)) {
+                    query.setParameterList("idx" + String.valueOf(index++), DataUtil.parseInputListString(con.getValue().toString()));
+                } else {
+                    query.setParameter("idx" + String.valueOf(index++), con.getValue().toString());
+                }
+            } else {
+                query.setParameter("idx" + String.valueOf(index++), con.getValue().toString());
+            }
+
+        }
+    }
+    public String deleteByCondition( List<Condition> lstCondition) {
+        try {
+            StringBuilder sql = new StringBuilder();
+            sql.append("delete from ");
+            sql.append(modelClass.getSimpleName());
+            sql.append(" where 1=1 ");
+
+            if (lstCondition != null) {
+                buildConditionQueryList(sql, lstCondition);
+                Query query = getSession().createQuery(sql.toString());
+                fillConditionQuery(query, lstCondition);
+                query.executeUpdate();
+            }
+            return Responses.SUCCESS.getName();
+
+        } catch (HibernateException he) {
+            log.error(he.getMessage(), he);
+            return Responses.ERROR.getName();
+        }
+    }
 }

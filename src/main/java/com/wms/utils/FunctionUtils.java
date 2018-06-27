@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -174,12 +175,13 @@ public class FunctionUtils {
                     break;
                 case "IN":
                     if(!DataUtil.isStringNullOrEmpty(i.getPropertyType()) && i.getPropertyType().equals(Constants.SQL_PRO_TYPE.LONG)){
-                        Long[] value = (Long[]) i.getValue();
-                        List<Long> lstValue = Lists.newArrayList();
-                        for(int j = 0;j<value.length;j++){
-                            lstValue.add(value[j]);
+
+                        List<Integer> lstValue = (List<Integer>) i.getValue();;
+                        List<Long> lstLong = new ArrayList<>();
+                        for(Integer interger :lstValue ){
+                            lstLong.add(interger.longValue());
                         }
-                        cr.add(Restrictions.in(i.getProperty(), lstValue));
+                        cr.add(Restrictions.in(i.getProperty(),lstLong));
                     }else{
                         String inValue = (String) i.getValue();
                         String[] inValues = inValue.split(",");

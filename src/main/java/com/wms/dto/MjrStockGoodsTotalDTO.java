@@ -22,6 +22,7 @@ public class MjrStockGoodsTotalDTO extends BaseDTO {
     private String amount;
     private String changeDate;
     private String preAmount;
+    private String stockName;
 
     public MjrStockGoodsTotalDTO(String id, String custId, String goodsId, String goodsCode, String goodsName, String goodsState, String stockId, String amount, String changeDate, String preAmount) {
         this.id = id;
@@ -37,6 +38,14 @@ public class MjrStockGoodsTotalDTO extends BaseDTO {
     }
 
     public MjrStockGoodsTotalDTO() {
+    }
+
+    public String getStockName() {
+        return stockName;
+    }
+
+    public void setStockName(String stockName) {
+        this.stockName = stockName;
     }
 
     public String getId() {

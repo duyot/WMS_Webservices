@@ -13,4 +13,6 @@ import java.util.List;
 public interface MjrStockGoodsTotalBusinessInterface {
     List<MjrStockGoodsTotalDTO> findByCondition(List<Condition> lstCondition,Session session);
     int updateGoods(CatGoodsDTO goods);
+
+    List<MjrStockGoodsTotalDTO> findMoreCondition(MjrStockGoodsTotalDTO searchGoodsTotalDTO);
 }
