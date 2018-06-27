@@ -101,7 +101,7 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
 
         StringBuilder str = new StringBuilder();
         str.append(" \n" +
-                " select a.goods_id, b.code as goods_code,b.name as goods_name, a.cust_id, a.goods_state, a.stock_id, c.name as stock_name, sum (a.amount) as amount, max (a.changed_date)\n" +
+                " select a.goods_id, b.code as goods_code,b.name as goods_name, a.cust_id, a.goods_state, a.stock_id, c.name as stock_name, sum (a.amount) as amount, max (a.changed_date) changed_date \n" +
                 " from MJR_STOCK_GOODS a, \n" +
                 " cat_goods b,\n" +
                 " cat_stock c\n" +
@@ -112,15 +112,29 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
                 "\n" +
                 " union all\n" +
                 "\n" +
-                " select a.goods_id, b.code as goods_code,b.name as goods_name, a.cust_id, a.goods_state, a.stock_id, c.name as stock_name, sum (a.amount) as amount, max (a.changed_date)\n" +
+                " select a.goods_id, b.code as goods_code,b.name as goods_name, a.cust_id, a.goods_state, a.stock_id, c.name as stock_name, sum (a.amount) as amount, max (a.changed_date) changed_date \n" +
                 " from MJR_STOCK_GOODS_SERIAL a, \n" +
                 " cat_goods b,\n" +
                 " cat_stock c\n" +
                 " where 1=1 and a.partner_id =1046 \n" +
                 " and a.goods_id = b.id\n" +
                 " and a.stock_id = c.id\n" +
-                " group by a.goods_id, b.code, b.name, a.cust_id, a.goods_state, a.stock_id, c.name");
-        Query ps = getSession().createSQLQuery(str.toString());
+                " group by a.goods_id, b.code, b.name, a.cust_id, a.goods_state, a.stock_id, c.name")
+        ;
+
+        System.out.println(str.toString());
+
+        Query ps = getSession().createSQLQuery(str.toString())
+                .addScalar("goods_id",      StringType.INSTANCE)
+                .addScalar("goods_code",      StringType.INSTANCE)
+                .addScalar("goods_name",      StringType.INSTANCE)
+                .addScalar("cust_id",      StringType.INSTANCE)
+                .addScalar("goods_state",      StringType.INSTANCE)
+                .addScalar("stock_id",      StringType.INSTANCE)
+                .addScalar("stock_name",      StringType.INSTANCE)
+                .addScalar("amount",      StringType.INSTANCE)
+                .addScalar("changed_date",      StringType.INSTANCE)
+                ;
 
         return  convertToStockGoodsTotal(ps.list());
     }
