@@ -10,10 +10,6 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "SYS_ROLE_MENU")
-@javax.persistence.SequenceGenerator(
-        name="sequence",
-        sequenceName="SEQ_SYS_ROLE_MENU"
-)
 public class SysRoleMenu extends BaseModel{
     private Long id;
     private Long menuId;
@@ -29,8 +25,14 @@ public class SysRoleMenu extends BaseModel{
     }
 
     @Id
-    @GeneratedValue(generator = "sequence")
     @Column(name = "ID", unique = true, nullable = false)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_SYS_ROLE_MENU")
+    @SequenceGenerator(
+            name="SEQ_SYS_ROLE_MENU",
+            sequenceName="SEQ_SYS_ROLE_MENU",
+            allocationSize = 1,
+            initialValue= 1000
+    )
     public Long getId() {
         return id;
     }
