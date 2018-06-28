@@ -34,7 +34,6 @@ public class CatDepartment  extends BaseModel {
 
     public CatDepartment() {
     }
-
     @Id
     @Column(name = "ID", unique = true, nullable = false)
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_CAT_DEPARTMENT")
