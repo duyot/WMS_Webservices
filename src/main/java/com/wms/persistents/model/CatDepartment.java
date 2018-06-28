@@ -18,11 +18,11 @@ public class CatDepartment  extends BaseModel {
     private String code;
     private String name;
     private String status;
-    private String custId;
+    private Long custId;
     private String path;
-    private String parentId;
+    private Long parentId;
 
-    public CatDepartment(Long id,String code, String name, String status, String custId, String path, String parentId) {
+    public CatDepartment(Long id,String code, String name, String status, Long custId, String path, Long parentId) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -80,11 +80,11 @@ public class CatDepartment  extends BaseModel {
     }
 
     @Column(name = "CUST_ID")
-    public String getCustId() {
+    public Long getCustId() {
         return custId;
     }
 
-    public void setCustId(String custId) {
+    public void setCustId(Long custId) {
         this.custId = custId;
     }
 
@@ -98,17 +98,17 @@ public class CatDepartment  extends BaseModel {
     }
 
     @Column(name = "PARENT_ID")
-    public String getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(String parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 
     @Override
     public BaseDTO toDTO() {
-        return new CatDepartmentDTO(id==null?"":id+"",code,name,status,custId, path, parentId);
+        return new CatDepartmentDTO(id==null?"":id+"",code,name,status,custId+"", path, parentId+"");
     }
 }
 
