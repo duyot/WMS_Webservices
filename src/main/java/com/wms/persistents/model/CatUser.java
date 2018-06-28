@@ -155,7 +155,7 @@ public class CatUser extends BaseModel {
         this.status = status;
     }
 
-    @Column(name = "CREATED_DATE")
+    @Column(name = "CREATED_DATE" ,insertable = false)
     public Date getCreatedDate() {
         return createdDate;
     }
