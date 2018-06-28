@@ -23,6 +23,9 @@ public class MjrStockGoodsTotalDTO extends BaseDTO {
     private String changeDate;
     private String preAmount;
     private String stockName;
+    //DoanLV lay cac kho thuoc user dang login vao he thong
+    private String userId;
+    private String partnerId;
 
     public MjrStockGoodsTotalDTO(String id, String custId, String goodsId, String goodsCode, String goodsName, String goodsState, String stockId, String amount, String changeDate, String preAmount) {
         this.id = id;
@@ -35,6 +38,22 @@ public class MjrStockGoodsTotalDTO extends BaseDTO {
         this.amount = amount;
         this.changeDate = changeDate;
         this.preAmount = preAmount;
+    }
+
+    public String getPartnerId() {
+        return partnerId;
+    }
+
+    public void setPartnerId(String partnerId) {
+        this.partnerId = partnerId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public MjrStockGoodsTotalDTO() {

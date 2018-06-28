@@ -97,32 +97,71 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
 
     @Transactional
     public List<MjrStockGoodsTotalDTO> findMoreCondition(MjrStockGoodsTotalDTO stockGoodsTotal) {
-        List<MjrStockGoodsTotalDTO> lstResult = new ArrayList<MjrStockGoodsTotalDTO>();
 
         StringBuilder str = new StringBuilder();
-        str.append(" \n" +
-                " select a.goods_id, b.code as goods_code,b.name as goods_name, a.cust_id, a.goods_state, a.stock_id, c.name as stock_name, sum (a.amount) as amount, max (a.changed_date) changed_date \n" +
-                " from MJR_STOCK_GOODS a, \n" +
-                " cat_goods b,\n" +
-                " cat_stock c\n" +
-                " where 1=1 and a.partner_id =1046 \n" +
-                " and a.goods_id = b.id\n" +
-                " and a.stock_id = c.id\n" +
-                " group by a.goods_id, b.code, b.name, a.cust_id, a.goods_state, a.stock_id, c.name\n" +
-                "\n" +
-                " union all\n" +
-                "\n" +
-                " select a.goods_id, b.code as goods_code,b.name as goods_name, a.cust_id, a.goods_state, a.stock_id, c.name as stock_name, sum (a.amount) as amount, max (a.changed_date) changed_date \n" +
-                " from MJR_STOCK_GOODS_SERIAL a, \n" +
-                " cat_goods b,\n" +
-                " cat_stock c\n" +
-                " where 1=1 and a.partner_id =1046 \n" +
-                " and a.goods_id = b.id\n" +
-                " and a.stock_id = c.id\n" +
-                " group by a.goods_id, b.code, b.name, a.cust_id, a.goods_state, a.stock_id, c.name")
-        ;
+        List<String> lstParamsStockGooods = new ArrayList<>();
+        List<String> lstParamsStockGooodsSerial = new ArrayList<>();
+        StringBuilder strStockGoods = new StringBuilder();
+        StringBuilder strStockGoodsSerial = new StringBuilder();
+        strStockGoods.append("select a.goods_id, b.code as goods_code,b.name as goods_name, a.cust_id, a.goods_state, a.stock_id, c.name as stock_name, sum (a.amount) as amount, max (a.changed_date) changed_date \n" +
+                "                 from MJR_STOCK_GOODS a, \n" +
+                "                 cat_goods b,\n" +
+                "                 cat_stock c,\n" +
+                "                 MAP_USER_STOCK d\n" +
+                "                 where 1=1 \n" +
+                "                 and a.goods_id = b.id\n" +
+                "                 and a.stock_id = c.id\n" +
+                "                 and d.stock_id = a.STOCK_ID\n" +
+                "                 and a.cust_id =?\n" +
+                "                 and d.USER_ID = ?");
+        lstParamsStockGooods.add(stockGoodsTotal.getCustId());
+        lstParamsStockGooods.add(stockGoodsTotal.getUserId());
 
-        System.out.println(str.toString());
+        strStockGoodsSerial.append("select a.goods_id, b.code as goods_code,b.name as goods_name, a.cust_id, a.goods_state, a.stock_id, c.name as stock_name, sum (a.amount) as amount, max (a.changed_date) changed_date \n" +
+                "                 from MJR_STOCK_GOODS_SERIAL a, \n" +
+                "                 cat_goods b,\n" +
+                "                 cat_stock c,\n" +
+                "                 MAP_USER_STOCK d\n" +
+                "                 where 1=1 \n" +
+                "                 and a.goods_id = b.id\n" +
+                "                 and a.stock_id = c.id\n" +
+                "                 and d.stock_id = a.STOCK_ID\n" +
+                "                 and a.cust_id =?\n" +
+                "                 and d.USER_ID = ?");
+        lstParamsStockGooodsSerial.add(stockGoodsTotal.getCustId());
+        lstParamsStockGooodsSerial.add(stockGoodsTotal.getUserId());
+
+        if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getStockId())){
+            strStockGoods.append("  and a.stock_id = ?");
+            strStockGoodsSerial.append("  and a.stock_id = ?");
+            lstParamsStockGooods.add(stockGoodsTotal.getStockId());
+            lstParamsStockGooodsSerial.add(stockGoodsTotal.getStockId());
+        }
+        if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getPartnerId())){
+            strStockGoods.append("  and a.partner_id = ?");
+            strStockGoodsSerial.append("  and a.partner_id = ?");
+            lstParamsStockGooods.add(stockGoodsTotal.getPartnerId());
+            lstParamsStockGooodsSerial.add(stockGoodsTotal.getPartnerId());
+        }
+        if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getGoodsState())){
+            strStockGoods.append("  and a.goods_state = ?");
+            strStockGoodsSerial.append("  and a.goods_state = ?");
+            lstParamsStockGooods.add(stockGoodsTotal.getGoodsState());
+            lstParamsStockGooodsSerial.add(stockGoodsTotal.getGoodsState());
+        }
+        if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getGoodsId())){
+            strStockGoods.append("  and a.goods_id = ?");
+            strStockGoodsSerial.append("  and a.goods_id = ?");
+            lstParamsStockGooods.add(stockGoodsTotal.getGoodsId());
+            lstParamsStockGooodsSerial.add(stockGoodsTotal.getGoodsId());
+        }
+
+        strStockGoods.append(" group by a.goods_id, b.code, b.name, a.cust_id, a.goods_state, a.stock_id, c.name");
+        strStockGoodsSerial.append(" group by a.goods_id, b.code, b.name, a.cust_id, a.goods_state, a.stock_id, c.name");
+
+        str.append(strStockGoods + "\n");
+        str.append(" union all \n");
+        str.append(strStockGoodsSerial);
 
         Query ps = getSession().createSQLQuery(str.toString())
                 .addScalar("goods_id",      StringType.INSTANCE)
@@ -135,6 +174,38 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
                 .addScalar("amount",      StringType.INSTANCE)
                 .addScalar("changed_date",      StringType.INSTANCE)
                 ;
+        int idx = 0;
+        //1.Chen tham so de lay Stock_goods
+        ps.setLong(idx,Long.valueOf(lstParamsStockGooods.get(idx++)));//cust_id stock_goods
+        ps.setLong(idx,Long.valueOf(lstParamsStockGooods.get(idx++)));//user_id stock_goods
+        if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getStockId())){
+            ps.setLong(idx,Long.valueOf(lstParamsStockGooods.get(idx++)));//stock_id stock_goods
+        }
+        if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getPartnerId())){
+            ps.setLong(idx,Long.valueOf(lstParamsStockGooods.get(idx++)));//partner_id stock_goods
+        }
+        if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getGoodsState())){
+            ps.setString(idx,lstParamsStockGooods.get(idx++));//goods_state stock_goods
+        }
+        if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getGoodsId())){
+            ps.setLong(idx,Long.valueOf(lstParamsStockGooods.get(idx++)));//goods_id stock_goods
+        }
+        //1.Chen tham so de lay Stock_goods_serial
+        int serIdx = 0;
+        ps.setLong(idx++,Long.valueOf(lstParamsStockGooodsSerial.get(serIdx++)));//cust_id stock_goods_serial
+        ps.setLong(idx++,Long.valueOf(lstParamsStockGooodsSerial.get(serIdx++)));//user_id stock_goods_serial
+        if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getStockId())){
+            ps.setLong(idx++,Long.valueOf(lstParamsStockGooodsSerial.get(serIdx++)));//stock_id stock_goods_serial
+        }
+        if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getPartnerId())){
+            ps.setLong(idx++,Long.valueOf(lstParamsStockGooodsSerial.get(serIdx++)));//partner_id stock_goods_serial
+        }
+        if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getGoodsState())){
+            ps.setString(idx++,lstParamsStockGooodsSerial.get(serIdx++));//goods_state stock_goods_serial
+        }
+        if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getGoodsId())){
+            ps.setLong(idx++,Long.valueOf(lstParamsStockGooodsSerial.get(serIdx++)));//goods_id stock_goods_serial
+        }
 
         return  convertToStockGoodsTotal(ps.list());
     }
@@ -148,7 +219,7 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
             temp.setGoodsCode( i[1]==null?"":String.valueOf(i[1]));
             temp.setGoodsName( i[2]==null?"":String.valueOf(i[2]));
             temp.setCustId( i[3]==null?"":String.valueOf(i[3]));
-            temp.setGoodsState(String.valueOf(i[4]).equals("1")?"Bình thường":"Hỏng");
+            temp.setGoodsState(i[4]==null?"":String.valueOf(i[4]));
             temp.setStockId( i[5]==null?"": String.valueOf(i[5]));
             temp.setStockName( i[6]==null?"":String.valueOf(i[6]));
             temp.setAmount( i[7]==null?"":String.valueOf(i[7]));
