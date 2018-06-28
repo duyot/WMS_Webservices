@@ -190,7 +190,7 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
         if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getGoodsId())){
             ps.setLong(idx,Long.valueOf(lstParamsStockGooods.get(idx++)));//goods_id stock_goods
         }
-        //1.Chen tham so de lay Stock_goods_serial
+        //2.Chen tham so de lay Stock_goods_serial
         int serIdx = 0;
         ps.setLong(idx++,Long.valueOf(lstParamsStockGooodsSerial.get(serIdx++)));//cust_id stock_goods_serial
         ps.setLong(idx++,Long.valueOf(lstParamsStockGooodsSerial.get(serIdx++)));//user_id stock_goods_serial
@@ -206,7 +206,6 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
         if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getGoodsId())){
             ps.setLong(idx++,Long.valueOf(lstParamsStockGooodsSerial.get(serIdx++)));//goods_id stock_goods_serial
         }
-
         return  convertToStockGoodsTotal(ps.list());
     }
 

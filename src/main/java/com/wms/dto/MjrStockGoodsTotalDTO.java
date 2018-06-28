@@ -23,7 +23,7 @@ public class MjrStockGoodsTotalDTO extends BaseDTO {
     private String changeDate;
     private String preAmount;
     private String stockName;
-    //DoanLV lay cac kho thuoc user dang login vao he thong
+    //DoanLV lay cac kho thuoc user dang login vao he thong (join qua bang map_user_stock)
     private String userId;
     private String partnerId;
 
