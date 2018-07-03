@@ -8,6 +8,8 @@ import com.wms.dto.MjrStockTransDetailDTO;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -145,89 +147,109 @@ public class FunctionUtils {
     }
 
 
-    public static Criteria initCriteria(Criteria cr, List<Condition> lstCondition){
-        for(Condition i: lstCondition){
-            String operator = i.getOperator();
-            switch (operator){
-                case "EQUAL":
-                    if(!DataUtil.isStringNullOrEmpty(i.getPropertyType()) && i.getPropertyType().equals(Constants.SQL_PRO_TYPE.LONG)){
-                        Long[] value = new Long[1];
-                        value[0] = Long.parseLong(i.getValue()+"");
-                        cr.add(Restrictions.in(i.getProperty(),Arrays.asList(value)));
-                    }else{
-                        cr.add(Restrictions.eq(i.getProperty(), i.getValue()).ignoreCase());
-                    }
-                    break;
-                case "NOT_EQUAL":
-                    cr.add(Restrictions.ne(i.getProperty(), i.getValue()));
-                    break;
-                case "GREATER":
-                    cr.add(Restrictions.gt(i.getProperty(), i.getValue()));
-                    break;
-                case "GREATER_EQUAL":
-                    cr.add(Restrictions.ge(i.getProperty(), i.getValue()));
-                    break;
-                case "LOWER":
-                    cr.add(Restrictions.lt(i.getProperty(), i.getValue()));
-                    break;
-                case "LOWER_EQUAL":
-                    cr.add(Restrictions.le(i.getProperty(), i.getValue()));
-                    break;
-                case "IN":
-                    if(!DataUtil.isStringNullOrEmpty(i.getPropertyType()) && i.getPropertyType().equals(Constants.SQL_PRO_TYPE.LONG)){
-
-                        List<Integer> lstValue = (List<Integer>) i.getValue();;
-                        List<Long> lstLong = new ArrayList<>();
-                        for(Integer interger :lstValue ){
-                            lstLong.add(interger.longValue());
-                        }
-                        cr.add(Restrictions.in(i.getProperty(),lstLong));
-                    }else{
-                        String inValue = (String) i.getValue();
-                        String[] inValues = inValue.split(",");
-                        cr.add(Restrictions.in(i.getProperty(), inValues));
-                    }
-                    break;
-                case "LIKE":
-                    cr.add(Restrictions.like(i.getProperty(), "%"+ i.getValue()+"%").ignoreCase());
-                    break;
-                case "ORDER":
-                    if(i.getValue().toString().equalsIgnoreCase("asc")){
-                        cr.addOrder(Order.asc(i.getProperty()));
-                    }else{
-                        cr.addOrder(Order.desc(i.getProperty()));
-                    }
-                    break;
+    public static Criteria initCriteria(Criteria cr, List<Condition> lstCondition) {
+        for (Condition i : lstCondition) {
+            if (DataUtil.isNullOrEmpty(i.getOperator())){
+                cr.add(buildQueryCriterion(i));
+            }else{
+            switch (i.getOperator()){
+                case "LIMIT":
+                    cr.setMaxResults((int) i.getValue());
                 case "VNM_ORDER":
-                    if(i.getValue().toString().equalsIgnoreCase("asc")){
+                    if (i.getValue().toString().equalsIgnoreCase("asc")) {
                         cr.addOrder(OrderOracleVietnameseSort.asc(i.getProperty()));
-                    }else{
+                    } else {
                         cr.addOrder(OrderOracleVietnameseSort.desc(i.getProperty()));
                     }
                     break;
-                case "BETWEEN":
-                    String[] arrValue = i.getValue().toString().split("\\|");
-                    try {
-                        String toDateStr = arrValue[1].length() <= 10 ? arrValue[1] + " 23:59:59":arrValue[1];
-                        Date fromDate = DateTimeUtils.convertStringToDate(arrValue[0]);
-                        Date toDate   = DateTimeUtils.convertStringToDate(toDateStr);
-                        cr.add(Restrictions.between(i.getProperty(),fromDate,toDate));
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                case "ORDER":
+                    if (i.getValue().toString().equalsIgnoreCase("asc")) {
+                        cr.addOrder(Order.asc(i.getProperty()));
+                    } else {
+                        cr.addOrder(Order.desc(i.getProperty()));
                     }
                     break;
-                case "LIMIT":
-                    cr.setMaxResults((int)i.getValue());
-                    break;
                 case "OFFSET":
-                    cr.setFirstResult((int)i.getValue());
+                    cr.setFirstResult((int) i.getValue());
                     break;
-                default:
-                    cr.add(Restrictions.eq(i.getProperty(), i.getValue()));
-                    break;
-            }
+                 default:
+                        cr.add(buildQueryCriterion(i));
+            } }
+        }
+        return cr;
+    }
+    public static Criterion buildQueryCriterion( Condition condition){
+        if (Constants.SQL_LOGIC.OR.trim().equalsIgnoreCase(condition.getExpType()) ||Constants.SQL_LOGIC.AND.trim().equalsIgnoreCase(condition.getExpType())) {
+            return buildOrCriterion(condition.getLstCondition(),condition.getExpType());
+        } else {
+            return buildCriterion(condition);
+        }
+    }
+    public static Criterion buildOrCriterion( List<Condition> lstCondition , String sqlLogic){
+
+        List<Criterion> lstOrCriterion = new ArrayList<>();
+        for (Condition con :lstCondition){
+            lstOrCriterion.add(buildQueryCriterion(con));
+        }
+        Criterion[] array = lstOrCriterion.toArray(new Criterion[lstOrCriterion.size()]);
+        if (Constants.SQL_LOGIC.OR.trim().equalsIgnoreCase(sqlLogic) ){
+            return Restrictions.or(array);
+        }else {
+            return Restrictions.and(array);
         }
 
-        return cr;
+    }
+    public static Criterion buildCriterion( Condition con){
+        String operator = con.getOperator();
+        Criterion cr ;
+        switch (operator){
+            case "EQUAL":
+                if(!DataUtil.isStringNullOrEmpty(con.getPropertyType()) && con.getPropertyType().equals(Constants.SQL_PRO_TYPE.LONG)){
+                    Long[] value = new Long[1];
+                    value[0] = Long.parseLong(con.getValue()+"");
+                     return Restrictions.in(con.getProperty(),Arrays.asList(value));
+                }else{
+                    return Restrictions.eq(con.getProperty(), con.getValue()).ignoreCase();
+                }
+
+            case "NOT_EQUAL":
+                return Restrictions.ne(con.getProperty(), con.getValue());
+            case "GREATER":
+                return Restrictions.gt(con.getProperty(), con.getValue());
+            case "GREATER_EQUAL":
+                 return Restrictions.ge(con.getProperty(), con.getValue());
+            case "LOWER":
+                return Restrictions.lt(con.getProperty(), con.getValue());
+            case "LOWER_EQUAL":
+                return Restrictions.le(con.getProperty(), con.getValue());
+            case "IN":
+                if(!DataUtil.isStringNullOrEmpty(con.getPropertyType()) && con.getPropertyType().equals(Constants.SQL_PRO_TYPE.LONG)){
+
+                    List<Integer> lstValue = (List<Integer>) con.getValue();;
+                    List<Long> lstLong = new ArrayList<>();
+                    for(Integer interger :lstValue ){
+                        lstLong.add(interger.longValue());
+                    }
+                    return Restrictions.in(con.getProperty(),lstLong);
+                }else{
+                    String inValue = (String) con.getValue();
+                    String[] inValues = inValue.split(",");
+                    return Restrictions.in(con.getProperty(), inValues);
+                }
+            case "LIKE":
+                return Restrictions.like(con.getProperty(), "%"+ con.getValue()+"%").ignoreCase();
+            case "BETWEEN":
+                String[] arrValue = con.getValue().toString().split("\\|");
+                try {
+                    String toDateStr = arrValue[1].length() <= 10 ? arrValue[1] + " 23:59:59":arrValue[1];
+                    Date fromDate = DateTimeUtils.convertStringToDate(arrValue[0]);
+                    Date toDate   = DateTimeUtils.convertStringToDate(toDateStr);
+                   return Restrictions.between(con.getProperty(),fromDate,toDate);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            default:
+                return  Restrictions.eq(con.getProperty(), con.getValue());
+        }
     }
 }
