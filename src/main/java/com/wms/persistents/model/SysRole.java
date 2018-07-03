@@ -18,11 +18,11 @@ public class SysRole extends BaseModel{
     private Long id;
     private String code;
     private String name;
-    private String status;
+    private byte status;
     private Long custId;
     private Long type;
 
-    public SysRole(Long id, String code, String name, String status,Long custId ,Long type) {
+    public SysRole(Long id, String code, String name, byte status,Long custId ,Long type) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -64,11 +64,11 @@ public class SysRole extends BaseModel{
     }
 
     @Column(name = "STATUS",nullable = false)
-    public String getStatus() {
+    public byte getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(byte status) {
         this.status = status;
     }
     @Column(name = "CUST_ID",nullable = false )
@@ -90,6 +90,6 @@ public class SysRole extends BaseModel{
 
     @Override
     public SysRoleDTO toDTO() {
-        return new SysRoleDTO(id==null?"":id+"",code, name, status,custId != null?String.valueOf(custId):"",type!=null ? type + "":"");
+        return new SysRoleDTO(id==null?"":id+"",code, name, status+"",custId != null?String.valueOf(custId):"",type!=null ? type + "":"");
     }
 }

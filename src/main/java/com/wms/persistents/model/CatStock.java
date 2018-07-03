@@ -19,10 +19,10 @@ public class CatStock  extends BaseModel{
     private String code;
     private String name;
     private String address;
-    private String status;
+    private byte status;
     private String managerInfo;
 
-    public CatStock(Long id, Long custId, String code, String name, String address, String status, String managerInfo) {
+    public CatStock(Long id, Long custId, String code, String name, String address, byte status, String managerInfo) {
         this.id = id;
         this.custId = custId;
         this.code = code;
@@ -89,11 +89,11 @@ public class CatStock  extends BaseModel{
     }
 
     @Column(name = "STATUS")
-    public String getStatus() {
+    public byte getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(byte status) {
         this.status = status;
     }
 
@@ -108,6 +108,6 @@ public class CatStock  extends BaseModel{
 
     @Override
     public CatStockDTO toDTO() {
-        return new CatStockDTO(id==null?"":id+"",custId==null?"":custId+"",code,name,address,status,managerInfo);
+        return new CatStockDTO(id==null?"":id+"",custId==null?"":custId+"",code,name,address,status+"",managerInfo);
     }
 }

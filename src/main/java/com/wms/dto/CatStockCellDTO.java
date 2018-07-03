@@ -49,4 +49,13 @@ public class CatStockCellDTO extends BaseDTO{
     public CatStockCell toModel() {
         return new CatStockCell(!StringUtils.validString(id) ? null:Long.valueOf(id),code,!StringUtils.validString(stockId) ? null:Long.valueOf(stockId));
     }
+
+    @Override
+    public String toString() {
+        return "CatStockCellDTO{" +
+                "id='" + id + '\'' +
+                ", code='" + code + '\'' +
+                ", stockId='" + stockId + '\'' +
+                '}';
+    }
 }

@@ -120,7 +120,7 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
     private List<BaseModel> listDTOToModel(List<T> lstDTO){
         List<BaseModel> lstResult = Lists.newArrayList();
         for(T i: lstDTO){
-            lstResult.add((BaseModel) i.toModel());
+            lstResult.add(i.toModel());
         }
         return lstResult;
     }

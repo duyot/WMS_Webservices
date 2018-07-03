@@ -1,3 +1,4 @@
+
 package com.wms.dto;
 
 import com.wms.base.BaseDTO;
@@ -139,10 +140,11 @@ public class CatGoodsDTO extends BaseDTO{
 
     @Override
     public BaseModel toModel() {
-        return new CatGoods(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,status,
+        return new CatGoods(
+                !StringUtils.validString(id) ? null:Long.valueOf(id), code, name, !StringUtils.validString(status) ? null:Byte.parseByte(status),
                 !StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),
-                Long.valueOf(custId),unitType,!StringUtils.validString(goodsGroupId) ? null:Long.valueOf(goodsGroupId),
-                isSerial,description,!StringUtils.validString(inPrice) ? null:Double.valueOf(inPrice),!StringUtils.validString(outPrice) ? null:Double.valueOf(outPrice)
+                Long.valueOf(custId), unitType, !StringUtils.validString(goodsGroupId) ? null:Long.valueOf(goodsGroupId),
+                !StringUtils.validString(isSerial) ? null:Byte.parseByte(isSerial), description, !StringUtils.validString(inPrice) ? null:Double.valueOf(inPrice), !StringUtils.validString(outPrice) ? null:Double.valueOf(outPrice)
         );
     }
 
@@ -164,3 +166,4 @@ public class CatGoodsDTO extends BaseDTO{
                 '}';
     }
 }
+

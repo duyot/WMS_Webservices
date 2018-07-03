@@ -16,10 +16,10 @@ import javax.persistence.*;
 public class CatGoodsGroup extends BaseModel{
     private Long id;
     private String name;
-    private String status;
+    private byte status;
     private Long custId;
 
-    public CatGoodsGroup(Long id, String name, String status, Long custId) {
+    public CatGoodsGroup(Long id, String name, byte status, Long custId) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -56,11 +56,11 @@ public class CatGoodsGroup extends BaseModel{
     }
 
     @Column(name = "STATUS")
-    public String getStatus() {
+    public byte getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(byte status) {
         this.status = status;
     }
 
@@ -75,6 +75,6 @@ public class CatGoodsGroup extends BaseModel{
 
     @Override
     public BaseDTO toDTO() {
-        return new CatGoodsGroupDTO(id==null?"":id+"",name,status,custId==null? "":String.valueOf(custId));
+        return new CatGoodsGroupDTO(id==null?"":id+"",name,status+"",custId==null? "":String.valueOf(custId));
     }
 }

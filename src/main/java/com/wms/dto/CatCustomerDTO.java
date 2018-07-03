@@ -143,7 +143,7 @@ public class CatCustomerDTO extends BaseDTO{
 
     @Override
     public CatCustomer toModel() {
-        return new CatCustomer(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,status,email,telNumber,
+        return new CatCustomer(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,!StringUtils.validString(status) ? 0:Byte.parseByte(status),email,telNumber,
                 address,bankName,bankAccountCode,!StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),
                 mailReport==null?0:Integer.parseInt(mailReport), partnerRequire==null?0:Integer.parseInt(partnerRequire)
                 );

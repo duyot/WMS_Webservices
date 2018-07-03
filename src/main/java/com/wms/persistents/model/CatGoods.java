@@ -21,19 +21,18 @@ public class CatGoods extends BaseModel {
     private Long goodsGroupId;
     private String code;
     private String name;
-    private String status;
+    private byte status;
     private Date createdDate;
     private String unitType;
-    private String isSerial;
+    private byte isSerial;
     private String description;
     private Double inPrice;
     private Double outPrice;
-    private String brand;
 
     public CatGoods() {
     }
 
-    public CatGoods(Long id, String code, String name, String status, Date createdDate, Long custId, String unitType, Long goodsGroupId, String isSerial, String description, Double inPrice, Double outPrice) {
+    public CatGoods(Long id, String code, String name, byte status, Date createdDate, Long custId, String unitType, Long goodsGroupId, byte isSerial, String description, Double inPrice, Double outPrice) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -46,7 +45,6 @@ public class CatGoods extends BaseModel {
         this.description = description;
         this.inPrice = inPrice;
         this.outPrice = outPrice;
-        this.brand = brand;
     }
 
     @Id
@@ -85,11 +83,11 @@ public class CatGoods extends BaseModel {
     }
 
     @Column(name = "STATUS")
-    public String getStatus() {
+    public byte getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(byte status) {
         this.status = status;
     }
 
@@ -130,11 +128,11 @@ public class CatGoods extends BaseModel {
     }
 
     @Column(name = "IS_SERIAL")
-    public String getIsSerial() {
+    public byte getIsSerial() {
         return isSerial;
     }
 
-    public void setIsSerial(String isSerial) {
+    public void setIsSerial(byte isSerial) {
         this.isSerial = isSerial;
     }
 
@@ -167,8 +165,9 @@ public class CatGoods extends BaseModel {
 
     @Override
     public BaseDTO toDTO() {
-        return new CatGoodsDTO(id==null?"":id+"",code,name,status, createdDate ==null?"": DateTimeUtils.convertDateTimeToString(createdDate),String.valueOf(custId),unitType,goodsGroupId==null?"":goodsGroupId+"", isSerial,description,inPrice==null?"":inPrice+"",outPrice==null?"":outPrice+"");
-
+        return new CatGoodsDTO(id==null?"":id+"",code,name,status+"",
+                createdDate ==null?"": DateTimeUtils.convertDateTimeToString(createdDate),String.valueOf(custId),
+                unitType,goodsGroupId==null?"":goodsGroupId+"", isSerial+"",description,inPrice==null?"":inPrice+"",
+                outPrice==null?"":outPrice+"");
     }
-
 }

@@ -20,13 +20,13 @@ public class SysMenu extends BaseModel {
     private String code;
     private String parentId;
     private String url;
-    private String status;
+    private byte status;
     private String levels;
     private String orders;
     private String imgClass;
 
     public SysMenu(Long id, String name, String code,
-                   String parentActionId, String url, String status,
+                   String parentActionId, String url, byte status,
                    String levels,String orders, String imgClass) {
 
         this.id = id;
@@ -91,12 +91,12 @@ public class SysMenu extends BaseModel {
     }
 
     @Column(name = "STATUS")
-    public String getStatus() {
+    public byte getStatus() {
         return status;
     }
 
 
-    public void setStatus(String status) {
+    public void setStatus(byte status) {
         this.status = status;
     }
 
@@ -129,7 +129,7 @@ public class SysMenu extends BaseModel {
 
     @Override
     public SysMenuDTO toDTO() {
-        return new SysMenuDTO(id==null?"":id+"", name, code, parentId,url,status,levels,orders,imgClass);
+        return new SysMenuDTO(id==null?"":id+"", name, code, parentId,url,status+"",levels,orders,imgClass);
     }
 }
 

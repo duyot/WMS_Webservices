@@ -25,17 +25,17 @@ public class CatUser extends BaseModel {
     private Date birthDate;
     private String email;
     private String telNumber;
-    private String status;
+    private byte status;
     private Date createdDate;
     private String  imgUrl;
     private String  roleName;
     private String  logReason;
     //
-    private Long block;
+    private byte block;
     private Long roleId;
 
 
-    public CatUser(Long id, Long deptId, Long custId, String code, String name, String password, Date birthDate, String email, String telNumber, String status, Date createdDate, String imgUrl, String roleName, String logReason, Long roleId, Long block) {
+    public CatUser(Long id, Long deptId, Long custId, String code, String name, String password, Date birthDate, String email, String telNumber, byte status, Date createdDate, String imgUrl, String roleName, String logReason, Long roleId, byte block) {
         this.id = id;
         this.deptId = deptId;
         this.custId = custId;
@@ -147,11 +147,11 @@ public class CatUser extends BaseModel {
     }
 
     @Column(name = "STATUS")
-    public String getStatus() {
+    public byte getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(byte status) {
         this.status = status;
     }
 
@@ -193,11 +193,11 @@ public class CatUser extends BaseModel {
     }
 
     @Column(name = "BLOCK")
-    public Long getBlock() {
+    public byte getBlock() {
         return block;
     }
 
-    public void setBlock(Long block) {
+    public void setBlock(byte block) {
         this.block = block;
     }
 
@@ -214,8 +214,8 @@ public class CatUser extends BaseModel {
     public CatUserDTO toDTO() {
         return new CatUserDTO(id==null?"":id+"",deptId==null?"":deptId+"",custId==null?"":custId+"",
                 code,name,password,birthDate==null?"": DateTimeUtils.convertDateTimeToString(birthDate),
-                email,telNumber,status,createdDate==null?"": DateTimeUtils.convertDateTimeToString(createdDate),
-                imgUrl,roleName,logReason,roleId==null?"":roleId+"",block==null?"":block+""
+                email,telNumber,status+"",createdDate==null?"": DateTimeUtils.convertDateTimeToString(createdDate),
+                imgUrl,roleName,logReason,roleId==null?"":roleId+"",block+""
         );
     }
 }
