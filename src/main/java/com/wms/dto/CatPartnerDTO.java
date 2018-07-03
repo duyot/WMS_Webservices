@@ -91,7 +91,8 @@ public class CatPartnerDTO extends BaseDTO {
 
     @Override
     public BaseModel toModel() {
-        return new CatPartner(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,address,telNumber,status,!StringUtils.validString(custId) ? null:Long.valueOf(custId));
+        return new CatPartner(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,address,telNumber,
+                !StringUtils.validString(status) ? 0:Byte.parseByte(status),!StringUtils.validString(custId) ? null:Long.valueOf(custId));
     }
 
     @Override

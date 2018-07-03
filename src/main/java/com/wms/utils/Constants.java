@@ -45,6 +45,8 @@ public class Constants {
         public static String STRING = "string";
         public static String LONG   = "long";
         public static String DATE   = "date";
+        public static String BYTE   = "byte";
+        public static String INT   = "int";
     }
     public static class SQL_LOGIC{
         public static String OR = " or ";

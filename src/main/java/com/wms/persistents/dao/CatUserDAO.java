@@ -31,11 +31,12 @@ public class CatUserDAO extends BaseDAOImpl<CatUser,Long> {
         List<Condition> lstCondition = Lists.newArrayList();
         String email = loginAdminCatUser.getEmail();
         if(!DataUtil.isStringNullOrEmpty(email)){
-            lstCondition.add(new Condition("email",Constants.SQL_OPERATOR.EQUAL,email));
+            lstCondition.add(new Condition("email", Constants.SQL_OPERATOR.EQUAL,email));
         }else{
-            lstCondition.add(new Condition("code",Constants.SQL_OPERATOR.EQUAL, loginAdminCatUser.getCode()));
+            lstCondition.add(new Condition("code",  Constants.SQL_OPERATOR.EQUAL, loginAdminCatUser.getCode()));
         }
-        lstCondition.add(new Condition("status",Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
+        lstCondition.add(new Condition("status", Constants.SQL_PRO_TYPE.BYTE, Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
+        lstCondition.add(new Condition("block",  Constants.SQL_PRO_TYPE.BYTE, Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.INACTIVE));
 
         List<CatUser> lstAdminCatUser = findByCondition(lstCondition);
         if(DataUtil.isListNullOrEmpty(lstAdminCatUser)){
@@ -44,8 +45,4 @@ public class CatUserDAO extends BaseDAOImpl<CatUser,Long> {
             return lstAdminCatUser.get(0);
         }
     }
-//
-//
-//    public static void main(String[] args) {
-//    }
 }

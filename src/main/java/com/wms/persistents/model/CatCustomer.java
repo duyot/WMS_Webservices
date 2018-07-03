@@ -19,7 +19,7 @@ public class CatCustomer extends BaseModel{
     private Long id;
     private String code;
     private String name;
-    private String status;
+    private byte status;
     private String email;
     private String telNumber;
     private String address;
@@ -27,9 +27,9 @@ public class CatCustomer extends BaseModel{
     private String bankAccountCode;
     private Date  createdDate;
     private int   mailReport;
-    private int partnerRequire;
+    private int   partnerRequire;
 
-    public CatCustomer(Long id, String code, String name, String status, String email,
+    public CatCustomer(Long id, String code, String name, byte status, String email,
                        String telNumber, String address, String bankName, String bankAccountCode,
                        Date createdDate, int mailReport, int partnerRequire) {
         this.id = id;
@@ -130,11 +130,11 @@ public class CatCustomer extends BaseModel{
     }
 
     @Column(name = "STATUS")
-    public String getStatus() {
+    public byte getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(byte status) {
         this.status = status;
     }
 
@@ -168,7 +168,7 @@ public class CatCustomer extends BaseModel{
 
     @Override
     public BaseDTO toDTO() {
-        return new CatCustomerDTO(id==null?"":id+"",code,name,status,email,telNumber,address,bankName,
+        return new CatCustomerDTO(id==null?"":id+"",code,name,status+"",email,telNumber,address,bankName,
                 bankAccountCode,createdDate==null?"": DateTimeUtils.convertDateTimeToString(createdDate),mailReport+"", partnerRequire+"");
     }
 }

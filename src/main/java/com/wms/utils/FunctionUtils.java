@@ -8,6 +8,7 @@ import com.wms.dto.MjrStockTransDetailDTO;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -150,10 +151,26 @@ public class FunctionUtils {
             String operator = i.getOperator();
             switch (operator){
                 case "EQUAL":
-                    if(!DataUtil.isStringNullOrEmpty(i.getPropertyType()) && i.getPropertyType().equals(Constants.SQL_PRO_TYPE.LONG)){
-                        Long[] value = new Long[1];
-                        value[0] = Long.parseLong(i.getValue()+"");
-                        cr.add(Restrictions.in(i.getProperty(),Arrays.asList(value)));
+                    if(!DataUtil.isStringNullOrEmpty(i.getPropertyType())){
+                        if (i.getPropertyType().equals(Constants.SQL_PRO_TYPE.LONG)) {
+                            //
+                            Long[] value = new Long[1];
+                            value[0] = Long.parseLong(i.getValue()+"");
+                            cr.add(Restrictions.in(i.getProperty(),Arrays.asList(value)));
+                            //
+                        }else if (i.getPropertyType().equals(Constants.SQL_PRO_TYPE.BYTE)){
+                            //
+                            Byte[] value = new Byte[1];
+                            value[0] = Byte.parseByte(i.getValue()+"");
+                            cr.add(Restrictions.in(i.getProperty(),Arrays.asList(value)));
+                            //
+                        }else if(i.getPropertyType().equals(Constants.SQL_PRO_TYPE.INT)){
+                            //
+                            Integer[] value = new Integer[1];
+                            value[0] = Integer.parseInt(i.getValue()+"");
+                            cr.add(Restrictions.in(i.getProperty(),Arrays.asList(value)));
+                            //
+                        }
                     }else{
                         cr.add(Restrictions.eq(i.getProperty(), i.getValue()).ignoreCase());
                     }
@@ -178,8 +195,8 @@ public class FunctionUtils {
 
                         List<Integer> lstValue = (List<Integer>) i.getValue();;
                         List<Long> lstLong = new ArrayList<>();
-                        for(Integer interger :lstValue ){
-                            lstLong.add(interger.longValue());
+                        for(Integer integer :lstValue ){
+                            lstLong.add(integer.longValue());
                         }
                         cr.add(Restrictions.in(i.getProperty(),lstLong));
                     }else{

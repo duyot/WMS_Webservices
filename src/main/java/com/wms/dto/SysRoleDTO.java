@@ -79,7 +79,7 @@ public class SysRoleDTO extends BaseDTO{
     @Override
     public SysRole toModel() {
         try {
-            return new SysRole(!StringUtils.validString(id) ? null:Long.valueOf(id), code, name,status,!StringUtils.validString(custId)? null: Long.valueOf(custId),!StringUtils.validString(type) ? null:Long.valueOf(type));
+            return new SysRole(!StringUtils.validString(id) ? null:Long.valueOf(id), code, name,!StringUtils.validString(status) ? null:Byte.parseByte(status),!StringUtils.validString(custId)? null: Long.valueOf(custId),!StringUtils.validString(type) ? null:Long.valueOf(type));
         } catch (Exception e) {
             e.printStackTrace();
             return null;

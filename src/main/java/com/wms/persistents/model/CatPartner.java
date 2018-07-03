@@ -17,12 +17,12 @@ public class CatPartner extends BaseModel {
     private Long id;
     private String code;
     private String name;
-    private String status;
+    private byte status;
     private Long custId;
     private String address;
     private String telNumber;
 
-    public CatPartner(Long id,String code, String name,String address, String telNumber, String status, Long custId ) {
+    public CatPartner(Long id,String code, String name,String address, String telNumber, byte status, Long custId ) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -71,11 +71,11 @@ public class CatPartner extends BaseModel {
     }
 
     @Column(name = "STATUS")
-    public String getStatus() {
+    public byte getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(byte status) {
         this.status = status;
     }
 
@@ -108,6 +108,6 @@ public class CatPartner extends BaseModel {
 
     @Override
     public BaseDTO toDTO() {
-        return new CatPartnerDTO(id==null?"":id+"",code,name,address,telNumber,status,custId==null? "":String.valueOf(custId));
+        return new CatPartnerDTO(id==null?"":id+"",code,name,address,telNumber,status+"",custId==null? "":String.valueOf(custId));
     }
 }
