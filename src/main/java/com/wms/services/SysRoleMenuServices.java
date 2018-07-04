@@ -71,7 +71,7 @@ public class SysRoleMenuServices extends BaseServices<SysRoleMenuDTO> {
         strActionId = strActionId.replaceFirst(",","");
         List<Condition> lstCondition = Lists.newArrayList();
         lstCondition.add(new Condition("id",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.IN,strActionId));
-        lstCondition.add(new Condition("status",Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
+        lstCondition.add(new Condition("status",Constants.SQL_PRO_TYPE.BYTE,Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
         //sap xep theo level(menu cha) -> order trong menu
         lstCondition.add(new Condition("levels",Constants.SQL_OPERATOR.ORDER,"asc"));
         lstCondition.add(new Condition("orders",Constants.SQL_OPERATOR.ORDER,"asc"));

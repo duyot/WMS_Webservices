@@ -221,9 +221,9 @@ public class FunctionUtils {
                         value[0] = Integer.parseInt(con.getValue()+"");
                         return Restrictions.in(con.getProperty(),Arrays.asList(value));
                         //
+                    }else{
+                        return Restrictions.eq(con.getProperty(), con.getValue()).ignoreCase();
                     }
-                }else{
-                    return Restrictions.eq(con.getProperty(), con.getValue()).ignoreCase();
                 }
             case "NOT_EQUAL":
                 return Restrictions.ne(con.getProperty(), con.getValue());

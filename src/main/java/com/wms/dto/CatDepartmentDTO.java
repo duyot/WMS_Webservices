@@ -87,7 +87,7 @@ public class CatDepartmentDTO extends BaseDTO {
 
     @Override
     public BaseModel toModel() {
-        return new CatDepartment(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,!StringUtils.validString(custId) ? null:Integer.parseInt(custId),!StringUtils.validString(custId) ? null:Long.valueOf(custId), path,!StringUtils.validString(parentId) ? null:Long.valueOf(parentId) );
+        return new CatDepartment(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,!StringUtils.validString(status) ? 0:Byte.parseByte(status),!StringUtils.validString(custId) ? null:Long.valueOf(custId), path,!StringUtils.validString(parentId) ? null:Long.valueOf(parentId) );
     }
 
     @Override

@@ -80,7 +80,7 @@ public class AppParamsDTO extends BaseDTO {
 
     @Override
     public BaseModel toModel() {
-        return new AppParams(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,status,type, parOrder);
+        return new AppParams(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,!StringUtils.validString(status) ? 0:Byte.parseByte(status),type, parOrder);
     }
 
     @Override
