@@ -111,7 +111,6 @@ public class FunctionUtils {
     }
 
 
-    //ROLLBACK
     public static void rollback(Transaction transaction, Connection con) {
         try {
             if (con != null) {
@@ -220,7 +219,9 @@ public class FunctionUtils {
                         Integer[] value = new Integer[1];
                         value[0] = Integer.parseInt(con.getValue()+"");
                         return Restrictions.in(con.getProperty(),Arrays.asList(value));
-                        //
+                    //
+                    }else{
+                        return Restrictions.eq(con.getProperty(), con.getValue()).ignoreCase();
                     }
                 }else{
                     return Restrictions.eq(con.getProperty(), con.getValue()).ignoreCase();
