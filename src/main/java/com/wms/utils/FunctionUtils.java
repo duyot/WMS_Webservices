@@ -219,12 +219,14 @@ public class FunctionUtils {
                         Integer[] value = new Integer[1];
                         value[0] = Integer.parseInt(con.getValue()+"");
                         return Restrictions.in(con.getProperty(),Arrays.asList(value));
+<<<<<<< HEAD
                     //
+=======
+                        //
+>>>>>>> e53edeb0686eff90dca9bff76fecdf43950b9fb7
                     }else{
                         return Restrictions.eq(con.getProperty(), con.getValue()).ignoreCase();
                     }
-                }else{
-                    return Restrictions.eq(con.getProperty(), con.getValue()).ignoreCase();
                 }
             case "NOT_EQUAL":
                 return Restrictions.ne(con.getProperty(), con.getValue());

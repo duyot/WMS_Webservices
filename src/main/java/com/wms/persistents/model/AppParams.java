@@ -16,11 +16,11 @@ public class AppParams extends BaseModel  {
     private Long id;
     private String code;
     private String name;
-    private String status;
+    private byte status;
     private String type;
     private String parOrder;
 
-    public AppParams(Long id,String code, String name, String status, String type, String parOrder) {
+    public AppParams(Long id,String code, String name, byte status, String type, String parOrder) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -68,11 +68,11 @@ public class AppParams extends BaseModel  {
     }
 
     @Column(name = "STATUS")
-    public String getStatus() {
+    public byte getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(byte status) {
         this.status = status;
     }
 
@@ -96,6 +96,6 @@ public class AppParams extends BaseModel  {
 
     @Override
     public BaseDTO toDTO() {
-        return new AppParamsDTO(id==null?"":id+"",code,name,status,type, parOrder);
+        return new AppParamsDTO(id==null?"":id+"",code,name,status+"",type, parOrder);
     }
 }

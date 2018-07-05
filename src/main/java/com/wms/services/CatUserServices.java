@@ -109,7 +109,7 @@ public class CatUserServices extends BaseServices<CatUserDTO>{
         //
         List<Condition> lstConditions = Lists.newArrayList();
         lstConditions.add(new Condition("customerId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,Long.parseLong(customerId)));
-        lstConditions.add(new Condition("status",Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
+        lstConditions.add(new Condition("status",Constants.SQL_PRO_TYPE.BYTE,Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
 
         //
         List<CatUserDTO> lstUser = catUserBusiness.findByCondition(lstConditions);

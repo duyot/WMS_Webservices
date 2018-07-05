@@ -17,12 +17,12 @@ public class CatDepartment  extends BaseModel {
     private Long id;
     private String code;
     private String name;
-    private int status;
+    private byte status;
     private Long custId;
     private String path;
     private Long parentId;
 
-    public CatDepartment(Long id,String code, String name, int status, Long custId, String path, Long parentId) {
+    public CatDepartment(Long id,String code, String name, byte status, Long custId, String path, Long parentId) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -70,11 +70,11 @@ public class CatDepartment  extends BaseModel {
     }
 
     @Column(name = "STATUS")
-    public int getStatus() {
+    public byte getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(byte status) {
         this.status = status;
     }
 
@@ -107,7 +107,7 @@ public class CatDepartment  extends BaseModel {
 
     @Override
     public BaseDTO toDTO() {
-        return new CatDepartmentDTO(id==null?"":id+"",code,name,id+"",custId+"", path, parentId+"");
+        return new CatDepartmentDTO(id==null?"":id+"",code,name,status+"",custId+"", path, parentId+"");
     }
 }
 

@@ -49,7 +49,7 @@ public class MjrStockGoodsDAO extends BaseDAOImpl<MjrStockGoods,Long> {
         lstCon.add(new Condition("stockId",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,mjrStockTransDTO.getStockId()));
         lstCon.add(new Condition("goodsId",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,goodsDetail.getGoodsId()));
         lstCon.add(new Condition("goodsState",Constants.SQL_OPERATOR.EQUAL,goodsDetail.getGoodsState()));
-        lstCon.add(new Condition("status", Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
+        lstCon.add(new Condition("status",Constants.SQL_PRO_TYPE.BYTE, Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
         //2. check valid
         List<MjrStockGoods> lstCurrentStockGoods = findByConditionSession(lstCon,session);
         if(DataUtil.isListNullOrEmpty(lstCurrentStockGoods)){

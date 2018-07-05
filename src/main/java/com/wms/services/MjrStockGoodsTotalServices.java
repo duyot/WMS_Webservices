@@ -38,11 +38,11 @@ public class MjrStockGoodsTotalServices extends BaseServices<MjrStockGoodsTotalD
 
     @RequestMapping(value = "/getGoodsDetail",method = RequestMethod.GET)
     public List<MjrStockTransDetailDTO> getGoodsDetail(@RequestParam("custId")String custId,@RequestParam("stockId")String stockId, @RequestParam("goodsId")String goodsId,@RequestParam("isSerial")String isSerial,
-                                   @RequestParam("goodsState")String goodsState,@RequestParam("limit")String limit,@RequestParam("offset")String offset){
+                                   @RequestParam("goodsState")String goodsState,@RequestParam("partnerId")String partnerId,@RequestParam("limit")String limit,@RequestParam("offset")String offset){
         //
         List<Condition> lstCon = Lists.newArrayList();
         lstCon.add(new Condition("custId", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL,custId));
-        lstCon.add(new Condition("status", Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
+        lstCon.add(new Condition("status", Constants.SQL_PRO_TYPE.BYTE,Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
 
         if(!DataUtil.isStringNullOrEmpty(stockId) && !stockId.equals("-1")){
             lstCon.add(new Condition("stockId",Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL,stockId));
@@ -52,6 +52,9 @@ public class MjrStockGoodsTotalServices extends BaseServices<MjrStockGoodsTotalD
         }
         if(!DataUtil.isStringNullOrEmpty(goodsState) && !goodsState.equals("-1")){
             lstCon.add(new Condition("goodsState",Constants.SQL_OPERATOR.EQUAL,goodsState));
+        }
+        if(!DataUtil.isStringNullOrEmpty(partnerId) && !partnerId.equals("-1")){
+            lstCon.add(new Condition("partnerId",Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL,partnerId));
         }
         lstCon.add(new Condition("",Constants.SQL_OPERATOR.LIMIT, Integer.parseInt(limit)));
         lstCon.add(new Condition("",Constants.SQL_OPERATOR.OFFSET, Integer.parseInt(offset)));
