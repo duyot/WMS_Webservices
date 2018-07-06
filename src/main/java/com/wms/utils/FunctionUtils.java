@@ -153,6 +153,7 @@ public class FunctionUtils {
             switch (i.getOperator()){
                 case "LIMIT":
                     cr.setMaxResults((int) i.getValue());
+                    break;
                 case "VNM_ORDER":
                     if (i.getValue().toString().equalsIgnoreCase("asc")) {
                         cr.addOrder(OrderOracleVietnameseSort.asc(i.getProperty()));
