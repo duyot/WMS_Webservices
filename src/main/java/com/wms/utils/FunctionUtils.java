@@ -153,6 +153,7 @@ public class FunctionUtils {
             switch (i.getOperator()){
                 case "LIMIT":
                     cr.setMaxResults((int) i.getValue());
+                    break;
                 case "VNM_ORDER":
                     if (i.getValue().toString().equalsIgnoreCase("asc")) {
                         cr.addOrder(OrderOracleVietnameseSort.asc(i.getProperty()));
@@ -177,7 +178,7 @@ public class FunctionUtils {
         return cr;
     }
     public static Criterion buildQueryCriterion( Condition condition){
-        if (Constants.SQL_LOGIC.OR.trim().equalsIgnoreCase(condition.getExpType()) ||Constants.SQL_LOGIC.AND.trim().equalsIgnoreCase(condition.getExpType())) {
+        if (Constants.SQL_LOGIC.OR.equalsIgnoreCase(condition.getExpType()) ||Constants.SQL_LOGIC.AND.equalsIgnoreCase(condition.getExpType())) {
             return buildOrCriterion(condition.getLstCondition(),condition.getExpType());
         } else {
             return buildCriterion(condition);
@@ -190,7 +191,7 @@ public class FunctionUtils {
             lstOrCriterion.add(buildQueryCriterion(con));
         }
         Criterion[] array = lstOrCriterion.toArray(new Criterion[lstOrCriterion.size()]);
-        if (Constants.SQL_LOGIC.OR.trim().equalsIgnoreCase(sqlLogic) ){
+        if (Constants.SQL_LOGIC.OR.equalsIgnoreCase(sqlLogic) ){
             return Restrictions.or(array);
         }else {
             return Restrictions.and(array);
