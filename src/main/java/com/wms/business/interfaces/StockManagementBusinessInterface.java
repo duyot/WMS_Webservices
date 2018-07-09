@@ -12,4 +12,5 @@ import java.util.List;
 public interface StockManagementBusinessInterface {
     ResponseObject importStock(MjrStockTransDTO mjrStockTransDTO, List<MjrStockTransDetailDTO> lstMjrStockTransDetailDTO);
     ResponseObject exportStock(MjrStockTransDTO mjrStockTransDTO, List<MjrStockTransDetailDTO> lstMjrStockTransDetailDTO);
+    ResponseObject partnerExport(MjrStockTransDTO mjrStockTransDTO, List<MjrStockTransDetailDTO> lstMjrStockTransDetailDTO);
 }

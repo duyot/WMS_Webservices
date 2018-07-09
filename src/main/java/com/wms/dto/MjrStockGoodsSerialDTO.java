@@ -196,7 +196,7 @@ public class MjrStockGoodsSerialDTO  extends BaseDTO{
         return new MjrStockGoodsSerial(!StringUtils.validString(id) ? null:Long.valueOf(id),!StringUtils.validString(custId) ? null:Long.valueOf(custId),
                 !StringUtils.validString(stockId) ? null:Long.valueOf(stockId),!StringUtils.validString(goodsId) ? null:Long.valueOf(goodsId),goodsState,cellCode,
                 !StringUtils.validString(amount) ? null:Float.valueOf(amount),serial,!StringUtils.validString(importDate) ? null: DateTimeUtils.convertStringToDate(importDate),
-                !StringUtils.validString(changeDate) ? null: DateTimeUtils.convertStringToDate(changeDate),status,!StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId),
+                !StringUtils.validString(changeDate) ? null: DateTimeUtils.convertStringToDate(changeDate),!StringUtils.validString(status) ? null:Byte.parseByte(status),!StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId),
                 !StringUtils.validString(importStockTransId) ? null:Long.valueOf(importStockTransId),
                 !StringUtils.validString(inputPrice) ? null:Float.valueOf(inputPrice),!StringUtils.validString(outputPrice) ? null:Float.valueOf(outputPrice),
                 !StringUtils.validString(exportDate) ? null: DateTimeUtils.convertStringToDate(exportDate),!StringUtils.validString(exportStockTransId) ? null:Long.valueOf(exportStockTransId)

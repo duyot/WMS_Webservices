@@ -42,6 +42,11 @@ public class StockFunctionBusinessImpl implements StockFunctionInterface {
     }
 
     @Override
+    public ResponseObject exportStockGoodsDetailForPartner(MjrStockTransDTO mjrStockTransDTO, MjrStockTransDetailDTO goodsDetail, Session session) {
+        return stockFunctionDAO.exportStockGoodsDetailForPartner(mjrStockTransDTO, goodsDetail, session);
+    }
+
+    @Override
     public ResponseObject updateExportStockGoodsTotal(MjrStockTransDTO mjrStockTransDTO, Map<String, Float> mapGoodsNumber, Session session) {
         return stockFunctionDAO.updateExportStockGoodsTotal(mjrStockTransDTO,mapGoodsNumber,session);
     }

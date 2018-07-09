@@ -41,6 +41,9 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
     StockFunctionInterface stockFunctionBusiness;
 
     @Autowired
+    BaseBusinessInterface catPartnerBusiness;
+
+    @Autowired
     SessionFactory sessionFactory;
 
     private Logger log = LoggerFactory.getLogger(StockManagementBusinessImpl.class);
@@ -284,6 +287,174 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
 
     }
 
+    @Override
+    public ResponseObject partnerExport(MjrStockTransDTO transDetail, List<MjrStockTransDetailDTO> lstGoods) {
+        //
+        ResponseObject response = new ResponseObject();
+        response.setStatusCode(Responses.ERROR.getName());
+        //
+        if (isEmptyRequest(transDetail,lstGoods)) {
+            response.setStatusCode(Responses.ERROR_CONTENT_NOT_FOUND.getName());
+            return response;
+        }
+        //
+        CatPartnerDTO partner = getPartner(transDetail);
+        if (partner == null){
+            //
+            response.setStatusCode(Responses.ERROR_PARTNER_NOT_FOUND.getName());
+            return response;
+        }
+        transDetail.setPartnerId(partner.getId());
+        //
+        CatStockDTO stock = getStock(transDetail.getStockId(),transDetail.getCustId());
+        if (stock == null) {
+            response.setStatusCode(Responses.ERROR_STOCK_NOT_FOUND.getName());
+            return response;
+        }
+        // do export
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.getTransaction();
+        transaction.begin();
+        String savedStockTranId;
+        String savedStockTranCode;
+        float totalExport = 0f;
+        try {
+            //1. INSERT STOCK_TRANS
+            transDetail = initMjrStockTransDTOInfo(transDetail,session,null);
+            savedStockTranId = mjrStockTransBusiness.saveBySession(transDetail,session);
+            if(!DataUtil.isInteger(savedStockTranId)){
+                FunctionUtils.rollback(transaction);
+                response.setStatusName(Responses.ERROR_CREATE_STOCK_TRANS.getName());
+                response.setKey(savedStockTranId);
+                return response;
+            }
+            transDetail.setId(savedStockTranId);
+            savedStockTranCode = transDetail.getCode();
+            response.setKey(savedStockTranCode);
+            log.info("Starting export for partner from stock:"+ transDetail.getStockId()+" code: "+ savedStockTranCode + " with: "+ lstGoods.size() +" items");
+            FunctionUtils.writeIEGoodsLog(lstGoods,log);
+            //2. INSERT TRANS_DETAIL|STOCK(GOODS|SERIAL)
+            Map<String,CatGoodsDTO> mapImportingGoods = new HashMap<>();
+            Map<String,Float>          mapGoodsAmount = new HashMap<>();
+            //
+            Set<String> setGoodsCode = new HashSet<>();
+            for(MjrStockTransDetailDTO i: lstGoods){
+                setGoodsCode.add(i.getGoodsCode());
+                String key = i.getGoodsId() + "," + i.getGoodsState();
+                if(mapGoodsAmount.containsKey(key)){
+                    mapGoodsAmount.put(key,mapGoodsAmount.get(key)+ Float.valueOf(i.getAmount()));
+                }else{
+                    mapGoodsAmount.put(key,Float.valueOf(i.getAmount()));
+                }
+                //
+                try {
+                    totalExport += Float.valueOf(i.getAmount());
+                } catch (NumberFormatException e) {
+                    FunctionUtils.rollback(transaction);
+                    response.setStatusName(Responses.ERROR_AMOUNT_NOT_VALID.getName());
+                    response.setKey(i.getAmount());
+                    return response;
+                }
+            }
+            //
+            if(setGoodsCode.size()>999){
+                FunctionUtils.rollback(transaction);
+                response.setStatusName(Responses.ERROR_OVER_GOODS_NUMBER.getName());
+                return response;
+            }
+            //
+            String strListGoodsCode = getStrListGoodsCode(setGoodsCode);
+            //
+            List<CatGoodsDTO> lstImportCatGoods = getGoodsFromCode(strListGoodsCode,transDetail.getCustId());
+            //
+            if(DataUtil.isListNullOrEmpty(lstImportCatGoods)){
+                FunctionUtils.rollback(transaction);
+                response.setStatusName(Responses.ERROR_NOT_VALID_GOODS_IN_REQUEST.getName());
+                return response;
+            }
+            //
+            for(CatGoodsDTO i: lstImportCatGoods){
+                mapImportingGoods.put(i.getId(),i);
+            }
+            //
+            ResponseObject transDetailResult;
+            for(MjrStockTransDetailDTO i: lstGoods){
+                //
+                i.setPartnerId(partner.getId());
+                //
+                transDetailResult = stockFunctionBusiness.exportStockGoodsDetailForPartner(transDetail,i,session);
+                if(!Responses.SUCCESS.getName().equalsIgnoreCase(transDetailResult.getStatusCode())){
+                    FunctionUtils.rollback(transaction);
+                    return transDetailResult;
+                }
+            }
+            log.info("Finished export "+ lstGoods.size() + " items.");
+            //3. UPDATE TOTAL
+            ResponseObject updateExportTotalResult = stockFunctionBusiness.updateExportStockGoodsTotal(transDetail,mapGoodsAmount,session);
+            if(!Responses.SUCCESS.getName().equalsIgnoreCase(updateExportTotalResult.getStatusCode())){
+                log.info("Error update stock total...");
+                FunctionUtils.rollback(transaction);
+                return updateExportTotalResult;
+            }
+            //4. Commit
+            FunctionUtils.commit(transaction);
+            //
+            response.setStatusCode(Responses.SUCCESS.getName());
+            response.setTotal(totalExport+"");
+            response.setSuccess(totalExport+"");
+            return response;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            FunctionUtils.rollback(transaction);
+            response.setStatusName(Responses.ERROR_SYSTEM.getName());
+            return response;
+        } finally {
+            FunctionUtils.closeSession(session);
+        }
+    }
+
+    private boolean isEmptyRequest(MjrStockTransDTO mjrStockTransDTO, List<MjrStockTransDetailDTO> lstMjrStockTransDetailDTO){
+        return mjrStockTransDTO == null || DataUtil.isListNullOrEmpty(lstMjrStockTransDetailDTO);
+    }
+
+    private CatPartnerDTO getPartner(MjrStockTransDTO transDetail){
+        String partnerId = transDetail.getPartnerId();
+        if (DataUtil.isStringNullOrEmpty(partnerId)) {
+            return null;
+        }
+        //
+        List<Condition> lstCon = Lists.newArrayList();
+        lstCon.add(new Condition("custId", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL,transDetail.getCustId()));
+        lstCon.add(new Condition("status", Constants.SQL_PRO_TYPE.BYTE, Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
+        lstCon.add(new Condition("id",     Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, transDetail.getPartnerId()));
+        //
+        List<CatPartnerDTO> lstCatPartner = catPartnerBusiness.findByCondition(lstCon);
+        if (DataUtil.isListNullOrEmpty(lstCatPartner)) {
+            return null;
+        }
+        //
+        return lstCatPartner.get(0);
+    }
+
+    private CatStockDTO getStock(String stockId, String custId){
+        if (DataUtil.isStringNullOrEmpty(stockId) || !DataUtil.isInteger(stockId)) {
+            return null;
+        }
+        //
+        List<Condition> lstCon = Lists.newArrayList();
+        lstCon.add(new Condition("custId", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL,custId));
+        lstCon.add(new Condition("status", Constants.SQL_PRO_TYPE.BYTE, Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
+        lstCon.add(new Condition("id",     Constants.SQL_PRO_TYPE.LONG , Constants.SQL_OPERATOR.EQUAL, stockId));
+        //
+        List<CatStockDTO> stocks = catStockBusiness.findByCondition(lstCon);
+        if (DataUtil.isListNullOrEmpty(stocks)) {
+            return null;
+        }
+        //
+        return stocks.get(0);
+    }
+
     //@SUPPORT-FUNCTION-------------------------------------------------------------------------------------------------
     private Map<String,Float> updateFinalTotal(Map<String,Float> mapAllImportAmount,Map<String,Float> mapAmountError){
         Iterator it = mapAmountError.entrySet().iterator();
@@ -381,4 +552,6 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
         lstCondition.add(new Condition("custId",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,custId));
         return catGoodsBusiness.findByCondition(lstCondition);
     }
+
+
 }

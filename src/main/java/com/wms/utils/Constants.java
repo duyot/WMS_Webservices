@@ -71,6 +71,8 @@ public class Constants {
         public static String ACTIVE = "1";
         public static String INACTIVE = "0";
         public static String EXPORTED = "2";
+        public static byte BYTE_EXPORTED = 2;
+
     }
    public static class DATETIME_FORMAT{
         public static final String ddMMyyyy = "dd/MM/yyyy";
