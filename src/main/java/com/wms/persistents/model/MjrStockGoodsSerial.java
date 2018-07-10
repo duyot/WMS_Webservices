@@ -25,7 +25,7 @@ public class MjrStockGoodsSerial extends BaseModel{
     private String serial;
     private Date importDate;
     private Date changeDate;
-    private String status;
+    private byte status;
     private Long partnerId;
     private Long importStockTransId;
     private Float inputPrice;
@@ -34,7 +34,7 @@ public class MjrStockGoodsSerial extends BaseModel{
     private Long exportStockTransId;
 
     public MjrStockGoodsSerial(Long id, Long custId, Long stockId, Long goodsId, String goodsState, String cellCode,
-                               Float amount, String serial, Date importDate, Date changeDate, String status, Long partnerId,
+                               Float amount, String serial, Date importDate, Date changeDate, byte status, Long partnerId,
                                Long importStockTransId, Float inputPrice, Float outputPrice,Date exportDate,Long exportStockTransId) {
         this.id = id;
         this.custId = custId;
@@ -157,11 +157,11 @@ public class MjrStockGoodsSerial extends BaseModel{
     }
 
     @Column(name = "STATUS")
-    public String getStatus() {
+    public byte getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(byte status) {
         this.status = status;
     }
 
@@ -223,7 +223,7 @@ public class MjrStockGoodsSerial extends BaseModel{
     public MjrStockGoodsSerialDTO toDTO() {
         return new MjrStockGoodsSerialDTO(id==null?"":id+"",custId==null?"":custId+"",stockId==null?"":stockId+"",
                 goodsId==null?"":goodsId+"",goodsState,cellCode,amount==null?"":amount+"",serial,importDate==null?"": DateTimeUtils.convertDateTimeToString(importDate),
-                changeDate==null?"": DateTimeUtils.convertDateTimeToString(changeDate),status,partnerId==null?"":partnerId+"",
+                changeDate==null?"": DateTimeUtils.convertDateTimeToString(changeDate),status +"",partnerId==null?"":partnerId+"",
                 importStockTransId==null?"":importStockTransId+"",inputPrice==null?"":inputPrice+"",outputPrice==null?"":outputPrice+"",
                 exportDate==null?"": DateTimeUtils.convertDateTimeToString(exportDate),exportStockTransId==null?"":exportStockTransId+""
         );
