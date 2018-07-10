@@ -47,6 +47,7 @@ public class MjrStockGoodsTotalServices extends BaseServices<MjrStockGoodsTotalD
         if(!DataUtil.isStringNullOrEmpty(stockId) && !stockId.equals("-1")){
             lstCon.add(new Condition("stockId",Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL,stockId));
         }
+
         if(!DataUtil.isStringNullOrEmpty(goodsId) && !goodsId.equals("-1")){
             lstCon.add(new Condition("goodsId",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,goodsId));
         }
