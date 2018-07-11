@@ -50,89 +50,11 @@ public class MjrStockGoodsDAO extends BaseDAOImpl<MjrStockGoods,Long> {
         lstCon.add(new Condition("goodsId",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,goodsDetail.getGoodsId()));
         lstCon.add(new Condition("goodsState",Constants.SQL_OPERATOR.EQUAL,goodsDetail.getGoodsState()));
         lstCon.add(new Condition("status",Constants.SQL_PRO_TYPE.BYTE, Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
-        //2. check valid
-        List<MjrStockGoods> lstCurrentStockGoods = findByConditionSession(lstCon,session);
-        if(DataUtil.isListNullOrEmpty(lstCurrentStockGoods)){
-            responseObject.setStatusName(Responses.ERROR_NOT_FOUND_STOCK_GOODS.getName());
-            return responseObject;
-        }
-        //3. update
-        float exportAmount = Float.valueOf(goodsDetail.getAmount());
-        float currentAmount;
-        Date sysDate = DateTimeUtils.convertStringToDate(mjrStockTransDTO.getCreatedDate());
-        String updateResult = null;
-        for(MjrStockGoods i: lstCurrentStockGoods){
-            currentAmount = i.getAmount();
-            if(exportAmount == currentAmount){
-                //
-                i.setChangedDate(sysDate);
-                i.setExportDate(sysDate);
-                i.setOutputPrice(FunctionUtils.convertStringToFloat(goodsDetail));
-                i.setStatus(Constants.STATUS.BYTE_EXPORTED);
-                i.setExportStockTransId(Long.valueOf(mjrStockTransDTO.getId()));
-                //
-                updateResult =  updateBySession(i,session);
-                if(!Responses.SUCCESS.getName().equalsIgnoreCase(updateResult)){
-                    responseObject.setStatusName(Responses.ERROR_UPDATE_STOCK_GOODS.getName());
-                    return responseObject;
-                }
-                //
-                log.info("Export goods: "+ i.getId());
-                //
-                break;
-            }else if(exportAmount < currentAmount){
-                //
-                i.setAmount(currentAmount-exportAmount);
-                i.setChangedDate(sysDate);
-                if(i.getAmount() != 0f){
-                    updateResult =  updateBySession(i,session);
-                }
-                if(!Responses.SUCCESS.getName().equalsIgnoreCase(updateResult)){
-                    responseObject.setStatusName(Responses.ERROR_UPDATE_STOCK_GOODS.getName());
-                    return responseObject;
-                }
-                log.info("Update stock_goods "+ i.getId()+" : "+ currentAmount +" export: "+ exportAmount);
-                //
-                String saveResult = saveBySession(initExportedStockGoods(mjrStockTransDTO, i,goodsDetail,exportAmount,sysDate),session);
-                if(!DataUtil.isInteger(saveResult)){
-                    responseObject.setStatusName(Responses.ERROR_INSERT_STOCK_GOODS.getName());
-                    return responseObject;
-                }
-                log.info("Insert new export stock goods: "+ saveResult);
-                break;
-            }else{
-                exportAmount -= currentAmount;
-                i.setOutputPrice(FunctionUtils.convertStringToFloat(goodsDetail));
-                i.setStatus(Constants.STATUS.BYTE_EXPORTED);
-                i.setChangedDate(sysDate);
-                i.setExportDate(sysDate);
-                i.setExportStockTransId(Long.valueOf(mjrStockTransDTO.getId()));
-                updateResult = updateBySession(i,session);
-                if(!Responses.SUCCESS.getName().equalsIgnoreCase(updateResult)){
-                    responseObject.setStatusName(Responses.ERROR_UPDATE_STOCK_GOODS.getName());
-                    return responseObject;
-                }
-                log.info("Export goods: "+ i.getId());
-            }
-        }
-        //
-        responseObject.setStatusCode(Responses.SUCCESS.getName());
-        return responseObject;
-    }
 
-    public ResponseObject exportStockGoodsForPartner(MjrStockTransDTO mjrStockTransDTO, MjrStockTransDetailDTO goodsDetail, Session session){
-        ResponseObject responseObject = new ResponseObject();
-        responseObject.setStatusCode(Responses.ERROR.getName());
-        //1. find valid stock goods
-        List<Condition> lstCon = Lists.newArrayList();
-        lstCon.add(new Condition("custId",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,mjrStockTransDTO.getCustId()));
-        lstCon.add(new Condition("stockId",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,mjrStockTransDTO.getStockId()));
-        lstCon.add(new Condition("goodsId",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,goodsDetail.getGoodsId()));
-        lstCon.add(new Condition("goodsState",Constants.SQL_OPERATOR.EQUAL,goodsDetail.getGoodsState()));
-        lstCon.add(new Condition("status",Constants.SQL_PRO_TYPE.BYTE, Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
-        //
-        lstCon.add(new Condition("partnerId",Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL,mjrStockTransDTO.getPartnerId()));
-        //
+        if(!DataUtil.isStringNullOrEmpty(mjrStockTransDTO.getPartnerId()) && !mjrStockTransDTO.getPartnerId().equals("-1")){
+            lstCon.add(new Condition("partnerId",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,mjrStockTransDTO.getPartnerId()));
+        }
+
         //2. check valid
         List<MjrStockGoods> lstCurrentStockGoods = findByConditionSession(lstCon,session);
         if(DataUtil.isListNullOrEmpty(lstCurrentStockGoods)){

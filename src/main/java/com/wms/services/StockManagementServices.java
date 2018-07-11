@@ -40,14 +40,6 @@ public class StockManagementServices {
         return exportResult;
     }
     //------------------------------------------------------------------------------------------------------------------
-    @RequestMapping(value = "/partnerExport",produces = "application/json",method = RequestMethod.POST)
-    public ResponseObject partnerExport(@RequestBody StockTransDTO stockTransDTO){
-        log.info("-------------------------------");
-        ResponseObject exportResult = stockManagementBusiness.partnerExport(stockTransDTO.getMjrStockTransDTO(),stockTransDTO.getLstMjrStockTransDetail());
-        log.info("Export result: "+ exportResult);
-        return exportResult;
-    }
-    //------------------------------------------------------------------------------------------------------------------
     @RequestMapping(value = "/cancelTransaction",produces = "application/json",method = RequestMethod.POST)
     public ResponseObject cancelTransaction(@RequestBody String transId){
         log.info("-------------------------------");

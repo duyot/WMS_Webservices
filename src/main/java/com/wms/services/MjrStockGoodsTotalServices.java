@@ -42,7 +42,7 @@ public class MjrStockGoodsTotalServices extends BaseServices<MjrStockGoodsTotalD
         //
         List<Condition> lstCon = Lists.newArrayList();
         lstCon.add(new Condition("custId", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL,custId));
-        lstCon.add(new Condition("status", Constants.SQL_PRO_TYPE.STRING,Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
+        lstCon.add(new Condition("status", Constants.SQL_PRO_TYPE.BYTE,Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
 
         if(!DataUtil.isStringNullOrEmpty(stockId) && !stockId.equals("-1")){
             lstCon.add(new Condition("stockId",Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL,stockId));

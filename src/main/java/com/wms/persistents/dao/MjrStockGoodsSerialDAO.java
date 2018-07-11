@@ -49,6 +49,9 @@ public class MjrStockGoodsSerialDAO extends BaseDAOImpl<MjrStockGoodsSerial,Long
         lstCon.add(new Condition("goodsState", Constants.SQL_OPERATOR.EQUAL,goodsDetail.getGoodsState()));
         lstCon.add(new Condition("serial", Constants.SQL_OPERATOR.EQUAL,goodsDetail.getSerial()));
         lstCon.add(new Condition("status",Constants.SQL_PRO_TYPE.BYTE, Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
+        if(!DataUtil.isStringNullOrEmpty(mjrStockTransDTO.getPartnerId()) && !mjrStockTransDTO.getPartnerId().equals("-1")){
+            lstCon.add(new Condition("partnerId",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,mjrStockTransDTO.getPartnerId()));
+        }
         List<MjrStockGoodsSerial> lstResultSerial = findByConditionSession(lstCon,session);
         if(DataUtil.isListNullOrEmpty(lstResultSerial)){
             responseObject.setStatusCode(Responses.ERROR.getName());
@@ -69,36 +72,4 @@ public class MjrStockGoodsSerialDAO extends BaseDAOImpl<MjrStockGoodsSerial,Long
         return responseObject;
     }
 
-    public ResponseObject exportStockGoodsSerialForPartner(MjrStockTransDTO mjrStockTransDTO, MjrStockTransDetailDTO goodsDetail, Session session){
-        ResponseObject responseObject = new ResponseObject();
-        //1. Find match total for goods
-        List<Condition> lstCon = Lists.newArrayList();
-        lstCon.add(new Condition("custId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,mjrStockTransDTO.getCustId()));
-        lstCon.add(new Condition("stockId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,mjrStockTransDTO.getStockId()));
-        lstCon.add(new Condition("goodsId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,goodsDetail.getGoodsId()));
-        lstCon.add(new Condition("goodsState", Constants.SQL_OPERATOR.EQUAL,goodsDetail.getGoodsState()));
-        lstCon.add(new Condition("serial", Constants.SQL_OPERATOR.EQUAL,goodsDetail.getSerial()));
-        lstCon.add(new Condition("status",Constants.SQL_PRO_TYPE.BYTE, Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
-        //
-        lstCon.add(new Condition("partnerId",Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL,mjrStockTransDTO.getPartnerId()));
-        //
-        List<MjrStockGoodsSerial> lstResultSerial = findByConditionSession(lstCon,session);
-        if(DataUtil.isListNullOrEmpty(lstResultSerial)){
-            responseObject.setStatusCode(Responses.ERROR.getName());
-            responseObject.setStatusName(Responses.ERROR_NOT_FOUND_SERIAL.getName());
-            responseObject.setKey(goodsDetail.getSerial());
-            return responseObject;
-        }
-        MjrStockGoodsSerial currentGoodsSerial = lstResultSerial.get(0);
-        //2. set export info
-        currentGoodsSerial.setStatus(Constants.STATUS.BYTE_EXPORTED);
-        currentGoodsSerial.setOutputPrice(FunctionUtils.convertStringToFloat(goodsDetail));
-        currentGoodsSerial.setChangeDate(DateTimeUtils.convertStringToDate(mjrStockTransDTO.getCreatedDate()));
-        currentGoodsSerial.setExportDate(DateTimeUtils.convertStringToDate(mjrStockTransDTO.getCreatedDate()));
-        currentGoodsSerial.setExportStockTransId(Long.valueOf(mjrStockTransDTO.getId()));
-        //
-        String updateResult = updateBySession(currentGoodsSerial,session);
-        responseObject.setStatusCode(updateResult);
-        return responseObject;
-    }
 }

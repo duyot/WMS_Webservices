@@ -370,26 +370,6 @@ public class StockFunctionDAO {
         return exportResult;
     }
 
-    public ResponseObject exportStockGoodsDetailForPartner(MjrStockTransDTO mjrStockTransDTO, MjrStockTransDetailDTO goodsDetail, Session session){
-        //
-        ResponseObject exportResult = new ResponseObject();
-        //1. save mjr_trans_detail
-        goodsDetail.setStockTransId(mjrStockTransDTO.getId());
-        String savedStockTranDetailId = mjrStockTransDetailDAO.saveBySession(goodsDetail.toModel(),session);
-        if(!DataUtil.isInteger(savedStockTranDetailId)){
-            exportResult.setStatusCode(Responses.ERROR.getName());
-            exportResult.setStatusName(Responses.ERROR_CREATE_STOCK_TRANS_DETAIL.getName());
-            return exportResult;
-        }
-        //
-        if(goodsDetail.isSerial()){
-            exportResult = mjrStockGoodsSerialDAO.exportStockGoodsSerialForPartner(mjrStockTransDTO, goodsDetail, session);
-        }else{
-            exportResult = mjrStockGoodsDAO.exportStockGoodsForPartner(mjrStockTransDTO,goodsDetail,session);
-        }
-        //
-        return exportResult;
-    }
 
     public ResponseObject updateExportStockGoodsTotal(MjrStockTransDTO mjrStockTransDTO, Map<String, Float> mapGoodsNumber, Session session) {
         Iterator iterator = mapGoodsNumber.entrySet().iterator();
