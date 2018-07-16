@@ -71,6 +71,36 @@ public class StatisticBusinessImpl implements StatisticBusinessInterface {
         return getTopGoodsChartFromData(lstStatisticTopGoods.get(0));
     }
 
+    @Override
+    public List<ChartDTO> getKPIStorage(String custId, int type) {
+        List<SysStatisticTopGoodsDTO> lstStatisticTopGoods;
+        List<Condition> lstCon = Lists.newArrayList();
+        lstCon.add(new Condition("custId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,custId));
+        lstCon.add(new Condition("type", Constants.SQL_OPERATOR.EQUAL,type+""));
+
+        lstStatisticTopGoods = sysStatisticTopGoodsBusiness.findByCondition(lstCon);
+        if(DataUtil.isListNullOrEmpty(lstStatisticTopGoods)){
+            return Lists.newArrayList();
+        }
+
+        return getTopGoodsChartFromData(lstStatisticTopGoods.get(0));
+    }
+
+    @Override
+    public List<ChartDTO> getTransaction(String custId, int type) {
+        List<SysStatisticTopGoodsDTO> lstStatisticTopGoods;
+        List<Condition> lstCon = Lists.newArrayList();
+        lstCon.add(new Condition("custId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,custId));
+        lstCon.add(new Condition("type", Constants.SQL_OPERATOR.EQUAL,type+""));
+
+        lstStatisticTopGoods = sysStatisticTopGoodsBusiness.findByCondition(lstCon);
+        if(DataUtil.isListNullOrEmpty(lstStatisticTopGoods)){
+            return Lists.newArrayList();
+        }
+
+        return getTopGoodsChartFromData(lstStatisticTopGoods.get(0));
+    }
+
     //1384|300,1361|10
     private List<ChartDTO> getTopGoodsChartFromData(SysStatisticTopGoodsDTO topGoodsDTO){
         List<ChartDTO> lstResult = Lists.newArrayList();
