@@ -21,7 +21,7 @@ public class MjrStockTrans extends BaseModel {
     private String contractNumber;
     private String invoicetNumber;
     private Long type;
-    private Long status;
+    private byte status;
     private Date createdDate;
     private String createdUser;
     private Float transMoneyTotal;
@@ -41,7 +41,7 @@ public class MjrStockTrans extends BaseModel {
     public MjrStockTrans() {
     }
 
-    public MjrStockTrans(Long id, String code, Long custId, Long stockId, String contractNumber, String invoicetNumber, Long type, Long status, Date createdDate, String createdUser, Float transMoneyTotal,
+    public MjrStockTrans(Long id, String code, Long custId, Long stockId, String contractNumber, String invoicetNumber, Long type, byte status, Date createdDate, String createdUser, Float transMoneyTotal,
                          Float transMoneyDiscount, Float discountAmount, Float transMoneyRequire, Float transMoneyReceive, Float transMoneyResponse, String description, Long partnerId, String partnerName,Long receiveId, String receiveName) {
         this.id = id;
         this.code = code;
@@ -138,11 +138,11 @@ public class MjrStockTrans extends BaseModel {
     }
 
     @Column(name = "STATUS")
-    public Long getStatus() {
+    public byte getStatus() {
         return status;
     }
 
-    public void setStatus(Long status) {
+    public void setStatus(byte status) {
         this.status = status;
     }
 
@@ -267,7 +267,7 @@ public class MjrStockTrans extends BaseModel {
     @Override
     public MjrStockTransDTO toDTO() {
         return new MjrStockTransDTO(id==null?"":id+"",code,custId==null?"":custId+"",stockId==null?"":stockId+"",
-                contractNumber,invoicetNumber,type==null?"":type+"",status==null?"":status+"",createdDate==null?"": DateTimeUtils.convertDateTimeToString(createdDate),
+                contractNumber,invoicetNumber,type==null?"":type+"",status+"",createdDate==null?"": DateTimeUtils.convertDateTimeToString(createdDate),
                 createdUser,transMoneyTotal==null?"":transMoneyTotal+"",transMoneyDiscount==null?"":transMoneyDiscount+"",discountAmount==null?"":discountAmount+"",
                 transMoneyRequire==null?"":transMoneyRequire+"",transMoneyReceive==null?"":transMoneyReceive+"",transMoneyResponse==null?"":transMoneyResponse+"",description,
                 partnerId==null?"":partnerId+"", partnerName,receiveId==null?"":receiveId+"", receiveName

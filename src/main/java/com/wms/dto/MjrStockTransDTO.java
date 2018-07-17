@@ -292,7 +292,7 @@ public class MjrStockTransDTO extends BaseDTO {
     public MjrStockTrans toModel() {
         return new MjrStockTrans(!StringUtils.validString(id) ? null:Long.valueOf(id),code,!StringUtils.validString(custId) ? null:Long.valueOf(custId),
                 !StringUtils.validString(stockId) ? null:Long.valueOf(stockId),contractNumber, invoiceNumber,!StringUtils.validString(type) ? null:Long.valueOf(type),
-                !StringUtils.validString(status) ? null:Long.valueOf(status),!StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),
+                !StringUtils.validString(status) ? 0:Byte.parseByte(status),!StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),
                 createdUser,!StringUtils.validString(transMoneyTotal) ? null:Float.valueOf(transMoneyTotal),!StringUtils.validString(transMoneyDiscount) ? null:Float.valueOf(transMoneyDiscount),
                 !StringUtils.validString(discountAmount) ? null:Float.valueOf(discountAmount),!StringUtils.validString(transMoneyRequire) ? null:Float.valueOf(transMoneyRequire),
                 !StringUtils.validString(transMoneyReceive) ? null:Float.valueOf(transMoneyReceive),!StringUtils.validString(transMoneyResponse) ? null:Float.valueOf(transMoneyResponse),description, !StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId), partnerName,!StringUtils.validString(receiveId) ? null:Long.valueOf(receiveId), receiveName
