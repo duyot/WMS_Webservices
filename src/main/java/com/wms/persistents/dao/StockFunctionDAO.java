@@ -185,6 +185,62 @@ public class StockFunctionDAO {
         return convertToStockTransInfo(ps.list());
     }
 
+    @Transactional
+    public List<ChartDTO> getTotalStockTrans (String custId, int type,String lstStockId){
+
+        Session session = sessionFactory.getCurrentSession();
+        String[] ids = lstStockId.split(",");
+        int size = ids.length;
+        StringBuilder lstParamIds = new StringBuilder("");
+        if ("".equalsIgnoreCase(lstStockId.trim())){
+            lstParamIds.append("?");
+        }else {
+            for (int i = 0; i < size; i++) {
+                lstParamIds.append("?");
+                if(i!=size -1){
+                    lstParamIds.append(",");
+                }
+            }
+        }
+
+        StringBuilder str = new StringBuilder();
+        str.append(" select a.stock_id, a.type, count(*) as so_luong ")
+                .append(" from mjr_stock_trans a")
+                .append(" where 1=1")
+                .append(" and a.id in( ")
+                .append(lstParamIds)
+                .append(" )")
+                .append(" and a.cust_id = ? ")
+                .append(" group by a.stock_id, a.type")
+                .append(" order by a.stock_id, a.type");
+
+        Query ps = session.createSQLQuery(str.toString())
+                .addScalar("stock_id", StringType.INSTANCE)
+                .addScalar("type", StringType.INSTANCE)
+                .addScalar("so_luong", StringType.INSTANCE);
+        if ("".equalsIgnoreCase(lstStockId.trim())){
+            ps.setString("1","-1");
+        }else{
+            int i;
+            for (i = 0; i<size;i++){
+                ps.setString(i,ids[i]);
+            }
+            ps.setString(i,custId);
+        }
+
+        return convertToTotalStockTrans(ps.list());
+    }
+
+    private List<ChartDTO> convertToTotalStockTrans(List<Object[]> lstData){
+        List<ChartDTO> lstResult = Lists.newArrayList();
+        for(Object[] i: lstData){
+            ChartDTO temp = new ChartDTO();
+            temp.setName(i[0]==null?"":String.valueOf(i[0]));
+            lstResult.add(temp);
+        }
+        return lstResult;
+    }
+
     private List<MjrStockTransDTO> convertToStockTransInfo(List<Object[]> lstData){
         List<MjrStockTransDTO> lstResult = Lists.newArrayList();
         for(Object[] i: lstData){
