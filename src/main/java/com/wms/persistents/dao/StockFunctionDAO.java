@@ -153,7 +153,7 @@ public class StockFunctionDAO {
 
         StringBuilder str = new StringBuilder();
         str.append(" select d.name as customer_name, a.code as trans_code,c.name as stock_name, c.code as stock_code, a.created_date, a.description,\n" +
-                "b.code as partner_code, b.name as partner_name, b.tel_number, b.address")
+                "b.code as partner_code, b.name as partner_name, b.tel_number, b.address , a.CUST_ID , a.stock_id, a.CREATED_USER , a.type,a.receive_name")
                 .append(" from mjr_stock_trans a, CAT_PARTNER b, cat_stock c, CAT_CUSTOMER d")
                 .append(" WHERE 1=1 ")
                 .append(" and a.partner_id = b.id")
@@ -173,7 +173,12 @@ public class StockFunctionDAO {
                 .addScalar("partner_code", StringType.INSTANCE)
                 .addScalar("partner_name", StringType.INSTANCE)
                 .addScalar("tel_number", StringType.INSTANCE)
-                .addScalar("address", StringType.INSTANCE);
+                .addScalar("address", StringType.INSTANCE)
+                .addScalar("cust_id", StringType.INSTANCE)
+                .addScalar("stock_id", StringType.INSTANCE)
+                .addScalar("created_user", StringType.INSTANCE)
+                .addScalar("type", StringType.INSTANCE)
+                .addScalar("receive_name", StringType.INSTANCE);
         if ("".equalsIgnoreCase(lstStockTransId.trim())){
             ps.setString("1","-1");
         }else{
@@ -199,6 +204,11 @@ public class StockFunctionDAO {
             temp.setPartnerName( i[7]==null?"":String.valueOf(i[7]));
             temp.setPartnerTelNumber( i[8]==null?"":String.valueOf(i[8]));
             temp.setPartnerAddress( i[9]==null?"":String.valueOf(i[9]));
+            temp.setCustId(i[10]==null?"":String.valueOf(i[10]));
+            temp.setStockId(i[11]==null?"":String.valueOf(i[11]));
+            temp.setCreatedUser(i[12]==null?"":String.valueOf(i[12]));
+            temp.setType(i[13]==null?"":String.valueOf(i[13]));
+            temp.setReceiveName(i[14]==null?"":String.valueOf(i[14]));
             lstResult.add(temp);
         }
         return lstResult;
