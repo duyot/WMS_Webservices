@@ -3,6 +3,7 @@ package com.wms.business.impl;
 import com.google.common.collect.Lists;
 import com.wms.base.BaseBusinessInterface;
 import com.wms.business.interfaces.StatisticBusinessInterface;
+import com.wms.business.interfaces.StockFunctionInterface;
 import com.wms.dto.ChartDTO;
 import com.wms.dto.Condition;
 import com.wms.dto.SysMailReportDTO;
@@ -26,6 +27,10 @@ public class StatisticBusinessImpl implements StatisticBusinessInterface {
     BaseBusinessInterface sysMailReportBusiness;
     @Autowired
     BaseBusinessInterface sysStatisticTopGoodsBusiness;
+
+    @Autowired
+    StockFunctionInterface stockFunctionBusiness;
+
 
     /*
         type: 7 weekly, 30: monthly
@@ -87,18 +92,9 @@ public class StatisticBusinessImpl implements StatisticBusinessInterface {
     }
 
     @Override
-    public List<ChartDTO> getTransaction(String custId, int type) {
-        List<SysStatisticTopGoodsDTO> lstStatisticTopGoods;
-        List<Condition> lstCon = Lists.newArrayList();
-        lstCon.add(new Condition("custId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,custId));
-        lstCon.add(new Condition("type", Constants.SQL_OPERATOR.EQUAL,type+""));
-
-        lstStatisticTopGoods = sysStatisticTopGoodsBusiness.findByCondition(lstCon);
-        if(DataUtil.isListNullOrEmpty(lstStatisticTopGoods)){
-            return Lists.newArrayList();
-        }
-
-        return getTopGoodsChartFromData(lstStatisticTopGoods.get(0));
+    public List<ChartDTO> getTransaction(String custId, int type,String lstStockId) {
+        List<ChartDTO> lstResult = stockFunctionBusiness.getTotalStockTrans(custId,type,lstStockId);
+        return lstResult;
     }
 
     //1384|300,1361|10

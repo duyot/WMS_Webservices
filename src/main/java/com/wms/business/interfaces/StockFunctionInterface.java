@@ -1,9 +1,6 @@
 package com.wms.business.interfaces;
 
-import com.wms.dto.CatGoodsDTO;
-import com.wms.dto.MjrStockTransDTO;
-import com.wms.dto.MjrStockTransDetailDTO;
-import com.wms.dto.ResponseObject;
+import com.wms.dto.*;
 import org.hibernate.Session;
 
 import java.sql.Connection;
@@ -40,4 +37,8 @@ public interface StockFunctionInterface {
     List<MjrStockTransDetailDTO> getListTransGoodsDetail(String lstStockTransId);
     //
     List<MjrStockTransDTO> getStockTransInfo(String lstStockTransId);
+
+    //
+    List<ChartDTO> getTotalStockTrans(String custId, int type,String lstStockId);
+
 }
