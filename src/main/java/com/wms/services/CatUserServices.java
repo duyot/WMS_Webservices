@@ -79,6 +79,10 @@ public class CatUserServices extends BaseServices<CatUserDTO>{
         return responseObject;
     }
 
+    @RequestMapping(value = "/guestAddUser",produces = "application/json",method = RequestMethod.POST)
+    public ResponseObject guestAddUser(@RequestBody CatUserDTO updateUser){
+        return add(updateUser);
+    }
     private CatUserDTO setUpdatedUserInfor(CatUserDTO updatedUser, CatUserDTO originalUser){
         if (!DataUtil.isStringNullOrEmpty(updatedUser.getName())) {
             originalUser.setName(updatedUser.getName());
@@ -129,33 +133,6 @@ public class CatUserServices extends BaseServices<CatUserDTO>{
     } catch (IOException e) {
         e.printStackTrace();
     }
-    }
-
-    @RequestMapping(value = "/add",produces = "application/json",method = RequestMethod.POST)
-    public ResponseObject add(@RequestBody CatUserDTO registerUser){
-        ResponseObject responseObject = new ResponseObject();
-        log.info("register user: "+ registerUser.toString());
-        //
-        if (registerUser == null) {
-            return  responseObject;
-        }
-        //check if username is available
-        if (!DataUtil.isStringNullOrEmpty(registerUser.getTelNumber())) {
-            List<Condition> lstCon = Lists.newArrayList();
-            lstCon.add(new Condition("telNumber",Constants.SQL_OPERATOR.EQUAL,registerUser.getTelNumber()));
-            List sameUserWithCode = catUserBusiness.findByCondition(lstCon);
-            if (!DataUtil.isListNullOrEmpty(sameUserWithCode)) {
-                responseObject.setStatusCode("USER_AVAILABLE");
-                return responseObject;
-            }
-        }
-
-        String registerResult = catUserBusiness.save(registerUser);
-        //
-        responseObject.setStatusCode(registerResult);
-        responseObject.setStatusName(registerResult);
-        log.info("Finished register with response: "+responseObject.toString());
-        return responseObject;
     }
 }
 
