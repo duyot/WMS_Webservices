@@ -153,12 +153,12 @@ public class StockFunctionDAO {
 
         StringBuilder str = new StringBuilder();
         str.append(" select d.name as customer_name, a.code as trans_code,c.name as stock_name, c.code as stock_code, a.created_date, a.description,\n" +
-                "b.code as partner_code, b.name as partner_name, b.tel_number, b.address , a.CUST_ID , a.stock_id, a.CREATED_USER , a.type,a.receive_name")
-                .append(" from mjr_stock_trans a, CAT_PARTNER b, cat_stock c, CAT_CUSTOMER d")
+                " b.code as partner_code, b.name as partner_name, b.tel_number, b.address , a.CUST_ID , a.stock_id, a.CREATED_USER , a.type,a.receive_name")
+                .append(" from mjr_stock_trans a " +
+                        " left join CAT_PARTNER b on a.partner_id = b.id " +
+                        " left join cat_stock c on a.stock_id = c.id " +
+                        " left join CAT_CUSTOMER d on a.CUST_ID = d.id ")
                 .append(" WHERE 1=1 ")
-                .append(" and a.partner_id = b.id")
-                .append(" and a.CUST_ID = d.id")
-                .append(" and a.stock_id = c.id")
                 .append(" and a.id in( ")
                 .append(lstParamIds)
                 .append(" )")
