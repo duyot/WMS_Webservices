@@ -12,20 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
  * Created by duyot on 8/24/2016.
  */
 @Repository
-@Transactional
 public class CatUserDAO extends BaseDAOImpl<CatUser,Long> {
-    @Autowired
-    SessionFactory sessionFactory;
-
-    public Session getSession(){
-        return sessionFactory.getCurrentSession();
-    }
 
     public CatUser login(CatUser loginAdminCatUser){
         List<Condition> lstCondition = Lists.newArrayList();

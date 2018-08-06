@@ -8,16 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 /**
  * Created by duyot on 12/6/2016.
  */
 @Repository
 @Transactional
 public class CatCustomerDAO extends BaseDAOImpl<CatCustomer,Long> {
-    @Autowired
-    SessionFactory sessionFactory;
-
-    public Session getSession(){
-        return sessionFactory.getCurrentSession();
-    }
 }

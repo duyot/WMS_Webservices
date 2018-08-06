@@ -14,10 +14,4 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class MjrStockTransDetailDAO extends BaseDAOImpl<MjrStockTransDetail,Long> {
-    @Autowired
-    SessionFactory sessionFactory;
-
-    public Session getSession(){
-        return sessionFactory.getCurrentSession();
-    }
 }

@@ -27,14 +27,8 @@ import java.util.List;
 @Repository
 @Transactional
 public class CatStockDAO extends BaseDAOImpl<CatStock,Long> {
-    @Autowired
-    SessionFactory sessionFactory;
-
     private Logger log = LoggerFactory.getLogger(CatStockDAO.class);
 
-    public Session getSession(){
-        return sessionFactory.getCurrentSession();
-    }
 
     public List<CatStockDTO> getStockByUser(long userId){
         try {

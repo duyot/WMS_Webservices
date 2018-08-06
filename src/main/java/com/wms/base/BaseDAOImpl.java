@@ -3,21 +3,25 @@ package com.wms.base;
 import com.google.common.collect.Lists;
 import com.wms.dto.Condition;
 import com.wms.enums.Responses;
-import com.wms.utils.*;
-import org.hibernate.*;
-import org.hibernate.criterion.Order;
+import com.wms.utils.Constants;
+import com.wms.utils.DataUtil;
+import com.wms.utils.FunctionUtils;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,22 +29,22 @@ import java.util.List;
  */
 @Repository
 @Transactional
-public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements BaseDAOInteface {
-    @Autowired
-    SessionFactory sessionFactory;
+public class BaseDAOImpl<T extends BaseModel, ID extends Serializable> implements BaseDAOInteface {
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private Class<T> modelClass;
 
     private Logger log = LoggerFactory.getLogger(BaseDAOImpl.class);
 
-    public void setModelClass(Class modelClass){
+    public void setModelClass(Class modelClass) {
         this.modelClass = modelClass;
     }
 
-    public Session getSession(){
-        return sessionFactory.getCurrentSession();
+    public Session getSession() {
+        return entityManager.unwrap(Session.class);
     }
-
     //SEQUENCE----------------------------------------------------------------------------------------------------------
     @Transactional(readOnly = true)
     public Long getSequence(String sequence) {
@@ -48,9 +52,10 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
         Query query = getSession().createSQLQuery(sql);
         return ((BigDecimal) query.list().get(0)).longValue();
     }
+
     //SYSDATE-----------------------------------------------------------------------------------------------------------
     @Transactional(readOnly = true)
-    public String getSysDate(String pattern){
+    public String getSysDate(String pattern) {
         String queryString = "SELECT to_char(sysdate,:id)  from dual";
         Query query = getSession().createSQLQuery(queryString);
         query.setParameter("id", pattern);
@@ -61,6 +66,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             return "";
         }
     }
+
     @Transactional(readOnly = true)
     public String getSysDate() {
         String queryString = "SELECT to_char(sysdate,:id)  from dual";
@@ -73,11 +79,12 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             return "";
         }
     }
+
     //@DELETE-----------------------------------------------------------------------------------------------------------
     @Transactional
-    public String deleteById(long id){
-        T object = (T)getSession().get(modelClass,id);
-        if(object == null){
+    public String deleteById(long id) {
+        T object = (T) getSession().get(modelClass, id);
+        if (object == null) {
             return Responses.NOT_FOUND.getName();
         }
         return deleteByObject(object);
@@ -94,7 +101,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
         }
     }
 
-    public String deleteByObjectSession(T obj,Session session) {
+    public String deleteByObjectSession(T obj, Session session) {
         try {
             session.delete(obj);
             return Responses.SUCCESS.getName();
@@ -103,6 +110,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             return Responses.ERROR.getName();
         }
     }
+
     //UPDATE-----------------------------------------------------------------------------------------------------------
     @Transactional
     public String update(T obj) {
@@ -115,7 +123,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
         }
     }
 
-    public String updateBySession(T obj,Session session) {
+    public String updateBySession(T obj, Session session) {
         try {
             session.update(obj);
             return Responses.SUCCESS.getName();
@@ -124,6 +132,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
             return Responses.ERROR.getName();
         }
     }
+
     //SAVE-----------------------------------------------------------------------------------------------------------
     @Transactional
     public String saveOrUpdate(T obj) {
@@ -140,11 +149,11 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
     public String save(T obj) {
         try {
             long savedObjectId = (long) getSession().save(obj);
-            return savedObjectId +"";
+            return savedObjectId + "";
         } catch (ConstraintViolationException e) {
             log.info(e.toString());
             return e.getConstraintName();
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.info(e.toString());
             e.printStackTrace();
             return Responses.ERROR.getName();
@@ -154,14 +163,14 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
     @Transactional
     public String save(List<T> lstObj) {
         try {
-            for (T obj :lstObj){
+            for (T obj : lstObj) {
                 getSession().save(obj);
             }
             return Responses.SUCCESS.getName();
         } catch (ConstraintViolationException e) {
             log.info(e.toString());
             return e.getConstraintName();
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.info(e.toString());
             e.printStackTrace();
             return Responses.ERROR.getName();
@@ -169,28 +178,29 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
     }
 
     @Transactional
-    public String saveBySession(T obj,Session session) {
+    public String saveBySession(T obj, Session session) {
         try {
             long id = (long) session.save(obj);
             session.flush();
-            return id+"";
+            return id + "";
         } catch (ConstraintViolationException e) {
             log.info(e.toString());
             return e.getConstraintName();
-        } catch (Exception e){
+        } catch (Exception e) {
             log.info(e.toString());
             return Responses.ERROR.getName();
         }
     }
+
     //GET--------------------------------------------------------------------------------------------------------------
     @Transactional(readOnly = true)
     public List<T> getAll() {
-        return (List<T>)getSession().createCriteria(modelClass).list();
+        return (List<T>) getSession().createCriteria(modelClass).list();
     }
 
     @Transactional(readOnly = true)
     public List<T> getAllByPage(int pageNum, int countPerPage) {
-        Criteria c = sessionFactory.getCurrentSession().createCriteria(modelClass);
+        Criteria c = getSession().createCriteria(modelClass);
         c.setMaxResults(countPerPage);
         c.setFirstResult(pageNum * countPerPage);
         return c.list();
@@ -201,28 +211,30 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
         return getSession().createCriteria(modelClass).setMaxResults(count).list();
 
     }
+
     //FIND--------------------------------------------------------------------------------------------------------------
     @Transactional(readOnly = true)
     public T findById(long id) {
-        return getSession().get(modelClass,id);
+        return getSession().get(modelClass, id);
     }
 
     @Transactional(readOnly = true)
-    public List<T> findByProperty(String property,String value) {
-        return (List<T>)getSession().createCriteria(modelClass).add(Restrictions.eq(property,value)).list();
+    public List<T> findByProperty(String property, String value) {
+        return (List<T>) getSession().createCriteria(modelClass).add(Restrictions.eq(property, value)).list();
     }
 
     @Transactional(readOnly = true)
     public List<T> findByCondition(List<Condition> lstCondition) {
+//        CriteriaQuery criteriaQuery = (CriteriaQuery) getSession().getCriteriaBuilder().createQuery(modelClass);
         Criteria cr = getSession().createCriteria(modelClass);
 
-        if(DataUtil.isListNullOrEmpty(lstCondition)){
-            return (List<T>)cr.list();
+        if (DataUtil.isListNullOrEmpty(lstCondition)) {
+            return (List<T>) cr.list();
         }
 
-        cr = FunctionUtils.initCriteria(cr,lstCondition);
+        cr = FunctionUtils.initCriteria(cr, lstCondition);
         try {
-            return (List<T>)cr.list();
+            return (List<T>) cr.list();
         } catch (HibernateException e) {
             e.printStackTrace();
             return Lists.newArrayList();
@@ -233,46 +245,47 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
     public Long countByCondition(List<Condition> lstCondition) {
         Criteria cr = getSession().createCriteria(modelClass);
 
-        if(DataUtil.isListNullOrEmpty(lstCondition)){
+        if (DataUtil.isListNullOrEmpty(lstCondition)) {
             return 0L;
         }
 
-        cr = FunctionUtils.initCriteria(cr,lstCondition);
-        return  (Long)cr.setProjection(Projections.rowCount()).uniqueResult();
+        cr = FunctionUtils.initCriteria(cr, lstCondition);
+        return (Long) cr.setProjection(Projections.rowCount()).uniqueResult();
     }
 
     @Transactional(readOnly = true)
     public List<T> findByConditionSession(List<Condition> lstCondition, Session session) {
         Criteria cr = session.createCriteria(modelClass);
-        if(DataUtil.isListNullOrEmpty(lstCondition)){
+        if (DataUtil.isListNullOrEmpty(lstCondition)) {
             return Lists.newArrayList();
         }
 
-        cr = FunctionUtils.initCriteria(cr,lstCondition);
+        cr = FunctionUtils.initCriteria(cr, lstCondition);
 
         try {
-            return (List<T>)cr.list();
+            return (List<T>) cr.list();
         } catch (HibernateException e) {
             e.printStackTrace();
             return Lists.newArrayList();
         }
     }
+
     public void buildConditionQueryList(StringBuilder sql, List<Condition> lstCondition) {
         int index = 0;
         for (Condition con : lstCondition) {
             sql.append(Constants.SQL_LOGIC.AND);
             sql.append(con.getProperty());
             sql.append(con.getOperator());
-            if (con.getPropertyType().equals(Constants.SQL_PRO_TYPE.LONG)){
-                if (!con.getOperator().equals(Constants.SQL_OP.OP_IN)){
+            if (con.getPropertyType().equals(Constants.SQL_PRO_TYPE.LONG)) {
+                if (!con.getOperator().equals(Constants.SQL_OP.OP_IN)) {
                     sql.append(" :idx").append(String.valueOf(index++));
-                }else{
+                } else {
                     sql.append("( :idx").append(String.valueOf(index++)).append(" )");
                 }
-            }else if (con.getPropertyType().equals(Constants.SQL_PRO_TYPE.DATE)){
+            } else if (con.getPropertyType().equals(Constants.SQL_PRO_TYPE.DATE)) {
                 sql.append(" to_date(:idx").append(String.valueOf(index++))
                         .append(", '").append(Constants.DATETIME_FORMAT.ddMMyyyy).append("')");
-            }else if (con.getPropertyType().equals(Constants.SQL_PRO_TYPE.STRING)){
+            } else if (con.getPropertyType().equals(Constants.SQL_PRO_TYPE.STRING)) {
                 sql.append(":idx").append(String.valueOf(index++));
                 if (con.getOperator().equals(Constants.SQL_OP.OP_LIKE)) {
                     sql.append(" ESCAPE '\\' ");
@@ -293,7 +306,7 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
                     query.setParameterList("idx" + String.valueOf(index++), DataUtil.parseInputListLong(con.getValue().toString()));
                 }
 
-            }else if (con.getPropertyType().equals(Constants.SQL_PRO_TYPE.STRING)) {
+            } else if (con.getPropertyType().equals(Constants.SQL_PRO_TYPE.STRING)) {
                 if (con.getOperator().equals(Constants.SQL_OP.OP_IN)) {
                     query.setParameterList("idx" + String.valueOf(index++), DataUtil.parseInputListString(con.getValue().toString()));
                 } else {
@@ -305,7 +318,8 @@ public class BaseDAOImpl<T extends BaseModel,ID extends Serializable> implements
 
         }
     }
-    public String deleteByCondition( List<Condition> lstCondition) {
+
+    public String deleteByCondition(List<Condition> lstCondition) {
         try {
             StringBuilder sql = new StringBuilder();
             sql.append("delete from ");

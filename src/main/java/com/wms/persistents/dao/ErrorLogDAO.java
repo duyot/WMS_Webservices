@@ -14,10 +14,4 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class ErrorLogDAO extends BaseDAOImpl<ErrorLog,Long> {
-    @Autowired
-    SessionFactory sessionFactory;
-
-    public Session getSession(){
-        return sessionFactory.getCurrentSession();
-    }
 }

@@ -14,10 +14,4 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 @Transactional
 public class SysRoleMenuDAO extends BaseDAOImpl<SysRoleMenu,Long> {
-    @Autowired
-    SessionFactory sessionFactory;
-
-    public Session getSession(){
-        return sessionFactory.getCurrentSession();
-    }
 }

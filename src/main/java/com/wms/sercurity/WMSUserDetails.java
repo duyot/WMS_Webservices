@@ -1,6 +1,5 @@
 package com.wms.sercurity;
 
-import com.wms.dto.ActionMenuDTO;
 import com.wms.dto.CatUserDTO;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,13 +8,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
  * Created by duyot on 11/18/2016.
  */
-public class WMSUserDetails implements UserDetails,CredentialsContainer {
+public class WMSUserDetails implements UserDetails, CredentialsContainer {
     private CatUserDTO catUserDTO;
     private Set<GrantedAuthority> lstAuthorities;
 
@@ -24,14 +22,12 @@ public class WMSUserDetails implements UserDetails,CredentialsContainer {
 
     public WMSUserDetails(CatUserDTO catUserDTO) {
         this.catUserDTO = catUserDTO;
-        //todo test
-//        this.lstAuthorities = getLstAuthorities(catUserDTO.getRoleCode());
-        this.lstAuthorities = null;
+        this.lstAuthorities = getLstAuthorities("ADMIN");
     }
 
-    public Set<GrantedAuthority> getLstAuthorities(String roleCode){
+    public Set<GrantedAuthority> getLstAuthorities(String roleCode) {
         Set<GrantedAuthority> authorities = new HashSet<>();
-        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_"+roleCode);
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_" + roleCode);
         authorities.add(grantedAuthority);
         return authorities;
     }

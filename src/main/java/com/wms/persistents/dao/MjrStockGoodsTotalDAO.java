@@ -24,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -33,11 +35,9 @@ import java.util.List;
 /**
  * Created by duyot on 12/19/2016.
  */
-@Repository
 @Transactional
+@Repository
 public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> {
-    @Autowired
-    SessionFactory sessionFactory;
 
     @Autowired
     ErrorLogDAO errorLogDAO;
@@ -49,9 +49,6 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
 
     Logger log = LoggerFactory.getLogger(MjrStockGoodsTotalDAO.class);
 
-    public Session getSession(){
-        return sessionFactory.getCurrentSession();
-    }
 
     @Transactional
     public int updateGoods(CatGoods catGoods){

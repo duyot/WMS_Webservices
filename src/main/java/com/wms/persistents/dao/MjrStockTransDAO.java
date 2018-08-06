@@ -31,12 +31,8 @@ import java.util.logging.Level;
 @Repository
 @Transactional
 public class MjrStockTransDAO extends BaseDAOImpl<MjrStockTrans,Long> {
-    @Autowired
-    SessionFactory sessionFactory;
+
     Logger log = LoggerFactory.getLogger(MjrStockTransDAO.class);
-    public Session getSession(){
-        return sessionFactory.getCurrentSession();
-    }
 
     public String saveStockTransByConnection(MjrStockTransDTO mjrStockTransDTO, Connection connection){
         StringBuilder sql = new StringBuilder();

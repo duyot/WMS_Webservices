@@ -31,13 +31,6 @@ import java.util.List;
 @Repository
 @Transactional
 public class MjrStockGoodsSerialDAO extends BaseDAOImpl<MjrStockGoodsSerial,Long> {
-    @Autowired
-    SessionFactory sessionFactory;
-
-    public Session getSession(){
-        return sessionFactory.getCurrentSession();
-    }
-
 
     public ResponseObject exportStockGoodsSerial(MjrStockTransDTO mjrStockTransDTO, MjrStockTransDetailDTO goodsDetail, Session session){
         ResponseObject responseObject = new ResponseObject();
