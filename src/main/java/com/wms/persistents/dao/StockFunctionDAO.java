@@ -153,12 +153,12 @@ public class StockFunctionDAO {
 
         StringBuilder str = new StringBuilder();
         str.append(" select d.name as customer_name, a.code as trans_code,c.name as stock_name, c.code as stock_code, a.created_date, a.description,\n" +
-                "b.code as partner_code, b.name as partner_name, b.tel_number, b.address , a.CUST_ID , a.stock_id, a.CREATED_USER , a.type,a.receive_name")
-                .append(" from mjr_stock_trans a, CAT_PARTNER b, cat_stock c, CAT_CUSTOMER d")
+                " b.code as partner_code, b.name as partner_name, b.tel_number, b.address , a.CUST_ID , a.stock_id, a.CREATED_USER , a.type,a.receive_name")
+                .append(" from mjr_stock_trans a " +
+                        " left join CAT_PARTNER b on a.partner_id = b.id " +
+                        " left join cat_stock c on a.stock_id = c.id " +
+                        " left join CAT_CUSTOMER d on a.CUST_ID = d.id ")
                 .append(" WHERE 1=1 ")
-                .append(" and a.partner_id = b.id")
-                .append(" and a.CUST_ID = d.id")
-                .append(" and a.stock_id = c.id")
                 .append(" and a.id in( ")
                 .append(lstParamIds)
                 .append(" )")
@@ -212,7 +212,7 @@ public class StockFunctionDAO {
         str.append(" select a.stock_id, a.type, count(*) as so_luong ")
                 .append(" from mjr_stock_trans a")
                 .append(" where 1=1")
-                .append(" and a.id in( ")
+                .append(" and a.stock_id in( ")
                 .append(lstParamIds)
                 .append(" )")
                 .append(" and a.cust_id = ? ")
@@ -237,14 +237,31 @@ public class StockFunctionDAO {
     }
 
     private List<ChartDTO> convertToTotalStockTrans(List<Object[]> lstData){
-        List<ChartDTO> lstResult = Lists.newArrayList();
+        List<ChartDTO> lstChart = Lists.newArrayList();
+        int size = lstData.size();
+        Double[] dataExport = new Double[size];
+        Double[] dataImport  = new Double[size];
+        String curStockId = null;
+        int count =0;
         for(Object[] i: lstData){
-            ChartDTO temp = new ChartDTO();
-            temp.setName(i[0]==null?"":String.valueOf(i[0]));
-            lstResult.add(temp);
+            //Bat dau mot kho moi
+            if (curStockId != null && !curStockId.equals(String.valueOf(i[0]))){
+                count++;
+            }
+            curStockId = String.valueOf(i[0]);
+            //So luong giao dich nhap cua kho dang xet
+            if (String.valueOf(i[1]).equals("1")){
+                dataImport[count] = Double.valueOf(String.valueOf(i[2]));
+            }else{
+                dataExport[count] = Double.valueOf(String.valueOf(i[2]));
+            }
+
         }
-        return lstResult;
+        lstChart.add(new ChartDTO("Nhập",dataImport));
+        lstChart.add(new ChartDTO("Xuất",dataExport));
+        return lstChart;
     }
+
 
     private List<MjrStockTransDTO> convertToStockTransInfo(List<Object[]> lstData){
         List<MjrStockTransDTO> lstResult = Lists.newArrayList();
