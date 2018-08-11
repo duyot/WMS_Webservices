@@ -44,7 +44,7 @@ public class SysRoleMenuServices extends BaseServices<SysRoleMenuDTO> {
         this.baseBusiness = sysRoleMenuBusiness;
     }
 
-    @RequestMapping(value = "/getUserAction/{roleId}/{cusId}",produces = "application/json",method = RequestMethod.GET)
+    @RequestMapping(value = "/getUserAction",produces = "application/json",method = RequestMethod.GET)
     @Cacheable("menus")
     public List<ActionMenuDTO> getUserAction(@PathVariable("roleId") String roleId,@PathVariable("cusId") String cusId){
         List<SysMenuDTO> menus = getListUserAction(roleId,cusId);

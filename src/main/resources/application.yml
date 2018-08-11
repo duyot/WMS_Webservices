@@ -1,0 +1,58 @@
+spring:
+  application:
+    name: WMS_SERVICE # ==> This is Service-Id
+
+
+---
+# Items that apply to ALL profiles:
+spring:
+  profiles: wms_service_note0
+eureka:
+  instance:
+     appname: WMS_SERVICE
+     hostname: 45.32.103.51
+     leaseRenewalIntervalInSeconds: 1
+     leaseExpirationDurationInSeconds: 5
+  client:
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://45.32.103.51:9000/eureka
+    healthcheck:
+      enabled: true
+    lease:
+      duration: 5
+server:
+  port: 8080
+---
+spring:
+  profiles: wms_service_note1
+eureka:
+  instance:
+    appname: WMS_SERVICE
+    hostname: 45.32.103.51
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 5
+  client:
+    fetchRegistry: true
+    serviceUrl:
+     defaultZone: http://45.32.103.51:9000/eureka
+server:
+  port: 8082
+
+---
+spring:
+  profiles: wms_service_note2
+eureka:
+  instance:
+    appname: WMS_SERVICE  # ==> This is a instance of ABC-SERVICE
+    hostname: 45.32.103.51
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 5
+  client:
+    fetchRegistry: true
+    enabled: false
+    serviceUrl:
+     defaultZone: http://45.32.103.51:9000/eureka
+
+server:
+  port: 8083
