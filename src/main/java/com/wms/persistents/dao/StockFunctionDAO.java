@@ -1,9 +1,11 @@
 package com.wms.persistents.dao;
 
 import com.google.common.collect.Lists;
+import com.wms.base.BaseDAOImpl;
 import com.wms.business.impl.StockManagementBusinessImpl;
 import com.wms.dto.*;
 import com.wms.enums.Responses;
+import com.wms.persistents.model.SysMenu;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import com.wms.utils.FunctionUtils;
@@ -38,7 +40,7 @@ import java.util.Map;
  */
 @Repository
 @Transactional
-public class StockFunctionDAO {
+public class StockFunctionDAO extends BaseDAOImpl<SysMenu,Long> {
     @Autowired
     SessionFactory sessionFactory;
 
@@ -59,11 +61,6 @@ public class StockFunctionDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
-
-    public Session getSession() {
-        return entityManager.unwrap(Session.class);
-    }
-
 
     private Logger log = LoggerFactory.getLogger(StockManagementBusinessImpl.class);
 
