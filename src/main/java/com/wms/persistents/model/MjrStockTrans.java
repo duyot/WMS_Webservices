@@ -28,8 +28,6 @@ public class MjrStockTrans extends BaseModel {
     private Float transMoneyDiscount;
     private Float discountAmount;
     private Float transMoneyRequire;
-    private Float transMoneyReceive;
-    private Float transMoneyResponse;
     private String description;
     private Long partnerId;
     private String partnerName;
@@ -42,7 +40,7 @@ public class MjrStockTrans extends BaseModel {
     }
 
     public MjrStockTrans(Long id, String code, Long custId, Long stockId, String contractNumber, String invoicetNumber, Long type, byte status, Date createdDate, String createdUser, Float transMoneyTotal,
-                         Float transMoneyDiscount, Float discountAmount, Float transMoneyRequire, Float transMoneyReceive, Float transMoneyResponse, String description, Long partnerId, String partnerName,Long receiveId, String receiveName) {
+                         Float transMoneyDiscount, Float discountAmount, Float transMoneyRequire, String description, Long partnerId, String partnerName,Long receiveId, String receiveName) {
         this.id = id;
         this.code = code;
         this.custId = custId;
@@ -57,8 +55,6 @@ public class MjrStockTrans extends BaseModel {
         this.transMoneyDiscount = transMoneyDiscount;
         this.discountAmount = discountAmount;
         this.transMoneyRequire = transMoneyRequire;
-        this.transMoneyReceive = transMoneyReceive;
-        this.transMoneyResponse = transMoneyResponse;
         this.description = description;
         this.partnerId = partnerId;
         this.partnerName = partnerName;
@@ -201,23 +197,6 @@ public class MjrStockTrans extends BaseModel {
         this.transMoneyRequire = transMoneyRequire;
     }
 
-    @Column(name = "TRANS_MONEY_RECEIVE")
-    public Float getTransMoneyReceive() {
-        return transMoneyReceive;
-    }
-
-    public void setTransMoneyReceive(Float transMoneyReceive) {
-        this.transMoneyReceive = transMoneyReceive;
-    }
-
-    @Column(name = "TRANS_MONEY_RESPONSE")
-    public Float getTransMoneyResponse() {
-        return transMoneyResponse;
-    }
-
-    public void setTransMoneyResponse(Float transMoneyResponse) {
-        this.transMoneyResponse = transMoneyResponse;
-    }
 
     @Column(name = "DESCRIPTION")
     public String getDescription() {
@@ -269,7 +248,7 @@ public class MjrStockTrans extends BaseModel {
         return new MjrStockTransDTO(id==null?"":id+"",code,custId==null?"":custId+"",stockId==null?"":stockId+"",
                 contractNumber,invoicetNumber,type==null?"":type+"",status+"",createdDate==null?"": DateTimeUtils.convertDateTimeToString(createdDate),
                 createdUser,transMoneyTotal==null?"":transMoneyTotal+"",transMoneyDiscount==null?"":transMoneyDiscount+"",discountAmount==null?"":discountAmount+"",
-                transMoneyRequire==null?"":transMoneyRequire+"",transMoneyReceive==null?"":transMoneyReceive+"",transMoneyResponse==null?"":transMoneyResponse+"",description,
+                transMoneyRequire==null?"":transMoneyRequire+"",description,
                 partnerId==null?"":partnerId+"", partnerName,receiveId==null?"":receiveId+"", receiveName
         );
     }
