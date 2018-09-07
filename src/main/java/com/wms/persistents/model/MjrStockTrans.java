@@ -142,7 +142,7 @@ public class MjrStockTrans extends BaseModel {
         this.status = status;
     }
 
-    @Column(name = "CREATED_DATE" )
+    @Column(name = "CREATED_DATE" , insertable = false)
     public Date getCreatedDate() {
         return createdDate;
     }
@@ -151,7 +151,7 @@ public class MjrStockTrans extends BaseModel {
         this.createdDate = createdDate;
     }
 
-    @Column(name = "CREATED_USER")
+    @Column(name = "CREATED_USER" )
     public String getCreatedUser() {
         return createdUser;
     }
