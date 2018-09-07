@@ -147,6 +147,7 @@ public class MjrStockTrans extends BaseModel {
         return createdDate;
     }
 
+
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
