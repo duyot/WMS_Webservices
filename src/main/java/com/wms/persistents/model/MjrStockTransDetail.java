@@ -23,12 +23,14 @@ public class MjrStockTransDetail extends BaseModel{
     private Float inputPrice;
     private Float outputPrice;
     private String cellCode;
+    private String unitName;
+    private Float totalMoney;
     private Long partnerId;
 
     public MjrStockTransDetail() {
     }
 
-    public MjrStockTransDetail(Long id, Long stockTransId, Long goodsId, String goodsCode, String goodsState, Long isSerial, Float amount, String serial, Float inputPrice, Float outputPrice, String cellCode, Long partnerId) {
+    public MjrStockTransDetail(Long id, Long stockTransId, Long goodsId, String goodsCode, String goodsState, Long isSerial, Float amount, String serial, Float inputPrice, Float outputPrice, String cellCode, Long partnerId,String unitName,Float totalMoney) {
         this.id = id;
         this.stockTransId = stockTransId;
         this.goodsId = goodsId;
@@ -41,6 +43,8 @@ public class MjrStockTransDetail extends BaseModel{
         this.outputPrice = outputPrice;
         this.cellCode = cellCode;
         this.partnerId = partnerId;
+        this.totalMoney = totalMoney;
+        this.unitName = unitName;
     }
 
     @Id
@@ -148,6 +152,22 @@ public class MjrStockTransDetail extends BaseModel{
 
     public void setCellCode(String cellCode) {
         this.cellCode = cellCode;
+    }
+    @Column(name = "UNIT_NAME")
+    public String getUnitName() {
+        return unitName;
+    }
+
+    public void setUnitName(String unitName) {
+        this.unitName = unitName;
+    }
+    @Column(name = "TOTAL_MONEY")
+    public Float getTotalMoney() {
+        return totalMoney;
+    }
+
+    public void setTotalMoney(Float totalMoney) {
+        this.totalMoney = totalMoney;
     }
 
     @Column(name = "PARTNER_ID",nullable = false)

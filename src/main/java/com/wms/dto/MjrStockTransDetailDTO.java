@@ -20,6 +20,7 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
     private String inputPrice;
     private String outputPrice;
     private String cellCode;
+    private String totalMoney;
     //unmap db field
     private String goodsName;
     //
@@ -244,7 +245,8 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
         return new MjrStockTransDetail(!StringUtils.validString(id) ? null:Long.valueOf(id),!StringUtils.validString(stockTransId) ? null:Long.valueOf(stockTransId),
                 !StringUtils.validString(goodsId) ? null:Long.valueOf(goodsId),goodsCode,goodsState,!StringUtils.validString(isSerial) ? null:Long.valueOf(isSerial),
                 !StringUtils.validString(amount) ? null:Float.valueOf(amount),serial,
-                !StringUtils.validString(inputPrice) ? null:Float.valueOf(inputPrice),!StringUtils.validString(outputPrice) ? null:Float.valueOf(outputPrice),cellCode,!StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId)
+                !StringUtils.validString(inputPrice) ? null:Float.valueOf(inputPrice),!StringUtils.validString(outputPrice) ? null:Float.valueOf(outputPrice),cellCode,!StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId),
+                unitName, !StringUtils.validString(totalMoney) ? null:Float.valueOf(totalMoney)
         );
     }
 
@@ -278,5 +280,13 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getTotalMoney() {
+        return totalMoney;
+    }
+
+    public void setTotalMoney(String totalMoney) {
+        this.totalMoney = totalMoney;
     }
 }
