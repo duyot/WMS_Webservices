@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/oauth/token", "/login", "/WMS_Webservices", "/services/catUserServices/updateUser").permitAll()
+                    .antMatchers("/WMS_Webservices/oauth/token", "/login", "/WMS_Webservices", "/services/catUserServices/updateUser").permitAll()
         ;
     }
 

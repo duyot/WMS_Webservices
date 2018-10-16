@@ -24,11 +24,12 @@ public class MjrStockTransDetail extends BaseModel{
     private Float outputPrice;
     private String cellCode;
     private Long partnerId;
+    private Float totalMoney;
 
     public MjrStockTransDetail() {
     }
 
-    public MjrStockTransDetail(Long id, Long stockTransId, Long goodsId, String goodsCode, String goodsState, Long isSerial, Float amount, String serial, Float inputPrice, Float outputPrice, String cellCode, Long partnerId) {
+    public MjrStockTransDetail(Long id, Long stockTransId, Long goodsId, String goodsCode, String goodsState, Long isSerial, Float amount, String serial, Float inputPrice, Float outputPrice, String cellCode, Long partnerId, Float totalMoney) {
         this.id = id;
         this.stockTransId = stockTransId;
         this.goodsId = goodsId;
@@ -41,6 +42,7 @@ public class MjrStockTransDetail extends BaseModel{
         this.outputPrice = outputPrice;
         this.cellCode = cellCode;
         this.partnerId = partnerId;
+        this.totalMoney = totalMoney;
     }
 
     @Id
@@ -159,11 +161,20 @@ public class MjrStockTransDetail extends BaseModel{
         this.partnerId = partnerId;
     }
 
+    @Column(name = "TOTAL_MONEY")
+    public Float getTotalMoney() {
+        return totalMoney;
+    }
+
+    public void setTotalMoney(Float totalMoney) {
+        this.totalMoney = totalMoney;
+    }
+
     @Override
     public MjrStockTransDetailDTO toDTO() {
         return new MjrStockTransDetailDTO(id==null?"":id+"",stockTransId==null?"":stockTransId+"",goodsId==null?"":goodsId+"",
                 goodsCode,goodsState,isSerial==null?"":isSerial+"",amount==null?"":amount+"",serial,inputPrice==null?"":inputPrice+"",outputPrice==null?"":outputPrice+"",
-                cellCode, partnerId==null?"":partnerId+""
+                cellCode, partnerId==null?"":partnerId+"", totalMoney==null?"":totalMoney+""
                 );
     }
 }

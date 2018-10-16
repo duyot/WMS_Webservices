@@ -29,6 +29,10 @@
             <entry key="com.zeroturnaround.jrebel.FormatVersion" value="7.0.0" />
             <entry key="com.zeroturnaround.jrebel.remoting.DeleteUnindexedFiles" value="true" />
             <entry key="com.zeroturnaround.jrebel.remoting.ModuleRemoteServerSelection" value="off" />
+            <entry key="jrebelEnabled" value="true" />
+            <entry key="rebelXmlGenerationType" value="external" />
+            <entry key="savedRebelXmlBuildTool" value="maven" />
+            <entry key="savedRebelXmlContent" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#10;&#10;&lt;!--&#10;  This is the JRebel configuration file. It maps the running application to your IDE workspace, enabling JRebel reloading for this project.&#10;  Refer to https://manuals.zeroturnaround.com/jrebel/standalone/config.html for more information.&#10;--&gt;&#10;&lt;application generated-by=&quot;maven&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns=&quot;http://www.zeroturnaround.com&quot; xsi:schemaLocation=&quot;http://www.zeroturnaround.com http://update.zeroturnaround.com/jrebel/rebel-2_1.xsd&quot;&gt;&#10;&#9;&lt;classpath&gt;&#10;&#9;&#9;&lt;dir name=&quot;D:/WMS/github/WMS_Webservices/target/classes&quot;&gt;&#10;&#9;&#9;&lt;/dir&gt;&#10;&#9;&lt;/classpath&gt;&#10;&#10;&#9;&lt;web&gt;&#10;&#9;&#9;&lt;link target=&quot;/&quot;&gt;&#10;&#9;&#9;&#9;&lt;dir name=&quot;D:/WMS/github/WMS_Webservices/src/main/webapp&quot;&gt;&#10;&#9;&#9;&#9;&lt;/dir&gt;&#10;&#9;&#9;&lt;/link&gt;&#10;&#9;&lt;/web&gt;&#10;&#10;&lt;/application&gt;&#10;" />
           </map>
         </option>
         <option name="masterModuleName" />

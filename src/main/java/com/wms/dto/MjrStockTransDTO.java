@@ -43,7 +43,7 @@ public class MjrStockTransDTO extends BaseDTO {
     //Khach hang nhan trong cac giao dich xuat
     private String receiveName;
     private String receiveId;
-
+    //
     public String getReceiveId() {
         return receiveId;
     }

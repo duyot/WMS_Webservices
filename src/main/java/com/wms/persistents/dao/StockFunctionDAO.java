@@ -536,8 +536,8 @@ public class StockFunctionDAO {
         StringBuilder sqlStockGoods = new StringBuilder();
         //STOCK_TRANS_DETAIL
         sqlStockTransDetail.append(" Insert into MJR_STOCK_TRANS_DETAIL ");
-        sqlStockTransDetail.append(" (ID,STOCK_TRANS_ID,GOODS_ID,GOODS_CODE,GOODS_STATE,IS_SERIAL,AMOUNT,SERIAL,INPUT_PRICE,CELL_CODE)  ");
-        sqlStockTransDetail.append(" values  (SEQ_MJR_STOCK_TRANS_DETAIL.nextval,?,?,?,?,?,?,?,?,?) ");
+        sqlStockTransDetail.append(" (ID,STOCK_TRANS_ID,GOODS_ID,GOODS_CODE,GOODS_STATE,IS_SERIAL,AMOUNT,SERIAL,INPUT_PRICE,CELL_CODE, total_money)  ");
+        sqlStockTransDetail.append(" values  (SEQ_MJR_STOCK_TRANS_DETAIL.nextval,?,?,?,?,?,?,?,?,?,?) ");
         //STOCK_GOODS_SERIAL
         sqlStockGoodsSerial.append(" Insert into MJR_STOCK_GOODS_SERIAL  ");
         sqlStockGoodsSerial.append(" (ID,CUST_ID,STOCK_ID,GOODS_ID,GOODS_STATE,CELL_CODE,AMOUNT,SERIAL,IMPORT_DATE,CHANGED_DATE,STATUS,PARTNER_ID,IMPORT_STOCK_TRANS_ID,INPUT_PRICE)  ");
@@ -626,6 +626,7 @@ public class StockFunctionDAO {
         paramsStockTrans.add(goods.getSerial());
         paramsStockTrans.add(goods.getInputPrice());
         paramsStockTrans.add(goods.getCellCode() != null ? goods.getCellCode():"");
+        paramsStockTrans.add(goods.getTotalMoney());
         return paramsStockTrans;
     }
 

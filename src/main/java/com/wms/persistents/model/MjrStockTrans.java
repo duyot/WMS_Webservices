@@ -37,6 +37,7 @@ public class MjrStockTrans extends BaseModel {
     //Khach hang nhan trong cac giao dich xuat
     private String receiveName;
     private Long receiveId;
+    private String totalMoney;
 
     public MjrStockTrans() {
     }
