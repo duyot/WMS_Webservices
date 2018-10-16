@@ -28,10 +28,10 @@ public class CatCustomer extends BaseModel{
     private Date  createdDate;
     private int   mailReport;
     private int   partnerRequire;
-
+    private int   trial;
     public CatCustomer(Long id, String code, String name, byte status, String email,
                        String telNumber, String address, String bankName, String bankAccountCode,
-                       Date createdDate, int mailReport, int partnerRequire) {
+                       Date createdDate, int mailReport, int partnerRequire,int trial) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -44,6 +44,7 @@ public class CatCustomer extends BaseModel{
         this.createdDate = createdDate;
         this.mailReport  = mailReport;
         this.partnerRequire = partnerRequire;
+        this.trial=trial;
     }
 
     public CatCustomer() {
@@ -138,7 +139,7 @@ public class CatCustomer extends BaseModel{
         this.status = status;
     }
 
-    @Column(name = "CREATED_DATE")
+    @Column(name = "CREATED_DATE",insertable = false)
     public Date getCreatedDate() {
         return createdDate;
     }
@@ -164,11 +165,18 @@ public class CatCustomer extends BaseModel{
     public void setPartnerRequire(int partnerRequire) {
         this.partnerRequire = partnerRequire;
     }
+    @Column(name = "TRIAL")
+    public int getTrial() {
+        return trial;
+    }
 
+    public void setTrial(int trial) {
+        this.trial = trial;
+    }
 
     @Override
     public BaseDTO toDTO() {
         return new CatCustomerDTO(id==null?"":id+"",code,name,status+"",email,telNumber,address,bankName,
-                bankAccountCode,createdDate==null?"": DateTimeUtils.convertDateTimeToString(createdDate),mailReport+"", partnerRequire+"");
+                bankAccountCode,createdDate==null?"": DateTimeUtils.convertDateTimeToString(createdDate),mailReport+"", partnerRequire+"",trial+"");
     }
 }
