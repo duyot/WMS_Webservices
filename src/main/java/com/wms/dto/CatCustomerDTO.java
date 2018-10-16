@@ -23,10 +23,11 @@ public class CatCustomerDTO extends BaseDTO{
     private String mailReport;
     //DoanLV4 doi tac co bat buoc chon khong khi nhap/xuat kho
     private String partnerRequire;
+    private String trial;
 
     public CatCustomerDTO(String id, String code, String name, String status, String email,
                           String telNumber, String address, String bankName, String bankAccountCode,
-                          String createdDate, String mailReport , String partnerRequire) {
+                          String createdDate, String mailReport , String partnerRequire,String trial) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -39,6 +40,7 @@ public class CatCustomerDTO extends BaseDTO{
         this.createdDate = createdDate;
         this.mailReport = mailReport;
         this.partnerRequire = partnerRequire;
+        this.trial = trial;
     }
 
     public CatCustomerDTO() {
@@ -141,11 +143,19 @@ public class CatCustomerDTO extends BaseDTO{
         this.partnerRequire = partnerRequire;
     }
 
+    public String getTrial() {
+        return trial;
+    }
+
+    public void setTrial(String trial) {
+        this.trial = trial;
+    }
+
     @Override
     public CatCustomer toModel() {
         return new CatCustomer(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,!StringUtils.validString(status) ? 0:Byte.parseByte(status),email,telNumber,
                 address,bankName,bankAccountCode,!StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),
-                mailReport==null?0:Integer.parseInt(mailReport), partnerRequire==null?0:Integer.parseInt(partnerRequire)
+                mailReport==null?0:Integer.parseInt(mailReport), partnerRequire==null?0:Integer.parseInt(partnerRequire), trial==null?0:Integer.parseInt(trial)
                 );
     }
 

@@ -1,9 +1,11 @@
 package com.wms.persistents.dao;
 
 import com.google.common.collect.Lists;
+import com.wms.base.BaseDAOImpl;
 import com.wms.business.impl.StockManagementBusinessImpl;
 import com.wms.dto.*;
 import com.wms.enums.Responses;
+import com.wms.persistents.model.SysMenu;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import com.wms.utils.FunctionUtils;
@@ -20,7 +22,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
+import javax.persistence.PersistenceContext;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -36,7 +40,7 @@ import java.util.Map;
  */
 @Repository
 @Transactional
-public class StockFunctionDAO {
+public class StockFunctionDAO extends BaseDAOImpl<SysMenu,Long> {
     @Autowired
     SessionFactory sessionFactory;
 
@@ -55,6 +59,9 @@ public class StockFunctionDAO {
     @Autowired
     MjrStockTransDetailDAO mjrStockTransDetailDAO;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     private Logger log = LoggerFactory.getLogger(StockManagementBusinessImpl.class);
 
     @Transactional
@@ -62,7 +69,7 @@ public class StockFunctionDAO {
         Session session;
         List<Object[]> lstResult = null;
         try {
-            session = sessionFactory.getCurrentSession();
+            session = getSession();
             ProcedureCall pc =  session.createStoredProcedureCall("pkg_stock_info.p_get_trans_goods_details");
             pc.registerParameter("p_cust_id", Integer.class,ParameterMode.IN).bindValue   (Integer.parseInt(custId));
             pc.registerParameter("p_stock_id", Integer.class,ParameterMode.IN).bindValue   (Integer.parseInt(stockId));
@@ -83,7 +90,7 @@ public class StockFunctionDAO {
     @Transactional
     public List<MjrStockTransDetailDTO> getListTransGoodsDetail(String lstStockTransId){
 
-        Session session = sessionFactory.getCurrentSession();
+        Session session = getSession();
         String[] ids = lstStockTransId.split(",");
         int size = ids.length;
         StringBuilder lstParamIds = new StringBuilder("");
@@ -136,7 +143,7 @@ public class StockFunctionDAO {
     @Transactional
     public List<MjrStockTransDTO> getStockTransInfo(String lstStockTransId){
 
-        Session session = sessionFactory.getCurrentSession();
+        Session session =  getSession();
         String[] ids = lstStockTransId.split(",");
         int size = ids.length;
         StringBuilder lstParamIds = new StringBuilder("");
@@ -193,7 +200,7 @@ public class StockFunctionDAO {
     @Transactional
     public List<ChartDTO> getTotalStockTrans (String custId, int type,String lstStockId){
 
-        Session session = sessionFactory.getCurrentSession();
+        Session session =  getSession();
         String[] ids = lstStockId.split(",");
         int size = ids.length;
         StringBuilder lstParamIds = new StringBuilder("");
@@ -336,7 +343,7 @@ public class StockFunctionDAO {
     public Long getCountGoodsDetail(String custId, String stockId, String goodsId, String goodsState, String isSerial){
         Session session;
         try {
-            session = sessionFactory.getCurrentSession();
+            session =  getSession();
             ProcedureCall pc =  session.createStoredProcedureCall("pkg_stock_info.count_goods_details");
             pc.registerParameter("p_cust_id", Integer.class,ParameterMode.IN).bindValue   (Integer.parseInt(custId));
             pc.registerParameter("p_stock_id", Integer.class,ParameterMode.IN).bindValue   (Integer.parseInt(stockId));
@@ -354,7 +361,7 @@ public class StockFunctionDAO {
     //
     @Transactional
     public List<String> getListSerialInStock(String custId, String stockId, String goodsId, String goodsState) {
-        Session session = sessionFactory.getCurrentSession();
+        Session session =  getSession();
         StringBuilder str = new StringBuilder();
         str.append("SELECT serial FROM mjr_stock_goods_serial a")
                 .append(" WHERE ")
@@ -378,7 +385,7 @@ public class StockFunctionDAO {
     public ResponseObject cancelTransaction(String transId) {
         Session session;
         try {
-            session = sessionFactory.getCurrentSession();
+            session =  getSession();
             ProcedureCall pc =  session.createStoredProcedureCall("pkg_stock_transaction.f_destroy_command");
             pc.registerParameter("p_command_id", Integer.class,ParameterMode.IN).bindValue   (Integer.parseInt(transId));
             pc.registerParameter("v_result", String.class,ParameterMode.OUT);

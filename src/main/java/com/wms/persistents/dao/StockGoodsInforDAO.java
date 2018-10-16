@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,12 +29,15 @@ import java.util.List;
 @Repository
 @Transactional
 public class StockGoodsInforDAO {
-    @Autowired
-    SessionFactory sessionFactory;
-    private Logger log = LoggerFactory.getLogger(StockGoodsInforDAO.class);
-    public Session getSession(){
-        return sessionFactory.getCurrentSession();
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public Session getSession() {
+        return entityManager.unwrap(Session.class);
     }
+
+    private Logger log = LoggerFactory.getLogger(StockGoodsInforDAO.class);
+
     public List<StockGoodsInfor> getStockGoodsInfor(String partnerId, String custId) {
         List<StockGoodsInfor> lstStockGoodsInfor = new ArrayList<>();
 

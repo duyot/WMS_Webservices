@@ -105,14 +105,11 @@ public class CatUserServices extends BaseServices<CatUserDTO>{
 
 
     @RequestMapping(value = "/getUserByCustomerId/{customerId}",produces = "application/json",method = RequestMethod.GET)
-    public List<CatUserDTO> getUserByCustomer(@PathVariable("customerId") String customerId){
-        if(!DataUtil.isInteger(customerId)){
-            log.info("Invalid customerId info");
-            return new ArrayList<>();
-        }
+    public List<CatUserDTO> getUserByCustomer(@PathVariable("customerId") long customerId){
+
         //
         List<Condition> lstConditions = Lists.newArrayList();
-        lstConditions.add(new Condition("customerId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,customerId));
+        lstConditions.add(new Condition("custId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,customerId));
         lstConditions.add(new Condition("status",Constants.SQL_PRO_TYPE.BYTE,Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
 
         //

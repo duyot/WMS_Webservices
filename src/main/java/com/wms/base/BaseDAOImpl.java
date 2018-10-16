@@ -6,15 +6,13 @@ import com.wms.enums.Responses;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import com.wms.utils.FunctionUtils;
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
+import org.hibernate.*;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +32,9 @@ public class BaseDAOImpl<T extends BaseModel, ID extends Serializable> implement
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Autowired
+    private SessionFactory sessionFactory;
+
     private Class<T> modelClass;
 
     private Logger log = LoggerFactory.getLogger(BaseDAOImpl.class);
@@ -43,7 +44,7 @@ public class BaseDAOImpl<T extends BaseModel, ID extends Serializable> implement
     }
 
     public Session getSession() {
-        return entityManager.unwrap(Session.class);
+        return sessionFactory.getCurrentSession();
     }
     //SEQUENCE----------------------------------------------------------------------------------------------------------
     @Transactional(readOnly = true)
