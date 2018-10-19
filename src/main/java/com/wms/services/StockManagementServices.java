@@ -66,8 +66,8 @@ public class StockManagementServices {
     }
     //------------------------------------------------------------------------------------------------------------------
     @RequestMapping(value = "/getListTransGoodsDetail",produces = "application/json",method = RequestMethod.GET)
-    public List<MjrStockTransDetailDTO> getListTransGoodsDetail(String lstStockTransId){
-        return stockFunctionBusiness.getListTransGoodsDetail(lstStockTransId);
+    public List<MjrStockTransDetailDTO> getListTransGoodsDetail(String transId){
+        return stockFunctionBusiness.getListTransGoodsDetail(transId);
     }
 
     //------------------------------------------------------------------------------------------------------------------

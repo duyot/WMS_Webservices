@@ -15,7 +15,7 @@ import java.util.Date;
 @Entity
 @Table(name = "CAT_CUSTOMER")
 @DynamicUpdate
-public class CatCustomer extends BaseModel{
+public class CatCustomer extends BaseModel {
     private Long id;
     private String code;
     private String name;
@@ -25,13 +25,14 @@ public class CatCustomer extends BaseModel{
     private String address;
     private String bankName;
     private String bankAccountCode;
-    private Date  createdDate;
-    private int   mailReport;
-    private int   partnerRequire;
-    private int   trial;
+    private Date createdDate;
+    private int mailReport;
+    private int partnerRequire;
+    private int trial;
+
     public CatCustomer(Long id, String code, String name, byte status, String email,
                        String telNumber, String address, String bankName, String bankAccountCode,
-                       Date createdDate, int mailReport, int partnerRequire,int trial) {
+                       Date createdDate, int mailReport, int partnerRequire, int trial) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -42,9 +43,9 @@ public class CatCustomer extends BaseModel{
         this.bankName = bankName;
         this.bankAccountCode = bankAccountCode;
         this.createdDate = createdDate;
-        this.mailReport  = mailReport;
+        this.mailReport = mailReport;
         this.partnerRequire = partnerRequire;
-        this.trial=trial;
+        this.trial = trial;
     }
 
     public CatCustomer() {
@@ -52,12 +53,12 @@ public class CatCustomer extends BaseModel{
 
     @Id
     @Column(name = "ID", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_CUSTOMER")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CUSTOMER")
     @SequenceGenerator(
-            name="SEQ_CUSTOMER",
-            sequenceName="SEQ_CUSTOMER",
+            name = "SEQ_CUSTOMER",
+            sequenceName = "SEQ_CUSTOMER",
             allocationSize = 1,
-            initialValue= 1000
+            initialValue = 1000
     )
     public Long getId() {
         return id;
@@ -67,7 +68,7 @@ public class CatCustomer extends BaseModel{
         this.id = id;
     }
 
-    @Column(name = "CODE",nullable = false)
+    @Column(name = "CODE", nullable = false)
     public String getCode() {
         return code;
     }
@@ -76,7 +77,7 @@ public class CatCustomer extends BaseModel{
         this.code = code;
     }
 
-    @Column(name = "NAME",nullable = false)
+    @Column(name = "NAME", nullable = false)
     public String getName() {
         return name;
     }
@@ -103,6 +104,7 @@ public class CatCustomer extends BaseModel{
     public void setEmail(String email) {
         this.email = email;
     }
+
     @Column(name = "BANK_NAME")
     public String getBankName() {
         return bankName;
@@ -139,7 +141,7 @@ public class CatCustomer extends BaseModel{
         this.status = status;
     }
 
-    @Column(name = "CREATED_DATE",insertable = false)
+    @Column(name = "CREATED_DATE", insertable = false)
     public Date getCreatedDate() {
         return createdDate;
     }
@@ -165,6 +167,7 @@ public class CatCustomer extends BaseModel{
     public void setPartnerRequire(int partnerRequire) {
         this.partnerRequire = partnerRequire;
     }
+
     @Column(name = "TRIAL")
     public int getTrial() {
         return trial;
@@ -176,7 +179,7 @@ public class CatCustomer extends BaseModel{
 
     @Override
     public BaseDTO toDTO() {
-        return new CatCustomerDTO(id==null?"":id+"",code,name,status+"",email,telNumber,address,bankName,
-                bankAccountCode,createdDate==null?"": DateTimeUtils.convertDateTimeToString(createdDate),mailReport+"", partnerRequire+"",trial+"");
+        return new CatCustomerDTO(id == null ? "" : id + "", code, name, status + "", email, telNumber, address, bankName,
+                bankAccountCode, createdDate == null ? "" : DateTimeUtils.convertDateTimeToString(createdDate), mailReport + "", partnerRequire + "", trial + "");
     }
 }

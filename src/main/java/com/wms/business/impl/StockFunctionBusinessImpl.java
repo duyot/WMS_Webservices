@@ -77,8 +77,8 @@ public class StockFunctionBusinessImpl implements StockFunctionInterface {
     }
 
     @Override
-    public List<MjrStockTransDetailDTO> getListTransGoodsDetail(String lstStockTransId) {
-        return stockFunctionDAO.getListTransGoodsDetail(lstStockTransId);
+    public List<MjrStockTransDetailDTO> getListTransGoodsDetail(String transId) {
+        return stockFunctionDAO.getListTransGoodsDetail(transId);
     }
     @Override
     public List<MjrStockTransDTO> getStockTransInfo(String lstStockTransId) {
