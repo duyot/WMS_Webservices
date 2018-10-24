@@ -203,8 +203,6 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
             log.info("Starting export from stock:" + mjrStockTransDTO.getStockId() + " code: " + savedStockTranCode + " with: " + lstMjrStockTransDetailDTO.size() + " items");
             FunctionUtils.writeIEGoodsLog(lstMjrStockTransDetailDTO, log);
             //2. INSERT TRANS_DETAIL|STOCK(GOODS|SERIAL)
-            Map<String, CatGoodsDTO> mapImportingGoods = new HashMap<>();
-            Map<String, Float> mapGoodsAmount = new HashMap<>();
             //
             if (DataUtil.isListNullOrEmpty(lstMjrStockTransDetailDTO)) {
                 FunctionUtils.rollback(transaction);
@@ -212,7 +210,10 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
                 return response;
             }
             //
+            Map<String, CatGoodsDTO> mapImportingGoods = new HashMap<>();
+            Map<String, Float> mapGoodsAmount = new HashMap<>();
             Set<String> setGoodsCode = new HashSet<>();
+            //
             for (MjrStockTransDetailDTO i : lstMjrStockTransDetailDTO) {
                 setGoodsCode.add(i.getGoodsCode());
                 String key = i.getGoodsId() + "," + i.getGoodsState();

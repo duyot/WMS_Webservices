@@ -42,6 +42,10 @@ public class MjrStockGoodsSerialDAO extends BaseDAOImpl<MjrStockGoodsSerial,Long
         lstCon.add(new Condition("goodsState", Constants.SQL_OPERATOR.EQUAL,goodsDetail.getGoodsState()));
         lstCon.add(new Condition("serial", Constants.SQL_OPERATOR.EQUAL,goodsDetail.getSerial()));
         lstCon.add(new Condition("status",Constants.SQL_PRO_TYPE.BYTE, Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
+        //#add export with cellcode
+        if (!DataUtil.isStringNullOrEmpty(goodsDetail.getCellCode())) {
+            lstCon.add(new Condition("cellCode", Constants.SQL_OPERATOR.EQUAL,goodsDetail.getCellCode()));
+        }
         if(!DataUtil.isStringNullOrEmpty(mjrStockTransDTO.getPartnerId()) && !mjrStockTransDTO.getPartnerId().equals("-1")){
             lstCon.add(new Condition("partnerId",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,mjrStockTransDTO.getPartnerId()));
         }
