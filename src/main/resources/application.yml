@@ -10,13 +10,13 @@ spring:
 eureka:
   instance:
      appname: WMS_SERVICE
-     hostname: 45.32.103.51
+     hostname: 207.148.121.185
      leaseRenewalIntervalInSeconds: 1
      leaseExpirationDurationInSeconds: 5
   client:
     fetchRegistry: true
     serviceUrl:
-      defaultZone: http://45.32.103.51:9000/eureka
+      defaultZone: http://207.148.121.185:9000/eureka
     healthcheck:
       enabled: true
     lease:
@@ -29,7 +29,7 @@ spring:
 eureka:
   instance:
     appname: WMS_SERVICE
-    hostname: 45.32.103.51
+    hostname: 207.148.121.185
     leaseRenewalIntervalInSeconds: 1
     leaseExpirationDurationInSeconds: 5
   client:
@@ -45,7 +45,7 @@ spring:
 eureka:
   instance:
     appname: WMS_SERVICE  # ==> This is a instance of ABC-SERVICE
-    hostname: 45.32.103.51
+    hostname: 207.148.121.185
     leaseRenewalIntervalInSeconds: 1
     leaseExpirationDurationInSeconds: 5
   client:

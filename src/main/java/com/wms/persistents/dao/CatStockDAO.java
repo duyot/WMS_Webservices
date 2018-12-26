@@ -37,7 +37,6 @@ public class CatStockDAO extends BaseDAOImpl<CatStock,Long> {
             sql.append(" SELECT b.id, b.cust_id, b.code, b.name, b.address, b.status FROM map_user_stock a, cat_stock b ");
             sql.append(" WHERE  a.user_id      = ? ");
             sql.append("    and a.stock_id     = b.id ");
-            sql.append("    and b.status       = 1 ");
             sql.append(" ORDER BY b.name ");
             //
             Query query = getSession().createSQLQuery(sql.toString())

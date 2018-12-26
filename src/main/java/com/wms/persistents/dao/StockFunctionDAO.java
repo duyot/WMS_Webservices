@@ -97,7 +97,9 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         str.append(" select a.code,c.name, a.type, b.goods_code,b.goods_id, b.goods_state,b.amount, b.unit_name, a.created_date, a.CREATED_USER, b.input_price, b.output_price, b.cell_code, b.serial, b.total_money  ")
                 .append(" from mjr_stock_trans a, mjr_stock_trans_detail b, cat_stock c")
                 .append(" WHERE 1 = 1 ")
-                .append(" and a.id = ? ")
+                .append(" and a.id in (  ")
+                .append(transId)
+                .append(" ) ")
                 .append(" and a.id= b.STOCK_TRANS_ID")
                 .append(" and a.stock_id = c.id")
                 .append(" order by a.id desc ");
@@ -118,7 +120,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
                 .addScalar("serial", StringType.INSTANCE)
                 .addScalar("total_money", StringType.INSTANCE);
         //
-        ps.setString(0, transId);
+        //ps.setString(0, transId);
         //
         return convertToStockTransDetail(ps.list());
     }
@@ -529,8 +531,8 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         StringBuilder sqlStockGoods = new StringBuilder();
         //STOCK_TRANS_DETAIL
         sqlStockTransDetail.append(" Insert into MJR_STOCK_TRANS_DETAIL ");
-        sqlStockTransDetail.append(" (ID,STOCK_TRANS_ID,GOODS_ID,GOODS_CODE,GOODS_STATE,IS_SERIAL,AMOUNT,SERIAL,INPUT_PRICE,CELL_CODE, total_money)  ");
-        sqlStockTransDetail.append(" values  (SEQ_MJR_STOCK_TRANS_DETAIL.nextval,?,?,?,?,?,?,?,?,?,?) ");
+        sqlStockTransDetail.append(" (ID,STOCK_TRANS_ID,GOODS_ID,GOODS_CODE,GOODS_STATE,IS_SERIAL,AMOUNT,SERIAL,INPUT_PRICE,CELL_CODE, total_money, unit_name)  ");
+        sqlStockTransDetail.append(" values  (SEQ_MJR_STOCK_TRANS_DETAIL.nextval,?,?,?,?,?,?,?,?,?,?,?) ");
         //STOCK_GOODS_SERIAL
         sqlStockGoodsSerial.append(" Insert into MJR_STOCK_GOODS_SERIAL  ");
         sqlStockGoodsSerial.append(" (ID,CUST_ID,STOCK_ID,GOODS_ID,GOODS_STATE,CELL_CODE,AMOUNT,SERIAL,IMPORT_DATE,CHANGED_DATE,STATUS,PARTNER_ID,IMPORT_STOCK_TRANS_ID,INPUT_PRICE)  ");
@@ -553,7 +555,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
                 //
                 count++;
                 //DETAIL
-                paramsStockTransDetail = setParamsStockTransSerial(mjrStockTransDTO, goods);
+                paramsStockTransDetail = setParamsStockTransDetail(mjrStockTransDTO, goods);
                 //SET PARAMS AND ADD TO BATCH
                 for (int idx = 0; idx < paramsStockTransDetail.size(); idx++) {
                     prstmtInsertStockTransDetail.setString(idx + 1, DataUtil.nvl(paramsStockTransDetail.get(idx), "").toString());
@@ -608,7 +610,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         return Responses.SUCCESS.getName();
     }
 
-    private List setParamsStockTransSerial(MjrStockTransDTO transDetail, MjrStockTransDetailDTO goods) {
+    private List setParamsStockTransDetail(MjrStockTransDTO transDetail, MjrStockTransDetailDTO goods) {
         List<String> paramsStockTrans = Lists.newArrayList();
         paramsStockTrans.add(transDetail.getId());
         paramsStockTrans.add(goods.getGoodsId());
@@ -620,6 +622,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         paramsStockTrans.add(goods.getInputPrice());
         paramsStockTrans.add(goods.getCellCode() != null ? goods.getCellCode() : "");
         paramsStockTrans.add(goods.getTotalMoney());
+        paramsStockTrans.add(goods.getUnitName());
         return paramsStockTrans;
     }
 

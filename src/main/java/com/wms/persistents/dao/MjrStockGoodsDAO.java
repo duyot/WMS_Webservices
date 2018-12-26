@@ -56,7 +56,7 @@ public class MjrStockGoodsDAO extends BaseDAOImpl<MjrStockGoods,Long> {
         //2. check valid
         List<MjrStockGoods> lstCurrentStockGoods = findByConditionSession(lstCon,session);
         if(DataUtil.isListNullOrEmpty(lstCurrentStockGoods)){
-            responseObject.setStatusName(Responses.ERROR_NOT_FOUND_STOCK_GOODS.getName());
+            responseObject.setStatusName(Responses.ERROR_NOT_FOUND_STOCK_GOODS.getName()+"|"+goodsDetail.getGoodsCode());
             return responseObject;
         }
         //3. update

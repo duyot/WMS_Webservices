@@ -57,8 +57,6 @@ public class MjrStockGoodsTotalServices extends BaseServices<MjrStockGoodsTotalD
         if(!DataUtil.isStringNullOrEmpty(partnerId) && !partnerId.equals("-1")){
             lstCon.add(new Condition("partnerId",Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL,partnerId));
         }
-        //lstCon.add(new Condition("",Constants.SQL_OPERATOR.LIMIT, Integer.parseInt(limit)));
-        //lstCon.add(new Condition("",Constants.SQL_OPERATOR.OFFSET, Integer.parseInt(offset)));
         lstCon.add(new Condition("importDate",Constants.SQL_OPERATOR.ORDER,"desc"));
         //
         if("1".equalsIgnoreCase(isSerial)){
@@ -114,6 +112,7 @@ public class MjrStockGoodsTotalServices extends BaseServices<MjrStockGoodsTotalD
                 temp.setInputPrice(i.getInputPrice());
                 temp.setOutputPrice(i.getOutputPrice());
                 temp.setPartnerId(i.getPartnerId());
+                temp.setCellCode(i.getCellCode());
                 //
                 lstResult.add(temp);
             }
@@ -138,6 +137,7 @@ public class MjrStockGoodsTotalServices extends BaseServices<MjrStockGoodsTotalD
                 temp.setOutputPrice(i.getOutputPrice());
                 temp.setStockId(i.getStockId());
                 temp.setPartnerId(i.getPartnerId());
+                temp.setCellCode(i.getCellCode());
                 //
                 lstResult.add(temp);
             }

@@ -52,7 +52,7 @@ public class MjrStockGoodsSerialDAO extends BaseDAOImpl<MjrStockGoodsSerial,Long
         List<MjrStockGoodsSerial> lstResultSerial = findByConditionSession(lstCon,session);
         if(DataUtil.isListNullOrEmpty(lstResultSerial)){
             responseObject.setStatusCode(Responses.ERROR.getName());
-            responseObject.setStatusName(Responses.ERROR_NOT_FOUND_SERIAL.getName());
+            responseObject.setStatusName(Responses.ERROR_NOT_FOUND_SERIAL.getName() + "|" + goodsDetail.getSerial());
             responseObject.setKey(goodsDetail.getSerial());
             return responseObject;
         }
