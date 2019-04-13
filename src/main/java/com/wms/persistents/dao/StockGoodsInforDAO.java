@@ -1,20 +1,15 @@
 package com.wms.persistents.dao;
 
 
-import com.wms.base.BaseDAOImpl;
 import com.wms.dto.StockGoodsInfor;
-import com.wms.enums.Responses;
-import com.wms.persistents.model.AppParams;
 import com.wms.utils.DataUtil;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.transform.Transformers;
 import org.hibernate.type.StringType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
