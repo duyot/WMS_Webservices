@@ -94,14 +94,15 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         Session session = getSession();
         //
         StringBuilder str = new StringBuilder();
-        str.append(" select a.code,c.name, a.type, b.goods_code,b.goods_id, b.goods_state,b.amount, b.unit_name, a.created_date, a.CREATED_USER, b.input_price, b.output_price, b.cell_code, b.serial, b.total_money  ")
-                .append(" from mjr_stock_trans a, mjr_stock_trans_detail b, cat_stock c")
+        str.append(" select a.code,c.name, a.type, b.goods_code, b.goods_id, b.goods_state,b.amount, b.unit_name, a.created_date, a.CREATED_USER, b.input_price, b.output_price, b.cell_code, b.serial, b.total_money, d.name as goods_name ")
+                .append(" from mjr_stock_trans a, mjr_stock_trans_detail b, cat_stock c, cat_goods d")
                 .append(" WHERE 1 = 1 ")
                 .append(" and a.id in (  ")
                 .append(transId)
                 .append(" ) ")
                 .append(" and a.id= b.STOCK_TRANS_ID")
                 .append(" and a.stock_id = c.id")
+                .append(" and b.goods_id = d.id")
                 .append(" order by a.id desc ");
         Query ps = session.createSQLQuery(str.toString())
                 .addScalar("code", StringType.INSTANCE)
@@ -118,7 +119,8 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
                 .addScalar("output_price", FloatType.INSTANCE)
                 .addScalar("cell_code", StringType.INSTANCE)
                 .addScalar("serial", StringType.INSTANCE)
-                .addScalar("total_money", StringType.INSTANCE);
+                .addScalar("total_money", StringType.INSTANCE)
+                .addScalar("goods_name", StringType.INSTANCE);
         //
         //ps.setString(0, transId);
         //
@@ -316,6 +318,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
             temp.setCellCode(i[12] == null ? "" : String.valueOf(i[12]));
             temp.setSerial(i[13] == null ? "" : String.valueOf(i[13]));
             temp.setTotalMoney(i[14] == null ? "" : FunctionUtils.formatNumber(String.valueOf(i[14])));
+            temp.setGoodsName(i[15] == null ? "" : String.valueOf(i[15]));
             //
             lstResult.add(temp);
         }
