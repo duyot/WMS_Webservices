@@ -28,11 +28,16 @@ public class CatGoods extends BaseModel {
     private String description;
     private Double inPrice;
     private Double outPrice;
+    private Double length;
+    private Double width;
+    private Double hight;
+    private Double weight;
 
     public CatGoods() {
     }
 
-    public CatGoods(Long id, String code, String name, byte status, Date createdDate, Long custId, String unitType, Long goodsGroupId, byte isSerial, String description, Double inPrice, Double outPrice) {
+    public CatGoods(Long id, String code, String name, byte status, Date createdDate, Long custId, String unitType, Long goodsGroupId, byte isSerial, String description, Double inPrice, Double outPrice,
+                    Double length, Double width, Double hight, Double weight) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -45,6 +50,10 @@ public class CatGoods extends BaseModel {
         this.description = description;
         this.inPrice = inPrice;
         this.outPrice = outPrice;
+        this.length = length;
+        this.width = width;
+        this.hight = hight;
+        this.weight = weight;
     }
 
     @Id
@@ -163,11 +172,52 @@ public class CatGoods extends BaseModel {
         this.outPrice = outPrice;
     }
 
+    @Column(name = "LENGTH")
+    public Double getLength() {
+        return length;
+    }
+
+    public void setLength(Double length) {
+        this.length = length;
+    }
+
+    @Column(name = "WIDTH")
+    public Double getWidth() {
+        return width;
+    }
+
+    public void setWidth(Double width) {
+        this.width = width;
+    }
+
+    @Column(name = "HIGHT")
+    public Double getHight() {
+        return hight;
+    }
+
+    public void setHight(Double hight) {
+        this.hight = hight;
+    }
+
+    @Column(name = "WEIGHT")
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+
     @Override
     public BaseDTO toDTO() {
         return new CatGoodsDTO(id==null?"":id+"",code,name,status+"",
                 createdDate ==null?"": DateTimeUtils.convertDateTimeToString(createdDate),String.valueOf(custId),
                 unitType,goodsGroupId==null?"":goodsGroupId+"", isSerial+"",description,inPrice==null?"":inPrice+"",
-                outPrice==null?"":outPrice+"");
+                outPrice==null?"":outPrice+"",
+                length==null?"":length+"",
+                width==null?"":width+"",
+                hight==null?"":hight+"",
+                weight==null?"":weight+""
+                );
     }
 }
