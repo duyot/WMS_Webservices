@@ -23,11 +23,15 @@ public class CatGoodsDTO extends BaseDTO{
     private String description;
     private String inPrice;
     private String outPrice;
+    private String length;
+    private String width;
+    private String hight;
+    private String weight;
 
     public CatGoodsDTO() {
     }
 
-    public CatGoodsDTO(String id, String code, String name, String status, String createdDate, String custId, String unitType, String goodsGroupId, String isSerial, String description, String inPrice, String outPrice) {
+    public CatGoodsDTO(String id, String code, String name, String status, String createdDate, String custId, String unitType, String goodsGroupId, String isSerial, String description, String inPrice, String outPrice,String length,String width,String hight,String weight) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -40,6 +44,42 @@ public class CatGoodsDTO extends BaseDTO{
         this.description = description;
         this.inPrice = inPrice;
         this.outPrice = outPrice;
+        this.length = length;
+        this.width = width;
+        this.hight = hight;
+        this.weight = weight;
+    }
+
+    public String getLength() {
+        return length;
+    }
+
+    public void setLength(String length) {
+        this.length = length;
+    }
+
+    public String getWidth() {
+        return width;
+    }
+
+    public void setWidth(String width) {
+        this.width = width;
+    }
+
+    public String getHight() {
+        return hight;
+    }
+
+    public void setHight(String hight) {
+        this.hight = hight;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
     }
 
     public String getId() {
@@ -144,7 +184,12 @@ public class CatGoodsDTO extends BaseDTO{
                 !StringUtils.validString(id) ? null:Long.valueOf(id), code, name, !StringUtils.validString(status) ? null:Byte.parseByte(status),
                 !StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),
                 Long.valueOf(custId), unitType, !StringUtils.validString(goodsGroupId) ? null:Long.valueOf(goodsGroupId),
-                !StringUtils.validString(isSerial) ? null:Byte.parseByte(isSerial), description, !StringUtils.validString(inPrice) ? null:Double.valueOf(inPrice), !StringUtils.validString(outPrice) ? null:Double.valueOf(outPrice)
+                !StringUtils.validString(isSerial) ? null:Byte.parseByte(isSerial), description,
+                !StringUtils.validString(inPrice) ? null:Double.valueOf(inPrice), !StringUtils.validString(outPrice) ? null:Double.valueOf(outPrice),
+                !StringUtils.validString(length) ? null:Double.valueOf(length),
+                !StringUtils.validString(width) ? null:Double.valueOf(width),
+                !StringUtils.validString(hight) ? null:Double.valueOf(hight),
+                !StringUtils.validString(weight) ? null:Double.valueOf(weight)
         );
     }
 
@@ -163,6 +208,10 @@ public class CatGoodsDTO extends BaseDTO{
                 ", description='" + description + '\'' +
                 ", inPrice='" + inPrice + '\'' +
                 ", outPrice='" + outPrice + '\'' +
+                ", length='" + length + '\'' +
+                ", width='" + width + '\'' +
+                ", hight='" + hight + '\'' +
+                ", weight='" + weight + '\'' +
                 '}';
     }
 }
