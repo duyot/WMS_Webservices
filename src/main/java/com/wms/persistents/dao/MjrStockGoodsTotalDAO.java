@@ -105,6 +105,7 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
                 "                 cat_goods b,\n" +
                 "                 cat_stock c \n" +
                 "                 where 1=1 \n" +
+                "                 and a.status = 1\n" +
                 "                 and a.goods_id = b.id\n" +
                 "                 and a.stock_id = c.id\n" +
                 "                 and a.cust_id =? ");
@@ -115,6 +116,7 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
                 "                 cat_goods b,\n" +
                 "                 cat_stock c \n" +
                 "                 where 1=1 \n" +
+                "                 and a.status = 1\n" +
                 "                 and a.goods_id = b.id\n" +
                 "                 and a.stock_id = c.id\n" +
                 "                 and a.cust_id =?\n");
