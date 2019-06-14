@@ -193,7 +193,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         String beforeDate;
 
         if (type == 7) {
-            beforeDate = DateTimeUtils.convertDateToString(DateTimeUtils.getDateCompareToCurrent(-type),"dd/MM/yyyy");
+            beforeDate = DateTimeUtils.convertDateToString(DateTimeUtils.getDateCompareToCurrent(-type+1),"dd/MM/yyyy");
         }else{
             beforeDate = DateTimeUtils.convertDateToString(DateTimeUtils.getFirstDateInMonth(),"dd/MM/yyyy");
         }
@@ -244,11 +244,11 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
 
     private List<ChartDTO> convertToTotalStockTrans(List<Object[]> lstData, Date beforeDate, int type) {
         List<ChartDTO> lstChart = Lists.newArrayList();
-        Double[] dataExport = new Double[type+1];
-        Double[] dataImport = new Double[type+1];
+        Double[] dataExport = new Double[type];
+        Double[] dataImport = new Double[type];
         Date curDate = null;
         int count = 0;
-        for (int j=0; j<=type; j++){
+        for (int j=0; j<type; j++){
             curDate = DateTimeUtils.getNextDate(beforeDate, j);
             for (Object[] i : lstData) {
                 //Bat dau mot kho moi
