@@ -121,6 +121,13 @@ public class DateTimeUtils {
         cal.add(Calendar.DATE, amount);
         return cal.getTime();
     }
+    public static Date getNextDate(Date fromDate, int amount){
+        final Calendar cal = Calendar.getInstance();
+        cal.setTime(fromDate);
+        cal.add(Calendar.DATE, amount);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        return convertStringToTime(dateFormat.format(cal.getTime()), "dd/mm/yyyy" );
+    }
 
     public static Date getFirstDateInMonth(){
         Calendar c = Calendar.getInstance();   // this takes current date

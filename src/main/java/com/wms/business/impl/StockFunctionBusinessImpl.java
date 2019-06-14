@@ -86,8 +86,8 @@ public class StockFunctionBusinessImpl implements StockFunctionInterface {
     }
 
     @Override
-    public List<ChartDTO> getTotalStockTrans(String custId, int type,String lstStockId) {
-        return stockFunctionDAO.getTotalStockTrans(custId,type,lstStockId);
+    public List<ChartDTO> getTotalStockTrans(String custId, int type,String userId) {
+        return stockFunctionDAO.getTotalStockTrans(custId,type,userId);
     }
 
 

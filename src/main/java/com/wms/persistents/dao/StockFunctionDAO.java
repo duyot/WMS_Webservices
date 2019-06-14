@@ -5,10 +5,9 @@ import com.wms.base.BaseDAOImpl;
 import com.wms.business.impl.StockManagementBusinessImpl;
 import com.wms.dto.*;
 import com.wms.enums.Responses;
+import com.wms.persistents.model.CatUser;
 import com.wms.persistents.model.SysMenu;
-import com.wms.utils.Constants;
-import com.wms.utils.DataUtil;
-import com.wms.utils.FunctionUtils;
+import com.wms.utils.*;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -33,6 +32,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -185,71 +185,87 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
     }
 
     @Transactional
-    public List<ChartDTO> getTotalStockTrans(String custId, int type, String lstStockId) {
+    public List<ChartDTO> getTotalStockTrans(String custId, int type, String userId) {
 
         Session session = getSession();
-        String[] ids = lstStockId.split(",");
-        int size = ids.length;
-        StringBuilder lstParamIds = new StringBuilder("");
-        if ("".equalsIgnoreCase(lstStockId.trim())) {
-            lstParamIds.append("?");
-        } else {
-            for (int i = 0; i < size; i++) {
-                lstParamIds.append("?");
-                if (i != size - 1) {
-                    lstParamIds.append(",");
-                }
-            }
+        Date date = new Date();
+        String currentDate = DateTimeUtils.convertDateToString(date,"dd/MM/yyyy");
+        String beforeDate;
+
+        if (type == 7) {
+            beforeDate = DateTimeUtils.convertDateToString(DateTimeUtils.getDateCompareToCurrent(-type),"dd/MM/yyyy");
+        }else{
+            beforeDate = DateTimeUtils.convertDateToString(DateTimeUtils.getFirstDateInMonth(),"dd/MM/yyyy");
         }
 
         StringBuilder str = new StringBuilder();
-        str.append(" select a.stock_id, a.type, count(*) as so_luong ")
-                .append(" from mjr_stock_trans a")
-                .append(" where 1=1")
-                .append(" and a.stock_id in( ")
-                .append(lstParamIds)
-                .append(" )")
-                .append(" and a.cust_id = ? ")
-                .append(" group by a.stock_id, a.type")
-                .append(" order by a.stock_id, a.type");
-
+        str.append(" select a.partner_permission, a.stock_permission ")
+                .append(" from cat_user a")
+                .append(" where a.status=1 and a.block =0")
+                .append(" and a.id = ? ");
         Query ps = session.createSQLQuery(str.toString())
-                .addScalar("stock_id", StringType.INSTANCE)
+                .addScalar("partner_permission", StringType.INSTANCE)
+                .addScalar("stock_permission", StringType.INSTANCE);
+        ps.setString(0, userId);
+        List<Object[]> lstData = ps.list();
+        String partnerPermission = "";
+        String stockPermission = "";
+        for (Object[] i : lstData) {
+            partnerPermission = (i[0] == null ? "" : String.valueOf(i[0]));
+            stockPermission = (i[1] == null ? "" : String.valueOf(i[1]));
+            break;
+        }
+        str = new StringBuilder("");
+        str.append(" select to_char(a.created_date,'dd/mm/yyyy') as created_date, a.type, count(*) as so_luong ")
+                .append(" from mjr_stock_trans a");
+        if ("1".equals(partnerPermission)) {
+            str.append(" join MAP_USER_PARTNER b on a.partner_id = b.partner_id ")
+                    .append(" and b.user_id = ").append(userId);
+        }
+        if ("1".equals(stockPermission)) {
+            str.append(" join MAP_USER_STOCK c on a.stock_id = c.stock_id ")
+                    .append(" and c.user_id = ").append(userId);
+        }
+        str.append(" where 1=1")
+                .append(" and a.cust_id = ? ")
+                .append(" and a.created_date >= ? ")
+                .append(" group by to_char(a.created_date,'dd/mm/yyyy'), a.type")
+                .append(" order by to_char(a.created_date,'dd/mm/yyyy'), a.type");
+
+        ps = session.createSQLQuery(str.toString())
+                .addScalar("created_date", StringType.INSTANCE)
                 .addScalar("type", StringType.INSTANCE)
                 .addScalar("so_luong", StringType.INSTANCE);
-        if ("".equalsIgnoreCase(lstStockId.trim())) {
-            ps.setString("1", "-1");
-        } else {
-            int i;
-            for (i = 0; i < size; i++) {
-                ps.setString(i, ids[i]);
-            }
-            ps.setString(i, custId);
-        }
+        ps.setString(0, custId);
+        ps.setDate(1, DateTimeUtils.convertStringToDate(beforeDate));
 
-        return convertToTotalStockTrans(ps.list());
+        return convertToTotalStockTrans(ps.list(), DateTimeUtils.convertStringToDate(beforeDate), type);
     }
 
-    private List<ChartDTO> convertToTotalStockTrans(List<Object[]> lstData) {
+    private List<ChartDTO> convertToTotalStockTrans(List<Object[]> lstData, Date beforeDate, int type) {
         List<ChartDTO> lstChart = Lists.newArrayList();
-        int size = lstData.size();
-        Double[] dataExport = new Double[size];
-        Double[] dataImport = new Double[size];
-        String curStockId = null;
+        Double[] dataExport = new Double[type+1];
+        Double[] dataImport = new Double[type+1];
+        Date curDate = null;
         int count = 0;
-        for (Object[] i : lstData) {
-            //Bat dau mot kho moi
-            if (curStockId != null && !curStockId.equals(String.valueOf(i[0]))) {
-                count++;
+        for (int j=0; j<=type; j++){
+            curDate = DateTimeUtils.getNextDate(beforeDate, j);
+            for (Object[] i : lstData) {
+                //Bat dau mot kho moi
+                if (curDate.compareTo(DateTimeUtils.convertStringToTime(String.valueOf(i[0]),"dd/mm/yyyy")) == 0) {
+                    if (String.valueOf(i[1]).equals("1")) {
+                        dataImport[j] = Double.valueOf(String.valueOf(i[2]));
+                    } else {
+                        dataExport[j] = Double.valueOf(String.valueOf(i[2]));
+                    }
+                }else{
+                    if (String.valueOf(i[1]).equals("1")) {
+                        dataImport[j] = 0.0;
+                    } else {
+                        dataExport[j] = 0.0;
+                    }
+                }
             }
-            curStockId = String.valueOf(i[0]);
-            //So luong giao dich nhap cua kho dang xet
-            if (String.valueOf(i[1]).equals("1")) {
-                dataImport[count] = Double.valueOf(String.valueOf(i[2]));
-            } else {
-                dataExport[count] = Double.valueOf(String.valueOf(i[2]));
-            }
-
         }
         lstChart.add(new ChartDTO("Nhập", dataImport));
         lstChart.add(new ChartDTO("Xuất", dataExport));

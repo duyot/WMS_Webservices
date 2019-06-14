@@ -30,4 +30,9 @@ public class StatisticServices {
     public List<ChartDTO> getTopGoods(@RequestParam("custId") String custId, @RequestParam("type") String type){
         return statisticBusinessInterface.getTopGoods(custId,Integer.parseInt(type));
     }
+    //------------------------------------------------------------------------------------------------------------------
+    @RequestMapping(value = "/getTransaction",produces = "application/json")
+    public List<ChartDTO> getTransaction(@RequestParam("custId") String custId, @RequestParam("type") String type, @RequestParam("userId") String userId){
+        return statisticBusinessInterface.getTransaction(custId,Integer.parseInt(type), userId);
+    }
 }

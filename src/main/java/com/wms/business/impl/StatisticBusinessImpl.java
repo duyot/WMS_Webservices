@@ -92,8 +92,8 @@ public class StatisticBusinessImpl implements StatisticBusinessInterface {
     }
 
     @Override
-    public List<ChartDTO> getTransaction(String custId, int type,String lstStockId) {
-        List<ChartDTO> lstResult = stockFunctionBusiness.getTotalStockTrans(custId,type,lstStockId);
+    public List<ChartDTO> getTransaction(String custId, int type,String userId) {
+        List<ChartDTO> lstResult = stockFunctionBusiness.getTotalStockTrans(custId,type,userId);
         return lstResult;
     }
 
