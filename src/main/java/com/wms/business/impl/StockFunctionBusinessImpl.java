@@ -90,5 +90,9 @@ public class StockFunctionBusinessImpl implements StockFunctionInterface {
         return stockFunctionDAO.getTotalStockTrans(custId,type,userId);
     }
 
+    @Override
+    public List<ChartDTO> getKPIStorage(String custId, int type,String userId) {
+        return stockFunctionDAO.getKPIStorage(custId,type,userId);
+    }
 
 }

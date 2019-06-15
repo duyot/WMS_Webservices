@@ -41,4 +41,7 @@ public interface StockFunctionInterface {
     //
     List<ChartDTO> getTotalStockTrans(String custId, int type,String userId);
 
+    //
+    List<ChartDTO> getKPIStorage(String custId, int type,String userId);
+
 }

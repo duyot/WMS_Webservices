@@ -32,10 +32,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by duyot on 3/6/2017.
@@ -216,7 +215,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
             break;
         }
         str = new StringBuilder("");
-        str.append(" select to_char(a.created_date,'dd/mm/yyyy') as created_date, a.type, count(*) as so_luong ")
+        str.append(" select to_char(a.created_date,'dd/MM/yyyy') as created_date, a.type, count(*) as so_luong ")
                 .append(" from mjr_stock_trans a");
         if ("1".equals(partnerPermission)) {
             str.append(" join MAP_USER_PARTNER b on a.partner_id = b.partner_id ")
@@ -229,8 +228,8 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         str.append(" where 1=1")
                 .append(" and a.cust_id = ? ")
                 .append(" and a.created_date >= ? ")
-                .append(" group by to_char(a.created_date,'dd/mm/yyyy'), a.type")
-                .append(" order by to_char(a.created_date,'dd/mm/yyyy'), a.type");
+                .append(" group by to_char(a.created_date,'dd/MM/yyyy'), a.type")
+                .append(" order by to_char(a.created_date,'dd/MM/yyyy'), a.type");
 
         ps = session.createSQLQuery(str.toString())
                 .addScalar("created_date", StringType.INSTANCE)
@@ -240,6 +239,138 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         ps.setDate(1, DateTimeUtils.convertStringToDate(beforeDate));
 
         return convertToTotalStockTrans(ps.list(), DateTimeUtils.convertStringToDate(beforeDate), type);
+    }
+
+    @Transactional
+    public List<ChartDTO> getKPIStorage(String custId, int type, String userId) {
+
+        Session session = getSession();
+        Date date = new Date();
+        String beforeDate = DateTimeUtils.convertDateToString(DateTimeUtils.getDateCompareToCurrent(-30),"dd/MM/yyyy");;
+
+        StringBuilder str = new StringBuilder();
+        str.append(" select a.partner_permission, a.stock_permission ")
+                .append(" from cat_user a")
+                .append(" where a.status=1 and a.block =0")
+                .append(" and a.id = ? ");
+        Query ps = session.createSQLQuery(str.toString())
+                .addScalar("partner_permission", StringType.INSTANCE)
+                .addScalar("stock_permission", StringType.INSTANCE);
+        ps.setString(0, userId);
+        List<Object[]> lstData = ps.list();
+        String partnerPermission = "";
+        String stockPermission = "";
+        for (Object[] i : lstData) {
+            partnerPermission = (i[0] == null ? "" : String.valueOf(i[0]));
+            stockPermission = (i[1] == null ? "" : String.valueOf(i[1]));
+            break;
+        }
+        str = new StringBuilder("");
+        str.append(" select gr.* from ( ")
+                .append(" select to_char(a.IMPORT_DATE,'dd/MM/yyyy') as IMPORT_DATE , a.goods_id, a.stock_id, a.partner_id, a.cust_id from MJR_STOCK_GOODS a where a.status =1 and a.IMPORT_DATE <= ?")
+                .append(" union all")
+                .append(" select to_char(b.IMPORT_DATE,'dd/MM/yyyy') as IMPORT_DATE , b.goods_id, b.stock_id, b.partner_id, b.cust_id from MJR_STOCK_GOODS_serial b where b.status =1 and b.IMPORT_DATE <= ?")
+                .append("   ) gr ")
+        ;
+        if ("1".equals(partnerPermission)) {
+            str.append(" join MAP_USER_PARTNER c on gr.partner_id = c.partner_id ")
+                    .append(" and c.user_id = ").append(userId);
+        }
+        if ("1".equals(stockPermission)) {
+            str.append(" join MAP_USER_STOCK d on gr.stock_id = d.stock_id ")
+                    .append(" and d.user_id = ").append(userId);
+        }
+        str.append(" where 1=1")
+                .append(" and gr.cust_id = ? ")
+                .append(" order by gr.IMPORT_DATE");
+
+        ps = session.createSQLQuery(str.toString())
+                .addScalar("IMPORT_DATE", StringType.INSTANCE)
+                .addScalar("goods_id", StringType.INSTANCE)
+                .addScalar("stock_id", StringType.INSTANCE)
+                .addScalar("partner_id", StringType.INSTANCE)
+                .addScalar("cust_id", StringType.INSTANCE)
+        ;
+        ps.setDate(0, DateTimeUtils.convertStringToDate(beforeDate));
+        ps.setDate(1, DateTimeUtils.convertStringToDate(beforeDate));
+        ps.setString(2, custId);
+
+        if(DataUtil.isListNullOrEmpty(ps.list())){
+            return Lists.newArrayList();
+        }
+        return getKPIStorageChartFromData(ps.list());
+    }
+
+    private List<ChartDTO> getKPIStorageChartFromData(List<Object[]> lstData){
+        List<ChartDTO> lstResult = Lists.newArrayList();
+        Session session = getSession();
+        Date date = new Date();
+        long diffInMillies = 0;
+        long diff = 0;
+        Date importDate = null;
+        Map<String, String> map1month =  new HashMap<String, String>();
+        Map<String, String> map3month =  new HashMap<String, String>();
+        Map<String, String> map6month =  new HashMap<String, String>();
+        Map<String, String> map12month =  new HashMap<String, String>();
+        Map<String, String> map36month =  new HashMap<String, String>();
+        Double amount1month = 0.0;
+        Double amount3month = 0.0;
+        Double amount6month = 0.0;
+        Double amount12month = 0.0;
+        Double amount36month = 0.0;
+
+        for (Object[] i : lstData) {
+            importDate = DateTimeUtils.convertStringToTime(String.valueOf(i[0]), "dd/MM/yyyy");
+            diffInMillies = Math.abs(date.getTime() - importDate.getTime());
+            diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+            if(diff >= 1095){
+                if(!map36month.containsKey(String.valueOf(i[1]))){
+                    amount36month++;
+                    map36month.put(String.valueOf(i[1]), String.valueOf(i[1]));
+                }
+            }else if(diff >= 365){
+                if(!map12month.containsKey(String.valueOf(i[1]))){
+                    amount12month++;
+                    map12month.put(String.valueOf(i[1]), String.valueOf(i[1]));
+                }
+            }else if(diff >= 180){
+                if(!map6month.containsKey(String.valueOf(i[1]))){
+                    amount6month++;
+                    map6month.put(String.valueOf(i[1]), String.valueOf(i[1]));
+                }
+            }else if(diff >=90){
+                if(!map3month.containsKey(String.valueOf(i[1]))){
+                    amount3month++;
+                    map3month.put(String.valueOf(i[1]), String.valueOf(i[1]));
+                }
+            }else{
+                if(!map1month.containsKey(String.valueOf(i[1]))){
+                    amount1month++;
+                    map1month.put(String.valueOf(i[1]), String.valueOf(i[1]));
+                }
+            }
+        }
+        for(int i = 0;i< 5;i++){
+            ChartDTO data = new ChartDTO();
+            if(i == 0){
+                data.setName(">=1 tháng");
+                data.setY(amount1month);
+            }else if (i ==1){
+                data.setName(">=3 tháng");
+                data.setY(amount3month);
+            }else if (i ==2){
+                data.setName(">=6 tháng");
+                data.setY(amount6month);
+            }else if (i ==3){
+                data.setName(">=1 năm");
+                data.setY(amount12month);
+            }else{
+                data.setName(">=3 năm");
+                data.setY(amount36month);
+            }
+            lstResult.add(data);
+        }
+        return lstResult;
     }
 
     private List<ChartDTO> convertToTotalStockTrans(List<Object[]> lstData, Date beforeDate, int type) {

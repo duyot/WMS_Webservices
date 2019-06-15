@@ -10,6 +10,6 @@ import java.util.List;
 public interface StatisticBusinessInterface {
     List<ChartDTO> getRevenue(String custId, int type);
     List<ChartDTO> getTopGoods(String custId, int type);
-    List<ChartDTO> getKPIStorage(String custId, int type);
+    List<ChartDTO> getKPIStorage(String custId, int type, String userId);
     List<ChartDTO> getTransaction(String custId, int type, String userId);
 }

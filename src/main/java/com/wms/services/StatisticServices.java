@@ -35,4 +35,10 @@ public class StatisticServices {
     public List<ChartDTO> getTransaction(@RequestParam("custId") String custId, @RequestParam("type") String type, @RequestParam("userId") String userId){
         return statisticBusinessInterface.getTransaction(custId,Integer.parseInt(type), userId);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+    @RequestMapping(value = "/getKPIStorage",produces = "application/json")
+    public List<ChartDTO> getKPIStorage(@RequestParam("custId") String custId, @RequestParam("type") String type, @RequestParam("userId") String userId){
+        return statisticBusinessInterface.getKPIStorage(custId,Integer.parseInt(type), userId);
+    }
 }
