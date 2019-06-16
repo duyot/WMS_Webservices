@@ -77,23 +77,14 @@ public class StatisticBusinessImpl implements StatisticBusinessInterface {
     }
 
     @Override
-    public List<ChartDTO> getKPIStorage(String custId, int type) {
-        List<SysStatisticTopGoodsDTO> lstStatisticTopGoods;
-        List<Condition> lstCon = Lists.newArrayList();
-        lstCon.add(new Condition("custId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,custId));
-        lstCon.add(new Condition("type", Constants.SQL_OPERATOR.EQUAL,type+""));
-
-        lstStatisticTopGoods = sysStatisticTopGoodsBusiness.findByCondition(lstCon);
-        if(DataUtil.isListNullOrEmpty(lstStatisticTopGoods)){
-            return Lists.newArrayList();
-        }
-
-        return getTopGoodsChartFromData(lstStatisticTopGoods.get(0));
+    public List<ChartDTO> getKPIStorage(String custId, int type,String userId) {
+        List<ChartDTO> lstResult = stockFunctionBusiness.getKPIStorage(custId,type,userId);
+        return lstResult;
     }
 
     @Override
-    public List<ChartDTO> getTransaction(String custId, int type,String lstStockId) {
-        List<ChartDTO> lstResult = stockFunctionBusiness.getTotalStockTrans(custId,type,lstStockId);
+    public List<ChartDTO> getTransaction(String custId, int type,String userId) {
+        List<ChartDTO> lstResult = stockFunctionBusiness.getTotalStockTrans(custId,type,userId);
         return lstResult;
     }
 

@@ -33,9 +33,11 @@ public class CatUser extends BaseModel {
     //
     private byte block;
     private Long roleId;
+    private Long partnerPermission;
+    private Long stockPermission;
 
 
-    public CatUser(Long id, Long deptId, Long custId, String code, String name, String password, Date birthDate, String email, String telNumber, byte status, Date createdDate, String imgUrl, String roleName, String logReason, Long roleId, byte block) {
+    public CatUser(Long id, Long deptId, Long custId, String code, String name, String password, Date birthDate, String email, String telNumber, byte status, Date createdDate, String imgUrl, String roleName, String logReason, Long roleId, byte block, Long partnerPermission, Long stockPermission) {
         this.id = id;
         this.deptId = deptId;
         this.custId = custId;
@@ -52,6 +54,8 @@ public class CatUser extends BaseModel {
         this.logReason = logReason;
         this.block = block;
         this.roleId = roleId;
+        this.partnerPermission = partnerPermission;
+        this.stockPermission = stockPermission;
     }
 
     public CatUser() {
@@ -210,12 +214,30 @@ public class CatUser extends BaseModel {
         this.roleId = roleId;
     }
 
+    @Column(name = "PARTNER_PERMISSION")
+    public Long getPartnerPermission() {
+        return partnerPermission;
+    }
+
+    public void setPartnerPermission(Long partnerPermission) {
+        this.partnerPermission = partnerPermission;
+    }
+
+    @Column(name = "STOCK_PERMISSION")
+    public Long getStockPermission() {
+        return stockPermission;
+    }
+
+    public void setStockPermission(Long stockPermission) {
+        this.stockPermission = stockPermission;
+    }
+
     @Override
     public CatUserDTO toDTO() {
         return new CatUserDTO(id==null?"":id+"",deptId==null?"":deptId+"",custId==null?"":custId+"",
                 code,name,password,birthDate==null?"": DateTimeUtils.convertDateTimeToString(birthDate),
                 email,telNumber,status+"",createdDate==null?"": DateTimeUtils.convertDateTimeToString(createdDate),
-                imgUrl,roleName,logReason,roleId==null?"":roleId+"",block+""
+                imgUrl,roleName,logReason,roleId==null?"":roleId+"",block+"", partnerPermission==null?"":partnerPermission+"", stockPermission==null?"":stockPermission+""
         );
     }
 }

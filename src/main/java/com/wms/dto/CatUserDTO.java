@@ -27,8 +27,10 @@ public class CatUserDTO extends BaseDTO {
     //
     private String roleId;
     private String block;
+    private String partnerPermission;
+    private String stockPermission;
 
-    public CatUserDTO(String id, String deptId, String custId, String code, String name, String password, String birthDate, String email, String telNumber, String status, String createdDate, String imgUrl, String roleName, String logReason, String roleId, String block) {
+    public CatUserDTO(String id, String deptId, String custId, String code, String name, String password, String birthDate, String email, String telNumber, String status, String createdDate, String imgUrl, String roleName, String logReason, String roleId, String block, String partnerPermission, String stockPermission) {
         this.id = id;
         this.deptId = deptId;
         this.custId = custId;
@@ -45,6 +47,16 @@ public class CatUserDTO extends BaseDTO {
         this.logReason = logReason;
         this.roleId = roleId;
         this.block = block;
+        this.partnerPermission = partnerPermission;
+        this.stockPermission= stockPermission;
+    }
+
+    public String getPartnerPermission() {
+        return partnerPermission;
+    }
+
+    public void setPartnerPermission(String partnerPermission) {
+        this.partnerPermission = partnerPermission;
     }
 
     public CatUserDTO() {
@@ -179,13 +191,21 @@ public class CatUserDTO extends BaseDTO {
         this.block = block;
     }
 
+    public String getStockPermission() {
+        return stockPermission;
+    }
+
+    public void setStockPermission(String stockPermission) {
+        this.stockPermission = stockPermission;
+    }
+
     @Override
     public CatUser toModel() {
         return new CatUser(!StringUtils.validString(id) ? null:Long.valueOf(id),!StringUtils.validString(deptId) ? null:Long.valueOf(deptId),!StringUtils.validString(custId) ? null:Long.valueOf(custId),
                             code,name,password,!StringUtils.validString(birthDate) ? null: DateTimeUtils.convertStringToDate(birthDate),email,telNumber,
                             !StringUtils.validString(status) ? 0:Byte.parseByte(status),
                             !StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),imgUrl,roleName,logReason,
-                            !StringUtils.validString(roleId) ? null:Long.valueOf(roleId),!StringUtils.validString(block) ? 0:Byte.parseByte(block)
+                            !StringUtils.validString(roleId) ? null:Long.valueOf(roleId),!StringUtils.validString(block) ? 0:Byte.parseByte(block), !StringUtils.validString(partnerPermission) ? null:Long.valueOf(partnerPermission), !StringUtils.validString(stockPermission) ? null:Long.valueOf(stockPermission)
                         );
     }
 
@@ -208,6 +228,8 @@ public class CatUserDTO extends BaseDTO {
                 ", logReason='" + logReason + '\'' +
                 ", roleId='" + roleId + '\'' +
                 ", block='" + block + '\'' +
+                ", partnerPermission='" + partnerPermission + '\'' +
+                ", stockPermission='" + stockPermission + '\'' +
                 '}';
     }
 }

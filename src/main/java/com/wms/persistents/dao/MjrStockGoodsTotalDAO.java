@@ -103,30 +103,24 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
         strStockGoods.append("select a.goods_id, b.code as goods_code,b.name as goods_name, a.cust_id, a.goods_state, a.stock_id, c.name as stock_name, sum (a.amount) as amount, max (a.changed_date) changed_date \n" +
                 "                 from MJR_STOCK_GOODS a, \n" +
                 "                 cat_goods b,\n" +
-                "                 cat_stock c,\n" +
-                "                 MAP_USER_STOCK d\n" +
+                "                 cat_stock c \n" +
                 "                 where 1=1 \n" +
+                "                 and a.status = 1\n" +
                 "                 and a.goods_id = b.id\n" +
                 "                 and a.stock_id = c.id\n" +
-                "                 and d.stock_id = a.STOCK_ID\n" +
-                "                 and a.cust_id =?\n" +
-                "                 and d.USER_ID = ?");
+                "                 and a.cust_id =? ");
         lstParamsStockGooods.add(stockGoodsTotal.getCustId());
-        lstParamsStockGooods.add(stockGoodsTotal.getUserId());
 
         strStockGoodsSerial.append("select a.goods_id, b.code as goods_code,b.name as goods_name, a.cust_id, a.goods_state, a.stock_id, c.name as stock_name, sum (a.amount) as amount, max (a.changed_date) changed_date \n" +
                 "                 from MJR_STOCK_GOODS_SERIAL a, \n" +
                 "                 cat_goods b,\n" +
-                "                 cat_stock c,\n" +
-                "                 MAP_USER_STOCK d\n" +
+                "                 cat_stock c \n" +
                 "                 where 1=1 \n" +
+                "                 and a.status = 1\n" +
                 "                 and a.goods_id = b.id\n" +
                 "                 and a.stock_id = c.id\n" +
-                "                 and d.stock_id = a.STOCK_ID\n" +
-                "                 and a.cust_id =?\n" +
-                "                 and d.USER_ID = ?");
+                "                 and a.cust_id =?\n");
         lstParamsStockGooodsSerial.add(stockGoodsTotal.getCustId());
-        lstParamsStockGooodsSerial.add(stockGoodsTotal.getUserId());
 
         if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getStockId())){
             strStockGoods.append("  and a.stock_id = ?");
@@ -135,10 +129,10 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
             lstParamsStockGooodsSerial.add(stockGoodsTotal.getStockId());
         }
         if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getPartnerId())){
-            strStockGoods.append("  and a.partner_id = ?");
-            strStockGoodsSerial.append("  and a.partner_id = ?");
-            lstParamsStockGooods.add(stockGoodsTotal.getPartnerId());
-            lstParamsStockGooodsSerial.add(stockGoodsTotal.getPartnerId());
+            strStockGoods.append("  and a.partner_id in ("+stockGoodsTotal.getPartnerId()+")");
+            strStockGoodsSerial.append("  and a.partner_id in ("+stockGoodsTotal.getPartnerId()+")");
+            //lstParamsStockGooods.add(stockGoodsTotal.getPartnerId());
+            //lstParamsStockGooodsSerial.add(stockGoodsTotal.getPartnerId());
         }
         if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getGoodsState())){
             strStockGoods.append("  and a.goods_state = ?");
@@ -174,13 +168,12 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
         int idx = 0;
         //1.Chen tham so de lay Stock_goods
         ps.setLong(idx,Long.valueOf(lstParamsStockGooods.get(idx++)));//cust_id stock_goods
-        ps.setLong(idx,Long.valueOf(lstParamsStockGooods.get(idx++)));//user_id stock_goods
         if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getStockId())){
             ps.setLong(idx,Long.valueOf(lstParamsStockGooods.get(idx++)));//stock_id stock_goods
         }
-        if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getPartnerId())){
+        /*if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getPartnerId())){
             ps.setLong(idx,Long.valueOf(lstParamsStockGooods.get(idx++)));//partner_id stock_goods
-        }
+        }*/
         if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getGoodsState())){
             ps.setString(idx,lstParamsStockGooods.get(idx++));//goods_state stock_goods
         }
@@ -190,13 +183,12 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
         //2.Chen tham so de lay Stock_goods_serial
         int serIdx = 0;
         ps.setLong(idx++,Long.valueOf(lstParamsStockGooodsSerial.get(serIdx++)));//cust_id stock_goods_serial
-        ps.setLong(idx++,Long.valueOf(lstParamsStockGooodsSerial.get(serIdx++)));//user_id stock_goods_serial
         if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getStockId())){
             ps.setLong(idx++,Long.valueOf(lstParamsStockGooodsSerial.get(serIdx++)));//stock_id stock_goods_serial
         }
-        if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getPartnerId())){
+        /*if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getPartnerId())){
             ps.setLong(idx++,Long.valueOf(lstParamsStockGooodsSerial.get(serIdx++)));//partner_id stock_goods_serial
-        }
+        }*/
         if(!DataUtil.isStringNullOrEmpty(stockGoodsTotal.getGoodsState())){
             ps.setString(idx++,lstParamsStockGooodsSerial.get(serIdx++));//goods_state stock_goods_serial
         }
