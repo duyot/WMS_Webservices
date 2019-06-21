@@ -27,11 +27,12 @@ public class CatGoodsDTO extends BaseDTO{
     private String width;
     private String hight;
     private String weight;
+    private String volume;
 
     public CatGoodsDTO() {
     }
 
-    public CatGoodsDTO(String id, String code, String name, String status, String createdDate, String custId, String unitType, String goodsGroupId, String isSerial, String description, String inPrice, String outPrice,String length,String width,String hight,String weight) {
+    public CatGoodsDTO(String id, String code, String name, String status, String createdDate, String custId, String unitType, String goodsGroupId, String isSerial, String description, String inPrice, String outPrice, String length, String width, String hight, String weight, String volume) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -48,6 +49,7 @@ public class CatGoodsDTO extends BaseDTO{
         this.width = width;
         this.hight = hight;
         this.weight = weight;
+        this.volume = volume;
     }
 
     public String getLength() {
@@ -181,15 +183,19 @@ public class CatGoodsDTO extends BaseDTO{
     @Override
     public BaseModel toModel() {
         return new CatGoods(
-                !StringUtils.validString(id) ? null:Long.valueOf(id), code, name, !StringUtils.validString(status) ? null:Byte.parseByte(status),
+                !StringUtils.validString(id) ? null:Long.valueOf(id),
+                !StringUtils.validString(custId) ? null:Long.valueOf(custId),
+                !StringUtils.validString(goodsGroupId) ? null:Long.valueOf(goodsGroupId),
+                code, name, !StringUtils.validString(status) ? null:Byte.parseByte(status),
                 !StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),
-                Long.valueOf(custId), unitType, !StringUtils.validString(goodsGroupId) ? null:Long.valueOf(goodsGroupId),
+                 unitType,
                 !StringUtils.validString(isSerial) ? null:Byte.parseByte(isSerial), description,
                 !StringUtils.validString(inPrice) ? null:Double.valueOf(inPrice), !StringUtils.validString(outPrice) ? null:Double.valueOf(outPrice),
                 !StringUtils.validString(length) ? null:Double.valueOf(length),
                 !StringUtils.validString(width) ? null:Double.valueOf(width),
                 !StringUtils.validString(hight) ? null:Double.valueOf(hight),
-                !StringUtils.validString(weight) ? null:Double.valueOf(weight)
+                !StringUtils.validString(weight) ? null:Double.valueOf(weight),
+                !StringUtils.validString(volume) ? null:Double.valueOf(volume)
         );
     }
 

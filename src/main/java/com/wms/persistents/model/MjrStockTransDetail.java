@@ -26,11 +26,14 @@ public class MjrStockTransDetail extends BaseModel{
     private String unitName;
     private Float totalMoney;
     private Long partnerId;
+    private Float volume;
+    private Float weight;
 
     public MjrStockTransDetail() {
     }
 
-    public MjrStockTransDetail(Long id, Long stockTransId, Long goodsId, String goodsCode, String goodsState, Long isSerial, Float amount, String serial, Float inputPrice, Float outputPrice, String cellCode, Long partnerId,String unitName,Float totalMoney) {
+    public MjrStockTransDetail(Long id, Long stockTransId, Long goodsId, String goodsCode, String goodsState, Long isSerial, Float amount,
+                               String serial, Float inputPrice, Float outputPrice, String cellCode, String unitName, Float totalMoney, Long partnerId, Float weight, Float volume) {
         this.id = id;
         this.stockTransId = stockTransId;
         this.goodsId = goodsId;
@@ -42,9 +45,11 @@ public class MjrStockTransDetail extends BaseModel{
         this.inputPrice = inputPrice;
         this.outputPrice = outputPrice;
         this.cellCode = cellCode;
-        this.partnerId = partnerId;
-        this.totalMoney = totalMoney;
         this.unitName = unitName;
+        this.totalMoney = totalMoney;
+        this.partnerId = partnerId;
+        this.weight = weight;
+        this.volume = volume;
     }
 
     @Id
@@ -179,11 +184,31 @@ public class MjrStockTransDetail extends BaseModel{
         this.partnerId = partnerId;
     }
 
+    @Column(name = "VOLUME")
+    public Float getVolume() {
+        return volume;
+    }
+
+    public void setVolume(Float volume) {
+        this.volume = volume;
+    }
+
+    @Column(name = "WEIGHT")
+    public Float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Float weight) {
+        this.weight = weight;
+    }
+
     @Override
     public MjrStockTransDetailDTO toDTO() {
         return new MjrStockTransDetailDTO(id==null?"":id+"",stockTransId==null?"":stockTransId+"",goodsId==null?"":goodsId+"",
                 goodsCode,goodsState,isSerial==null?"":isSerial+"",amount==null?"":amount+"",serial,inputPrice==null?"":inputPrice+"",outputPrice==null?"":outputPrice+"",
-                cellCode, partnerId==null?"":partnerId+""
+                cellCode, partnerId==null?"":partnerId+"",
+                weight==null?"":weight+"",
+                volume==null?"":volume+""
                 );
     }
 }

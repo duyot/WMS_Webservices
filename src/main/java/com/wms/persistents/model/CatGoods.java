@@ -30,30 +30,32 @@ public class CatGoods extends BaseModel {
     private Double outPrice;
     private Double length;
     private Double width;
-    private Double hight;
+    private Double high;
     private Double weight;
+    private Double volume;
 
     public CatGoods() {
     }
 
-    public CatGoods(Long id, String code, String name, byte status, Date createdDate, Long custId, String unitType, Long goodsGroupId, byte isSerial, String description, Double inPrice, Double outPrice,
-                    Double length, Double width, Double hight, Double weight) {
+    public CatGoods(Long id, Long custId, Long goodsGroupId, String code, String name, byte status,
+                    Date createdDate, String unitType, byte isSerial, String description, Double inPrice, Double outPrice, Double length, Double width, Double high, Double weight, Double volume) {
         this.id = id;
+        this.custId = custId;
+        this.goodsGroupId = goodsGroupId;
         this.code = code;
         this.name = name;
         this.status = status;
         this.createdDate = createdDate;
-        this.custId = custId;
         this.unitType = unitType;
-        this.goodsGroupId = goodsGroupId;
         this.isSerial = isSerial;
         this.description = description;
         this.inPrice = inPrice;
         this.outPrice = outPrice;
         this.length = length;
         this.width = width;
-        this.hight = hight;
+        this.high = high;
         this.weight = weight;
+        this.volume = volume;
     }
 
     @Id
@@ -191,12 +193,12 @@ public class CatGoods extends BaseModel {
     }
 
     @Column(name = "HIGHT")
-    public Double getHight() {
-        return hight;
+    public Double getHigh() {
+        return high;
     }
 
-    public void setHight(Double hight) {
-        this.hight = hight;
+    public void setHigh(Double high) {
+        this.high = high;
     }
 
     @Column(name = "WEIGHT")
@@ -208,6 +210,15 @@ public class CatGoods extends BaseModel {
         this.weight = weight;
     }
 
+    @Column(name = "VOLUME")
+    public Double getVolume() {
+        return volume;
+    }
+
+    public void setVolume(Double volume) {
+        this.volume = volume;
+    }
+
     @Override
     public BaseDTO toDTO() {
         return new CatGoodsDTO(id==null?"":id+"",code,name,status+"",
@@ -216,8 +227,9 @@ public class CatGoods extends BaseModel {
                 outPrice==null?"":outPrice+"",
                 length==null?"":length+"",
                 width==null?"":width+"",
-                hight==null?"":hight+"",
-                weight==null?"":weight+""
+                high ==null?"": high +"",
+                weight==null?"":weight+"",
+                volume==null?"":volume+""
                 );
     }
 }

@@ -32,10 +32,10 @@ public class MjrStockGoodsSerial extends BaseModel{
     private Float outputPrice;
     private Date exportDate;
     private Long exportStockTransId;
+    private Float weight;
+    private Float volume;
 
-    public MjrStockGoodsSerial(Long id, Long custId, Long stockId, Long goodsId, String goodsState, String cellCode,
-                               Float amount, String serial, Date importDate, Date changeDate, byte status, Long partnerId,
-                               Long importStockTransId, Float inputPrice, Float outputPrice,Date exportDate,Long exportStockTransId) {
+    public MjrStockGoodsSerial(Long id, Long custId, Long stockId, Long goodsId, String goodsState, String cellCode, Float amount, String serial, Date importDate, Date changeDate, byte status, Long partnerId, Long importStockTransId, Float inputPrice, Float outputPrice, Date exportDate, Long exportStockTransId, Float weight, Float volume) {
         this.id = id;
         this.custId = custId;
         this.stockId = stockId;
@@ -53,6 +53,8 @@ public class MjrStockGoodsSerial extends BaseModel{
         this.outputPrice = outputPrice;
         this.exportDate = exportDate;
         this.exportStockTransId = exportStockTransId;
+        this.weight = weight;
+        this.volume = volume;
     }
 
     public MjrStockGoodsSerial() {
@@ -225,7 +227,8 @@ public class MjrStockGoodsSerial extends BaseModel{
                 goodsId==null?"":goodsId+"",goodsState,cellCode,amount==null?"":amount+"",serial,importDate==null?"": DateTimeUtils.convertDateTimeToString(importDate),
                 changeDate==null?"": DateTimeUtils.convertDateTimeToString(changeDate),status +"",partnerId==null?"":partnerId+"",
                 importStockTransId==null?"":importStockTransId+"",inputPrice==null?"":inputPrice+"",outputPrice==null?"":outputPrice+"",
-                exportDate==null?"": DateTimeUtils.convertDateTimeToString(exportDate),exportStockTransId==null?"":exportStockTransId+""
+                exportDate==null?"": DateTimeUtils.convertDateTimeToString(exportDate),exportStockTransId==null?"":exportStockTransId+"",
+                weight==null?"":weight+"",volume==null?"":volume+""
         );
     }
 }

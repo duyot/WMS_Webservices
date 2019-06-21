@@ -29,10 +29,10 @@ public class MjrStockGoods extends BaseModel{
     private Float outputPrice;
     private Date exportDate;
     private Long exportStockTransId;
+    private Float volume;
+    private Float weight;
 
-    public MjrStockGoods(Long id, Long custId, Long stockId, Long goodsId, String goodsState, String cellCode,
-                         Float amount, Date importDate, Date changedDate, byte status, Long partnerId,
-                         Long importStockTransId, Float inputPrice, Float outputPrice,Date exportDate,Long exportStockTransId) {
+    public MjrStockGoods(Long id, Long custId, Long stockId, Long goodsId, String goodsState, String cellCode, Float amount, Date importDate, Date changedDate, byte status, Long partnerId, Long importStockTransId, Float inputPrice, Float outputPrice, Date exportDate, Long exportStockTransId, Float weight, Float volume) {
         this.id = id;
         this.custId = custId;
         this.stockId = stockId;
@@ -49,6 +49,8 @@ public class MjrStockGoods extends BaseModel{
         this.outputPrice = outputPrice;
         this.exportDate = exportDate;
         this.exportStockTransId = exportStockTransId;
+        this.volume = volume;
+        this.weight = weight;
     }
 
     public MjrStockGoods() {
@@ -206,6 +208,24 @@ public class MjrStockGoods extends BaseModel{
         this.exportStockTransId = exportStockTransId;
     }
 
+    @Column(name = "VOLUME")
+    public Float getVolume() {
+        return volume;
+    }
+
+    public void setVolume(Float volume) {
+        this.volume = volume;
+    }
+
+    @Column(name = "WEIGHT")
+    public Float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Float weight) {
+        this.weight = weight;
+    }
+
 
 
     @Override
@@ -214,7 +234,8 @@ public class MjrStockGoods extends BaseModel{
                 goodsId==null?"":goodsId+"",goodsState,cellCode,amount==null?"":amount+"",importDate==null?"": DateTimeUtils.convertDateTimeToString(importDate),
                 changedDate ==null?"": DateTimeUtils.convertDateTimeToString(changedDate),status+"",partnerId==null?"":partnerId+"",
                 importStockTransId==null?"":importStockTransId+"",inputPrice==null?"":inputPrice+"",outputPrice==null?"":outputPrice+"",
-                exportDate==null?"": DateTimeUtils.convertDateTimeToString(exportDate),exportStockTransId==null?"":exportStockTransId+""
+                exportDate==null?"": DateTimeUtils.convertDateTimeToString(exportDate),exportStockTransId==null?"":exportStockTransId+"",
+                weight==null?"":weight+"", volume==null?"":volume+""
                 );
     }
 }

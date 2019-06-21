@@ -28,10 +28,10 @@ public class MjrStockGoodsDTO extends BaseDTO {
     private String outputPrice;
     private String exportDate;
     private String exportStockTransId;
+    private String volume;
+    private String weight;
 
-    public MjrStockGoodsDTO(String id, String custId, String stockId, String goodsId, String goodsState, String cellCode,
-                            String amount, String importDate, String changeDate, String status, String partnerId,
-                            String importStockTransId, String inputPrice, String outputPrice,String exportDate,String exportStockTransId) {
+    public MjrStockGoodsDTO(String id, String custId, String stockId, String goodsId, String goodsState, String cellCode, String amount, String importDate, String changeDate, String status, String partnerId, String importStockTransId, String inputPrice, String outputPrice, String exportDate, String exportStockTransId, String weight, String volume) {
         this.id = id;
         this.custId = custId;
         this.stockId = stockId;
@@ -48,6 +48,24 @@ public class MjrStockGoodsDTO extends BaseDTO {
         this.outputPrice = outputPrice;
         this.exportDate = exportDate;
         this.exportStockTransId = exportStockTransId;
+        this.volume = volume;
+        this.weight = weight;
+    }
+
+    public String getVolume() {
+        return volume;
+    }
+
+    public void setVolume(String volume) {
+        this.volume = volume;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
     }
 
     public MjrStockGoodsDTO() {
@@ -189,7 +207,9 @@ public class MjrStockGoodsDTO extends BaseDTO {
                 !StringUtils.validString(changeDate) ? null: DateTimeUtils.convertStringToDate(changeDate),!StringUtils.validString(status) ? null:Byte.valueOf(status),!StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId),
                 !StringUtils.validString(importStockTransId) ? null:Long.valueOf(importStockTransId),
                 !StringUtils.validString(inputPrice) ? null:Float.valueOf(inputPrice),!StringUtils.validString(outputPrice) ? null:Float.valueOf(outputPrice),
-                !StringUtils.validString(exportDate) ? null: DateTimeUtils.convertStringToDate(exportDate),!StringUtils.validString(exportStockTransId) ? null:Long.valueOf(exportStockTransId)
+                !StringUtils.validString(exportDate) ? null: DateTimeUtils.convertStringToDate(exportDate),
+                !StringUtils.validString(exportStockTransId) ? null:Long.valueOf(exportStockTransId),
+            !StringUtils.validString(weight) ? null:Float.valueOf(weight),!StringUtils.validString(volume) ? null:Float.valueOf(volume)
         );
     }
 }

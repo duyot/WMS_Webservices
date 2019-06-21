@@ -14,45 +14,46 @@ eureka:
      leaseRenewalIntervalInSeconds: 1
      leaseExpirationDurationInSeconds: 5
   client:
+    enabled: false
     fetchRegistry: true
     serviceUrl:
       defaultZone: http://207.148.121.185:9000/eureka
     healthcheck:
-      enabled: true
+      enabled: false
     lease:
       duration: 5
 server:
   port: 8080
----
-spring:
-  profiles: wms_service_note1
-eureka:
-  instance:
-    appname: WMS_SERVICE
-    hostname: 207.148.121.185
-    leaseRenewalIntervalInSeconds: 1
-    leaseExpirationDurationInSeconds: 5
-  client:
-    fetchRegistry: true
-    serviceUrl:
-     defaultZone: http://45.32.103.51:9000/eureka
-server:
-  port: 8082
-
----
-spring:
-  profiles: wms_service_note2
-eureka:
-  instance:
-    appname: WMS_SERVICE  # ==> This is a instance of ABC-SERVICE
-    hostname: 207.148.121.185
-    leaseRenewalIntervalInSeconds: 1
-    leaseExpirationDurationInSeconds: 5
-  client:
-    fetchRegistry: true
-    enabled: false
-    serviceUrl:
-     defaultZone: http://45.32.103.51:9000/eureka
-
-server:
-  port: 8083
+#---
+#spring:
+#  profiles: wms_service_note1
+##eureka:
+##  instance:
+##    appname: WMS_SERVICE
+##    hostname: 207.148.121.185
+##    leaseRenewalIntervalInSeconds: 1
+##    leaseExpirationDurationInSeconds: 5
+##  client:
+##    fetchRegistry: true
+##    serviceUrl:
+##     defaultZone: http://207.148.121.185:9000/eureka
+#server:
+#  port: 8082
+#
+#---
+#spring:
+#  profiles: wms_service_note2
+##eureka:
+##  instance:
+##    appname: WMS_SERVICE  # ==> This is a instance of ABC-SERVICE
+##    hostname: 207.148.121.185
+##    leaseRenewalIntervalInSeconds: 1
+##    leaseExpirationDurationInSeconds: 5
+##  client:
+##    fetchRegistry: true
+##    enabled: false
+##    serviceUrl:
+##     defaultZone: http://207.148.121.185:9000/eureka
+#
+#server:
+#  port: 8083
