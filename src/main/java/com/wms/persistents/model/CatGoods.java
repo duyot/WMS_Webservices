@@ -37,8 +37,7 @@ public class CatGoods extends BaseModel {
     public CatGoods() {
     }
 
-    public CatGoods(Long id, Long custId, Long goodsGroupId, String code, String name, byte status,
-                    Date createdDate, String unitType, byte isSerial, String description, Double inPrice, Double outPrice, Double length, Double width, Double high, Double weight, Double volume) {
+    public CatGoods(Long id, Long custId, Long goodsGroupId, String code, String name, byte status, Date createdDate, String unitType, byte isSerial, String description, Double inPrice, Double outPrice, Double length, Double width, Double high, Double weight, Double volume) {
         this.id = id;
         this.custId = custId;
         this.goodsGroupId = goodsGroupId;
