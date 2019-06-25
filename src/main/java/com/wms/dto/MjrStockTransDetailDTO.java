@@ -37,6 +37,9 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
     private String partnerId;
     private String partnerName;
 
+    private String volume;
+    private String weight;
+
     public String getPartnerId() {
         return partnerId;
     }
@@ -135,6 +138,53 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
         this.outputPrice = outputPrice;
         this.cellCode = cellCode;
         this.partnerId = partnerId;
+    }
+
+    public MjrStockTransDetailDTO(String id, String stockTransId, String goodsId, String goodsCode, String goodsState, String isSerial, String amount, String serial, String inputPrice, String outputPrice, String cellCode, String partnerId,String volume, String weight ) {
+        this.id = id;
+        this.stockTransId = stockTransId;
+        this.goodsId = goodsId;
+        this.goodsCode = goodsCode;
+        this.goodsState = goodsState;
+        this.isSerial = isSerial;
+        this.amount = amount;
+        this.serial = serial;
+        this.inputPrice = inputPrice;
+        this.outputPrice = outputPrice;
+        this.cellCode = cellCode;
+        this.partnerId = partnerId;
+        this.volume = volume;
+        this.weight = weight;
+    }
+
+    public MjrStockTransDetailDTO(String id, String stockTransId, String goodsId, String goodsCode, String goodsState, String isSerial, String amount, String serial, String inputPrice, String outputPrice, String cellCode, String totalMoney, String goodsName, String stockId, String importDate, String exportDate, String status, String stockTransCode, String stockName, String stockTransType, String unitName, String stockTransCreatedDate, String stockTransCreatedUser, String partnerId, String partnerName, String volume, String weight) {
+        this.id = id;
+        this.stockTransId = stockTransId;
+        this.goodsId = goodsId;
+        this.goodsCode = goodsCode;
+        this.goodsState = goodsState;
+        this.isSerial = isSerial;
+        this.amount = amount;
+        this.serial = serial;
+        this.inputPrice = inputPrice;
+        this.outputPrice = outputPrice;
+        this.cellCode = cellCode;
+        this.totalMoney = totalMoney;
+        this.goodsName = goodsName;
+        this.stockId = stockId;
+        this.importDate = importDate;
+        this.exportDate = exportDate;
+        this.status = status;
+        this.stockTransCode = stockTransCode;
+        this.stockName = stockName;
+        this.stockTransType = stockTransType;
+        this.unitName = unitName;
+        this.stockTransCreatedDate = stockTransCreatedDate;
+        this.stockTransCreatedUser = stockTransCreatedUser;
+        this.partnerId = partnerId;
+        this.partnerName = partnerName;
+        this.volume = volume;
+        this.weight = weight;
     }
 
     public MjrStockTransDetailDTO() {
@@ -243,10 +293,16 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
     @Override
     public MjrStockTransDetail toModel() {
         return new MjrStockTransDetail(!StringUtils.validString(id) ? null:Long.valueOf(id),!StringUtils.validString(stockTransId) ? null:Long.valueOf(stockTransId),
-                !StringUtils.validString(goodsId) ? null:Long.valueOf(goodsId),goodsCode,goodsState,!StringUtils.validString(isSerial) ? null:Long.valueOf(isSerial),
+                !StringUtils.validString(goodsId) ? null:Long.valueOf(goodsId),goodsCode,goodsState,
+                !StringUtils.validString(isSerial) ? null:Long.valueOf(isSerial),
                 !StringUtils.validString(amount) ? null:Float.valueOf(amount),serial,
-                !StringUtils.validString(inputPrice) ? null:Float.valueOf(inputPrice),!StringUtils.validString(outputPrice) ? null:Float.valueOf(outputPrice),cellCode,!StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId),
-                unitName, !StringUtils.validString(totalMoney) ? null:Float.valueOf(totalMoney)
+                !StringUtils.validString(inputPrice) ? null:Float.valueOf(inputPrice),
+                !StringUtils.validString(outputPrice) ? null:Float.valueOf(outputPrice),
+                cellCode,unitName,
+                !StringUtils.validString(totalMoney) ? null:Float.valueOf(totalMoney),
+                !StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId),
+                !StringUtils.validString(weight) ? null:Float.valueOf(weight),
+                !StringUtils.validString(volume) ? null:Float.valueOf(volume)
         );
     }
 
@@ -288,5 +344,21 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
 
     public void setTotalMoney(String totalMoney) {
         this.totalMoney = totalMoney;
+    }
+
+    public String getVolume() {
+        return volume;
+    }
+
+    public void setVolume(String volume) {
+        this.volume = volume;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
     }
 }

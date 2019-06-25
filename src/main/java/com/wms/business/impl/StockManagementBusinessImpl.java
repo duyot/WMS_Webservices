@@ -203,7 +203,6 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
             log.info("Starting export from stock:" + mjrStockTransDTO.getStockId() + " code: " + savedStockTranCode + " with: " + lstMjrStockTransDetailDTO.size() + " items");
             FunctionUtils.writeIEGoodsLog(lstMjrStockTransDetailDTO, log);
             //2. INSERT TRANS_DETAIL|STOCK(GOODS|SERIAL)
-            //
             if (DataUtil.isListNullOrEmpty(lstMjrStockTransDetailDTO)) {
                 FunctionUtils.rollback(transaction);
                 response.setStatusName(Responses.ERROR_NOT_FOUND_GOODS.getName());

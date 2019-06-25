@@ -33,9 +33,10 @@ public class MjrStockGoodsSerial extends BaseModel{
     private Date exportDate;
     private Long exportStockTransId;
 
-    public MjrStockGoodsSerial(Long id, Long custId, Long stockId, Long goodsId, String goodsState, String cellCode,
-                               Float amount, String serial, Date importDate, Date changeDate, byte status, Long partnerId,
-                               Long importStockTransId, Float inputPrice, Float outputPrice,Date exportDate,Long exportStockTransId) {
+    private Float volume;
+    private Float weight;
+
+    public MjrStockGoodsSerial(Long id, Long custId, Long stockId, Long goodsId, String goodsState, String cellCode, Float amount, String serial, Date importDate, Date changeDate, byte status, Long partnerId, Long importStockTransId, Float inputPrice, Float outputPrice, Date exportDate, Long exportStockTransId, Float volume, Float weight) {
         this.id = id;
         this.custId = custId;
         this.stockId = stockId;
@@ -53,6 +54,8 @@ public class MjrStockGoodsSerial extends BaseModel{
         this.outputPrice = outputPrice;
         this.exportDate = exportDate;
         this.exportStockTransId = exportStockTransId;
+        this.volume = volume;
+        this.weight = weight;
     }
 
     public MjrStockGoodsSerial() {
@@ -219,13 +222,35 @@ public class MjrStockGoodsSerial extends BaseModel{
         this.exportStockTransId = exportStockTransId;
     }
 
+    @Column(name = "VOLUME")
+    public Float getVolume() {
+        return volume;
+    }
+
+    public void setVolume(Float volume) {
+        this.volume = volume;
+    }
+
+    @Column(name = "WEIGHT")
+    public Float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Float weight) {
+        this.weight = weight;
+    }
+
+
+
+
     @Override
     public MjrStockGoodsSerialDTO toDTO() {
         return new MjrStockGoodsSerialDTO(id==null?"":id+"",custId==null?"":custId+"",stockId==null?"":stockId+"",
                 goodsId==null?"":goodsId+"",goodsState,cellCode,amount==null?"":amount+"",serial,importDate==null?"": DateTimeUtils.convertDateTimeToString(importDate),
                 changeDate==null?"": DateTimeUtils.convertDateTimeToString(changeDate),status +"",partnerId==null?"":partnerId+"",
                 importStockTransId==null?"":importStockTransId+"",inputPrice==null?"":inputPrice+"",outputPrice==null?"":outputPrice+"",
-                exportDate==null?"": DateTimeUtils.convertDateTimeToString(exportDate),exportStockTransId==null?"":exportStockTransId+""
+                exportDate==null?"": DateTimeUtils.convertDateTimeToString(exportDate),exportStockTransId==null?"":exportStockTransId+"",
+                volume==null?"":volume+"",weight==null?"":weight+""
         );
     }
 }

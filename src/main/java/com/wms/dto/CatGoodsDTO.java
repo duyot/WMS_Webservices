@@ -25,13 +25,14 @@ public class CatGoodsDTO extends BaseDTO{
     private String outPrice;
     private String length;
     private String width;
-    private String hight;
+    private String high;
     private String weight;
+    private String volume;
 
     public CatGoodsDTO() {
     }
 
-    public CatGoodsDTO(String id, String code, String name, String status, String createdDate, String custId, String unitType, String goodsGroupId, String isSerial, String description, String inPrice, String outPrice,String length,String width,String hight,String weight) {
+    public CatGoodsDTO(String id, String code, String name, String status, String createdDate, String custId, String unitType, String goodsGroupId, String isSerial, String description, String inPrice, String outPrice, String length, String width, String high, String weight, String volume) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -46,8 +47,9 @@ public class CatGoodsDTO extends BaseDTO{
         this.outPrice = outPrice;
         this.length = length;
         this.width = width;
-        this.hight = hight;
+        this.high = high;
         this.weight = weight;
+        this.volume = volume;
     }
 
     public String getLength() {
@@ -66,12 +68,12 @@ public class CatGoodsDTO extends BaseDTO{
         this.width = width;
     }
 
-    public String getHight() {
-        return hight;
+    public String getHigh() {
+        return high;
     }
 
-    public void setHight(String hight) {
-        this.hight = hight;
+    public void setHigh(String high) {
+        this.high = high;
     }
 
     public String getWeight() {
@@ -178,6 +180,15 @@ public class CatGoodsDTO extends BaseDTO{
         this.outPrice = outPrice;
     }
 
+
+    public String getVolume() {
+        return volume;
+    }
+
+    public void setVolume(String volume) {
+        this.volume = volume;
+    }
+
     @Override
     public BaseModel toModel() {
         return new CatGoods(
@@ -188,8 +199,9 @@ public class CatGoodsDTO extends BaseDTO{
                 !StringUtils.validString(inPrice) ? null:Double.valueOf(inPrice), !StringUtils.validString(outPrice) ? null:Double.valueOf(outPrice),
                 !StringUtils.validString(length) ? null:Double.valueOf(length),
                 !StringUtils.validString(width) ? null:Double.valueOf(width),
-                !StringUtils.validString(hight) ? null:Double.valueOf(hight),
-                !StringUtils.validString(weight) ? null:Double.valueOf(weight)
+                !StringUtils.validString(high) ? null:Double.valueOf(high),
+                !StringUtils.validString(weight) ? null:Double.valueOf(weight),
+                !StringUtils.validString(volume) ? null:Double.valueOf(volume)
         );
     }
 
@@ -210,8 +222,9 @@ public class CatGoodsDTO extends BaseDTO{
                 ", outPrice='" + outPrice + '\'' +
                 ", length='" + length + '\'' +
                 ", width='" + width + '\'' +
-                ", hight='" + hight + '\'' +
+                ", high='" + high + '\'' +
                 ", weight='" + weight + '\'' +
+                ", volume='" + volume + '\'' +
                 '}';
     }
 }
