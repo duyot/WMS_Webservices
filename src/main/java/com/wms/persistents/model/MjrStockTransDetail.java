@@ -206,7 +206,7 @@ public class MjrStockTransDetail extends BaseModel{
         return new MjrStockTransDetailDTO(id==null?"":id+"",stockTransId==null?"":stockTransId+"",goodsId==null?"":goodsId+"",
                 goodsCode,goodsState,isSerial==null?"":isSerial+"",amount==null?"":amount+"",serial,inputPrice==null?"":inputPrice+"",outputPrice==null?"":outputPrice+"",
                 cellCode, partnerId==null?"":partnerId+"",
-                weight==null?"":weight+"", volume==null?"":volume+""
+                volume==null?"":volume+"", weight==null?"":weight+""
                 );
     }
 }
