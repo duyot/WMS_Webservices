@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import sun.plugin.util.UIUtil;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
@@ -462,8 +463,8 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
             temp.setUnitName(i[7] == null ? "" : String.valueOf(i[7]));
             temp.setStockTransCreatedDate(i[8] == null ? "" : String.valueOf(i[8]));
             temp.setStockTransCreatedUser(i[9] == null ? "" : String.valueOf(i[9]));
-            temp.setInputPrice(i[10] == null ? "" : FunctionUtils.formatNumber(String.valueOf(i[10])));
-            temp.setOutputPrice(i[11] == null ? "" : FunctionUtils.formatNumber(String.valueOf(i[11])));
+            temp.setInputPrice(i[10] == null ? null : String.valueOf(i[10]));
+            temp.setOutputPrice(i[11] == null ? null : String.valueOf(i[11]));
             temp.setCellCode(i[12] == null ? "" : String.valueOf(i[12]));
             temp.setSerial(i[13] == null ? "" : String.valueOf(i[13]));
             temp.setTotalMoney(i[14] == null ? "" : FunctionUtils.formatNumber(String.valueOf(i[14])));
@@ -797,8 +798,16 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         paramsStockTrans.add(transDetail.getPartnerId());
         paramsStockTrans.add(transDetail.getId());
         paramsStockTrans.add(goods.getInputPrice());
-        paramsStockTrans.add(goods.getVolume());
-        paramsStockTrans.add(goods.getWeight());
+        if(!DataUtil.isNullOrEmpty(goods.getVolume())){
+            paramsStockTrans.add(String.valueOf(Math.round(1000000*Double.valueOf(goods.getVolume())/Double.valueOf(goods.getAmount()))/1000000D));
+        }else{
+            paramsStockTrans.add(goods.getVolume());
+        }
+        if(!DataUtil.isNullOrEmpty(goods.getWeight())){
+            paramsStockTrans.add(String.valueOf(Math.round(1000000*Double.valueOf(goods.getWeight())/Double.valueOf(goods.getAmount()))/1000000D));
+        }else{
+            paramsStockTrans.add(goods.getWeight());
+        }
         return paramsStockTrans;
     }
 
@@ -816,8 +825,16 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         paramsStockTrans.add(transDetail.getPartnerId());
         paramsStockTrans.add(transDetail.getId());
         paramsStockTrans.add(goods.getInputPrice());
-        paramsStockTrans.add(goods.getVolume());
-        paramsStockTrans.add(goods.getWeight());
+        if(!DataUtil.isNullOrEmpty(goods.getVolume())){
+            paramsStockTrans.add(String.valueOf(Math.round(1000000*Double.valueOf(goods.getVolume())/Double.valueOf(goods.getAmount()))/1000000D));
+        }else{
+            paramsStockTrans.add(goods.getVolume());
+        }
+        if(!DataUtil.isNullOrEmpty(goods.getWeight())){
+            paramsStockTrans.add(String.valueOf(Math.round(1000000*Double.valueOf(goods.getWeight())/Double.valueOf(goods.getAmount()))/1000000D));
+        }else{
+            paramsStockTrans.add(goods.getWeight());
+        }
         return paramsStockTrans;
     }
 
