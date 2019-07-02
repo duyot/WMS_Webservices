@@ -46,7 +46,7 @@ public class BeanConfig {
         props.setProperty("dialect", "org.hibernate.dialect.Oracle10gDialect");
         props.put("logging.level.org.hibernate.SQL", "DEBUG");
         props.put("logging.level.org.hibernate.type", "TRACE");
-        props.put("hibernate.show_sql", true);
+        props.put("hibernate.show_sql", false);
         sfb.setHibernateProperties(props);
         sfb.afterPropertiesSet();
         SessionFactory sf = sfb.getObject();

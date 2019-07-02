@@ -140,7 +140,7 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
         this.partnerId = partnerId;
     }
 
-    public MjrStockTransDetailDTO(String id, String stockTransId, String goodsId, String goodsCode, String goodsState, String isSerial, String amount, String serial, String inputPrice, String outputPrice, String cellCode, String partnerId,String volume, String weight ) {
+    public MjrStockTransDetailDTO(String id, String stockTransId, String goodsId, String goodsCode, String goodsState, String isSerial, String amount, String serial, String inputPrice, String outputPrice, String cellCode, String partnerId, String volume, String weight ) {
         this.id = id;
         this.stockTransId = stockTransId;
         this.goodsId = goodsId;
@@ -301,8 +301,8 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
                 cellCode,unitName,
                 !StringUtils.validString(totalMoney) ? null:Float.valueOf(totalMoney),
                 !StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId),
-                !StringUtils.validString(weight) ? null:Float.valueOf(weight),
-                !StringUtils.validString(volume) ? null:Float.valueOf(volume)
+                !StringUtils.validString(volume) ? null:Float.valueOf(volume),
+                !StringUtils.validString(weight) ? null:Float.valueOf(weight)
         );
     }
 
