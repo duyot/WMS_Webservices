@@ -157,35 +157,7 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
         this.weight = weight;
     }
 
-    public MjrStockTransDetailDTO(String id, String stockTransId, String goodsId, String goodsCode, String goodsState, String isSerial, String amount, String serial, String inputPrice, String outputPrice, String cellCode, String totalMoney, String goodsName, String stockId, String importDate, String exportDate, String status, String stockTransCode, String stockName, String stockTransType, String unitName, String stockTransCreatedDate, String stockTransCreatedUser, String partnerId, String partnerName, String volume, String weight) {
-        this.id = id;
-        this.stockTransId = stockTransId;
-        this.goodsId = goodsId;
-        this.goodsCode = goodsCode;
-        this.goodsState = goodsState;
-        this.isSerial = isSerial;
-        this.amount = amount;
-        this.serial = serial;
-        this.inputPrice = inputPrice;
-        this.outputPrice = outputPrice;
-        this.cellCode = cellCode;
-        this.totalMoney = totalMoney;
-        this.goodsName = goodsName;
-        this.stockId = stockId;
-        this.importDate = importDate;
-        this.exportDate = exportDate;
-        this.status = status;
-        this.stockTransCode = stockTransCode;
-        this.stockName = stockName;
-        this.stockTransType = stockTransType;
-        this.unitName = unitName;
-        this.stockTransCreatedDate = stockTransCreatedDate;
-        this.stockTransCreatedUser = stockTransCreatedUser;
-        this.partnerId = partnerId;
-        this.partnerName = partnerName;
-        this.volume = volume;
-        this.weight = weight;
-    }
+
 
     public MjrStockTransDetailDTO() {
     }
