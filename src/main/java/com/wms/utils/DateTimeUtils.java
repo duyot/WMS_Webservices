@@ -126,7 +126,7 @@ public class DateTimeUtils {
         cal.setTime(fromDate);
         cal.add(Calendar.DATE, amount);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        return convertStringToTime(dateFormat.format(cal.getTime()), "dd/mm/yyyy" );
+        return convertStringToTime(dateFormat.format(cal.getTime()), "dd/MM/yyyy" );
     }
 
     public static Date getFirstDateInMonth(){

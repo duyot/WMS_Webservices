@@ -385,18 +385,14 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         for (int j=0; j<type; j++){
             curDate = DateTimeUtils.getNextDate(beforeDate, j);
             for (Object[] i : lstData) {
-                //Bat dau mot kho moi
-                if (curDate.compareTo(DateTimeUtils.convertStringToTime(String.valueOf(i[0]),"dd/mm/yyyy")) == 0) {
+                if(dataImport[j] != null && dataExport[j] != null){
+                    break;
+                }
+                if (curDate.compareTo(DateTimeUtils.convertStringToTime(String.valueOf(i[0]),"dd/MM/yyyy")) == 0) {
                     if (String.valueOf(i[1]).equals("1")) {
                         dataImport[j] = Double.valueOf(String.valueOf(i[2]));
                     } else {
                         dataExport[j] = Double.valueOf(String.valueOf(i[2]));
-                    }
-                }else{
-                    if (String.valueOf(i[1]).equals("1")) {
-                        dataImport[j] = 0.0;
-                    } else {
-                        dataExport[j] = 0.0;
                     }
                 }
             }
