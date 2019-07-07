@@ -396,6 +396,12 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
                     }
                 }
             }
+            if(dataImport[j] == null){
+                dataImport[j] = 0.0;
+            }
+            if(dataExport[j] == null){
+                dataExport[j] = 0.0;
+            }
         }
         lstChart.add(new ChartDTO("Nhập", dataImport));
         lstChart.add(new ChartDTO("Xuất", dataExport));
