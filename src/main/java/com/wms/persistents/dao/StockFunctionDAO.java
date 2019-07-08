@@ -465,8 +465,8 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
             temp.setUnitName(i[7] == null ? "" : String.valueOf(i[7]));
             temp.setStockTransCreatedDate(i[8] == null ? "" : String.valueOf(i[8]));
             temp.setStockTransCreatedUser(i[9] == null ? "" : String.valueOf(i[9]));
-            temp.setInputPrice(i[10] == null ? null : String.valueOf(i[10]));
-            temp.setOutputPrice(i[11] == null ? null : String.valueOf(i[11]));
+            temp.setInputPrice(i[10] == null ? null : FunctionUtils.formatNumber(String.valueOf(i[10])));
+            temp.setOutputPrice(i[11] == null ? null : FunctionUtils.formatNumber(String.valueOf(i[11])));
             temp.setCellCode(i[12] == null ? "" : String.valueOf(i[12]));
             temp.setSerial(i[13] == null ? "" : String.valueOf(i[13]));
             temp.setTotalMoney(i[14] == null ? "" : FunctionUtils.formatNumber(String.valueOf(i[14])));
