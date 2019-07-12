@@ -5,6 +5,7 @@ package com.wms.utils;
  */
 public class Constants {
     public static final String STATUS_OK = "200";
+    public static final String STATS_ALL = "-1";
     public static final String IS_SERIAL = "1";
     public static final int COMMIT_NUMBER = 200;
 
