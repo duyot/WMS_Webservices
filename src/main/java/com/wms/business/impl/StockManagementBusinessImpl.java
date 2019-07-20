@@ -73,7 +73,7 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
             //
             String savedStockTransCode = mjrStockTransDTO.getCode();
             String savedStockTransId = mjrStockTransDTO.getId();
-            responseObject.setKey(savedStockTransCode);
+            responseObject.setKey(savedStockTransId + "|" + savedStockTransCode);
             log.info("Starting import to stock: " + mjrStockTransDTO.getStockId() + " trans code: " + savedStockTransCode + " with: " + lstMjrStockTransDetailDTO.size() + " items");
             FunctionUtils.writeIEGoodsLog(lstMjrStockTransDetailDTO, log);
             //2. INSERT TRANS_DETAIL -> TRANS_GOODS (SERIAL|GOODS)
@@ -167,6 +167,7 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
             log.info(e.toString());
             FunctionUtils.rollback(transaction, connection);
             responseObject.setStatusName(Responses.ERROR_SYSTEM.getName());

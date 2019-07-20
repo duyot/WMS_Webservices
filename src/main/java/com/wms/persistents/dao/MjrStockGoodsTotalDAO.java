@@ -64,6 +64,7 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
         try {
             return query.executeUpdate();
         } catch (Exception e) {
+            log.info(e.toString());
             e.printStackTrace();
             return 0;
         }
@@ -83,6 +84,7 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal,Long> 
             }
             prstmtInsertTotal.execute();
         } catch (SQLException e) {
+            log.info(e.toString());
             e.printStackTrace();
             return Responses.ERROR.getName();
         }
