@@ -4,6 +4,7 @@ import com.wms.base.BaseDTO;
 import com.wms.persistents.model.MjrStockTransDetail;
 import com.wms.utils.Constants;
 import com.wms.utils.StringUtils;
+import org.hibernate.type.StringType;
 
 /**
  * Created by duyot on 12/29/2016.
@@ -39,6 +40,26 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
 
     private String volume;
     private String weight;
+
+    private String custId;
+    private String changeDate;
+
+
+    public String getCustId() {
+        return custId;
+    }
+
+    public void setCustId(String custId) {
+        this.custId = custId;
+    }
+
+    public String getChangeDate() {
+        return changeDate;
+    }
+
+    public void setChangeDate(String changeDate) {
+        this.changeDate = changeDate;
+    }
 
     public String getPartnerId() {
         return partnerId;
@@ -157,6 +178,21 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
         this.weight = weight;
     }
 
+    public MjrStockTransDetailDTO(String custId, String stockId, String goodsId,String goodsState, String partnerId, String amount,String volume,String weight,String cellCode,String importDate, String changeDate, String inputPrice, String serial) {
+        this.custId = custId;
+        this.stockId = stockId;
+        this.goodsId = goodsId;
+        this.goodsState = goodsState;
+        this.partnerId = partnerId;
+        this.amount = amount;
+        this.volume = volume;
+        this.weight = weight;
+        this.cellCode = cellCode;
+        this.importDate = importDate;
+        this.changeDate = changeDate;
+        this.inputPrice = inputPrice;
+        this.serial = serial;
+    }
 
 
     public MjrStockTransDetailDTO() {

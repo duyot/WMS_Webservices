@@ -7,6 +7,7 @@ package com.wms.business.impl;
 import com.wms.base.BaseBusinessImpl;
 import com.wms.business.interfaces.StockGoodsInforBusinessInterface;
 import com.wms.dto.AppParamsDTO;
+import com.wms.dto.MjrStockTransDetailDTO;
 import com.wms.dto.StockGoodsInfor;
 import com.wms.persistents.dao.AppParamsDAO;
 import com.wms.persistents.dao.StockGoodsInforDAO;
@@ -30,5 +31,10 @@ public class StockGoodsInforBusinessImpl implements StockGoodsInforBusinessInter
     @Override
     public List<StockGoodsInfor> getStockGoodsDetailInfor(String partnerId, String custId, String stockId, String goodsId, String serial) {
         return stockGoodsInforDAO.getStockGoodsDetailInfor(partnerId,custId,stockId,goodsId,serial);
+    }
+
+    @Override
+    public List<MjrStockTransDetailDTO> getAllStockGoodsDetail(String userId, String custId, String stockId, String partnerId,  String goodsId, String goodState) {
+        return stockGoodsInforDAO.getAllStockGoodsDetail(userId, custId,stockId, partnerId,goodsId,goodState);
     }
 }

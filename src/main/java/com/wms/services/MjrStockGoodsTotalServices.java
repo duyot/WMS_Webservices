@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.wms.business.interfaces.MjrStockGoodsTotalBusinessInterface;
 import com.wms.base.BaseBusinessInterface;
 import com.wms.base.BaseServices;
+import com.wms.business.interfaces.StockGoodsInforBusinessInterface;
 import com.wms.dto.*;
 import com.wms.persistents.model.MjrStockGoodsTotal;
 import com.wms.utils.Constants;
@@ -22,6 +23,9 @@ import java.util.List;
 public class MjrStockGoodsTotalServices extends BaseServices<MjrStockGoodsTotalDTO> {
     @Autowired
     BaseBusinessInterface mjrStockGoodsTotalBusiness;
+
+    @Autowired
+    StockGoodsInforBusinessInterface stockGoodsInforBusiness;
 
     @Autowired
     MjrStockGoodsTotalBusinessInterface mjrStockGoodsTotalServices;
@@ -65,6 +69,13 @@ public class MjrStockGoodsTotalServices extends BaseServices<MjrStockGoodsTotalD
             return convertGoodsToDetail(mjrStockGoodsBusiness.findByCondition(lstCon));
         }
     }
+
+    @RequestMapping(value = "/getAllStockGoodsDetail",method = RequestMethod.GET)
+    public List<MjrStockTransDetailDTO> getStockGoodsDetail(@RequestParam("userId")String userId,@RequestParam("custId")String custId,@RequestParam("stockId")String stockId,@RequestParam("partnerId")String partnerId, @RequestParam("goodsId")String goodsId,
+                                                       @RequestParam("goodsState")String goodsState){
+        return stockGoodsInforBusiness.getAllStockGoodsDetail(userId, custId, stockId, partnerId, goodsId,goodsState);
+    }
+
     @RequestMapping(value = "/findMoreCondition",method = RequestMethod.POST)
     public List<MjrStockGoodsTotalDTO> findMoreCondition(@RequestBody MjrStockGoodsTotalDTO searchGoodsTotalDTO){
       return mjrStockGoodsTotalServices.findMoreCondition(searchGoodsTotalDTO);
