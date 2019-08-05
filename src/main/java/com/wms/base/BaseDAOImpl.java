@@ -3,6 +3,7 @@ package com.wms.base;
 import com.google.common.collect.Lists;
 import com.wms.dto.Condition;
 import com.wms.enums.Responses;
+import com.wms.utils.AccessorUtil;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import com.wms.utils.FunctionUtils;
@@ -127,6 +128,20 @@ public class BaseDAOImpl<T extends BaseModel, ID extends Serializable> implement
     public String updateBySession(T obj, Session session) {
         try {
             session.update(obj);
+            return Responses.SUCCESS.getName();
+        } catch (Exception e) {
+            log.info(e.toString());
+            return Responses.ERROR.getName();
+        }
+    }
+
+    @Transactional
+    public String updateByProperties(T sourceObject, Long id, String[] copiedProperties) {
+        try {
+            Session session = getSession();
+            T targetObject = session.get(modelClass, id);
+            AccessorUtil.copyClass(sourceObject, targetObject, copiedProperties);
+            session.update(targetObject);
             return Responses.SUCCESS.getName();
         } catch (Exception e) {
             log.info(e.toString());

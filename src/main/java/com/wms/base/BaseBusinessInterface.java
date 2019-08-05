@@ -2,6 +2,7 @@ package com.wms.base;
 
 import com.wms.dto.Condition;
 import org.hibernate.Session;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -10,29 +11,31 @@ import java.util.List;
  */
 public interface BaseBusinessInterface<T extends BaseDTO> {
 
-    public Long getSequence(String sequenceName);
+    Long getSequence(String sequenceName);
 
-    public String getSysDate(String pattern);
-    public String getSysDate();
+    String getSysDate(String pattern);
+    String getSysDate();
 
-    public String deleteByObject(T obj);
-    public String deleteById(long id);
+    String deleteByObject(T obj);
+    String deleteById(long id);
 
-    public String saveOrUpdate(T obj);
-    public String save(T obj);
-    public String save(List<T> lstObj);
-    public String saveBySession(T obj, Session session);
+    String saveOrUpdate(T obj);
+    String save(T obj);
+    String save(List<T> lstObj);
+    String saveBySession(T obj, Session session);
 
 
-    public String update(T obj);
+    String update(T obj);
 
-    public List<T> getAll();
-    public List<T> getList(int count);
-    public List<T> getAllByPage(int pageNum, int countPerPage);
+    List<T> getAll();
+    List<T> getList(int count);
+    List<T> getAllByPage(int pageNum, int countPerPage);
 
-    public T findById(long id);
-    public List<T> findByProperty(String property, String value);
-    public List<T> findByCondition(List<Condition> lstCondition);
-    public String deleteByCondition(List<Condition> lstCondition);
-    public Long countByCondition(List<Condition> lstCondition);
+    T findById(long id);
+    List<T> findByProperty(String property, String value);
+    List<T> findByCondition(List<Condition> lstCondition);
+    String deleteByCondition(List<Condition> lstCondition);
+    Long countByCondition(List<Condition> lstCondition);
+
+    String updateByProperties(T sourceObject, Long id, String[] copiedProperties);
 }

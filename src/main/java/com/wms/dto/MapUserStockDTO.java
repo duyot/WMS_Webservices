@@ -1,7 +1,6 @@
 package com.wms.dto;
 
 import com.wms.base.BaseDTO;
-import com.wms.base.BaseModel;
 import com.wms.persistents.model.MapUserStock;
 import com.wms.utils.StringUtils;
 

@@ -1,6 +1,7 @@
 package com.wms.utils;
 
 import com.google.gson.Gson;
+import com.wms.dto.CatPartnerDTO;
 
 /**
  * Created by duyot on 7/7/2016.
@@ -22,6 +23,10 @@ public class JSONUtils {
     }
 
     public static void main(String[] args) {
+        CatPartnerDTO partnerDTO = new CatPartnerDTO();
+        partnerDTO.setId("1000");
+        partnerDTO.setAddress("hv");
+        System.out.println(object2JSONString(partnerDTO));
     }
 
 }

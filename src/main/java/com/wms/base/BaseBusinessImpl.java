@@ -2,6 +2,8 @@ package com.wms.base;
 
 import com.google.common.collect.Lists;
 import com.wms.dto.Condition;
+import com.wms.enums.Responses;
+import com.wms.utils.AccessorUtil;
 import com.wms.utils.StringUtils;
 import org.hibernate.Session;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,22 +19,22 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
     public T tDTO;
     protected Class<T> entityClass;
 
-    @Override
-    public Long getSequence(String sequenceName) {
-        return tdao.getSequence(sequenceName);
-    }
-
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     @Override
     public String getSysDate(String pattern){
-       return tdao.getSysDate(pattern);
+        return tdao.getSysDate(pattern);
     }
 
     @Override
     public String getSysDate()  {
         return tdao.getSysDate();
     }
-    //--------------------------------------------------------------------
+
+    @Override
+    public Long getSequence(String sequenceName) {
+        return tdao.getSequence(sequenceName);
+    }
+    //------------------------------------------------------------------------------------------------------------------
     @Override
     public String deleteById(long id) {
         return tdao.deleteById(id);
@@ -42,7 +44,12 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
     public String deleteByObject(T obj) {
         return tdao.deleteByObject(obj.toModel());
     }
-    //--------------------------------------------------------------------
+
+    @Override
+    public String deleteByCondition(List<Condition> lstCondition) {
+        return  tdao.deleteByCondition(StringUtils.convertCondition(lstCondition));
+    }
+    //------------------------------------------------------------------------------------------------------------------
     @Override
     public String saveOrUpdate(T obj) {
         return tdao.saveOrUpdate(obj.toModel());
@@ -58,10 +65,19 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
         return tdao.saveBySession(obj.toModel(),session);
     }
 
-    //--------------------------------------------------------------------
+    @Override
+    public String save(List<T> lstObj) {
+        return tdao.save(listDTOToModel(lstObj));
+    }
+    //------------------------------------------------------------------------------------------------------------------
     @Override
     public String update(T obj) {
         return tdao.update(obj.toModel());
+    }
+
+    @Transactional
+    public String updateByProperties(T sourceObject, Long id, String[] copiedProperties) {
+      return tdao.updateByProperties(sourceObject.toModel(), id, copiedProperties);
     }
 
     //--------------------------------------------------------------------
@@ -79,7 +95,7 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
     public List<T> getAllByPage(int pageNum, int countPerPage) {
         return tdao.getAllByPage(pageNum,countPerPage);
     }
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     @Override
     public T findById(long id) {
         BaseModel temp = tdao.findById(id);
@@ -100,15 +116,10 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
     }
 
     @Override
-    public String deleteByCondition(List<Condition> lstCondition) {
-      return  tdao.deleteByCondition(StringUtils.convertCondition(lstCondition));
-    }
-
-    @Override
     public Long countByCondition(List<Condition> lstCondition) {
         return tdao.countByCondition(lstCondition);
     }
-    //--------------------------------------------------------------------
+    //------------------------------------------------------------------------------------------------------------------
     private List<T> listModelToDTO(List<BaseModel> lstModel){
         List<T> lstResult = Lists.newArrayList();
         for(BaseModel i: lstModel){
@@ -124,8 +135,6 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
         }
         return lstResult;
     }
-    @Override
-    public String save(List<T> lstObj) {
-        return tdao.save(listDTOToModel(lstObj));
-    }
+    //------------------------------------------------------------------------------------------------------------------
+
 }
