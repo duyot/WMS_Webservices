@@ -94,7 +94,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         Session session = getSession();
         //
         StringBuilder str = new StringBuilder();
-        str.append(" select a.code,c.name, a.type, b.goods_code, b.goods_id, b.goods_state,b.amount, b.unit_name, a.created_date, a.CREATED_USER, b.input_price, b.output_price, b.cell_code, b.serial, b.total_money, b.weight, b.volume, d.name as goods_name ")
+        str.append(" select a.code,c.name, a.type, b.goods_code, b.goods_id, b.goods_state,b.amount, b.unit_name, a.created_date, a.CREATED_USER, b.input_price, b.output_price, b.cell_code, b.serial, b.total_money, b.weight, b.volume, d.name as goods_name, b.description, b.produce_date, b.expire_date ")
                 .append(" from mjr_stock_trans a, mjr_stock_trans_detail b, cat_stock c, cat_goods d")
                 .append(" WHERE 1 = 1 ")
                 .append(" and a.id in (  ")
@@ -122,7 +122,10 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
                 .addScalar("total_money", StringType.INSTANCE)
                 .addScalar("weight", FloatType.INSTANCE)
                 .addScalar("volume", FloatType.INSTANCE)
-                .addScalar("goods_name", StringType.INSTANCE);
+                .addScalar("goods_name", StringType.INSTANCE)
+                .addScalar("description", StringType.INSTANCE)
+                .addScalar("produce_date", DateType.INSTANCE)
+                .addScalar("expire_date", DateType.INSTANCE);
         //
         //ps.setString(0, transId);
         //
@@ -473,6 +476,9 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
             temp.setWeight(i[15] == null ? "" : FunctionUtils.formatNumber(String.valueOf(i[15])));
             temp.setVolume(i[16] == null ? "" : FunctionUtils.formatNumber(String.valueOf(i[16])));
             temp.setGoodsName(i[17] == null ? "" : String.valueOf(i[17]));
+            temp.setDescription(i[18] == null ? "" : String.valueOf(i[18]));
+            temp.setProduceDate(i[19] == null ? "" : String.valueOf(i[19]));
+            temp.setExpireDate(i[20] == null ? "" : String.valueOf(i[20]));
             //
             lstResult.add(temp);
         }
