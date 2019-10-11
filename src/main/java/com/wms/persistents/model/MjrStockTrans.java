@@ -37,11 +37,14 @@ public class MjrStockTrans extends BaseModel {
     private Long receiveId;
     private String totalMoney;
 
+    private String orderCode;
+    private Long orderId;
+
     public MjrStockTrans() {
     }
 
     public MjrStockTrans(Long id, String code, Long custId, Long stockId, String contractNumber, String invoicetNumber, Long type, byte status, Date createdDate, String createdUser, Float transMoneyTotal,
-                         Float transMoneyDiscount, Float discountAmount, Float transMoneyRequire, String description, Long partnerId, String partnerName,Long receiveId, String receiveName) {
+                         Float transMoneyDiscount, Float discountAmount, Float transMoneyRequire, String description, Long partnerId, String partnerName,Long receiveId, String receiveName,Long orderId, String orderCode) {
         this.id = id;
         this.code = code;
         this.custId = custId;
@@ -61,6 +64,8 @@ public class MjrStockTrans extends BaseModel {
         this.partnerName = partnerName;
         this.receiveId  = receiveId;
         this.receiveName = receiveName;
+        this.orderId = orderId;
+        this.orderCode = orderCode;
     }
 
     @Id
@@ -245,13 +250,31 @@ public class MjrStockTrans extends BaseModel {
         this.receiveName = receiveName;
     }
 
+    @Column(name = "ORDER_ID")
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
+    }
+
+    @Column(name = "ORDER_CODE")
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
+    }
+
     @Override
     public MjrStockTransDTO toDTO() {
         return new MjrStockTransDTO(id==null?"":id+"",code,custId==null?"":custId+"",stockId==null?"":stockId+"",
                 contractNumber,invoicetNumber,type==null?"":type+"",status+"",createdDate==null?"": DateTimeUtils.convertDateTimeToString(createdDate),
                 createdUser,transMoneyTotal==null?"":transMoneyTotal+"",transMoneyDiscount==null?"":transMoneyDiscount+"",discountAmount==null?"":discountAmount+"",
                 transMoneyRequire==null?"":transMoneyRequire+"",description,
-                partnerId==null?"":partnerId+"", partnerName,receiveId==null?"":receiveId+"", receiveName
+                partnerId==null?"":partnerId+"", partnerName,receiveId==null?"":receiveId+"", receiveName,orderId==null?"":orderId+"", orderCode
         );
     }
 }
