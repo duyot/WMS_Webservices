@@ -68,6 +68,7 @@ public class MjrStockTrans extends BaseModel {
         this.orderCode = orderCode;
     }
 
+
     @Id
     @Column(name = "ID", unique = true, nullable = false)
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_MJR_STOCK_TRANS")
