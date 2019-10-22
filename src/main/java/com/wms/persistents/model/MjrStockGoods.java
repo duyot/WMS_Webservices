@@ -2,6 +2,7 @@ package com.wms.persistents.model;
 
 import com.wms.base.BaseModel;
 import com.wms.dto.MjrStockGoodsDTO;
+import com.wms.utils.Constants;
 import com.wms.utils.DateTimeUtils;
 
 import javax.persistence.*;
@@ -29,11 +30,13 @@ public class MjrStockGoods extends BaseModel{
     private Float outputPrice;
     private Date exportDate;
     private Long exportStockTransId;
-
     private Float volume;
     private Float weight;
+    private Date produceDate;
+    private Date expireDate;
+    private String description;
 
-    public MjrStockGoods(Long id, Long custId, Long stockId, Long goodsId, String goodsState, String cellCode, Float amount, Date importDate, Date changedDate, byte status, Long partnerId, Long importStockTransId, Float inputPrice, Float outputPrice, Date exportDate, Long exportStockTransId, Float volume, Float weight) {
+    public MjrStockGoods(Long id, Long custId, Long stockId, Long goodsId, String goodsState, String cellCode, Float amount, Date importDate, Date changedDate, byte status, Long partnerId, Long importStockTransId, Float inputPrice, Float outputPrice, Date exportDate, Long exportStockTransId, Float volume, Float weight, Date produceDate, Date expireDate, String description) {
         this.id = id;
         this.custId = custId;
         this.stockId = stockId;
@@ -52,6 +55,9 @@ public class MjrStockGoods extends BaseModel{
         this.exportStockTransId = exportStockTransId;
         this.volume = volume;
         this.weight = weight;
+        this.produceDate = produceDate;
+        this.expireDate = expireDate;
+        this.description = description;
     }
 
     public MjrStockGoods() {
@@ -227,6 +233,33 @@ public class MjrStockGoods extends BaseModel{
         this.weight = weight;
     }
 
+    @Column(name = "PRODUCE_DATE")
+    public Date getProduceDate() {
+        return produceDate;
+    }
+
+    public void setProduceDate(Date produceDate) {
+        this.produceDate = produceDate;
+    }
+
+    @Column(name = "EXPIRE_DATE")
+    public Date getExpireDate() {
+        return expireDate;
+    }
+
+    public void setExpireDate(Date expireDate) {
+        this.expireDate = expireDate;
+    }
+
+    @Column(name = "DESCRIPTION")
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 
 
     @Override
@@ -236,7 +269,10 @@ public class MjrStockGoods extends BaseModel{
                 changedDate ==null?"": DateTimeUtils.convertDateTimeToString(changedDate),status+"",partnerId==null?"":partnerId+"",
                 importStockTransId==null?"":importStockTransId+"",inputPrice==null?"":inputPrice+"",outputPrice==null?"":outputPrice+"",
                 exportDate==null?"": DateTimeUtils.convertDateTimeToString(exportDate),exportStockTransId==null?"":exportStockTransId+"",
-                volume==null?"":volume+"",weight==null?"":weight+""
+                volume==null?"":volume+"",weight==null?"":weight+"",
+                produceDate==null?"": DateTimeUtils.convertDateTimeToString(produceDate, Constants.DATETIME_FORMAT.ddMMyyyy),
+                expireDate==null?"": DateTimeUtils.convertDateTimeToString(expireDate, Constants.DATETIME_FORMAT.ddMMyyyy),
+                description
                 );
     }
 }

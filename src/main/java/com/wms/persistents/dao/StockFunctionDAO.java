@@ -688,17 +688,17 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         StringBuilder sqlStockGoods = new StringBuilder();
         //STOCK_TRANS_DETAIL
         sqlStockTransDetail.append(" Insert into MJR_STOCK_TRANS_DETAIL ");
-        sqlStockTransDetail.append(" (ID,STOCK_TRANS_ID,GOODS_ID,GOODS_CODE,GOODS_STATE,IS_SERIAL,AMOUNT,SERIAL,INPUT_PRICE,CELL_CODE, total_money, unit_name, volume, weight)  ");
-        sqlStockTransDetail.append(" values  (SEQ_MJR_STOCK_TRANS_DETAIL.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?) ");
+        sqlStockTransDetail.append(" (ID,STOCK_TRANS_ID,GOODS_ID,GOODS_CODE,GOODS_STATE,IS_SERIAL,AMOUNT,SERIAL,INPUT_PRICE,CELL_CODE, total_money, unit_name, volume, weight,PRODUCE_DATE,EXPIRE_DATE,DESCRIPTION  )  ");
+        sqlStockTransDetail.append(" values  (SEQ_MJR_STOCK_TRANS_DETAIL.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?) ");
         //STOCK_GOODS_SERIAL
         sqlStockGoodsSerial.append(" Insert into MJR_STOCK_GOODS_SERIAL  ");
-        sqlStockGoodsSerial.append(" (ID,CUST_ID,STOCK_ID,GOODS_ID,GOODS_STATE,CELL_CODE,AMOUNT,SERIAL,IMPORT_DATE,CHANGED_DATE,STATUS,PARTNER_ID,IMPORT_STOCK_TRANS_ID,INPUT_PRICE, volume, weight )  ");
-        sqlStockGoodsSerial.append(" values (SEQ_MJR_STOCK_GOODS_SERIAL.nextval,?,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?,?,?,?,?,?) ");
+        sqlStockGoodsSerial.append(" (ID,CUST_ID,STOCK_ID,GOODS_ID,GOODS_STATE,CELL_CODE,AMOUNT,SERIAL,IMPORT_DATE,CHANGED_DATE,STATUS,PARTNER_ID,IMPORT_STOCK_TRANS_ID,INPUT_PRICE, volume, weight, PRODUCE_DATE,EXPIRE_DATE,DESCRIPTION )  ");
+        sqlStockGoodsSerial.append(" values (SEQ_MJR_STOCK_GOODS_SERIAL.nextval,?,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?) ");
         sqlStockGoodsSerial.append(" LOG ERRORS INTO ERR$_MJR_STOCK_GOODS_SERIAL REJECT LIMIT UNLIMITED ");
         //STOCK_GOODS
         sqlStockGoods.append(" Insert into MJR_STOCK_GOODS ");
-        sqlStockGoods.append(" (ID,CUST_ID,STOCK_ID,GOODS_ID,GOODS_STATE,CELL_CODE,AMOUNT,IMPORT_DATE,CHANGED_DATE,STATUS,PARTNER_ID,IMPORT_STOCK_TRANS_ID,INPUT_PRICE, volume, weight)  ");
-        sqlStockGoods.append(" values  (SEQ_MJR_STOCK_GOODS.nextval,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?,?,?,?,?,?)  ");
+        sqlStockGoods.append(" (ID,CUST_ID,STOCK_ID,GOODS_ID,GOODS_STATE,CELL_CODE,AMOUNT,IMPORT_DATE,CHANGED_DATE,STATUS,PARTNER_ID,IMPORT_STOCK_TRANS_ID,INPUT_PRICE, volume, weight, PRODUCE_DATE,EXPIRE_DATE,DESCRIPTION)  ");
+        sqlStockGoods.append(" values  (SEQ_MJR_STOCK_GOODS.nextval,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?)  ");
         sqlStockGoods.append(" LOG ERRORS INTO ERR$_MJR_STOCK_GOODS_SERIAL REJECT LIMIT UNLIMITED ");
         //3. TAO PREPARE STATEMENT
         try {
@@ -782,6 +782,9 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         paramsStockTrans.add(goods.getUnitName());
         paramsStockTrans.add(goods.getVolume());
         paramsStockTrans.add(goods.getWeight());
+        paramsStockTrans.add(goods.getProduceDate());
+        paramsStockTrans.add(goods.getExpireDate());
+        paramsStockTrans.add(goods.getDescription());
         return paramsStockTrans;
     }
 
@@ -810,6 +813,10 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         }else{
             paramsStockTrans.add(goods.getWeight());
         }
+        paramsStockTrans.add(goods.getProduceDate());
+        paramsStockTrans.add(goods.getExpireDate());
+        paramsStockTrans.add(goods.getDescription());
+
         return paramsStockTrans;
     }
 
@@ -837,6 +844,10 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         }else{
             paramsStockTrans.add(goods.getWeight());
         }
+        paramsStockTrans.add(goods.getProduceDate());
+        paramsStockTrans.add(goods.getExpireDate());
+        paramsStockTrans.add(goods.getDescription());
+
         return paramsStockTrans;
     }
 

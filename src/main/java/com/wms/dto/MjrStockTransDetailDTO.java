@@ -3,8 +3,11 @@ package com.wms.dto;
 import com.wms.base.BaseDTO;
 import com.wms.persistents.model.MjrStockTransDetail;
 import com.wms.utils.Constants;
+import com.wms.utils.DateTimeUtils;
 import com.wms.utils.StringUtils;
 import org.hibernate.type.StringType;
+
+import java.util.Date;
 
 /**
  * Created by duyot on 12/29/2016.
@@ -21,10 +24,18 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
     private String inputPrice;
     private String outputPrice;
     private String cellCode;
+    private String unitName;
+    private String partnerId;
     private String totalMoney;
+    private String volume;
+    private String weight;
+    private String produceDate;
+    private String expireDate;
+    private String description;
+
+
     //unmap db field
     private String goodsName;
-    //
     private String stockId;
     private String importDate;
     private String exportDate;
@@ -32,18 +43,71 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
     private String stockTransCode;
     private String stockName;
     private String stockTransType;
-    private String unitName;
     private String stockTransCreatedDate;
     private String stockTransCreatedUser;
-    private String partnerId;
     private String partnerName;
-
-    private String volume;
-    private String weight;
-
     private String custId;
     private String changeDate;
 
+    public MjrStockTransDetailDTO() {
+    }
+
+    public MjrStockTransDetailDTO(String id, String stockTransId, String goodsId, String goodsCode, String goodsState, String isSerial, String amount, String serial, String inputPrice, String outputPrice, String cellCode, String unitName, String partnerId, String totalMoney, String volume, String weight, String produceDate, String expireDate, String description) {
+        this.id = id;
+        this.stockTransId = stockTransId;
+        this.goodsId = goodsId;
+        this.goodsCode = goodsCode;
+        this.goodsState = goodsState;
+        this.isSerial = isSerial;
+        this.amount = amount;
+        this.serial = serial;
+        this.inputPrice = inputPrice;
+        this.outputPrice = outputPrice;
+        this.cellCode = cellCode;
+        this.unitName = unitName;
+        this.partnerId = partnerId;
+        this.totalMoney = totalMoney;
+        this.volume = volume;
+        this.weight = weight;
+        this.produceDate = produceDate;
+        this.expireDate = expireDate;
+        this.description = description;
+    }
+
+    public MjrStockTransDetailDTO(String id, String stockTransId, String goodsId, String goodsCode, String goodsState, String isSerial, String amount, String serial, String inputPrice, String outputPrice, String cellCode, String unitName, String partnerId, String totalMoney, String volume, String weight, String produceDate, String expireDate, String description, String goodsName, String stockId, String importDate, String exportDate, String status, String stockTransCode, String stockName, String stockTransType, String stockTransCreatedDate, String stockTransCreatedUser, String partnerName, String custId, String changeDate) {
+        this.id = id;
+        this.stockTransId = stockTransId;
+        this.goodsId = goodsId;
+        this.goodsCode = goodsCode;
+        this.goodsState = goodsState;
+        this.isSerial = isSerial;
+        this.amount = amount;
+        this.serial = serial;
+        this.inputPrice = inputPrice;
+        this.outputPrice = outputPrice;
+        this.cellCode = cellCode;
+        this.unitName = unitName;
+        this.partnerId = partnerId;
+        this.totalMoney = totalMoney;
+        this.volume = volume;
+        this.weight = weight;
+        this.produceDate = produceDate;
+        this.expireDate = expireDate;
+        this.description = description;
+        this.goodsName = goodsName;
+        this.stockId = stockId;
+        this.importDate = importDate;
+        this.exportDate = exportDate;
+        this.status = status;
+        this.stockTransCode = stockTransCode;
+        this.stockName = stockName;
+        this.stockTransType = stockTransType;
+        this.stockTransCreatedDate = stockTransCreatedDate;
+        this.stockTransCreatedUser = stockTransCreatedUser;
+        this.partnerName = partnerName;
+        this.custId = custId;
+        this.changeDate = changeDate;
+    }
 
     public String getCustId() {
         return custId;
@@ -124,78 +188,6 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
 
     public void setStockTransCreatedUser(String stockTransCreatedUser) {
         this.stockTransCreatedUser = stockTransCreatedUser;
-    }
-
-
-    public MjrStockTransDetailDTO(String id, String stockTransId, String goodsId, String goodsCode, String goodsState, String isSerial, String amount, String serial, String inputPrice, String outputPrice, String cellCode, String goodsName, String stockId, String importDate, String exportDate, String status) {
-        this.id = id;
-        this.stockTransId = stockTransId;
-        this.goodsId = goodsId;
-        this.goodsCode = goodsCode;
-        this.goodsState = goodsState;
-        this.isSerial = isSerial;
-        this.amount = amount;
-        this.serial = serial;
-        this.inputPrice = inputPrice;
-        this.outputPrice = outputPrice;
-        this.cellCode = cellCode;
-        this.goodsName = goodsName;
-        this.stockId = stockId;
-        this.importDate = importDate;
-        this.exportDate = exportDate;
-        this.status = status;
-    }
-
-    public MjrStockTransDetailDTO(String id, String stockTransId, String goodsId, String goodsCode, String goodsState, String isSerial, String amount, String serial, String inputPrice, String outputPrice, String cellCode, String partnerId) {
-        this.id = id;
-        this.stockTransId = stockTransId;
-        this.goodsId = goodsId;
-        this.goodsCode = goodsCode;
-        this.goodsState = goodsState;
-        this.isSerial = isSerial;
-        this.amount = amount;
-        this.serial = serial;
-        this.inputPrice = inputPrice;
-        this.outputPrice = outputPrice;
-        this.cellCode = cellCode;
-        this.partnerId = partnerId;
-    }
-
-    public MjrStockTransDetailDTO(String id, String stockTransId, String goodsId, String goodsCode, String goodsState, String isSerial, String amount, String serial, String inputPrice, String outputPrice, String cellCode, String partnerId, String volume, String weight ) {
-        this.id = id;
-        this.stockTransId = stockTransId;
-        this.goodsId = goodsId;
-        this.goodsCode = goodsCode;
-        this.goodsState = goodsState;
-        this.isSerial = isSerial;
-        this.amount = amount;
-        this.serial = serial;
-        this.inputPrice = inputPrice;
-        this.outputPrice = outputPrice;
-        this.cellCode = cellCode;
-        this.partnerId = partnerId;
-        this.volume = volume;
-        this.weight = weight;
-    }
-
-    public MjrStockTransDetailDTO(String custId, String stockId, String goodsId,String goodsState, String partnerId, String amount,String volume,String weight,String cellCode,String importDate, String changeDate, String inputPrice, String serial) {
-        this.custId = custId;
-        this.stockId = stockId;
-        this.goodsId = goodsId;
-        this.goodsState = goodsState;
-        this.partnerId = partnerId;
-        this.amount = amount;
-        this.volume = volume;
-        this.weight = weight;
-        this.cellCode = cellCode;
-        this.importDate = importDate;
-        this.changeDate = changeDate;
-        this.inputPrice = inputPrice;
-        this.serial = serial;
-    }
-
-
-    public MjrStockTransDetailDTO() {
     }
 
     public String getId() {
@@ -298,6 +290,30 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
         this.cellCode = cellCode;
     }
 
+    public String getProduceDate() {
+        return produceDate;
+    }
+
+    public void setProduceDate(String produceDate) {
+        this.produceDate = produceDate;
+    }
+
+    public String getExpireDate() {
+        return expireDate;
+    }
+
+    public void setExpireDate(String expireDate) {
+        this.expireDate = expireDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public MjrStockTransDetail toModel() {
         return new MjrStockTransDetail(!StringUtils.validString(id) ? null:Long.valueOf(id),!StringUtils.validString(stockTransId) ? null:Long.valueOf(stockTransId),
@@ -310,7 +326,9 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
                 !StringUtils.validString(totalMoney) ? null:Float.valueOf(totalMoney),
                 !StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId),
                 !StringUtils.validString(volume) ? null:Float.valueOf(volume),
-                !StringUtils.validString(weight) ? null:Float.valueOf(weight)
+                !StringUtils.validString(weight) ? null:Float.valueOf(weight),
+                !StringUtils.validString(produceDate) ? null: DateTimeUtils.convertStringToDate(produceDate),
+                !StringUtils.validString(expireDate) ? null: DateTimeUtils.convertStringToDate(expireDate), description
         );
     }
 

@@ -28,11 +28,13 @@ public class MjrStockGoodsSerialDTO  extends BaseDTO{
     private String outputPrice;
     private String exportDate;
     private String exportStockTransId;
-
     private String volume;
     private String weight;
+    private String produceDate;
+    private String expireDate;
+    private String description;
 
-    public MjrStockGoodsSerialDTO(String id, String custId, String stockId, String goodsId, String goodsState, String cellCode, String amount, String serial, String importDate, String changeDate, String status, String partnerId, String importStockTransId, String inputPrice, String outputPrice, String exportDate, String exportStockTransId, String volume, String weight) {
+    public MjrStockGoodsSerialDTO(String id, String custId, String stockId, String goodsId, String goodsState, String cellCode, String amount, String serial, String importDate, String changeDate, String status, String partnerId, String importStockTransId, String inputPrice, String outputPrice, String exportDate, String exportStockTransId, String volume, String weight, String produceDate, String expireDate, String description) {
         this.id = id;
         this.custId = custId;
         this.stockId = stockId;
@@ -52,6 +54,9 @@ public class MjrStockGoodsSerialDTO  extends BaseDTO{
         this.exportStockTransId = exportStockTransId;
         this.volume = volume;
         this.weight = weight;
+        this.produceDate = produceDate;
+        this.expireDate = expireDate;
+        this.description = description;
     }
 
     public MjrStockGoodsSerialDTO() {
@@ -209,6 +214,30 @@ public class MjrStockGoodsSerialDTO  extends BaseDTO{
         this.weight = weight;
     }
 
+    public String getProduceDate() {
+        return produceDate;
+    }
+
+    public void setProduceDate(String produceDate) {
+        this.produceDate = produceDate;
+    }
+
+    public String getExpireDate() {
+        return expireDate;
+    }
+
+    public void setExpireDate(String expireDate) {
+        this.expireDate = expireDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public MjrStockGoodsSerial toModel() {
         return new MjrStockGoodsSerial(!StringUtils.validString(id) ? null:Long.valueOf(id),!StringUtils.validString(custId) ? null:Long.valueOf(custId),
@@ -218,7 +247,9 @@ public class MjrStockGoodsSerialDTO  extends BaseDTO{
                 !StringUtils.validString(importStockTransId) ? null:Long.valueOf(importStockTransId),
                 !StringUtils.validString(inputPrice) ? null:Float.valueOf(inputPrice),!StringUtils.validString(outputPrice) ? null:Float.valueOf(outputPrice),
                 !StringUtils.validString(exportDate) ? null: DateTimeUtils.convertStringToDate(exportDate),!StringUtils.validString(exportStockTransId) ? null:Long.valueOf(exportStockTransId),
-                !StringUtils.validString(volume) ? null:Float.valueOf(volume),!StringUtils.validString(weight) ? null:Float.valueOf(weight)
+                !StringUtils.validString(volume) ? null:Float.valueOf(volume),!StringUtils.validString(weight) ? null:Float.valueOf(weight),
+                !StringUtils.validString(produceDate) ? null: DateTimeUtils.convertStringToDate(produceDate),
+                !StringUtils.validString(expireDate) ? null: DateTimeUtils.convertStringToDate(expireDate), description
 
         );
     }
