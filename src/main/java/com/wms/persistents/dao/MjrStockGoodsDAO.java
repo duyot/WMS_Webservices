@@ -52,6 +52,14 @@ public class MjrStockGoodsDAO extends BaseDAOImpl<MjrStockGoods,Long> {
         if(!DataUtil.isStringNullOrEmpty(mjrStockTransDTO.getPartnerId()) && !mjrStockTransDTO.getPartnerId().equals("-1")){
             lstCon.add(new Condition("partnerId",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,mjrStockTransDTO.getPartnerId()));
         }
+        if("0".equals(mjrStockTransDTO.getExportMethod())){
+            lstCon.add(new Condition("importDate",Constants.SQL_OPERATOR.ORDER,"asc"));
+        }else if("1".equals(mjrStockTransDTO.getExportMethod())){
+            lstCon.add(new Condition("produceDate",Constants.SQL_OPERATOR.ORDER,"asc"));
+        }else if("2".equals(mjrStockTransDTO.getExportMethod())){
+            lstCon.add(new Condition("expireDate",Constants.SQL_OPERATOR.ORDER,"asc"));
+        }
+
 
         //2. check valid
         List<MjrStockGoods> lstCurrentStockGoods = findByConditionSession(lstCon,session);

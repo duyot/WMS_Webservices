@@ -45,6 +45,8 @@ public class MjrStockTransDTO extends BaseDTO {
     private String orderCode;
     private String orderId;
 
+    private String exportMethod;
+
     public String getOrderCode() {
         return orderCode;
     }
@@ -124,6 +126,14 @@ public class MjrStockTransDTO extends BaseDTO {
 
     public void setPartnerAddress(String partnerAddress) {
         this.partnerAddress = partnerAddress;
+    }
+
+    public String getExportMethod() {
+        return exportMethod;
+    }
+
+    public void setExportMethod(String exportMethod) {
+        this.exportMethod = exportMethod;
     }
 
     public MjrStockTransDTO() {
