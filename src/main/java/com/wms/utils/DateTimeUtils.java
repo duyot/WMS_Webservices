@@ -215,6 +215,15 @@ public class DateTimeUtils {
         }
     }
 
+    public static String convertDateTimeToString(Date date, String pattern){
+        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+        try {
+            return dateFormat.format(date);
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
     /**
      *
      * @param utilDate to convert

@@ -94,7 +94,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         Session session = getSession();
         //
         StringBuilder str = new StringBuilder();
-        str.append(" select a.code,c.name, a.type, b.goods_code, b.goods_id, b.goods_state,b.amount, b.unit_name, a.created_date, a.CREATED_USER, b.input_price, b.output_price, b.cell_code, b.serial, b.total_money, b.weight, b.volume, d.name as goods_name ")
+        str.append(" select a.code,c.name, a.type, b.goods_code, b.goods_id, b.goods_state,b.amount, b.unit_name, a.created_date, a.CREATED_USER, b.input_price, b.output_price, b.cell_code, b.serial, b.total_money, b.weight, b.volume, d.name as goods_name, b.description, b.produce_date, b.expire_date ")
                 .append(" from mjr_stock_trans a, mjr_stock_trans_detail b, cat_stock c, cat_goods d")
                 .append(" WHERE 1 = 1 ")
                 .append(" and a.id in (  ")
@@ -122,7 +122,10 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
                 .addScalar("total_money", StringType.INSTANCE)
                 .addScalar("weight", FloatType.INSTANCE)
                 .addScalar("volume", FloatType.INSTANCE)
-                .addScalar("goods_name", StringType.INSTANCE);
+                .addScalar("goods_name", StringType.INSTANCE)
+                .addScalar("description", StringType.INSTANCE)
+                .addScalar("produce_date", DateType.INSTANCE)
+                .addScalar("expire_date", DateType.INSTANCE);
         //
         //ps.setString(0, transId);
         //
@@ -473,6 +476,9 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
             temp.setWeight(i[15] == null ? "" : FunctionUtils.formatNumber(String.valueOf(i[15])));
             temp.setVolume(i[16] == null ? "" : FunctionUtils.formatNumber(String.valueOf(i[16])));
             temp.setGoodsName(i[17] == null ? "" : String.valueOf(i[17]));
+            temp.setDescription(i[18] == null ? "" : String.valueOf(i[18]));
+            temp.setProduceDate(i[19] == null ? "" : String.valueOf(i[19]));
+            temp.setExpireDate(i[20] == null ? "" : String.valueOf(i[20]));
             //
             lstResult.add(temp);
         }
@@ -688,17 +694,17 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         StringBuilder sqlStockGoods = new StringBuilder();
         //STOCK_TRANS_DETAIL
         sqlStockTransDetail.append(" Insert into MJR_STOCK_TRANS_DETAIL ");
-        sqlStockTransDetail.append(" (ID,STOCK_TRANS_ID,GOODS_ID,GOODS_CODE,GOODS_STATE,IS_SERIAL,AMOUNT,SERIAL,INPUT_PRICE,CELL_CODE, total_money, unit_name, volume, weight)  ");
-        sqlStockTransDetail.append(" values  (SEQ_MJR_STOCK_TRANS_DETAIL.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?) ");
+        sqlStockTransDetail.append(" (ID,STOCK_TRANS_ID,GOODS_ID,GOODS_CODE,GOODS_STATE,IS_SERIAL,AMOUNT,SERIAL,INPUT_PRICE,CELL_CODE, total_money, unit_name, volume, weight,PRODUCE_DATE,EXPIRE_DATE,DESCRIPTION  )  ");
+        sqlStockTransDetail.append(" values  (SEQ_MJR_STOCK_TRANS_DETAIL.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?) ");
         //STOCK_GOODS_SERIAL
         sqlStockGoodsSerial.append(" Insert into MJR_STOCK_GOODS_SERIAL  ");
-        sqlStockGoodsSerial.append(" (ID,CUST_ID,STOCK_ID,GOODS_ID,GOODS_STATE,CELL_CODE,AMOUNT,SERIAL,IMPORT_DATE,CHANGED_DATE,STATUS,PARTNER_ID,IMPORT_STOCK_TRANS_ID,INPUT_PRICE, volume, weight )  ");
-        sqlStockGoodsSerial.append(" values (SEQ_MJR_STOCK_GOODS_SERIAL.nextval,?,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?,?,?,?,?,?) ");
+        sqlStockGoodsSerial.append(" (ID,CUST_ID,STOCK_ID,GOODS_ID,GOODS_STATE,CELL_CODE,AMOUNT,SERIAL,IMPORT_DATE,CHANGED_DATE,STATUS,PARTNER_ID,IMPORT_STOCK_TRANS_ID,INPUT_PRICE, volume, weight, PRODUCE_DATE,EXPIRE_DATE,DESCRIPTION )  ");
+        sqlStockGoodsSerial.append(" values (SEQ_MJR_STOCK_GOODS_SERIAL.nextval,?,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?) ");
         sqlStockGoodsSerial.append(" LOG ERRORS INTO ERR$_MJR_STOCK_GOODS_SERIAL REJECT LIMIT UNLIMITED ");
         //STOCK_GOODS
         sqlStockGoods.append(" Insert into MJR_STOCK_GOODS ");
-        sqlStockGoods.append(" (ID,CUST_ID,STOCK_ID,GOODS_ID,GOODS_STATE,CELL_CODE,AMOUNT,IMPORT_DATE,CHANGED_DATE,STATUS,PARTNER_ID,IMPORT_STOCK_TRANS_ID,INPUT_PRICE, volume, weight)  ");
-        sqlStockGoods.append(" values  (SEQ_MJR_STOCK_GOODS.nextval,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?,?,?,?,?,?)  ");
+        sqlStockGoods.append(" (ID,CUST_ID,STOCK_ID,GOODS_ID,GOODS_STATE,CELL_CODE,AMOUNT,IMPORT_DATE,CHANGED_DATE,STATUS,PARTNER_ID,IMPORT_STOCK_TRANS_ID,INPUT_PRICE, volume, weight, PRODUCE_DATE,EXPIRE_DATE,DESCRIPTION)  ");
+        sqlStockGoods.append(" values  (SEQ_MJR_STOCK_GOODS.nextval,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?)  ");
         sqlStockGoods.append(" LOG ERRORS INTO ERR$_MJR_STOCK_GOODS_SERIAL REJECT LIMIT UNLIMITED ");
         //3. TAO PREPARE STATEMENT
         try {
@@ -782,6 +788,9 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         paramsStockTrans.add(goods.getUnitName());
         paramsStockTrans.add(goods.getVolume());
         paramsStockTrans.add(goods.getWeight());
+        paramsStockTrans.add(goods.getProduceDate());
+        paramsStockTrans.add(goods.getExpireDate());
+        paramsStockTrans.add(goods.getDescription());
         return paramsStockTrans;
     }
 
@@ -810,6 +819,10 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         }else{
             paramsStockTrans.add(goods.getWeight());
         }
+        paramsStockTrans.add(goods.getProduceDate());
+        paramsStockTrans.add(goods.getExpireDate());
+        paramsStockTrans.add(goods.getDescription());
+
         return paramsStockTrans;
     }
 
@@ -837,6 +850,10 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         }else{
             paramsStockTrans.add(goods.getWeight());
         }
+        paramsStockTrans.add(goods.getProduceDate());
+        paramsStockTrans.add(goods.getExpireDate());
+        paramsStockTrans.add(goods.getDescription());
+
         return paramsStockTrans;
     }
 

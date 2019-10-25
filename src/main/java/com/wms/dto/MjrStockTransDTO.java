@@ -41,6 +41,26 @@ public class MjrStockTransDTO extends BaseDTO {
     //Khach hang nhan trong cac giao dich xuat
     private String receiveName;
     private String receiveId;
+
+    private String orderCode;
+    private String orderId;
+
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
     //
     public String getReceiveId() {
         return receiveId;
@@ -109,7 +129,7 @@ public class MjrStockTransDTO extends BaseDTO {
     public MjrStockTransDTO() {
     }
 
-    public MjrStockTransDTO(String id, String code, String custId, String stockId, String contractNumber, String invoiceNumber, String type, String status, String createdDate, String createdUser, String transMoneyTotal, String transMoneyDiscount, String discountAmount, String transMoneyRequire, String description, String partnerId, String partnerName,String receiveId, String receiveName) {
+    public MjrStockTransDTO(String id, String code, String custId, String stockId, String contractNumber, String invoiceNumber, String type, String status, String createdDate, String createdUser, String transMoneyTotal, String transMoneyDiscount, String discountAmount, String transMoneyRequire, String description, String partnerId, String partnerName,String receiveId, String receiveName,String orderId, String orderCode) {
         this.id = id;
         this.code = code;
         this.custId = custId;
@@ -129,6 +149,8 @@ public class MjrStockTransDTO extends BaseDTO {
         this.partnerName = partnerName;
         this.receiveId = receiveId;
         this.receiveName = receiveName;
+        this.orderId = orderId;
+        this.orderCode = orderCode;
     }
 
     public String getPartnerId() {
@@ -276,6 +298,7 @@ public class MjrStockTransDTO extends BaseDTO {
                 createdUser,!StringUtils.validString(transMoneyTotal) ? null:Float.valueOf(transMoneyTotal),!StringUtils.validString(transMoneyDiscount) ? null:Float.valueOf(transMoneyDiscount),
                 !StringUtils.validString(discountAmount) ? null:Float.valueOf(discountAmount),!StringUtils.validString(transMoneyRequire) ? null:Float.valueOf(transMoneyRequire),
                 description, !StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId), partnerName,!StringUtils.validString(receiveId) ? null:Long.valueOf(receiveId), receiveName
+                ,!StringUtils.validString(orderId) ? null:Long.valueOf(orderId), orderCode
                 );
     }
 }

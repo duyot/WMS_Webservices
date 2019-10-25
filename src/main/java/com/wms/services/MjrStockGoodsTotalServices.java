@@ -126,6 +126,9 @@ public class MjrStockGoodsTotalServices extends BaseServices<MjrStockGoodsTotalD
                 temp.setCellCode(i.getCellCode());
                 temp.setWeight(i.getWeight());
                 temp.setVolume(i.getVolume());
+                temp.setProduceDate(i.getProduceDate());
+                temp.setExpireDate(i.getExpireDate());
+                temp.setDescription(i.getDescription());
                 //
                 lstResult.add(temp);
             }
@@ -153,6 +156,9 @@ public class MjrStockGoodsTotalServices extends BaseServices<MjrStockGoodsTotalD
                 temp.setCellCode(i.getCellCode());
                 temp.setWeight(i.getWeight());
                 temp.setVolume(i.getVolume());
+                temp.setProduceDate(i.getProduceDate());
+                temp.setExpireDate(i.getExpireDate());
+                temp.setDescription(i.getDescription());
                 //
                 lstResult.add(temp);
             }
