@@ -29,10 +29,11 @@ public class CatCustomer extends BaseModel {
     private int mailReport;
     private int partnerRequire;
     private int trial;
+    private int exportMethod;
 
     public CatCustomer(Long id, String code, String name, byte status, String email,
                        String telNumber, String address, String bankName, String bankAccountCode,
-                       Date createdDate, int mailReport, int partnerRequire, int trial) {
+                       Date createdDate, int mailReport, int partnerRequire, int trial, int exportMethod) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -46,6 +47,7 @@ public class CatCustomer extends BaseModel {
         this.mailReport = mailReport;
         this.partnerRequire = partnerRequire;
         this.trial = trial;
+        this.exportMethod = exportMethod;
     }
 
     public CatCustomer() {
@@ -177,9 +179,18 @@ public class CatCustomer extends BaseModel {
         this.trial = trial;
     }
 
+    @Column(name = "EXPORT_METHOD")
+    public int getExportMethod() {
+        return exportMethod;
+    }
+
+    public void setExportMethod(int exportMethod) {
+        this.exportMethod = exportMethod;
+    }
+
     @Override
     public BaseDTO toDTO() {
         return new CatCustomerDTO(id == null ? "" : id + "", code, name, status + "", email, telNumber, address, bankName,
-                bankAccountCode, createdDate == null ? "" : DateTimeUtils.convertDateTimeToString(createdDate), mailReport + "", partnerRequire + "", trial + "");
+                bankAccountCode, createdDate == null ? "" : DateTimeUtils.convertDateTimeToString(createdDate), mailReport + "", partnerRequire + "", trial + "", exportMethod + "");
     }
 }

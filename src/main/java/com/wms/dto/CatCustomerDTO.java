@@ -24,10 +24,11 @@ public class CatCustomerDTO extends BaseDTO{
     //DoanLV4 doi tac co bat buoc chon khong khi nhap/xuat kho
     private String partnerRequire;
     private String trial;
+    private String exportMethod;
 
     public CatCustomerDTO(String id, String code, String name, String status, String email,
                           String telNumber, String address, String bankName, String bankAccountCode,
-                          String createdDate, String mailReport , String partnerRequire,String trial) {
+                          String createdDate, String mailReport , String partnerRequire,String trial, String exportMethod) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -41,6 +42,7 @@ public class CatCustomerDTO extends BaseDTO{
         this.mailReport = mailReport;
         this.partnerRequire = partnerRequire;
         this.trial = trial;
+        this.exportMethod = exportMethod;
     }
 
     public CatCustomerDTO() {
@@ -151,11 +153,19 @@ public class CatCustomerDTO extends BaseDTO{
         this.trial = trial;
     }
 
+    public String getExportMethod() {
+        return exportMethod;
+    }
+
+    public void setExportMethod(String exportMethod) {
+        this.exportMethod = exportMethod;
+    }
+
     @Override
     public CatCustomer toModel() {
         return new CatCustomer(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,!StringUtils.validString(status) ? 0:Byte.parseByte(status),email,telNumber,
                 address,bankName,bankAccountCode,!StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),
-                mailReport==null?0:Integer.parseInt(mailReport), partnerRequire==null?0:Integer.parseInt(partnerRequire), trial==null?0:Integer.parseInt(trial)
+                mailReport==null?0:Integer.parseInt(mailReport), partnerRequire==null?0:Integer.parseInt(partnerRequire), trial==null?0:Integer.parseInt(trial),exportMethod==null?0:Integer.parseInt(exportMethod)
                 );
     }
 
@@ -172,6 +182,7 @@ public class CatCustomerDTO extends BaseDTO{
                 ", address='" + address + '\'' +
                 ", status='" + status + '\'' +
                 ", createDate='" + createdDate + '\'' +
+                ", exportMethod='" + exportMethod + '\'' +
                 '}';
     }
 }
