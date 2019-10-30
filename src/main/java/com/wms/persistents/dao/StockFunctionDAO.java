@@ -152,7 +152,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
 
         StringBuilder str = new StringBuilder();
         str.append(" select d.name as customer_name, a.code as trans_code,c.name as stock_name, c.code as stock_code, a.created_date, a.description,\n" +
-                " b.code as partner_code, b.name as partner_name, b.tel_number, b.address , a.CUST_ID , a.stock_id, a.CREATED_USER , a.type,a.receive_name")
+                " b.code as partner_code, b.name as partner_name, b.tel_number, b.address , a.CUST_ID , a.stock_id, a.CREATED_USER , a.type,a.receive_name , a.ORDER_CODE orderCode")
                 .append(" from mjr_stock_trans a " +
                         " left join CAT_PARTNER b on a.partner_id = b.id " +
                         " left join cat_stock c on a.stock_id = c.id " +
@@ -177,7 +177,8 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
                 .addScalar("stock_id", StringType.INSTANCE)
                 .addScalar("created_user", StringType.INSTANCE)
                 .addScalar("type", StringType.INSTANCE)
-                .addScalar("receive_name", StringType.INSTANCE);
+                .addScalar("receive_name", StringType.INSTANCE)
+                .addScalar("orderCode", StringType.INSTANCE);
         if ("".equalsIgnoreCase(lstStockTransId.trim())) {
             ps.setString("1", "-1");
         } else {
@@ -431,6 +432,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
             temp.setCreatedUser(i[12] == null ? "" : String.valueOf(i[12]));
             temp.setType(i[13] == null ? "" : String.valueOf(i[13]));
             temp.setReceiveName(i[14] == null ? "" : String.valueOf(i[14]));
+            temp.setOrderCode(i[15] == null ? "" : String.valueOf(i[15]));
             lstResult.add(temp);
         }
         return lstResult;
