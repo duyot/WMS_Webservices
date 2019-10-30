@@ -1,5 +1,6 @@
 package com.wms.base;
 
+import com.wms.dto.CatPartnerDTO;
 import com.wms.dto.Condition;
 import com.wms.dto.ErrorLogDTO;
 import com.wms.dto.ResponseObject;
@@ -102,6 +103,7 @@ public class BaseServices<T extends BaseDTO> {
 
     }
 
+    //#delete-----------------------------------------------------------------------------------------------------------
     @RequestMapping(value = "/delete/{id}",method = RequestMethod.DELETE)
     public ResponseObject delete(@PathVariable("id") long id ){
         log.info("Id : "+ id);

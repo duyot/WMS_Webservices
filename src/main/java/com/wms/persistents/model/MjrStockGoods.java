@@ -22,7 +22,7 @@ public class MjrStockGoods extends BaseModel{
     private String cellCode;
     private Float amount;
     private Date importDate;
-    private Date changedDate;
+    private Date changeDate;
     private byte status;
     private Long partnerId;
     private Long importStockTransId;
@@ -45,7 +45,7 @@ public class MjrStockGoods extends BaseModel{
         this.cellCode = cellCode;
         this.amount = amount;
         this.importDate = importDate;
-        this.changedDate = changedDate;
+        this.changeDate = changedDate;
         this.status = status;
         this.partnerId = partnerId;
         this.importStockTransId = importStockTransId;
@@ -144,12 +144,12 @@ public class MjrStockGoods extends BaseModel{
     }
 
     @Column(name = "CHANGED_DATE")
-    public Date getChangedDate() {
-        return changedDate;
+    public Date getChangeDate() {
+        return changeDate;
     }
 
-    public void setChangedDate(Date changedDate) {
-        this.changedDate = changedDate;
+    public void setChangeDate(Date changeDate) {
+        this.changeDate = changeDate;
     }
 
     @Column(name = "STATUS")
@@ -266,7 +266,7 @@ public class MjrStockGoods extends BaseModel{
     public MjrStockGoodsDTO toDTO() {
         return new MjrStockGoodsDTO(id==null?"":id+"",custId==null?"":custId+"",stockId==null?"":stockId+"",
                 goodsId==null?"":goodsId+"",goodsState,cellCode,amount==null?"":amount+"",importDate==null?"": DateTimeUtils.convertDateTimeToString(importDate),
-                changedDate ==null?"": DateTimeUtils.convertDateTimeToString(changedDate),status+"",partnerId==null?"":partnerId+"",
+                changeDate ==null?"": DateTimeUtils.convertDateTimeToString(changeDate),status+"",partnerId==null?"":partnerId+"",
                 importStockTransId==null?"":importStockTransId+"",inputPrice==null?"":inputPrice+"",outputPrice==null?"":outputPrice+"",
                 exportDate==null?"": DateTimeUtils.convertDateTimeToString(exportDate),exportStockTransId==null?"":exportStockTransId+"",
                 volume==null?"":volume+"",weight==null?"":weight+"",

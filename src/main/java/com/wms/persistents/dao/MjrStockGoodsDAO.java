@@ -9,16 +9,13 @@ import com.wms.dto.MjrStockTransDetailDTO;
 import com.wms.dto.ResponseObject;
 import com.wms.enums.Responses;
 import com.wms.persistents.model.MjrStockGoods;
-import com.wms.persistents.model.MjrStockTransDetail;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import com.wms.utils.DateTimeUtils;
 import com.wms.utils.FunctionUtils;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,7 +65,7 @@ public class MjrStockGoodsDAO extends BaseDAOImpl<MjrStockGoods,Long> {
             currentAmount = i.getAmount();
             if(exportAmount == currentAmount){
                 //
-                i.setChangedDate(sysDate);
+                i.setChangeDate(sysDate);
                 i.setExportDate(sysDate);
                 i.setOutputPrice(FunctionUtils.convertStringToFloat(goodsDetail));
                 i.setStatus(Constants.STATUS.BYTE_EXPORTED);
@@ -86,7 +83,7 @@ public class MjrStockGoodsDAO extends BaseDAOImpl<MjrStockGoods,Long> {
             }else if(exportAmount < currentAmount){
                 //
                 i.setAmount(currentAmount-exportAmount);
-                i.setChangedDate(sysDate);
+                i.setChangeDate(sysDate);
                 if(i.getAmount() != 0f){
                     updateResult =  updateBySession(i,session);
                 }
@@ -107,7 +104,7 @@ public class MjrStockGoodsDAO extends BaseDAOImpl<MjrStockGoods,Long> {
                 exportAmount -= currentAmount;
                 i.setOutputPrice(FunctionUtils.convertStringToFloat(goodsDetail));
                 i.setStatus(Constants.STATUS.BYTE_EXPORTED);
-                i.setChangedDate(sysDate);
+                i.setChangeDate(sysDate);
                 i.setExportDate(sysDate);
                 i.setExportStockTransId(Long.valueOf(mjrStockTransDTO.getId()));
                 updateResult = updateBySession(i,session);
@@ -133,7 +130,7 @@ public class MjrStockGoodsDAO extends BaseDAOImpl<MjrStockGoods,Long> {
         goods.setCellCode(currentGoodsDetail.getCellCode());
         goods.setAmount(exportAmount);
         goods.setImportDate(currentGoodsDetail.getImportDate());
-        goods.setChangedDate(changeDate);
+        goods.setChangeDate(changeDate);
         goods.setExportDate(changeDate);
         goods.setStatus(Constants.STATUS.BYTE_EXPORTED);
         goods.setPartnerId(currentGoodsDetail.getPartnerId());
