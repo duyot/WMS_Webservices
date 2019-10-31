@@ -31,7 +31,7 @@ public class MjrStockGoodsServices extends BaseServices<MjrStockGoodsDTO> {
 
     @RequestMapping(value = "/updateByProperties",produces = "application/json",method = RequestMethod.POST)
     public ResponseObject updateByProperties(@RequestBody MjrStockGoodsDTO mjrStockGoodsDTO){
-        String [] updateProperties = {"produceDate", "expireDate", "description", "cellCode"};
+        String [] updateProperties = {"produceDate", "expireDate", "description", "cellCode", "changeDate"};
         String result = mjrStockGoodsBusiness.updateByProperties(mjrStockGoodsDTO, Long.parseLong(mjrStockGoodsDTO.getId()), updateProperties);
         if(!result.equalsIgnoreCase(Responses.SUCCESS.getName())){
             log.info("Fail");
