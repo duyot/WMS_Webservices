@@ -94,7 +94,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         Session session = getSession();
         //
         StringBuilder str = new StringBuilder();
-        str.append(" select a.code,c.name, a.type, b.goods_code, b.goods_id, b.goods_state,b.amount, b.unit_name, a.created_date, a.CREATED_USER, b.input_price, b.output_price, b.cell_code, b.serial, b.total_money, b.weight, b.volume, d.name as goods_name, b.description, b.produce_date, b.expire_date ")
+        str.append(" select a.code,c.name, a.type, b.goods_code, b.goods_id, b.goods_state,b.amount, b.unit_name, to_char(a.created_date,'dd/MM/yyyy') created_date, a.CREATED_USER, b.input_price, b.output_price, b.cell_code, b.serial, b.total_money, b.weight, b.volume, d.name as goods_name, b.description, to_char(b.produce_date,'dd/MM/yyyy') produce_date , to_char(b.expire_date,'dd/MM/yyyy') expire_date ")
                 .append(" from mjr_stock_trans a, mjr_stock_trans_detail b, cat_stock c, cat_goods d")
                 .append(" WHERE 1 = 1 ")
                 .append(" and a.id in (  ")
@@ -113,7 +113,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
                 .addScalar("goods_state", StringType.INSTANCE)
                 .addScalar("amount", FloatType.INSTANCE)
                 .addScalar("unit_name", StringType.INSTANCE)
-                .addScalar("created_date", DateType.INSTANCE)
+                .addScalar("created_date", StringType.INSTANCE)
                 .addScalar("CREATED_USER", StringType.INSTANCE)
                 .addScalar("input_price", FloatType.INSTANCE)
                 .addScalar("output_price", FloatType.INSTANCE)
@@ -124,10 +124,8 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
                 .addScalar("volume", FloatType.INSTANCE)
                 .addScalar("goods_name", StringType.INSTANCE)
                 .addScalar("description", StringType.INSTANCE)
-                .addScalar("produce_date", DateType.INSTANCE)
-                .addScalar("expire_date", DateType.INSTANCE);
-        //
-        //ps.setString(0, transId);
+                .addScalar("produce_date", StringType.INSTANCE)
+                .addScalar("expire_date", StringType.INSTANCE);
         //
         return convertToStockTransDetail(ps.list());
     }
