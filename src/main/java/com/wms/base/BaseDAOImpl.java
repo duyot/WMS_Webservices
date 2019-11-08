@@ -208,6 +208,22 @@ public class BaseDAOImpl<T extends BaseModel, ID extends Serializable> implement
         }
     }
 
+    @Transactional
+    public String saveBySession(List<T> lstObj, Session session) {
+        try {
+            for (T obj : lstObj) {
+                session.save(obj);
+            }
+            return Responses.SUCCESS.getName();
+        } catch (ConstraintViolationException e) {
+            log.info(e.toString());
+            return e.getConstraintName();
+        } catch (Exception e) {
+            log.info(e.toString());
+            e.printStackTrace();
+            return Responses.ERROR.getName();
+        }
+    }
     //GET--------------------------------------------------------------------------------------------------------------
     @Transactional(readOnly = true)
     public List<T> getAll() {
