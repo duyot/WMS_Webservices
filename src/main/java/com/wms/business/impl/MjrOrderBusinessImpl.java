@@ -74,7 +74,8 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
 					mjrOrderDetailDAO.deleteByObjectSession(mjrOrderDetail,session);
 				}
 			}else {
-				mjrOrder.setCode(initTransCode(mjrOrder, getSysDate(), session, null));
+			    String createdDatePartition = getSysDate("ddMMyyyy");
+				mjrOrder.setCode(initTransCode(mjrOrder, createdDatePartition, session, null));
 				 id = mjrOrderDAO.saveBySession(mjrOrder.toModel(), session);
 			}
 
@@ -110,9 +111,9 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
 		//
 		StringBuilder stringBuilder = new StringBuilder();
 		if (isImport) {
-			stringBuilder.append("PNK");
+			stringBuilder.append("YCNK");
 		} else {
-			stringBuilder.append("PXK");
+			stringBuilder.append("YCXK");
 		}
 		stringBuilder.append("/").append(stockCode)
 				.append("/")
