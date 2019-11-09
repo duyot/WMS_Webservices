@@ -139,10 +139,10 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
 			realExportExcelDTO.setUnitName(mjrOrderDetail.getUnitName());
 			realExportExcelDTO.setGoodsCode(mjrOrderDetail.getGoodsCode());
 			realExportExcelDTO.setGoodsState(mjrOrderDetail.getGoodsState());
-			realExportExcelDTO.setAmount(mjrStockGoods1.getAmount() +"");
-			realExportExcelDTO.setWeight(mjrStockGoods1.getWeight() + "");
-			realExportExcelDTO.setVolume(mjrStockGoods1.getVolume() + "");
-			realExportExcelDTO.setCellCode(mjrStockGoods1.getCellCode() );
+			realExportExcelDTO.setAmount(mjrStockGoods1.getAmount() == null ? "" : mjrStockGoods1.getAmount()+"");
+			realExportExcelDTO.setWeight(mjrStockGoods1.getWeight() == null ? "" : mjrStockGoods1.getWeight() +"");
+			realExportExcelDTO.setVolume(mjrStockGoods1.getVolume() == null ? "" : mjrStockGoods1.getWeight() +"");
+			realExportExcelDTO.setCellCode(mjrStockGoods1.getCellCode() == null ?  "" :mjrStockGoods1.getCellCode() +"" );
 			realExportExcelDTO.setDescription(mjrStockGoods1.getDescription());
 			realExportExcelDTOS.add(realExportExcelDTO);
 		}
@@ -157,9 +157,9 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
 			realExportExcelDTO.setUnitName(mjrOrderDetail.getUnitName());
 			realExportExcelDTO.setGoodsCode(mjrOrderDetail.getGoodsCode());
 			realExportExcelDTO.setGoodsState(mjrOrderDetail.getGoodsState());
-			realExportExcelDTO.setAmount(mjrStockGoodsSerial.getAmount() +"");
-			realExportExcelDTO.setWeight(mjrStockGoodsSerial.getWeight() + "");
-			realExportExcelDTO.setVolume(mjrStockGoodsSerial.getVolume() + "");
+			realExportExcelDTO.setAmount(mjrStockGoodsSerial.getAmount() == null ? "" :mjrStockGoodsSerial.getAmount() +"");
+			realExportExcelDTO.setWeight(mjrStockGoodsSerial.getWeight() == null ? "" :mjrStockGoodsSerial.getWeight() + "");
+			realExportExcelDTO.setVolume(mjrStockGoodsSerial.getVolume() == null ? "" :mjrStockGoodsSerial.getVolume() + "");
 			realExportExcelDTO.setCellCode(mjrStockGoodsSerial.getCellCode() );
 			realExportExcelDTO.setDescription(mjrStockGoodsSerial.getDescription());
 			realExportExcelDTOS.add(realExportExcelDTO);
