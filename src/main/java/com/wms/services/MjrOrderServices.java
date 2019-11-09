@@ -37,5 +37,8 @@ public class MjrOrderServices extends BaseServices<MjrOrderDTO> {
     public List<RealExportExcelDTO>  getExportData(@PathVariable("id") Long id){
         return mjrOrderBusiness.orderExportData(id);
     }
-
+	@RequestMapping(value = "/getListOrderDetail/{orderId}",produces = "application/json",method = RequestMethod.GET)
+	public List<MjrOrderDetailDTO>  getListOrderDetail(@PathVariable("orderId") Long orderId){
+		return mjrOrderBusiness.getListOrderDetail(orderId);
+	}
 }

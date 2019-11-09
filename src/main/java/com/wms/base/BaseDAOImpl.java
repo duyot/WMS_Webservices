@@ -91,11 +91,28 @@ public class BaseDAOImpl<T extends BaseModel, ID extends Serializable> implement
         }
         return deleteByObject(object);
     }
-
+	@Transactional
+	public String deleteByIdSession(long id,Session session) {
+		T object = (T) session.get(modelClass, id);
+		if (object == null) {
+			return Responses.NOT_FOUND.getName();
+		}
+		return deleteByObject(object);
+	}
     @Transactional
     public String deleteByObject(T obj) {
         try {
             getSession().delete(obj);
+            return Responses.SUCCESS.getName();
+        } catch (Exception e) {
+            log.info(e.toString());
+            return Responses.ERROR.getName();
+        }
+    }
+    @Transactional
+    public String deleteByObject(T obj,Session session) {
+        try {
+            session.delete(obj);
             return Responses.SUCCESS.getName();
         } catch (Exception e) {
             log.info(e.toString());
