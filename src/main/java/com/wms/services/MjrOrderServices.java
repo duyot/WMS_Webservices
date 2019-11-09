@@ -7,12 +7,10 @@ import com.wms.dto.*;
 import com.wms.persistents.model.MjrOrder;
 import com.wms.persistents.model.MjrOrderDetail;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 /**
  * Created by duyot on 4/4/2017.
@@ -35,4 +33,9 @@ public class MjrOrderServices extends BaseServices<MjrOrderDTO> {
         log.info("Export result: "+ exportResult);
         return exportResult;
     }
+    @RequestMapping(value = "/getExportData/{id}",produces = "application/json",method = RequestMethod.GET)
+    public List<RealExportExcelDTO>  getExportData(@PathVariable("id") Long id){
+        return mjrOrderBusiness.orderExportData(id);
+    }
+
 }

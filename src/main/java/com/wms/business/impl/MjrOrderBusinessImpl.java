@@ -6,12 +6,8 @@ import com.wms.business.interfaces.MjrOrderBusinessInterface;
 import com.wms.business.interfaces.StockFunctionInterface;
 import com.wms.dto.*;
 import com.wms.enums.Responses;
-import com.wms.persistents.dao.MjrOrderDAO;
-import com.wms.persistents.dao.MjrOrderDetailDAO;
-import com.wms.persistents.dao.SysRoleMenuDAO;
-import com.wms.persistents.model.MjrOrder;
-import com.wms.persistents.model.MjrOrderDetail;
-import com.wms.persistents.model.SysRoleMenu;
+import com.wms.persistents.dao.*;
+import com.wms.persistents.model.*;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import com.wms.utils.FunctionUtils;
@@ -36,6 +32,11 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
 	MjrOrderDAO mjrOrderDAO;
 
 	@Autowired
+	MjrStockGoodsDAO mjrStockGoodsDAO;
+
+	@Autowired
+	MjrStockGoodsSerialDAO mjrStockGoodsSerialDAO;
+	@Autowired
 	MjrOrderDetailDAO mjrOrderDetailDAO;
 
 	@Autowired
@@ -46,6 +47,7 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
 
 	@Autowired
 	BaseBusinessInterface catStockBusiness;
+
 	@PostConstruct
 	public void setupService() {
 		this.tdao = mjrOrderDAO;
@@ -61,18 +63,18 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
 		Session session = sessionFactory.openSession();
 		Transaction transaction = session.getTransaction();
 		transaction.begin();
-		mjrOrder.setCode(initTransCode(mjrOrder,getSysDate(),session,null));
+		mjrOrder.setCode(initTransCode(mjrOrder, getSysDate(), session, null));
 		List<MjrOrderDetail> mjrOrderDetails = new ArrayList<>();
 		try {
-			String id = mjrOrderDAO.saveBySession(mjrOrder.toModel(),session);
+			String id = mjrOrderDAO.saveBySession(mjrOrder.toModel(), session);
 
 			lstMjrOrderDetails.forEach(e -> {
 				MjrOrderDetail mjrOrderDetail = e.toModel();
-//				mjrOrderDetail.setOrderId(Long.parseLong(id));
+				mjrOrderDetail.setOrderId(Long.parseLong(id));
 				mjrOrderDetails.add(mjrOrderDetail);
 			});
 
-			mjrOrderDetailDAO.saveBySession(mjrOrderDetails,session);
+			mjrOrderDetailDAO.saveBySession(mjrOrderDetails, session);
 			transaction.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -83,6 +85,7 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
 		}
 		return responseObject;
 	}
+
 	//
 	private String initTransCode(MjrOrderDTO mjrOrderDTO, String createdTime, Session session, Connection con) {
 		//
@@ -110,5 +113,57 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
 			stringBuilder.append(stockFunctionBusiness.getTotalStockTransaction(mjrOrderDTO.getStockId(), session));
 		}
 		return stringBuilder.toString();
+	}
+
+	@Override
+	public List<RealExportExcelDTO>  orderExportData(Long mjrOrderId) {
+		List<RealExportExcelDTO> realExportExcelDTOS = new ArrayList<>();
+		MjrOrder mjrOrder = mjrOrderDAO.findById(mjrOrderId);
+		List<MjrOrderDetail> mjrOrderDetail = mjrOrderDetailDAO.findByProperty("orderId", mjrOrderId);
+		for (MjrOrderDetail detail : mjrOrderDetail) {
+			if (detail.isSerial()) {
+				List<MjrStockGoodsSerial> mjrStockGoodsSerials = mjrStockGoodsSerialDAO.exportOrderStockGoodsSerial(mjrOrder.toDTO(), detail.toDTO());
+				realExportExcelDTOS.addAll(convertStockGoodsSerialToExcelData(mjrStockGoodsSerials,detail));
+			} else {
+				List<MjrStockGoods> mjrStockGoods = mjrStockGoodsDAO.exportOrderStockGoods(mjrOrder.toDTO(), detail.toDTO());
+				realExportExcelDTOS.addAll(convertStockGoodsToExcelData(mjrStockGoods,detail));
+			}
+		}
+		return realExportExcelDTOS;
+	}
+
+	public List<RealExportExcelDTO> convertStockGoodsToExcelData(List<MjrStockGoods> mjrStockGoods, MjrOrderDetail mjrOrderDetail) {
+		List<RealExportExcelDTO> realExportExcelDTOS = new ArrayList<>();
+		for (MjrStockGoods mjrStockGoods1 : mjrStockGoods){
+			RealExportExcelDTO realExportExcelDTO = new RealExportExcelDTO();
+			realExportExcelDTO.setUnitName(mjrOrderDetail.getUnitName());
+			realExportExcelDTO.setGoodsCode(mjrOrderDetail.getGoodsCode());
+			realExportExcelDTO.setGoodsState(mjrOrderDetail.getGoodsState());
+			realExportExcelDTO.setAmount(mjrStockGoods1.getAmount() +"");
+			realExportExcelDTO.setWeight(mjrStockGoods1.getWeight() + "");
+			realExportExcelDTO.setVolume(mjrStockGoods1.getVolume() + "");
+			realExportExcelDTO.setCellCode(mjrStockGoods1.getCellCode() );
+			realExportExcelDTO.setDescription(mjrStockGoods1.getDescription());
+			realExportExcelDTOS.add(realExportExcelDTO);
+		}
+
+		return realExportExcelDTOS;
+	}
+
+	public List<RealExportExcelDTO> convertStockGoodsSerialToExcelData(List<MjrStockGoodsSerial> mjrStockGoodsSerials, MjrOrderDetail mjrOrderDetail) {
+		List<RealExportExcelDTO> realExportExcelDTOS = new ArrayList<>();
+		for (MjrStockGoodsSerial mjrStockGoodsSerial : mjrStockGoodsSerials){
+			RealExportExcelDTO realExportExcelDTO = new RealExportExcelDTO();
+			realExportExcelDTO.setUnitName(mjrOrderDetail.getUnitName());
+			realExportExcelDTO.setGoodsCode(mjrOrderDetail.getGoodsCode());
+			realExportExcelDTO.setGoodsState(mjrOrderDetail.getGoodsState());
+			realExportExcelDTO.setAmount(mjrStockGoodsSerial.getAmount() +"");
+			realExportExcelDTO.setWeight(mjrStockGoodsSerial.getWeight() + "");
+			realExportExcelDTO.setVolume(mjrStockGoodsSerial.getVolume() + "");
+			realExportExcelDTO.setCellCode(mjrStockGoodsSerial.getCellCode() );
+			realExportExcelDTO.setDescription(mjrStockGoodsSerial.getDescription());
+			realExportExcelDTOS.add(realExportExcelDTO);
+		}
+		return realExportExcelDTOS;
 	}
 }

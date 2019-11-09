@@ -3,6 +3,7 @@ package com.wms.persistents.model;
 import com.wms.base.BaseModel;
 import com.wms.dto.MjrOrderDetailDTO;
 import com.wms.dto.MjrStockTransDetailDTO;
+import com.wms.utils.Constants;
 import com.wms.utils.DateTimeUtils;
 
 import javax.persistence.*;
@@ -12,7 +13,7 @@ import java.util.Date;
  * Created by truongbx
  */
 @Entity
-@Table(name = "MJR_STOCK_TRANS_DETAIL")
+@Table(name = "MJR_ORDER_DETAIL")
 public class MjrOrderDetail extends BaseModel {
 	private Long id;
 	private Long orderId;
@@ -66,7 +67,7 @@ public class MjrOrderDetail extends BaseModel {
 		this.id = id;
 	}
 
-//	@Column(name = "ORDER_ID")
+	@Column(name = "ORDER_ID")
 	public Long getOrderId() {
 		return orderId;
 	}
@@ -193,5 +194,12 @@ public class MjrOrderDetail extends BaseModel {
 				volume == null ? "" : volume + "", weight == null ? "" : weight + "",
 				description
 		);
+	}
+	@Transient
+	public boolean isSerial() {
+		if (isSerial == null || isSerial == 0){
+			return false;
+		}
+		return true;
 	}
 }

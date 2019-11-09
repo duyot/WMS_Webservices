@@ -3,11 +3,10 @@ package com.wms.persistents.dao;
 import com.google.common.collect.Lists;
 import com.wms.base.BaseDAOImpl;
 import com.wms.business.impl.StockManagementBusinessImpl;
-import com.wms.dto.Condition;
-import com.wms.dto.MjrStockTransDTO;
-import com.wms.dto.MjrStockTransDetailDTO;
-import com.wms.dto.ResponseObject;
+import com.wms.dto.*;
 import com.wms.enums.Responses;
+import com.wms.persistents.model.MjrOrder;
+import com.wms.persistents.model.MjrOrderDetail;
 import com.wms.persistents.model.MjrStockGoodsSerial;
 import com.wms.persistents.model.MjrStockGoodsTotal;
 import com.wms.utils.Constants;
@@ -22,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -67,6 +67,25 @@ public class MjrStockGoodsSerialDAO extends BaseDAOImpl<MjrStockGoodsSerial,Long
         String updateResult = updateBySession(currentGoodsSerial,session);
         responseObject.setStatusCode(updateResult);
         return responseObject;
+    }
+
+    public List<MjrStockGoodsSerial> exportOrderStockGoodsSerial(MjrOrderDTO mjrOrderDTO, MjrOrderDetailDTO goodsDetail){
+        ResponseObject responseObject = new ResponseObject();
+        List<MjrStockGoodsSerial> lstStockGoods = new ArrayList<>();
+        //1. Find match total for goods
+        List<Condition> lstCon = Lists.newArrayList();
+        lstCon.add(new Condition("custId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,mjrOrderDTO.getCustId()));
+        lstCon.add(new Condition("stockId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,mjrOrderDTO.getStockId()));
+        lstCon.add(new Condition("goodsId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,goodsDetail.getGoodsId()));
+        lstCon.add(new Condition("goodsState", Constants.SQL_OPERATOR.EQUAL,goodsDetail.getGoodsState()));
+        lstCon.add(new Condition("serial", Constants.SQL_OPERATOR.EQUAL,goodsDetail.getSerial()));
+        lstCon.add(new Condition("status",Constants.SQL_PRO_TYPE.BYTE, Constants.SQL_OPERATOR.EQUAL,Constants.STATUS.ACTIVE));
+
+        if(!DataUtil.isStringNullOrEmpty(mjrOrderDTO.getPartnerId()) && !mjrOrderDTO.getPartnerId().equals("-1")){
+            lstCon.add(new Condition("partnerId",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,mjrOrderDTO.getPartnerId()));
+        }
+        List<MjrStockGoodsSerial> lstResultSerial = findByConditionSession(lstCon,getSession());
+        return lstResultSerial;
     }
 
 }

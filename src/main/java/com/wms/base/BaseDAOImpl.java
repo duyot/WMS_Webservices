@@ -251,7 +251,7 @@ public class BaseDAOImpl<T extends BaseModel, ID extends Serializable> implement
     }
 
     @Transactional(readOnly = true)
-    public List<T> findByProperty(String property, String value) {
+    public List<T> findByProperty(String property, Object value) {
         return (List<T>) getSession().createCriteria(modelClass).add(Restrictions.eq(property, value)).list();
     }
 

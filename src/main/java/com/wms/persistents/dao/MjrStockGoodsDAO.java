@@ -3,11 +3,10 @@ package com.wms.persistents.dao;
 import com.google.common.collect.Lists;
 import com.wms.base.BaseDAOImpl;
 import com.wms.business.impl.StockManagementBusinessImpl;
-import com.wms.dto.Condition;
-import com.wms.dto.MjrStockTransDTO;
-import com.wms.dto.MjrStockTransDetailDTO;
-import com.wms.dto.ResponseObject;
+import com.wms.dto.*;
 import com.wms.enums.Responses;
+import com.wms.persistents.model.MjrOrder;
+import com.wms.persistents.model.MjrOrderDetail;
 import com.wms.persistents.model.MjrStockGoods;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
@@ -19,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -128,6 +128,54 @@ public class MjrStockGoodsDAO extends BaseDAOImpl<MjrStockGoods,Long> {
         return responseObject;
     }
 
+	//for real export
+	public List<MjrStockGoods> exportOrderStockGoods(MjrOrderDTO mjrOrder, MjrOrderDetailDTO mjrOrderDetail) {
+		ResponseObject responseObject = new ResponseObject();
+		responseObject.setStatusCode(Responses.ERROR.getName());
+		List<MjrStockGoods> lstResult = new ArrayList<>();
+		//1. find valid stock goods
+		List<Condition> lstCon = Lists.newArrayList();
+		lstCon.add(new Condition("custId", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, mjrOrder.getCustId()));
+		lstCon.add(new Condition("goodsId", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, mjrOrderDetail.getGoodsId()));
+		lstCon.add(new Condition("stockId", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, mjrOrder.getStockId()));
+		lstCon.add(new Condition("goodsState", Constants.SQL_OPERATOR.EQUAL, mjrOrderDetail.getGoodsState()));
+		lstCon.add(new Condition("status", Constants.SQL_PRO_TYPE.BYTE, Constants.SQL_OPERATOR.EQUAL, Constants.STATUS.ACTIVE));
+
+		if (!DataUtil.isStringNullOrEmpty(mjrOrder.getPartnerId()) && !mjrOrder.getPartnerId().equals("-1")) {
+			lstCon.add(new Condition("partnerId", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, mjrOrder.getPartnerId()));
+		}
+		if ("0".equals(mjrOrder.getExportMethod())) {
+			lstCon.add(new Condition("importDate", Constants.SQL_OPERATOR.ORDER, "asc"));
+		} else if ("1".equals(mjrOrder.getExportMethod())) {
+			lstCon.add(new Condition("produceDate", Constants.SQL_OPERATOR.ORDER, "asc"));
+		} else if ("2".equals(mjrOrder.getExportMethod())) {
+			lstCon.add(new Condition("expireDate", Constants.SQL_OPERATOR.ORDER, "asc"));
+		}
+
+
+		//2. check valid
+		List<MjrStockGoods> lstCurrentStockGoods = findByConditionSession(lstCon, getSession());
+		if (DataUtil.isListNullOrEmpty(lstCurrentStockGoods)) {
+			return lstResult;
+		}
+		//3. update
+		float exportAmount = Float.valueOf(mjrOrderDetail.getAmount());
+		float currentAmount;
+		String updateResult = null;
+		for (MjrStockGoods i : lstCurrentStockGoods) {
+			currentAmount = i.getAmount();
+			if (exportAmount > currentAmount) {
+				exportAmount -= currentAmount;
+				lstResult.add(i);
+			} else {
+				i.setAmount(exportAmount);
+				lstResult.add(i);
+				break;
+			}
+
+		}
+		return lstResult;
+	}
     public  MjrStockGoods initExportedStockGoods(MjrStockTransDTO mjrStockTransDTO, MjrStockGoods currentGoodsDetail,MjrStockTransDetailDTO exportGoodsDetail,
                                                  float exportAmount,Date changeDate){
         MjrStockGoods goods = new MjrStockGoods();
