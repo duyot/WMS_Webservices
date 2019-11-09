@@ -177,7 +177,16 @@ public class BaseDAOImpl<T extends BaseModel, ID extends Serializable> implement
             return Responses.ERROR.getName();
         }
     }
-
+    @Transactional
+    public String saveOrUpdateSession(T obj,Session session) {
+        try {
+            session.saveOrUpdate(obj);
+            return Responses.SUCCESS.getName();
+        } catch (Exception e) {
+            log.info(e.toString());
+            return Responses.ERROR.getName();
+        }
+    }
     @Transactional
     public String save(T obj) {
         try {
