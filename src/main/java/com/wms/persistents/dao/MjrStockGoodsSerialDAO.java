@@ -69,11 +69,10 @@ public class MjrStockGoodsSerialDAO extends BaseDAOImpl<MjrStockGoodsSerial,Long
         return responseObject;
     }
 
-    public List<MjrStockGoodsSerial> exportOrderStockGoodsSerial(MjrOrderDTO mjrOrderDTO, MjrOrderDetailDTO goodsDetail){
-        ResponseObject responseObject = new ResponseObject();
-        List<MjrStockGoodsSerial> lstStockGoods = new ArrayList<>();
+    public List<MjrStockGoodsSerialDTO> exportOrderStockGoodsSerial(MjrOrderDTO mjrOrderDTO, MjrOrderDetailDTO goodsDetail){
         //1. Find match total for goods
         List<Condition> lstCon = Lists.newArrayList();
+        List<MjrStockGoodsSerialDTO> data= new ArrayList<>();
         lstCon.add(new Condition("custId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,mjrOrderDTO.getCustId()));
         lstCon.add(new Condition("stockId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,mjrOrderDTO.getStockId()));
         lstCon.add(new Condition("goodsId", Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,goodsDetail.getGoodsId()));
@@ -85,7 +84,10 @@ public class MjrStockGoodsSerialDAO extends BaseDAOImpl<MjrStockGoodsSerial,Long
             lstCon.add(new Condition("partnerId",Constants.SQL_PRO_TYPE.LONG,Constants.SQL_OPERATOR.EQUAL,mjrOrderDTO.getPartnerId()));
         }
         List<MjrStockGoodsSerial> lstResultSerial = findByConditionSession(lstCon,getSession());
-        return lstResultSerial;
+        lstResultSerial.forEach(e->{
+            data.add(e.toDTO());
+        });
+        return data;
     }
 
 }

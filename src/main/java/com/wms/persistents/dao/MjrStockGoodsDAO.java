@@ -129,10 +129,10 @@ public class MjrStockGoodsDAO extends BaseDAOImpl<MjrStockGoods,Long> {
     }
 
 	//for real export
-	public List<MjrStockGoods> exportOrderStockGoods(MjrOrderDTO mjrOrder, MjrOrderDetailDTO mjrOrderDetail) {
+	public List<MjrStockGoodsDTO> exportOrderStockGoods(MjrOrderDTO mjrOrder, MjrOrderDetailDTO mjrOrderDetail) {
 		ResponseObject responseObject = new ResponseObject();
 		responseObject.setStatusCode(Responses.ERROR.getName());
-		List<MjrStockGoods> lstResult = new ArrayList<>();
+		List<MjrStockGoodsDTO> lstResult = new ArrayList<>();
 		//1. find valid stock goods
 		List<Condition> lstCon = Lists.newArrayList();
 		lstCon.add(new Condition("custId", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, mjrOrder.getCustId()));
@@ -163,13 +163,14 @@ public class MjrStockGoodsDAO extends BaseDAOImpl<MjrStockGoods,Long> {
 		float currentAmount;
 		String updateResult = null;
 		for (MjrStockGoods i : lstCurrentStockGoods) {
+			MjrStockGoodsDTO data = i.toDTO();
 			currentAmount = i.getAmount();
 			if (exportAmount > currentAmount) {
 				exportAmount -= currentAmount;
-				lstResult.add(i);
+				lstResult.add(data);
 			} else {
-				i.setAmount(exportAmount);
-				lstResult.add(i);
+				data.setAmount(exportAmount+"");
+				lstResult.add(data);
 				break;
 			}
 
