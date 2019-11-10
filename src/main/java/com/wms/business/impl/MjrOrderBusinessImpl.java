@@ -66,20 +66,20 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
 		List<MjrOrderDetail> mjrOrderDetails = new ArrayList<>();
 		try {
 			String id = null;
-			if (mjrOrder.getId() != null) {
-					id = mjrOrder.getId();
+			if (!DataUtil.isNullOrEmpty(mjrOrder.getId())) {
+				id = mjrOrder.getId();
 				mjrOrderDAO.updateBySession(mjrOrder.toModel(), session);
 				List<MjrOrderDetail> mjrOrderDetails1 = mjrOrderDetailDAO.findByProperty("orderId", Long.parseLong(mjrOrder.getId()));
-				for (MjrOrderDetail mjrOrderDetail : mjrOrderDetails1){
-					mjrOrderDetailDAO.deleteByObjectSession(mjrOrderDetail,session);
+				for (MjrOrderDetail mjrOrderDetail : mjrOrderDetails1) {
+					mjrOrderDetailDAO.deleteByObjectSession(mjrOrderDetail, session);
 				}
-			}else {
+			} else {
 				mjrOrder.setCode(initTransCode(mjrOrder, getSysDate(), session, null));
-				 id = mjrOrderDAO.saveBySession(mjrOrder.toModel(), session);
+				id = mjrOrderDAO.saveBySession(mjrOrder.toModel(), session);
 			}
 
 
-			for (MjrOrderDetailDTO mjrOrderDetailDTO :lstMjrOrderDetails){
+			for (MjrOrderDetailDTO mjrOrderDetailDTO : lstMjrOrderDetails) {
 				MjrOrderDetail mjrOrderDetail = mjrOrderDetailDTO.toModel();
 				mjrOrderDetail.setOrderId(Long.parseLong(id));
 				mjrOrderDetails.add(mjrOrderDetail);

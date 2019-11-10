@@ -119,7 +119,7 @@ public class MjrOrder extends BaseModel {
         this.status = status;
     }
 
-    @Column(name = "CREATED_DATE" , insertable = false)
+    @Column(name = "CREATED_DATE" , insertable = false,updatable = false)
     public Date getCreatedDate() {
         return createdDate;
     }
