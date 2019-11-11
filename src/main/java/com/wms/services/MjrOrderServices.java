@@ -41,4 +41,8 @@ public class MjrOrderServices extends BaseServices<MjrOrderDTO> {
 	public List<MjrOrderDetailDTO>  getListOrderDetail(@PathVariable("orderId") Long orderId){
 		return mjrOrderBusiness.getListOrderDetail(orderId);
 	}
+    @RequestMapping(value = "/deleteOrder/{orderId}",produces = "application/json",method = RequestMethod.GET)
+    public ResponseObject deleteOrder(@PathVariable("orderId") Long orderId){
+        return mjrOrderBusiness.deleteOrder(orderId);
+    }
 }

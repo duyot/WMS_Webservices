@@ -98,6 +98,31 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
 		return responseObject;
 	}
 
+	@Override
+	public ResponseObject deleteOrder(Long orderId) {
+		ResponseObject responseObject = new ResponseObject();
+		responseObject.setStatusName(Responses.SUCCESS.getName());
+		Session session = sessionFactory.openSession();
+		Transaction transaction = session.getTransaction();
+		transaction.begin();
+		try {
+			mjrOrderDAO.deleteByIdSession(orderId, session);
+			List<MjrOrderDetail> mjrOrderDetails1 = mjrOrderDetailDAO.findByProperty("orderId", orderId);
+			for (MjrOrderDetail mjrOrderDetail : mjrOrderDetails1) {
+				mjrOrderDetailDAO.deleteByObjectSession(mjrOrderDetail, session);
+			}
+			transaction.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			transaction.rollback();
+			responseObject.setStatusName(Responses.ERROR.getName());
+			responseObject.setKey("FAIL");
+		} finally {
+			session.close();
+		}
+		return responseObject;
+	}
+
 	//
 	private String initTransCode(MjrOrderDTO mjrOrderDTO, String createdTime, Session session, Connection con) {
 		//

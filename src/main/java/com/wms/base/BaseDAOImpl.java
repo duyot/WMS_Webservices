@@ -91,7 +91,6 @@ public class BaseDAOImpl<T extends BaseModel, ID extends Serializable> implement
         }
         return deleteByObject(object);
     }
-	@Transactional
 	public String deleteByIdSession(long id,Session session) {
 		T object = (T) session.get(modelClass, id);
 		if (object == null) {
