@@ -1,29 +1,21 @@
 package com.wms.persistents.dao;
 
-import com.wms.base.BaseBusinessInterface;
 import com.wms.base.BaseDAOImpl;
-import com.wms.dto.MjrStockGoodsTotalDTO;
 import com.wms.dto.MjrStockTransDTO;
 import com.wms.enums.Responses;
-import com.wms.persistents.model.MjrStockGoodsTotal;
 import com.wms.persistents.model.MjrStockTrans;
 import com.wms.utils.DataUtil;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import com.wms.utils.FunctionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  * Created by duyot on 12/28/2016.
@@ -41,8 +33,9 @@ public class MjrStockTransDAO extends BaseDAOImpl<MjrStockTrans,Long> {
         sql.append(" (ID,CODE,CUST_ID,STOCK_ID,CONTRACT_NUMBER,INVOICE_NUMBER,TYPE,STATUS,CREATED_DATE,CREATED_USER,DESCRIPTION,PARTNER_ID,PARTNER_NAME,RECEIVE_ID,RECEIVE_NAME, trans_money_total) ");
         sql.append(" values (?,?,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),?,?,?,?,?,?,?) ");
         //
+        PreparedStatement stm = null;
         try {
-            PreparedStatement stm = connection.prepareStatement(sql.toString());
+            stm = connection.prepareStatement(sql.toString());
 
             for (int idx = 0; idx < params.size(); idx++) {
                 stm.setString(idx + 1, (String) DataUtil.nvl(params.get(idx), null));
@@ -51,6 +44,8 @@ public class MjrStockTransDAO extends BaseDAOImpl<MjrStockTrans,Long> {
         } catch (SQLException ex) {
             log.info(ex.toString());
             return Responses.ERROR.getName();
+        }finally {
+            FunctionUtils.closeStatement(stm);
         }
         return Responses.SUCCESS.getName();
         //

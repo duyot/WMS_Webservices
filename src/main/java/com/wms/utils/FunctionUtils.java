@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -125,6 +126,16 @@ public class FunctionUtils {
             }
         } catch (SQLException ex) {
             log.info(ex.toString());
+        }
+    }
+
+    public static void closeStatement(Statement statement){
+        try {
+            if (statement != null) {
+                statement.close();
+            }
+        } catch (SQLException e) {
+            log.info(e.toString());
         }
     }
 

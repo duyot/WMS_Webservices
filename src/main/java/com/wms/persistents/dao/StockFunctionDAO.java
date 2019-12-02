@@ -5,13 +5,16 @@ import com.wms.base.BaseDAOImpl;
 import com.wms.business.impl.StockManagementBusinessImpl;
 import com.wms.dto.*;
 import com.wms.enums.Responses;
-import com.wms.persistents.model.CatUser;
 import com.wms.persistents.model.SysMenu;
-import com.wms.utils.*;
+import com.wms.utils.Constants;
+import com.wms.utils.DataUtil;
+import com.wms.utils.DateTimeUtils;
+import com.wms.utils.FunctionUtils;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.procedure.ProcedureCall;
+import org.hibernate.query.NativeQuery;
 import org.hibernate.result.Output;
 import org.hibernate.result.ResultSetOutput;
 import org.hibernate.type.DateType;
@@ -23,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import sun.plugin.util.UIUtil;
 
 import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
@@ -33,7 +35,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -565,8 +566,9 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
     public String getTotalStockTransaction(String stockId, Connection connection) {
         String sql = " select count(*) trans_num from mjr_stock_trans where type = 1 and stock_id = ? ";
         int count = 0;
+        PreparedStatement ps = null;
         try {
-            PreparedStatement ps = connection.prepareStatement(sql.toString());
+            ps = connection.prepareStatement(sql);
             ps.setInt(1, Integer.parseInt(stockId));
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -575,6 +577,8 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         } catch (SQLException e) {
             e.printStackTrace();
             count = 0;
+        }finally {
+            FunctionUtils.closeStatement(ps);
         }
         return String.format("%08d", count);
     }
@@ -685,9 +689,9 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         List paramsStockGoodsSerial;
         List paramsStockGoods;
         //PREPARE STATEMENTS
-        PreparedStatement prstmtInsertStockTransDetail;
-        PreparedStatement prstmtInsertStockGoodsSerial;
-        PreparedStatement prstmtInsertStockGoods;
+        PreparedStatement prstmtInsertStockTransDetail = null;
+        PreparedStatement prstmtInsertStockGoodsSerial = null;
+        PreparedStatement prstmtInsertStockGoods = null;
         //SQL
         StringBuilder sqlStockTransDetail = new StringBuilder();
         StringBuilder sqlStockGoodsSerial = new StringBuilder();
@@ -759,15 +763,14 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
                     e.printStackTrace();
                 }
             }
-            //
-            prstmtInsertStockTransDetail.close();
-            prstmtInsertStockGoodsSerial.close();
-            prstmtInsertStockGoods.close();
-
-
         } catch (SQLException e) {
             log.info(e.toString());
             return Responses.ERROR.getName();
+        }finally {
+            //
+            FunctionUtils.closeStatement(prstmtInsertStockTransDetail);
+            FunctionUtils.closeStatement(prstmtInsertStockGoodsSerial);
+            FunctionUtils.closeStatement(prstmtInsertStockGoods);
         }
 
         return Responses.SUCCESS.getName();
