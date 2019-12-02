@@ -144,11 +144,7 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
 				.append("/")
 				.append(createdTime)
 				.append("/");
-		if (isImport) {
-			stringBuilder.append(stockFunctionBusiness.getTotalStockTransaction(mjrOrderDTO.getStockId(), con));
-		} else {
-			stringBuilder.append(stockFunctionBusiness.getTotalStockTransaction(mjrOrderDTO.getStockId(), session));
-		}
+		stringBuilder.append(mjrOrderDAO.getTotalOrder(mjrOrderDTO.getStockId(), Integer.parseInt(mjrOrderDTO.getType())));
 		return stringBuilder.toString();
 	}
 
