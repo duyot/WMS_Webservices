@@ -95,7 +95,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         Session session = getSession();
         //
         StringBuilder str = new StringBuilder();
-        str.append(" select a.code,c.name, a.type, b.goods_code, b.goods_id, b.goods_state,b.amount, b.unit_name, to_char(a.created_date,'dd/MM/yyyy') created_date, a.CREATED_USER, b.input_price, b.output_price, b.cell_code, b.serial, b.total_money, b.weight, b.volume, d.name as goods_name, b.description, to_char(b.produce_date,'dd/MM/yyyy') produce_date , to_char(b.expire_date,'dd/MM/yyyy') expire_date ")
+        str.append(" select a.code,c.name, a.type, b.goods_code, b.goods_id, b.goods_state,b.amount, b.unit_name, to_char(a.created_date,'dd/MM/yyyy') created_date, a.CREATED_USER, b.input_price, b.output_price, b.cell_code, b.serial, b.total_money, b.weight, b.volume, d.name as goods_name, a.description, to_char(b.produce_date,'dd/MM/yyyy') produce_date , to_char(b.expire_date,'dd/MM/yyyy') expire_date ")
                 .append(" from mjr_stock_trans a, mjr_stock_trans_detail b, cat_stock c, cat_goods d")
                 .append(" WHERE 1 = 1 ")
                 .append(" and a.id in (  ")

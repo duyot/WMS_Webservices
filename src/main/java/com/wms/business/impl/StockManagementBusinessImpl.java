@@ -302,7 +302,9 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
         List<Condition> lstCon = Lists.newArrayList();
         lstCon.add(new Condition("custId", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, transDetail.getCustId()));
         lstCon.add(new Condition("status", Constants.SQL_PRO_TYPE.BYTE, Constants.SQL_OPERATOR.EQUAL, Constants.STATUS.ACTIVE));
-        lstCon.add(new Condition("id", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, transDetail.getPartnerId()));
+        if(!DataUtil.isStringNullOrEmpty(transDetail.getPartnerId())){
+            lstCon.add(new Condition("id", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, transDetail.getPartnerId()));
+        }
         //
         List<CatPartnerDTO> lstCatPartner = catPartnerBusiness.findByCondition(lstCon);
         if (DataUtil.isListNullOrEmpty(lstCatPartner)) {
