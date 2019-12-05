@@ -3,9 +3,14 @@ package com.wms.persistents.model;
 import com.wms.base.BaseModel;
 import com.wms.dto.MjrStockGoodsTotalDTO;
 import com.wms.utils.DateTimeUtils;
-
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 /**
  * Created by duyot on 12/19/2016.
@@ -24,7 +29,7 @@ public class MjrStockGoodsTotal extends BaseModel {
     private Date changeDate;
     private Double preAmount;
 
-    public MjrStockGoodsTotal(Long id, Long custId, Long goodsId, String goodsCode, String goodsName, String goodsState, Long stockId, Double amount, Date changeDate,Double preAmount) {
+    public MjrStockGoodsTotal(Long id, Long custId, Long goodsId, String goodsCode, String goodsName, String goodsState, Long stockId, Double amount, Date changeDate, Double preAmount) {
         this.id = id;
         this.custId = custId;
         this.goodsId = goodsId;
@@ -42,12 +47,12 @@ public class MjrStockGoodsTotal extends BaseModel {
 
     @Id
     @Column(name = "ID", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_MJR_STOCK_GOODS_TOTAL")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MJR_STOCK_GOODS_TOTAL")
     @SequenceGenerator(
-            name="SEQ_MJR_STOCK_GOODS_TOTAL",
-            sequenceName="SEQ_MJR_STOCK_GOODS_TOTAL",
+            name = "SEQ_MJR_STOCK_GOODS_TOTAL",
+            sequenceName = "SEQ_MJR_STOCK_GOODS_TOTAL",
             allocationSize = 1,
-            initialValue= 1000
+            initialValue = 1000
     )
     public Long getId() {
         return id;
@@ -140,12 +145,11 @@ public class MjrStockGoodsTotal extends BaseModel {
 
     @Override
     public MjrStockGoodsTotalDTO toDTO() {
-        return new MjrStockGoodsTotalDTO(id==null?"":id+"",custId==null?"":custId+"",goodsId==null?"":goodsId+"",
-                goodsCode,goodsName,goodsState,stockId==null?"":stockId+"",amount==null?"":amount+"",changeDate==null?"": DateTimeUtils.convertDateTimeToString(changeDate),
-                preAmount==null?"":preAmount+""
-                );
+        return new MjrStockGoodsTotalDTO(id == null ? "" : id + "", custId == null ? "" : custId + "", goodsId == null ? "" : goodsId + "",
+                goodsCode, goodsName, goodsState, stockId == null ? "" : stockId + "", amount == null ? "" : amount + "", changeDate == null ? "" : DateTimeUtils.convertDateTimeToString(changeDate),
+                preAmount == null ? "" : preAmount + ""
+        );
     }
-
 
 
     @Override

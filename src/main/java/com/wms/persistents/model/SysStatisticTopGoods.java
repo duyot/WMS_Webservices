@@ -4,9 +4,14 @@ import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
 import com.wms.dto.SysStatisticTopGoodsDTO;
 import com.wms.utils.DateTimeUtils;
-
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 /**
  * Created by duyot on 5/19/2017.
@@ -33,12 +38,12 @@ public class SysStatisticTopGoods extends BaseModel {
 
     @Id
     @Column(name = "ID", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_SYS_STATISTIC_TOP_GOODS")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_SYS_STATISTIC_TOP_GOODS")
     @SequenceGenerator(
-            name="SEQ_SYS_STATISTIC_TOP_GOODS",
-            sequenceName="SEQ_SYS_STATISTIC_TOP_GOODS",
+            name = "SEQ_SYS_STATISTIC_TOP_GOODS",
+            sequenceName = "SEQ_SYS_STATISTIC_TOP_GOODS",
             allocationSize = 1,
-            initialValue= 1000
+            initialValue = 1000
     )
     public Long getId() {
         return id;
@@ -86,8 +91,8 @@ public class SysStatisticTopGoods extends BaseModel {
 
     @Override
     public BaseDTO toDTO() {
-        return new SysStatisticTopGoodsDTO(id==null?"":id+"",custId==null?"":custId+"",statisticInfo,
-                createdDate==null?"": DateTimeUtils.convertDateTimeToString(createdDate),type
-                );
+        return new SysStatisticTopGoodsDTO(id == null ? "" : id + "", custId == null ? "" : custId + "", statisticInfo,
+                createdDate == null ? "" : DateTimeUtils.convertDateTimeToString(createdDate), type
+        );
     }
 }

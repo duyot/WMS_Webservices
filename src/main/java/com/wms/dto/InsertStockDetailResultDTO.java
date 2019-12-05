@@ -1,6 +1,5 @@
 package com.wms.dto;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -8,7 +7,7 @@ import java.util.Map;
  */
 public class InsertStockDetailResultDTO {
     public ResponseObject responseObject;
-    public Map<String,Float> mapGoodsNumber;
+    public Map<String, Float> mapGoodsNumber;
 
     public InsertStockDetailResultDTO(ResponseObject responseObject, Map<String, Float> mapGoodsNumber) {
         this.responseObject = responseObject;

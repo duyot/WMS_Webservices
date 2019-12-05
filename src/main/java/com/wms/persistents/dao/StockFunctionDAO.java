@@ -3,18 +3,36 @@ package com.wms.persistents.dao;
 import com.google.common.collect.Lists;
 import com.wms.base.BaseDAOImpl;
 import com.wms.business.impl.StockManagementBusinessImpl;
-import com.wms.dto.*;
+import com.wms.dto.CatGoodsDTO;
+import com.wms.dto.ChartDTO;
+import com.wms.dto.MjrStockGoodsTotalDTO;
+import com.wms.dto.MjrStockTransDTO;
+import com.wms.dto.MjrStockTransDetailDTO;
+import com.wms.dto.ResponseObject;
 import com.wms.enums.Responses;
 import com.wms.persistents.model.SysMenu;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import com.wms.utils.DateTimeUtils;
 import com.wms.utils.FunctionUtils;
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
+import javax.persistence.PersistenceContext;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.procedure.ProcedureCall;
-import org.hibernate.query.NativeQuery;
 import org.hibernate.result.Output;
 import org.hibernate.result.ResultSetOutput;
 import org.hibernate.type.DateType;
@@ -26,17 +44,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.ParameterMode;
-import javax.persistence.PersistenceContext;
-import java.math.BigDecimal;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by duyot on 3/6/2017.
@@ -137,7 +144,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         Session session = getSession();
         String[] ids = lstStockTransId.split(",");
         int size = ids.length;
-        StringBuilder lstParamIds = new StringBuilder("");
+        StringBuilder lstParamIds = new StringBuilder();
         if ("".equalsIgnoreCase(lstStockTransId.trim())) {
             lstParamIds.append("?");
         } else {
@@ -194,13 +201,13 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
 
         Session session = getSession();
         Date date = new Date();
-        String currentDate = DateTimeUtils.convertDateToString(date,"dd/MM/yyyy");
+        String currentDate = DateTimeUtils.convertDateToString(date, "dd/MM/yyyy");
         String beforeDate;
 
         if (type == 7) {
-            beforeDate = DateTimeUtils.convertDateToString(DateTimeUtils.getDateCompareToCurrent(-type+1),"dd/MM/yyyy");
-        }else{
-            beforeDate = DateTimeUtils.convertDateToString(DateTimeUtils.getFirstDateInMonth(),"dd/MM/yyyy");
+            beforeDate = DateTimeUtils.convertDateToString(DateTimeUtils.getDateCompareToCurrent(-type + 1), "dd/MM/yyyy");
+        } else {
+            beforeDate = DateTimeUtils.convertDateToString(DateTimeUtils.getFirstDateInMonth(), "dd/MM/yyyy");
         }
 
         StringBuilder str = new StringBuilder();
@@ -220,7 +227,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
             stockPermission = (i[1] == null ? "" : String.valueOf(i[1]));
             break;
         }
-        str = new StringBuilder("");
+        str = new StringBuilder();
         str.append(" select to_char(a.created_date,'dd/MM/yyyy') as created_date, a.type, count(*) as so_luong ")
                 .append(" from mjr_stock_trans a");
         if ("1".equals(partnerPermission)) {
@@ -252,7 +259,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
 
         Session session = getSession();
         Date date = new Date();
-        String beforeDate = DateTimeUtils.convertDateToString(DateTimeUtils.getDateCompareToCurrent(-30),"dd/MM/yyyy");;
+        String beforeDate = DateTimeUtils.convertDateToString(DateTimeUtils.getDateCompareToCurrent(-30), "dd/MM/yyyy");
 
         StringBuilder str = new StringBuilder();
         str.append(" select a.partner_permission, a.stock_permission ")
@@ -271,7 +278,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
             stockPermission = (i[1] == null ? "" : String.valueOf(i[1]));
             break;
         }
-        str = new StringBuilder("");
+        str = new StringBuilder();
         str.append(" select gr.* from ( ")
                 .append(" select to_char(a.IMPORT_DATE,'dd/MM/yyyy') as IMPORT_DATE , a.goods_id, a.stock_id, a.partner_id, a.cust_id from MJR_STOCK_GOODS a where a.status =1 and a.IMPORT_DATE <= ?")
                 .append(" union all")
@@ -301,24 +308,24 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         ps.setDate(1, DateTimeUtils.convertStringToDate(beforeDate));
         ps.setString(2, custId);
 
-        if(DataUtil.isListNullOrEmpty(ps.list())){
+        if (DataUtil.isListNullOrEmpty(ps.list())) {
             return Lists.newArrayList();
         }
         return getKPIStorageChartFromData(ps.list());
     }
 
-    private List<ChartDTO> getKPIStorageChartFromData(List<Object[]> lstData){
+    private List<ChartDTO> getKPIStorageChartFromData(List<Object[]> lstData) {
         List<ChartDTO> lstResult = Lists.newArrayList();
         Session session = getSession();
         Date date = new Date();
         long diffInMillies = 0;
         long diff = 0;
         Date importDate = null;
-        Map<String, String> map1month =  new HashMap<String, String>();
-        Map<String, String> map3month =  new HashMap<String, String>();
-        Map<String, String> map6month =  new HashMap<String, String>();
-        Map<String, String> map12month =  new HashMap<String, String>();
-        Map<String, String> map36month =  new HashMap<String, String>();
+        Map<String, String> map1month = new HashMap<String, String>();
+        Map<String, String> map3month = new HashMap<String, String>();
+        Map<String, String> map6month = new HashMap<String, String>();
+        Map<String, String> map12month = new HashMap<String, String>();
+        Map<String, String> map36month = new HashMap<String, String>();
         Double amount1month = 0.0;
         Double amount3month = 0.0;
         Double amount6month = 0.0;
@@ -329,48 +336,48 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
             importDate = DateTimeUtils.convertStringToTime(String.valueOf(i[0]), "dd/MM/yyyy");
             diffInMillies = Math.abs(date.getTime() - importDate.getTime());
             diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-            if(diff >= 1095){
-                if(!map36month.containsKey(String.valueOf(i[1]))){
+            if (diff >= 1095) {
+                if (!map36month.containsKey(String.valueOf(i[1]))) {
                     amount36month++;
                     map36month.put(String.valueOf(i[1]), String.valueOf(i[1]));
                 }
-            }else if(diff >= 365){
-                if(!map12month.containsKey(String.valueOf(i[1]))){
+            } else if (diff >= 365) {
+                if (!map12month.containsKey(String.valueOf(i[1]))) {
                     amount12month++;
                     map12month.put(String.valueOf(i[1]), String.valueOf(i[1]));
                 }
-            }else if(diff >= 180){
-                if(!map6month.containsKey(String.valueOf(i[1]))){
+            } else if (diff >= 180) {
+                if (!map6month.containsKey(String.valueOf(i[1]))) {
                     amount6month++;
                     map6month.put(String.valueOf(i[1]), String.valueOf(i[1]));
                 }
-            }else if(diff >=90){
-                if(!map3month.containsKey(String.valueOf(i[1]))){
+            } else if (diff >= 90) {
+                if (!map3month.containsKey(String.valueOf(i[1]))) {
                     amount3month++;
                     map3month.put(String.valueOf(i[1]), String.valueOf(i[1]));
                 }
-            }else{
-                if(!map1month.containsKey(String.valueOf(i[1]))){
+            } else {
+                if (!map1month.containsKey(String.valueOf(i[1]))) {
                     amount1month++;
                     map1month.put(String.valueOf(i[1]), String.valueOf(i[1]));
                 }
             }
         }
-        for(int i = 0;i< 5;i++){
+        for (int i = 0; i < 5; i++) {
             ChartDTO data = new ChartDTO();
-            if(i == 0){
+            if (i == 0) {
                 data.setName(">=1 tháng");
                 data.setY(amount1month);
-            }else if (i ==1){
+            } else if (i == 1) {
                 data.setName(">=3 tháng");
                 data.setY(amount3month);
-            }else if (i ==2){
+            } else if (i == 2) {
                 data.setName(">=6 tháng");
                 data.setY(amount6month);
-            }else if (i ==3){
+            } else if (i == 3) {
                 data.setName(">=1 năm");
                 data.setY(amount12month);
-            }else{
+            } else {
                 data.setName(">=3 năm");
                 data.setY(amount36month);
             }
@@ -385,13 +392,13 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         Double[] dataImport = new Double[type];
         Date curDate = null;
         int count = 0;
-        for (int j=0; j<type; j++){
+        for (int j = 0; j < type; j++) {
             curDate = DateTimeUtils.getNextDate(beforeDate, j);
             for (Object[] i : lstData) {
-                if(dataImport[j] != null && dataExport[j] != null){
+                if (dataImport[j] != null && dataExport[j] != null) {
                     break;
                 }
-                if (curDate.compareTo(DateTimeUtils.convertStringToTime(String.valueOf(i[0]),"dd/MM/yyyy")) == 0) {
+                if (curDate.compareTo(DateTimeUtils.convertStringToTime(String.valueOf(i[0]), "dd/MM/yyyy")) == 0) {
                     if (String.valueOf(i[1]).equals("1")) {
                         dataImport[j] = Double.valueOf(String.valueOf(i[2]));
                     } else {
@@ -399,10 +406,10 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
                     }
                 }
             }
-            if(dataImport[j] == null){
+            if (dataImport[j] == null) {
                 dataImport[j] = 0.0;
             }
-            if(dataExport[j] == null){
+            if (dataExport[j] == null) {
                 dataExport[j] = 0.0;
             }
         }
@@ -577,7 +584,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         } catch (SQLException e) {
             e.printStackTrace();
             count = 0;
-        }finally {
+        } finally {
             FunctionUtils.closeStatement(ps);
         }
         return String.format("%08d", count);
@@ -714,7 +721,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         try {
             prstmtInsertStockTransDetail = connection.prepareStatement(sqlStockTransDetail.toString());
             prstmtInsertStockGoodsSerial = connection.prepareStatement(sqlStockGoodsSerial.toString());
-            prstmtInsertStockGoods       = connection.prepareStatement(sqlStockGoods.toString());
+            prstmtInsertStockGoods = connection.prepareStatement(sqlStockGoods.toString());
             //
             int count = 0;
             //
@@ -766,7 +773,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         } catch (SQLException e) {
             log.info(e.toString());
             return Responses.ERROR.getName();
-        }finally {
+        } finally {
             //
             FunctionUtils.closeStatement(prstmtInsertStockTransDetail);
             FunctionUtils.closeStatement(prstmtInsertStockGoodsSerial);
@@ -812,14 +819,14 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         paramsStockTrans.add(transDetail.getPartnerId());
         paramsStockTrans.add(transDetail.getId());
         paramsStockTrans.add(goods.getInputPrice());
-        if(!DataUtil.isNullOrEmpty(goods.getVolume())){
-            paramsStockTrans.add(String.valueOf(Math.round(1000000*Double.valueOf(goods.getVolume())/Double.valueOf(goods.getAmount()))/1000000D));
-        }else{
+        if (!DataUtil.isNullOrEmpty(goods.getVolume())) {
+            paramsStockTrans.add(String.valueOf(Math.round(1000000 * Double.valueOf(goods.getVolume()) / Double.valueOf(goods.getAmount())) / 1000000D));
+        } else {
             paramsStockTrans.add(goods.getVolume());
         }
-        if(!DataUtil.isNullOrEmpty(goods.getWeight())){
-            paramsStockTrans.add(String.valueOf(Math.round(1000000*Double.valueOf(goods.getWeight())/Double.valueOf(goods.getAmount()))/1000000D));
-        }else{
+        if (!DataUtil.isNullOrEmpty(goods.getWeight())) {
+            paramsStockTrans.add(String.valueOf(Math.round(1000000 * Double.valueOf(goods.getWeight()) / Double.valueOf(goods.getAmount())) / 1000000D));
+        } else {
             paramsStockTrans.add(goods.getWeight());
         }
         paramsStockTrans.add(goods.getProduceDate());
@@ -843,14 +850,14 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         paramsStockTrans.add(transDetail.getPartnerId());
         paramsStockTrans.add(transDetail.getId());
         paramsStockTrans.add(goods.getInputPrice());
-        if(!DataUtil.isNullOrEmpty(goods.getVolume())){
-            paramsStockTrans.add(String.valueOf(Math.round(1000000*Double.valueOf(goods.getVolume())/Double.valueOf(goods.getAmount()))/1000000D));
-        }else{
+        if (!DataUtil.isNullOrEmpty(goods.getVolume())) {
+            paramsStockTrans.add(String.valueOf(Math.round(1000000 * Double.valueOf(goods.getVolume()) / Double.valueOf(goods.getAmount())) / 1000000D));
+        } else {
             paramsStockTrans.add(goods.getVolume());
         }
-        if(!DataUtil.isNullOrEmpty(goods.getWeight())){
-            paramsStockTrans.add(String.valueOf(Math.round(1000000*Double.valueOf(goods.getWeight())/Double.valueOf(goods.getAmount()))/1000000D));
-        }else{
+        if (!DataUtil.isNullOrEmpty(goods.getWeight())) {
+            paramsStockTrans.add(String.valueOf(Math.round(1000000 * Double.valueOf(goods.getWeight()) / Double.valueOf(goods.getAmount())) / 1000000D));
+        } else {
             paramsStockTrans.add(goods.getWeight());
         }
         paramsStockTrans.add(goods.getProduceDate());

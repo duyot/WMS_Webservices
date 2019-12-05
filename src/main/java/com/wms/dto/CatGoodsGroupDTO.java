@@ -8,7 +8,7 @@ import com.wms.utils.StringUtils;
 /**
  * Created by duyot on 12/7/2016.
  */
-public class CatGoodsGroupDTO  extends BaseDTO {
+public class CatGoodsGroupDTO extends BaseDTO {
 
     private String id;
     private String name;
@@ -59,8 +59,8 @@ public class CatGoodsGroupDTO  extends BaseDTO {
 
     @Override
     public BaseModel toModel() {
-        return new CatGoodsGroup(!StringUtils.validString(id) ? null:Long.valueOf(id), name, !StringUtils.validString(status) ? 0:Byte.parseByte(status),
-                !StringUtils.validString(custId) ? null:Long.valueOf(custId));
+        return new CatGoodsGroup(!StringUtils.validString(id) ? null : Long.valueOf(id), name, !StringUtils.validString(status) ? 0 : Byte.parseByte(status),
+                !StringUtils.validString(custId) ? null : Long.valueOf(custId));
     }
 
     @Override

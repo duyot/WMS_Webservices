@@ -48,7 +48,7 @@ public class CatUserDTO extends BaseDTO {
         this.roleId = roleId;
         this.block = block;
         this.partnerPermission = partnerPermission;
-        this.stockPermission= stockPermission;
+        this.stockPermission = stockPermission;
     }
 
     public String getPartnerPermission() {
@@ -201,12 +201,12 @@ public class CatUserDTO extends BaseDTO {
 
     @Override
     public CatUser toModel() {
-        return new CatUser(!StringUtils.validString(id) ? null:Long.valueOf(id),!StringUtils.validString(deptId) ? null:Long.valueOf(deptId),!StringUtils.validString(custId) ? null:Long.valueOf(custId),
-                            code,name,password,!StringUtils.validString(birthDate) ? null: DateTimeUtils.convertStringToDate(birthDate),email,telNumber,
-                            !StringUtils.validString(status) ? 0:Byte.parseByte(status),
-                            !StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),imgUrl,roleName,logReason,
-                            !StringUtils.validString(roleId) ? null:Long.valueOf(roleId),!StringUtils.validString(block) ? 0:Byte.parseByte(block), !StringUtils.validString(partnerPermission) ? null:Long.valueOf(partnerPermission), !StringUtils.validString(stockPermission) ? null:Long.valueOf(stockPermission)
-                        );
+        return new CatUser(!StringUtils.validString(id) ? null : Long.valueOf(id), !StringUtils.validString(deptId) ? null : Long.valueOf(deptId), !StringUtils.validString(custId) ? null : Long.valueOf(custId),
+                code, name, password, !StringUtils.validString(birthDate) ? null : DateTimeUtils.convertStringToDate(birthDate), email, telNumber,
+                !StringUtils.validString(status) ? 0 : Byte.parseByte(status),
+                !StringUtils.validString(createdDate) ? null : DateTimeUtils.convertStringToDate(createdDate), imgUrl, roleName, logReason,
+                !StringUtils.validString(roleId) ? null : Long.valueOf(roleId), !StringUtils.validString(block) ? 0 : Byte.parseByte(block), !StringUtils.validString(partnerPermission) ? null : Long.valueOf(partnerPermission), !StringUtils.validString(stockPermission) ? null : Long.valueOf(stockPermission)
+        );
     }
 
     @Override

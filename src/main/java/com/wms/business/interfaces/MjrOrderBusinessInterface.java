@@ -1,15 +1,18 @@
 package com.wms.business.interfaces;
 
 import com.wms.base.BaseBusinessInterface;
-import com.wms.dto.*;
-import com.wms.persistents.model.MjrOrder;
-import com.wms.persistents.model.MjrOrderDetail;
-
+import com.wms.dto.MjrOrderDTO;
+import com.wms.dto.MjrOrderDetailDTO;
+import com.wms.dto.RealExportExcelDTO;
+import com.wms.dto.ResponseObject;
 import java.util.List;
 
 public interface MjrOrderBusinessInterface extends BaseBusinessInterface<MjrOrderDTO> {
-	public ResponseObject orderExport(MjrOrderDTO mjrOrder, List<MjrOrderDetailDTO> lstMjrOrderDetails);
-	public List<RealExportExcelDTO>  orderExportData(Long mjrOrderId );
-	public List<MjrOrderDetailDTO>  getListOrderDetail(Long orderId );
-	public ResponseObject deleteOrder(Long orderId );
+    ResponseObject orderExport(MjrOrderDTO mjrOrder, List<MjrOrderDetailDTO> lstMjrOrderDetails);
+
+    List<RealExportExcelDTO> orderExportData(Long mjrOrderId);
+
+    List<MjrOrderDetailDTO> getListOrderDetail(Long orderId);
+
+    ResponseObject deleteOrder(Long orderId);
 }

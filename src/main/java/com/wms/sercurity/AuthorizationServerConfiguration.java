@@ -19,8 +19,8 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
  */
 @Configuration
 @EnableAuthorizationServer
-public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter  {
-    private static String REALM="WMS_OAUTH_REALM";
+public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
+    private static String REALM = "WMS_OAUTH_REALM";
 
     @Autowired
     private TokenStore tokenStore;
@@ -58,6 +58,6 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-        oauthServer.realm(REALM+"/client");
+        oauthServer.realm(REALM + "/client");
     }
 }

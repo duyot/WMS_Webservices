@@ -1,13 +1,12 @@
 package com.wms.base;
 
+import java.sql.Types;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.criterion.CriteriaQuery;
 import org.hibernate.criterion.Order;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.type.Type;
-
-import java.sql.Types;
 
 public class OrderOracleVietnameseSort extends Order {
     private static final long serialVersionUID = 1L;

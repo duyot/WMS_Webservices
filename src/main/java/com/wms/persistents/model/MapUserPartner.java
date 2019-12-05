@@ -2,9 +2,12 @@ package com.wms.persistents.model;
 
 import com.wms.base.BaseModel;
 import com.wms.dto.MapUserPartnerDTO;
-import com.wms.dto.SysRoleDTO;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 /**
  * Created by duyot on 11/1/2016.
@@ -12,10 +15,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "MAP_USER_PARTNER")
 @SequenceGenerator(
-        name="sequence",
-        sequenceName="SEQ_MAP_USER_PARTNER"
+        name = "sequence",
+        sequenceName = "SEQ_MAP_USER_PARTNER"
 )
-public class MapUserPartner extends BaseModel{
+public class MapUserPartner extends BaseModel {
     private Long id;
     private Long userId;
     private Long partnerId;
@@ -40,7 +43,7 @@ public class MapUserPartner extends BaseModel{
         this.id = id;
     }
 
-    @Column(name = "USER_ID",nullable = false)
+    @Column(name = "USER_ID", nullable = false)
     public Long getUserId() {
         return userId;
     }
@@ -48,7 +51,8 @@ public class MapUserPartner extends BaseModel{
     public void setUserId(Long userId) {
         this.userId = userId;
     }
-    @Column(name = "PARTNER_ID",nullable = false)
+
+    @Column(name = "PARTNER_ID", nullable = false)
     public Long getPartnerId() {
         return partnerId;
     }
@@ -60,6 +64,6 @@ public class MapUserPartner extends BaseModel{
 
     @Override
     public MapUserPartnerDTO toDTO() {
-        return new MapUserPartnerDTO(id==null?"":id+"",userId != null?String.valueOf(userId):"",partnerId+"");
+        return new MapUserPartnerDTO(id == null ? "" : id + "", userId != null ? String.valueOf(userId) : "", partnerId + "");
     }
 }

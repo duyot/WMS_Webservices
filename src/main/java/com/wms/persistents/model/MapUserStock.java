@@ -2,9 +2,12 @@ package com.wms.persistents.model;
 
 import com.wms.base.BaseModel;
 import com.wms.dto.MapUserStockDTO;
-import com.wms.dto.SysRoleDTO;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 /**
  * Created by duyot on 11/1/2016.
@@ -12,10 +15,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "MAP_USER_STOCK")
 @SequenceGenerator(
-        name="sequence",
-        sequenceName="SEQ_MAP_USER_STOCK"
+        name = "sequence",
+        sequenceName = "SEQ_MAP_USER_STOCK"
 )
-public class MapUserStock extends BaseModel{
+public class MapUserStock extends BaseModel {
     private Long id;
     private Long userId;
     private Long stockId;
@@ -40,7 +43,7 @@ public class MapUserStock extends BaseModel{
         this.id = id;
     }
 
-    @Column(name = "USER_ID",nullable = false)
+    @Column(name = "USER_ID", nullable = false)
     public Long getUserId() {
         return userId;
     }
@@ -48,7 +51,8 @@ public class MapUserStock extends BaseModel{
     public void setUserId(Long userId) {
         this.userId = userId;
     }
-    @Column(name = "STOCK_ID",nullable = false)
+
+    @Column(name = "STOCK_ID", nullable = false)
     public Long getStockId() {
         return stockId;
     }
@@ -60,6 +64,6 @@ public class MapUserStock extends BaseModel{
 
     @Override
     public MapUserStockDTO toDTO() {
-        return new MapUserStockDTO(id==null?"":id+"",userId != null?String.valueOf(userId):"",stockId+"");
+        return new MapUserStockDTO(id == null ? "" : id + "", userId != null ? String.valueOf(userId) : "", stockId + "");
     }
 }

@@ -12,7 +12,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- *
  * @author Admin
  * @version 1.0
  */
@@ -38,7 +37,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param date1 Date
      * @param date2 Date
      * @return long
@@ -48,7 +46,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -61,7 +58,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -74,7 +70,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -121,7 +116,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value String
      * @return Date
      */
@@ -136,7 +130,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -149,7 +142,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -162,7 +154,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -175,7 +166,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -189,7 +179,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -203,7 +192,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -217,7 +205,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return Timestamp
      */
@@ -229,7 +216,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @return Date
      */
     public static Date sysDate() {
@@ -247,7 +233,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @return Date
      */
     public static Date sysdateYmd() {
@@ -255,7 +240,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param day integer
      * @return Date
      */
@@ -273,9 +257,8 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param date Date
-     * @param day integer
+     * @param day  integer
      * @return Date
      */
     public static Date nextdate(Date date, int day) {
@@ -295,7 +278,7 @@ public final class DateUtil {
     /**
      * get the next n month.
      *
-     * @param date Date
+     * @param date  Date
      * @param month number of next month
      * @return Date
      */
@@ -325,7 +308,7 @@ public final class DateUtil {
     /**
      * get the previos n month
      *
-     * @param date Date
+     * @param date  Date
      * @param month integer
      * @return Date
      */
@@ -347,7 +330,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @return String
      */
     public static String sysdateString() {
@@ -357,7 +339,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @return SimpleDateFormat
      */
     public static SimpleDateFormat getDate() {
@@ -366,7 +347,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @return SimpleDateFormat
      */
     public static SimpleDateFormat getDateTime() {
@@ -375,7 +355,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @return SimpleDateFormat
      */
     public static SimpleDateFormat getDateTimeMinute() {
@@ -400,7 +379,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @return SimpleDateFormat
      */
     public static SimpleDateFormat getDbUpdateDateTime() {
@@ -410,7 +388,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @return SimpleDateFormat
      */
     public static SimpleDateFormat getYYYYMM() {
@@ -419,7 +396,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @return SimpleDateFormat
      */
     public static SimpleDateFormat getMMdd() {
@@ -428,7 +404,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -441,7 +416,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -468,7 +442,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -481,7 +454,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -494,7 +466,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -507,7 +478,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -520,7 +490,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -533,7 +502,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -545,7 +513,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return []String
      */
@@ -568,7 +535,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -581,7 +547,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -594,7 +559,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -607,7 +571,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -620,7 +583,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param value Date
      * @return String
      */
@@ -633,7 +595,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @return
      */
     public static Timestamp nowDateMilli() {
@@ -641,7 +602,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param date Date
      * @return integer
      */
@@ -653,7 +613,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param nowDate Date
      * @return integer
      */
@@ -664,7 +623,6 @@ public final class DateUtil {
     }
 
     /**
-     *
      * @param nowDate Date
      * @return integer
      */
@@ -675,11 +633,12 @@ public final class DateUtil {
     }
 
     //==========================================================================
+
     /**
      * addMilli.<br>
      *
      * @param nowDate Date
-     * @param period integer
+     * @param period  integer
      * @return Timestamp
      */
     //==========================================================================
@@ -697,7 +656,7 @@ public final class DateUtil {
      * add minute
      *
      * @param nowDate Date
-     * @param period integer
+     * @param period  integer
      * @return Date
      */
     public static Date addMinute(Date nowDate, int period) {

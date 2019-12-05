@@ -4,9 +4,9 @@ import com.wms.base.BaseBusinessImpl;
 import com.wms.dto.MjrStockGoodsSerialDTO;
 import com.wms.persistents.dao.MjrStockGoodsSerialDAO;
 import com.wms.persistents.model.MjrStockGoodsSerial;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import javax.annotation.PostConstruct;
 
 /**
  * Created by duyot on 1/3/2017.

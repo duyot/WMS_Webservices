@@ -2,8 +2,11 @@ package com.wms.persistents.model;
 
 import com.wms.base.BaseModel;
 import com.wms.dto.SysRoleDTO;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Created by duyot on 11/1/2016.
@@ -11,10 +14,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "SYS_ROLE")
 @javax.persistence.SequenceGenerator(
-        name="sequence",
-        sequenceName="SEQ_SYS_ROLE"
+        name = "sequence",
+        sequenceName = "SEQ_SYS_ROLE"
 )
-public class SysRole extends BaseModel{
+public class SysRole extends BaseModel {
     private Long id;
     private String code;
     private String name;
@@ -22,7 +25,7 @@ public class SysRole extends BaseModel{
     private Long custId;
     private Long type;
 
-    public SysRole(Long id, String code, String name, byte status,Long custId ,Long type) {
+    public SysRole(Long id, String code, String name, byte status, Long custId, Long type) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -45,7 +48,7 @@ public class SysRole extends BaseModel{
         this.id = id;
     }
 
-    @Column(name = "CODE",nullable = false)
+    @Column(name = "CODE", nullable = false)
     public String getCode() {
         return code;
     }
@@ -63,7 +66,7 @@ public class SysRole extends BaseModel{
         this.name = name;
     }
 
-    @Column(name = "STATUS",nullable = false)
+    @Column(name = "STATUS", nullable = false)
     public byte getStatus() {
         return status;
     }
@@ -71,7 +74,8 @@ public class SysRole extends BaseModel{
     public void setStatus(byte status) {
         this.status = status;
     }
-    @Column(name = "CUST_ID",nullable = false )
+
+    @Column(name = "CUST_ID", nullable = false)
     public Long getCustId() {
         return custId;
     }
@@ -79,7 +83,8 @@ public class SysRole extends BaseModel{
     public void setCustId(Long custId) {
         this.custId = custId;
     }
-    @Column(name = "TYPE",nullable = false )
+
+    @Column(name = "TYPE", nullable = false)
     public Long getType() {
         return type;
     }
@@ -90,6 +95,6 @@ public class SysRole extends BaseModel{
 
     @Override
     public SysRoleDTO toDTO() {
-        return new SysRoleDTO(id==null?"":id+"",code, name, status+"",custId != null?String.valueOf(custId):"",type!=null ? type + "":"");
+        return new SysRoleDTO(id == null ? "" : id + "", code, name, status + "", custId != null ? String.valueOf(custId) : "", type != null ? type + "" : "");
     }
 }

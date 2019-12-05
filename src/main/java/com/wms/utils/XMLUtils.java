@@ -1,15 +1,19 @@
 package com.wms.utils;
 
-import javax.xml.bind.*;
+import java.io.ByteArrayOutputStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
 
 /**
  * Created by duyot on 7/11/2016.
@@ -22,25 +26,26 @@ public class XMLUtils {
 
     }
 
-    public static String objectToXMLString(Object object){
+    public static String objectToXMLString(Object object) {
         try {
-            JAXBContext jaxbContext   = JAXBContext.newInstance(object.getClass());
+            JAXBContext jaxbContext = JAXBContext.newInstance(object.getClass());
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            jaxbMarshaller.marshal(object,sw);
+            jaxbMarshaller.marshal(object, sw);
             return sw.toString();
         } catch (JAXBException e) {
             e.printStackTrace();
             return "";
         }
     }
-    public static <T> String objectToSOAPXMLString(T t,Class objectClass,String wrapperName,String wrapperMethod,String attribute){
+
+    public static <T> String objectToSOAPXMLString(T t, Class objectClass, String wrapperName, String wrapperMethod, String attribute) {
         QName root = new QName("return");
         JAXBElement<T> je = new JAXBElement<T>(root, objectClass, t);
 
         XMLOutputFactory xof = null;
         XMLStreamWriter xsw = null;
-        ByteArrayOutputStream out =new ByteArrayOutputStream();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
         try {
             xof = XMLOutputFactory.newFactory();
             xsw = xof.createXMLStreamWriter(out);
@@ -60,7 +65,7 @@ public class XMLUtils {
         } catch (Exception e) {
             e.printStackTrace();
             return "";
-        }finally {
+        } finally {
             try {
                 xsw.close();
             } catch (Exception e) {
@@ -70,8 +75,7 @@ public class XMLUtils {
     }
 
 
-
-    public static <T> T xmlSOAPToObject(String xmlContent,String rootTag,Class objectClass){
+    public static <T> T xmlSOAPToObject(String xmlContent, String rootTag, Class objectClass) {
         XMLInputFactory xmlInputFactory = XMLInputFactory.newFactory();
         Reader readerXML = new StringReader(xmlContent);
         XMLStreamReader xsr = null;
@@ -79,7 +83,7 @@ public class XMLUtils {
             xsr = xmlInputFactory.createXMLStreamReader(readerXML);
 
             xsr.nextTag();
-            while(!xsr.getLocalName().equals(rootTag)) {
+            while (!xsr.getLocalName().equals(rootTag)) {
                 xsr.nextTag();
             }
 
@@ -92,7 +96,7 @@ public class XMLUtils {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
-        }finally {
+        } finally {
             try {
                 xsr.close();
                 readerXML.close();
@@ -103,7 +107,7 @@ public class XMLUtils {
     }
 
 
-    public static <T> T xmlToObject(String xmlContent,Class objectClass){
+    public static <T> T xmlToObject(String xmlContent, Class objectClass) {
         JAXBContext jaxbContext = null;
         try {
             jaxbContext = JAXBContext.newInstance(objectClass);

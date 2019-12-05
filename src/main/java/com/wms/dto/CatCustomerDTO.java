@@ -1,7 +1,6 @@
 package com.wms.dto;
 
 import com.wms.base.BaseDTO;
-import com.wms.base.BaseModel;
 import com.wms.persistents.model.CatCustomer;
 import com.wms.utils.DateTimeUtils;
 import com.wms.utils.StringUtils;
@@ -9,7 +8,7 @@ import com.wms.utils.StringUtils;
 /**
  * Created by duyot on 12/6/2016.
  */
-public class CatCustomerDTO extends BaseDTO{
+public class CatCustomerDTO extends BaseDTO {
     private String id;
     private String code;
     private String name;
@@ -28,7 +27,7 @@ public class CatCustomerDTO extends BaseDTO{
 
     public CatCustomerDTO(String id, String code, String name, String status, String email,
                           String telNumber, String address, String bankName, String bankAccountCode,
-                          String createdDate, String mailReport , String partnerRequire,String trial, String exportMethod) {
+                          String createdDate, String mailReport, String partnerRequire, String trial, String exportMethod) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -163,10 +162,10 @@ public class CatCustomerDTO extends BaseDTO{
 
     @Override
     public CatCustomer toModel() {
-        return new CatCustomer(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,!StringUtils.validString(status) ? 0:Byte.parseByte(status),email,telNumber,
-                address,bankName,bankAccountCode,!StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),
-                mailReport==null?0:Integer.parseInt(mailReport), partnerRequire==null?0:Integer.parseInt(partnerRequire), trial==null?0:Integer.parseInt(trial),exportMethod==null?0:Integer.parseInt(exportMethod)
-                );
+        return new CatCustomer(!StringUtils.validString(id) ? null : Long.valueOf(id), code, name, !StringUtils.validString(status) ? 0 : Byte.parseByte(status), email, telNumber,
+                address, bankName, bankAccountCode, !StringUtils.validString(createdDate) ? null : DateTimeUtils.convertStringToDate(createdDate),
+                mailReport == null ? 0 : Integer.parseInt(mailReport), partnerRequire == null ? 0 : Integer.parseInt(partnerRequire), trial == null ? 0 : Integer.parseInt(trial), exportMethod == null ? 0 : Integer.parseInt(exportMethod)
+        );
     }
 
     @Override

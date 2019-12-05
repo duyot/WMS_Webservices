@@ -3,9 +3,14 @@ package com.wms.persistents.model;
 import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
 import com.wms.dto.CatStockCellDTO;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import org.hibernate.annotations.DynamicUpdate;
-
-import javax.persistence.*;
 
 /**
  * Created by duyot on 4/19/2017.
@@ -13,7 +18,7 @@ import javax.persistence.*;
 @Entity
 @DynamicUpdate
 @Table(name = "CAT_STOCK_CELL")
-public class CatStockCell extends BaseModel{
+public class CatStockCell extends BaseModel {
     private Long id;
     private String code;
     private Long stockId;
@@ -29,12 +34,12 @@ public class CatStockCell extends BaseModel{
 
     @Id
     @Column(name = "ID", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_CAT_STOCK_CELL")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CAT_STOCK_CELL")
     @SequenceGenerator(
-            name="SEQ_CAT_STOCK_CELL",
-            sequenceName="SEQ_CAT_STOCK_CELL",
+            name = "SEQ_CAT_STOCK_CELL",
+            sequenceName = "SEQ_CAT_STOCK_CELL",
             allocationSize = 1,
-            initialValue= 1000
+            initialValue = 1000
     )
     public Long getId() {
         return id;
@@ -64,6 +69,6 @@ public class CatStockCell extends BaseModel{
 
     @Override
     public BaseDTO toDTO() {
-        return new CatStockCellDTO(id==null?"":id+"",code,stockId==null?"":stockId+"");
-        }
+        return new CatStockCellDTO(id == null ? "" : id + "", code, stockId == null ? "" : stockId + "");
     }
+}

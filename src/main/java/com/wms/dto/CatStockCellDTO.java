@@ -7,7 +7,7 @@ import com.wms.utils.StringUtils;
 /**
  * Created by duyot on 4/19/2017.
  */
-public class CatStockCellDTO extends BaseDTO{
+public class CatStockCellDTO extends BaseDTO {
     private String id;
     private String code;
     private String stockId;
@@ -47,7 +47,7 @@ public class CatStockCellDTO extends BaseDTO{
 
     @Override
     public CatStockCell toModel() {
-        return new CatStockCell(!StringUtils.validString(id) ? null:Long.valueOf(id),code,!StringUtils.validString(stockId) ? null:Long.valueOf(stockId));
+        return new CatStockCell(!StringUtils.validString(id) ? null : Long.valueOf(id), code, !StringUtils.validString(stockId) ? null : Long.valueOf(stockId));
     }
 
     @Override

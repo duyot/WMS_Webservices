@@ -2,15 +2,20 @@ package com.wms.persistents.model;
 
 import com.wms.base.BaseModel;
 import com.wms.dto.SysRoleMenuDTO;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 /**
  * Created by duyot on 11/2/2016.
  */
 @Entity
 @Table(name = "SYS_ROLE_MENU")
-public class SysRoleMenu extends BaseModel{
+public class SysRoleMenu extends BaseModel {
     private Long id;
     private Long menuId;
     private Long roleId;
@@ -26,12 +31,12 @@ public class SysRoleMenu extends BaseModel{
 
     @Id
     @Column(name = "ID", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_SYS_ROLE_MENU")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_SYS_ROLE_MENU")
     @SequenceGenerator(
-            name="SEQ_SYS_ROLE_MENU",
-            sequenceName="SEQ_SYS_ROLE_MENU",
+            name = "SEQ_SYS_ROLE_MENU",
+            sequenceName = "SEQ_SYS_ROLE_MENU",
             allocationSize = 1,
-            initialValue= 1000
+            initialValue = 1000
     )
     public Long getId() {
         return id;
@@ -50,7 +55,7 @@ public class SysRoleMenu extends BaseModel{
         this.menuId = menuId;
     }
 
-    @Column(name = "ROLE_ID",nullable = false)
+    @Column(name = "ROLE_ID", nullable = false)
     public Long getRoleId() {
         return roleId;
     }
@@ -60,12 +65,8 @@ public class SysRoleMenu extends BaseModel{
     }
 
 
-
-
-
-
     @Override
     public SysRoleMenuDTO toDTO() {
-        return new SysRoleMenuDTO(id==null?"":id+"", menuId ==null?"": menuId +"", roleId ==null?"": roleId +"");
+        return new SysRoleMenuDTO(id == null ? "" : id + "", menuId == null ? "" : menuId + "", roleId == null ? "" : roleId + "");
     }
 }

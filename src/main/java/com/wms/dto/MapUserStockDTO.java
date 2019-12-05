@@ -45,6 +45,6 @@ public class MapUserStockDTO extends BaseDTO {
 
     @Override
     public MapUserStock toModel() {
-        return new MapUserStock(!StringUtils.validString(id) ? null:Long.valueOf(id),!StringUtils.validString(userId) ? null:Long.valueOf(userId),!StringUtils.validString(stockId) ? null:Long.valueOf(stockId));
+        return new MapUserStock(!StringUtils.validString(id) ? null : Long.valueOf(id), !StringUtils.validString(userId) ? null : Long.valueOf(userId), !StringUtils.validString(stockId) ? null : Long.valueOf(stockId));
     }
 }

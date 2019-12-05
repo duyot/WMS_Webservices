@@ -1,14 +1,9 @@
 package com.wms.dto;
 
-import com.wms.base.BaseDTO;
-import com.wms.persistents.model.MjrStockGoods;
-import com.wms.utils.DateTimeUtils;
-import com.wms.utils.StringUtils;
-
 /**
  * Created by truongbx
  */
-public class RealExportExcelDTO  {
+public class RealExportExcelDTO {
     private String goodsCode;
     private String goodsName;
     private String goodsState;

@@ -1,12 +1,16 @@
 package com.wms.persistents.model;
 
-import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
 import com.wms.dto.MjrStockTransDTO;
 import com.wms.utils.DateTimeUtils;
-
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 /**
  * Created by duyot on 12/28/2016.
@@ -44,7 +48,7 @@ public class MjrStockTrans extends BaseModel {
     }
 
     public MjrStockTrans(Long id, String code, Long custId, Long stockId, String contractNumber, String invoicetNumber, Long type, byte status, Date createdDate, String createdUser, Float transMoneyTotal,
-                         Float transMoneyDiscount, Float discountAmount, Float transMoneyRequire, String description, Long partnerId, String partnerName,Long receiveId, String receiveName,Long orderId, String orderCode) {
+                         Float transMoneyDiscount, Float discountAmount, Float transMoneyRequire, String description, Long partnerId, String partnerName, Long receiveId, String receiveName, Long orderId, String orderCode) {
         this.id = id;
         this.code = code;
         this.custId = custId;
@@ -62,7 +66,7 @@ public class MjrStockTrans extends BaseModel {
         this.description = description;
         this.partnerId = partnerId;
         this.partnerName = partnerName;
-        this.receiveId  = receiveId;
+        this.receiveId = receiveId;
         this.receiveName = receiveName;
         this.orderId = orderId;
         this.orderCode = orderCode;
@@ -71,12 +75,12 @@ public class MjrStockTrans extends BaseModel {
 
     @Id
     @Column(name = "ID", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_MJR_STOCK_TRANS")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MJR_STOCK_TRANS")
     @SequenceGenerator(
-            name="SEQ_MJR_STOCK_TRANS",
-            sequenceName="SEQ_MJR_STOCK_TRANS",
+            name = "SEQ_MJR_STOCK_TRANS",
+            sequenceName = "SEQ_MJR_STOCK_TRANS",
             allocationSize = 1,
-            initialValue= 1000
+            initialValue = 1000
     )
     public Long getId() {
         return id;
@@ -86,7 +90,7 @@ public class MjrStockTrans extends BaseModel {
         this.id = id;
     }
 
-    @Column(name = "CODE",nullable = false)
+    @Column(name = "CODE", nullable = false)
     public String getCode() {
         return code;
     }
@@ -95,7 +99,7 @@ public class MjrStockTrans extends BaseModel {
         this.code = code;
     }
 
-    @Column(name = "CUST_ID",nullable = false)
+    @Column(name = "CUST_ID", nullable = false)
     public Long getCustId() {
         return custId;
     }
@@ -104,7 +108,7 @@ public class MjrStockTrans extends BaseModel {
         this.custId = custId;
     }
 
-    @Column(name = "STOCK_ID",nullable = false)
+    @Column(name = "STOCK_ID", nullable = false)
     public Long getStockId() {
         return stockId;
     }
@@ -149,7 +153,7 @@ public class MjrStockTrans extends BaseModel {
         this.status = status;
     }
 
-    @Column(name = "CREATED_DATE" , insertable = false)
+    @Column(name = "CREATED_DATE", insertable = false)
     public Date getCreatedDate() {
         return createdDate;
     }
@@ -159,7 +163,7 @@ public class MjrStockTrans extends BaseModel {
         this.createdDate = createdDate;
     }
 
-    @Column(name = "CREATED_USER" )
+    @Column(name = "CREATED_USER")
     public String getCreatedUser() {
         return createdUser;
     }
@@ -271,11 +275,11 @@ public class MjrStockTrans extends BaseModel {
 
     @Override
     public MjrStockTransDTO toDTO() {
-        return new MjrStockTransDTO(id==null?"":id+"",code,custId==null?"":custId+"",stockId==null?"":stockId+"",
-                contractNumber,invoicetNumber,type==null?"":type+"",status+"",createdDate==null?"": DateTimeUtils.convertDateTimeToString(createdDate),
-                createdUser,transMoneyTotal==null?"":transMoneyTotal+"",transMoneyDiscount==null?"":transMoneyDiscount+"",discountAmount==null?"":discountAmount+"",
-                transMoneyRequire==null?"":transMoneyRequire+"",description,
-                partnerId==null?"":partnerId+"", partnerName,receiveId==null?"":receiveId+"", receiveName,orderId==null?"":orderId+"", orderCode
+        return new MjrStockTransDTO(id == null ? "" : id + "", code, custId == null ? "" : custId + "", stockId == null ? "" : stockId + "",
+                contractNumber, invoicetNumber, type == null ? "" : type + "", status + "", createdDate == null ? "" : DateTimeUtils.convertDateTimeToString(createdDate),
+                createdUser, transMoneyTotal == null ? "" : transMoneyTotal + "", transMoneyDiscount == null ? "" : transMoneyDiscount + "", discountAmount == null ? "" : discountAmount + "",
+                transMoneyRequire == null ? "" : transMoneyRequire + "", description,
+                partnerId == null ? "" : partnerId + "", partnerName, receiveId == null ? "" : receiveId + "", receiveName, orderId == null ? "" : orderId + "", orderCode
         );
     }
 }

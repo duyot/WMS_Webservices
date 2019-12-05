@@ -7,6 +7,7 @@ import com.wms.dto.CatGoodsDTO;
 import com.wms.dto.ErrorLogDTO;
 import com.wms.dto.ResponseObject;
 import com.wms.enums.Responses;
+import javax.annotation.PostConstruct;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import javax.annotation.PostConstruct;
 
 /**
  * Created by duyot on 12/9/2016.
@@ -32,34 +32,32 @@ public class CatGoodsServices extends BaseServices<CatGoodsDTO> {
         this.baseBusiness = catGoodsBusiness;
     }
 
-    @RequestMapping(value = "/update",produces = "application/json",method = RequestMethod.POST)
-    public ResponseObject update(@RequestBody CatGoodsDTO dto){
+    @RequestMapping(value = "/update", produces = "application/json", method = RequestMethod.POST)
+    public ResponseObject update(@RequestBody CatGoodsDTO dto) {
         String sysDate = baseBusiness.getSysDate();
         log.info("-------------------------------");
-        log.info("Update: "+ dto.toString());
+        log.info("Update: " + dto.toString());
         try {
             String result = baseBusiness.update(dto);
-            if(!result.equalsIgnoreCase(Responses.SUCCESS.getName())){
+            if (!result.equalsIgnoreCase(Responses.SUCCESS.getName())) {
                 log.info("Fail");
-                return new ResponseObject(Responses.ERROR.getName(),Responses.ERROR.getName(), "");
+                return new ResponseObject(Responses.ERROR.getName(), Responses.ERROR.getName(), "");
             }
             log.info("Success");
             //update goods name in total
             int updatedTotalNum = totalService.updateGoods(dto);
-            log.info("Updated "+ updatedTotalNum + " "+ dto.getName()+ " in total.");
+            log.info("Updated " + updatedTotalNum + " " + dto.getName() + " in total.");
             //
-            return new ResponseObject(Responses.SUCCESS.getName(),null, "");
-        }
-        catch (DataIntegrityViolationException e) {
+            return new ResponseObject(Responses.SUCCESS.getName(), null, "");
+        } catch (DataIntegrityViolationException e) {
             log.info(e.toString());
-            errorLogBusiness.save(new ErrorLogDTO(null,"update","BaseServices",dto.toString(),sysDate, e.getMessage()));
-            return new ResponseObject(Responses.ERROR.getName(),Responses.ERROR_CONSTRAINT.getName(),((ConstraintViolationException) e.getCause()).getConstraintName());
-        }
-        catch (Exception e) {
+            errorLogBusiness.save(new ErrorLogDTO(null, "update", "BaseServices", dto.toString(), sysDate, e.getMessage()));
+            return new ResponseObject(Responses.ERROR.getName(), Responses.ERROR_CONSTRAINT.getName(), ((ConstraintViolationException) e.getCause()).getConstraintName());
+        } catch (Exception e) {
             e.printStackTrace();
-            log.error("ERROR: "+ e.toString());
-            errorLogBusiness.save(new ErrorLogDTO(null,"update","BaseServices",dto.toString(),sysDate,e.toString()));
-            return new ResponseObject(Responses.ERROR.getName(),Responses.ERROR.getName(),"");
+            log.error("ERROR: " + e.toString());
+            errorLogBusiness.save(new ErrorLogDTO(null, "update", "BaseServices", dto.toString(), sysDate, e.toString()));
+            return new ResponseObject(Responses.ERROR.getName(), Responses.ERROR.getName(), "");
         }
 
     }

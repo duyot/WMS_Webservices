@@ -8,12 +8,12 @@ import com.wms.base.BaseBusinessImpl;
 import com.wms.dto.CatDepartmentDTO;
 import com.wms.persistents.dao.CatDepartmentDAO;
 import com.wms.persistents.model.CatDepartment;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 @Service("catDepartmentBusiness")
-public class CatDepartmentBusinessImpl  extends BaseBusinessImpl<CatDepartmentDTO, CatDepartmentDAO>  {
+public class CatDepartmentBusinessImpl extends BaseBusinessImpl<CatDepartmentDTO, CatDepartmentDAO> {
     @Autowired
     CatDepartmentDAO catDepartmentDAO;
 
