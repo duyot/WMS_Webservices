@@ -4,9 +4,14 @@ import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
 import com.wms.dto.SysMailReportDTO;
 import com.wms.utils.DateTimeUtils;
-
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 /**
  * Created by duyot on 5/17/2017.
@@ -35,12 +40,12 @@ public class SysMailReport extends BaseModel {
 
     @Id
     @Column(name = "ID", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_SYS_MAIL_REPORT")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_SYS_MAIL_REPORT")
     @SequenceGenerator(
-            name="SEQ_SYS_MAIL_REPORT",
-            sequenceName="SEQ_SYS_MAIL_REPORT",
+            name = "SEQ_SYS_MAIL_REPORT",
+            sequenceName = "SEQ_SYS_MAIL_REPORT",
             allocationSize = 1,
-            initialValue= 1000
+            initialValue = 1000
     )
     public Long getId() {
         return id;
@@ -97,8 +102,8 @@ public class SysMailReport extends BaseModel {
 
     @Override
     public BaseDTO toDTO() {
-        return new SysMailReportDTO(id==null?"":id+"", custId==null?"":custId+"",
-                totalImportMoney==null?"":totalImportMoney+"",totalExportMoney==null?"":totalExportMoney+"",
-                totalMoney==null?"":totalMoney+"",createdDate==null?"": DateTimeUtils.convertDateTimeToString(createdDate));
+        return new SysMailReportDTO(id == null ? "" : id + "", custId == null ? "" : custId + "",
+                totalImportMoney == null ? "" : totalImportMoney + "", totalExportMoney == null ? "" : totalExportMoney + "",
+                totalMoney == null ? "" : totalMoney + "", createdDate == null ? "" : DateTimeUtils.convertDateTimeToString(createdDate));
     }
 }

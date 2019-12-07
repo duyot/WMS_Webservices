@@ -9,18 +9,17 @@ import com.wms.dto.MjrStockGoodsTotalDTO;
 import com.wms.persistents.dao.MjrStockGoodsTotalDAO;
 import com.wms.persistents.model.CatGoods;
 import com.wms.persistents.model.MjrStockGoodsTotal;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
-import java.util.List;
 
 /**
  * Created by duyot on 12/19/2016.
  */
 @Service("mjrStockGoodsTotalBusiness")
-public class MjrStockGoodsTotalBusinessImpl extends BaseBusinessImpl<MjrStockGoodsTotalDTO, MjrStockGoodsTotalDAO> implements MjrStockGoodsTotalBusinessInterface{
+public class MjrStockGoodsTotalBusinessImpl extends BaseBusinessImpl<MjrStockGoodsTotalDTO, MjrStockGoodsTotalDAO> implements MjrStockGoodsTotalBusinessInterface {
     @Autowired
     MjrStockGoodsTotalDAO mjrStockGoodsTotalDAO;
 
@@ -34,27 +33,26 @@ public class MjrStockGoodsTotalBusinessImpl extends BaseBusinessImpl<MjrStockGoo
 
     @Override
     public List<MjrStockGoodsTotalDTO> findByCondition(List<Condition> lstCondition, Session session) {
-        return listModelToDTO(mjrStockGoodsTotalDAO.findByConditionSession(lstCondition,session));
+        return listModelToDTO(mjrStockGoodsTotalDAO.findByConditionSession(lstCondition, session));
     }
 
     @Override
     public int updateGoods(CatGoodsDTO goods) {
         return mjrStockGoodsTotalDAO.updateGoods((CatGoods) goods.toModel());
     }
+
     @Override
     public List<MjrStockGoodsTotalDTO> findMoreCondition(MjrStockGoodsTotalDTO searchGoodsTotalDTO) {
         return mjrStockGoodsTotalDAO.findMoreCondition(searchGoodsTotalDTO);
     }
 
-    public List<MjrStockGoodsTotalDTO> listModelToDTO(List<MjrStockGoodsTotal> lstModel){
+    public List<MjrStockGoodsTotalDTO> listModelToDTO(List<MjrStockGoodsTotal> lstModel) {
         List<MjrStockGoodsTotalDTO> lstResult = Lists.newArrayList();
-        for(MjrStockGoodsTotal i: lstModel){
+        for (MjrStockGoodsTotal i : lstModel) {
             lstResult.add(i.toDTO());
         }
         return lstResult;
     }
-
-
 
 
 }

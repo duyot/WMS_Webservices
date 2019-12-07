@@ -1,6 +1,5 @@
 package com.wms.business.interfaces;
 
-import com.wms.dto.CatStockDTO;
 import com.wms.dto.CatUserDTO;
 
 /**

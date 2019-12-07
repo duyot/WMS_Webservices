@@ -5,16 +5,14 @@
  */
 package com.wms.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- *
  * @author duyot
  */
 public class BundleUtils {
@@ -22,8 +20,8 @@ public class BundleUtils {
 
     private static ResourceBundle rsConfig = null;
     public static final String CASCASCAS = "cas";
-    
-     public static String getkey(String key) {
+
+    public static String getkey(String key) {
         try {
             InputStream input = null;
             String filename = "config.properties";
@@ -40,8 +38,9 @@ public class BundleUtils {
         }
         return key;
     }
-     public static void main(String[] args) {
-         System.out.println(getkey("rest_service_url"));
+
+    public static void main(String[] args) {
+        System.out.println(getkey("rest_service_url"));
     }
-     
+
 }

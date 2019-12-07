@@ -1,8 +1,6 @@
 package com.wms.dto;
 
 import com.wms.base.BaseDTO;
-import com.wms.base.BaseModel;
-import com.wms.persistents.model.MjrStockGoods;
 import com.wms.persistents.model.MjrStockGoodsSerial;
 import com.wms.utils.DateTimeUtils;
 import com.wms.utils.StringUtils;
@@ -10,7 +8,7 @@ import com.wms.utils.StringUtils;
 /**
  * Created by duyot on 1/3/2017.
  */
-public class MjrStockGoodsSerialDTO  extends BaseDTO{
+public class MjrStockGoodsSerialDTO extends BaseDTO {
     private String id;
     private String custId;
     private String stockId;
@@ -240,16 +238,16 @@ public class MjrStockGoodsSerialDTO  extends BaseDTO{
 
     @Override
     public MjrStockGoodsSerial toModel() {
-        return new MjrStockGoodsSerial(!StringUtils.validString(id) ? null:Long.valueOf(id),!StringUtils.validString(custId) ? null:Long.valueOf(custId),
-                !StringUtils.validString(stockId) ? null:Long.valueOf(stockId),!StringUtils.validString(goodsId) ? null:Long.valueOf(goodsId),goodsState,cellCode,
-                !StringUtils.validString(amount) ? null:Float.valueOf(amount),serial,!StringUtils.validString(importDate) ? null: DateTimeUtils.convertStringToDate(importDate),
-                !StringUtils.validString(changeDate) ? null: DateTimeUtils.convertStringToDate(changeDate),!StringUtils.validString(status) ? 0:Byte.parseByte(status),!StringUtils.validString(partnerId) ? 0L:Long.valueOf(partnerId),
-                !StringUtils.validString(importStockTransId) ? null:Long.valueOf(importStockTransId),
-                !StringUtils.validString(inputPrice) ? null:Float.valueOf(inputPrice),!StringUtils.validString(outputPrice) ? null:Float.valueOf(outputPrice),
-                !StringUtils.validString(exportDate) ? null: DateTimeUtils.convertStringToDate(exportDate),!StringUtils.validString(exportStockTransId) ? 0L:Long.valueOf(exportStockTransId),
-                !StringUtils.validString(volume) ? null:Float.valueOf(volume),!StringUtils.validString(weight) ? null:Float.valueOf(weight),
-                !StringUtils.validString(produceDate) ? null: DateTimeUtils.convertStringToDate(produceDate),
-                !StringUtils.validString(expireDate) ? null: DateTimeUtils.convertStringToDate(expireDate), description
+        return new MjrStockGoodsSerial(!StringUtils.validString(id) ? null : Long.valueOf(id), !StringUtils.validString(custId) ? null : Long.valueOf(custId),
+                !StringUtils.validString(stockId) ? null : Long.valueOf(stockId), !StringUtils.validString(goodsId) ? null : Long.valueOf(goodsId), goodsState, cellCode,
+                !StringUtils.validString(amount) ? null : Float.valueOf(amount), serial, !StringUtils.validString(importDate) ? null : DateTimeUtils.convertStringToDate(importDate),
+                !StringUtils.validString(changeDate) ? null : DateTimeUtils.convertStringToDate(changeDate), !StringUtils.validString(status) ? 0 : Byte.parseByte(status), !StringUtils.validString(partnerId) ? 0L : Long.valueOf(partnerId),
+                !StringUtils.validString(importStockTransId) ? null : Long.valueOf(importStockTransId),
+                !StringUtils.validString(inputPrice) ? null : Float.valueOf(inputPrice), !StringUtils.validString(outputPrice) ? null : Float.valueOf(outputPrice),
+                !StringUtils.validString(exportDate) ? null : DateTimeUtils.convertStringToDate(exportDate), !StringUtils.validString(exportStockTransId) ? 0L : Long.valueOf(exportStockTransId),
+                !StringUtils.validString(volume) ? null : Float.valueOf(volume), !StringUtils.validString(weight) ? null : Float.valueOf(weight),
+                !StringUtils.validString(produceDate) ? null : DateTimeUtils.convertStringToDate(produceDate),
+                !StringUtils.validString(expireDate) ? null : DateTimeUtils.convertStringToDate(expireDate), description
 
         );
     }

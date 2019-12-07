@@ -4,10 +4,9 @@ import com.wms.base.BaseBusinessImpl;
 import com.wms.dto.SysRoleMenuDTO;
 import com.wms.persistents.dao.SysRoleMenuDAO;
 import com.wms.persistents.model.SysRoleMenu;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Created by duyot on 11/3/2016.

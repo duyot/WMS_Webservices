@@ -4,11 +4,25 @@ import com.google.common.collect.Lists;
 import com.wms.base.BaseBusinessInterface;
 import com.wms.business.interfaces.StockFunctionInterface;
 import com.wms.business.interfaces.StockManagementBusinessInterface;
-import com.wms.dto.*;
+import com.wms.dto.CatGoodsDTO;
+import com.wms.dto.CatPartnerDTO;
+import com.wms.dto.CatStockDTO;
+import com.wms.dto.Condition;
+import com.wms.dto.Err$MjrStockGoodsSerialDTO;
+import com.wms.dto.MjrStockTransDTO;
+import com.wms.dto.MjrStockTransDetailDTO;
+import com.wms.dto.ResponseObject;
 import com.wms.enums.Responses;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import com.wms.utils.FunctionUtils;
+import java.sql.Connection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -17,9 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.sql.Connection;
-import java.util.*;
 
 /**
  * Created by duyot on 12/19/2016.
@@ -302,7 +313,9 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
         List<Condition> lstCon = Lists.newArrayList();
         lstCon.add(new Condition("custId", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, transDetail.getCustId()));
         lstCon.add(new Condition("status", Constants.SQL_PRO_TYPE.BYTE, Constants.SQL_OPERATOR.EQUAL, Constants.STATUS.ACTIVE));
-        lstCon.add(new Condition("id", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, transDetail.getPartnerId()));
+        if (!DataUtil.isStringNullOrEmpty(transDetail.getPartnerId())) {
+            lstCon.add(new Condition("id", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, transDetail.getPartnerId()));
+        }
         //
         List<CatPartnerDTO> lstCatPartner = catPartnerBusiness.findByCondition(lstCon);
         if (DataUtil.isListNullOrEmpty(lstCatPartner)) {

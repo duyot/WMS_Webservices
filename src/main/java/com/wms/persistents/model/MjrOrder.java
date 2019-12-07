@@ -2,11 +2,15 @@ package com.wms.persistents.model;
 
 import com.wms.base.BaseModel;
 import com.wms.dto.MjrOrderDTO;
-import com.wms.dto.MjrStockTransDTO;
 import com.wms.utils.DateTimeUtils;
-
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 /**
  * Created by truongbx.
@@ -51,12 +55,12 @@ public class MjrOrder extends BaseModel {
 
     @Id
     @Column(name = "ID", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_MJR_STOCK_TRANS")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MJR_STOCK_TRANS")
     @SequenceGenerator(
-            name="SEQ_MJR_STOCK_TRANS",
-            sequenceName="SEQ_MJR_STOCK_TRANS",
+            name = "SEQ_MJR_STOCK_TRANS",
+            sequenceName = "SEQ_MJR_STOCK_TRANS",
             allocationSize = 1,
-            initialValue= 1000
+            initialValue = 1000
     )
     public Long getId() {
         return id;
@@ -66,7 +70,7 @@ public class MjrOrder extends BaseModel {
         this.id = id;
     }
 
-    @Column(name = "CODE",nullable = false)
+    @Column(name = "CODE", nullable = false)
     public String getCode() {
         return code;
     }
@@ -75,7 +79,7 @@ public class MjrOrder extends BaseModel {
         this.code = code;
     }
 
-    @Column(name = "CUST_ID",nullable = false)
+    @Column(name = "CUST_ID", nullable = false)
     public Long getCustId() {
         return custId;
     }
@@ -84,7 +88,7 @@ public class MjrOrder extends BaseModel {
         this.custId = custId;
     }
 
-    @Column(name = "STOCK_ID",nullable = false)
+    @Column(name = "STOCK_ID", nullable = false)
     public Long getStockId() {
         return stockId;
     }
@@ -97,6 +101,7 @@ public class MjrOrder extends BaseModel {
     public Long getType() {
         return type;
     }
+
     @Column(name = "EXPORT_METHOD")
     public Long getExportMethod() {
         return exportMethod;
@@ -119,7 +124,7 @@ public class MjrOrder extends BaseModel {
         this.status = status;
     }
 
-    @Column(name = "CREATED_DATE" , insertable = false,updatable = false)
+    @Column(name = "CREATED_DATE", insertable = false, updatable = false)
     public Date getCreatedDate() {
         return createdDate;
     }
@@ -129,7 +134,7 @@ public class MjrOrder extends BaseModel {
         this.createdDate = createdDate;
     }
 
-    @Column(name = "CREATED_USER" )
+    @Column(name = "CREATED_USER")
     public String getCreatedUser() {
         return createdUser;
     }
@@ -187,8 +192,8 @@ public class MjrOrder extends BaseModel {
 
     @Override
     public MjrOrderDTO toDTO() {
-        return new MjrOrderDTO(id==null?"":id+"",code,custId==null?"":custId+"",stockId==null?"":stockId+"",type==null?"":type+"",exportMethod== null ? "" :exportMethod +"" ,status+"",
-                createdDate==null?"": DateTimeUtils.convertDateTimeToString(createdDate), createdUser,description,
-                partnerId==null?"":partnerId+"", partnerName,receiveName,receiveId==null?"":receiveId+"");
+        return new MjrOrderDTO(id == null ? "" : id + "", code, custId == null ? "" : custId + "", stockId == null ? "" : stockId + "", type == null ? "" : type + "", exportMethod == null ? "" : exportMethod + "", status + "",
+                createdDate == null ? "" : DateTimeUtils.convertDateTimeToString(createdDate), createdUser, description,
+                partnerId == null ? "" : partnerId + "", partnerName, receiveName, receiveId == null ? "" : receiveId + "");
     }
 }

@@ -7,14 +7,12 @@ package com.wms.business.impl;
 import com.wms.base.BaseBusinessImpl;
 import com.wms.business.interfaces.CatPartnerBusinessInterface;
 import com.wms.dto.CatPartnerDTO;
-import com.wms.dto.CatStockDTO;
 import com.wms.persistents.dao.CatPartnerDAO;
 import com.wms.persistents.model.CatPartner;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
-import java.util.List;
 
 @Service("catPartnerBusiness")
 public class CatPartnerBusinessImpl extends BaseBusinessImpl<CatPartnerDTO, CatPartnerDAO> implements CatPartnerBusinessInterface {
@@ -31,6 +29,6 @@ public class CatPartnerBusinessImpl extends BaseBusinessImpl<CatPartnerDTO, CatP
 
     @Override
     public List<CatPartnerDTO> getPartnerByUser(Long userId, Long partnerPermission) {
-        return catPartnerDAO.getPartnerByUser(userId,partnerPermission);
+        return catPartnerDAO.getPartnerByUser(userId, partnerPermission);
     }
 }

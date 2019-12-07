@@ -3,7 +3,6 @@ package com.wms.dto;
 import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
 import com.wms.persistents.model.SysMenu;
-import com.wms.utils.DateTimeUtils;
 import com.wms.utils.StringUtils;
 
 /**
@@ -111,8 +110,8 @@ public class SysMenuDTO extends BaseDTO {
     @Override
     public BaseModel toModel() {
         try {
-            return new SysMenu(!StringUtils.validString(id) ? null:Long.valueOf(id), name, code, parentId,url,
-                    !StringUtils.validString(status) ? 0:Byte.parseByte(status),levels,orders,imgClass);
+            return new SysMenu(!StringUtils.validString(id) ? null : Long.valueOf(id), name, code, parentId, url,
+                    !StringUtils.validString(status) ? 0 : Byte.parseByte(status), levels, orders, imgClass);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

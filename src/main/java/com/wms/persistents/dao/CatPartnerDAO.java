@@ -4,25 +4,21 @@ import com.google.common.collect.Lists;
 import com.wms.base.BaseDAOImpl;
 import com.wms.dto.CatPartnerDTO;
 import com.wms.persistents.model.CatPartner;
+import java.util.ArrayList;
+import java.util.List;
 import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.type.StringType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by doanlv4 on 2/17/2017.
  */
 @Repository
 @Transactional
-public class CatPartnerDAO extends BaseDAOImpl<CatPartner,Long> {
+public class CatPartnerDAO extends BaseDAOImpl<CatPartner, Long> {
     private Logger log = LoggerFactory.getLogger(CatPartnerDAO.class);
 
 

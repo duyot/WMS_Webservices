@@ -5,10 +5,9 @@ import com.wms.business.interfaces.CatUserBusinessInterface;
 import com.wms.dto.CatUserDTO;
 import com.wms.persistents.dao.CatUserDAO;
 import com.wms.persistents.model.CatUser;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Created by duyot on 8/24/2016.

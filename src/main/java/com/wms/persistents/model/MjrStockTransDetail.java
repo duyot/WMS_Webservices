@@ -1,19 +1,23 @@
 package com.wms.persistents.model;
 
-import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
 import com.wms.dto.MjrStockTransDetailDTO;
 import com.wms.utils.DateTimeUtils;
-
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 /**
  * Created by duyot on 12/29/2016.
  */
 @Entity
 @Table(name = "MJR_STOCK_TRANS_DETAIL")
-public class MjrStockTransDetail extends BaseModel{
+public class MjrStockTransDetail extends BaseModel {
     private Long id;
     private Long stockTransId;
     private Long goodsId;
@@ -61,12 +65,12 @@ public class MjrStockTransDetail extends BaseModel{
 
     @Id
     @Column(name = "ID", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_MJR_STOCK_TRANS_DETAIL")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MJR_STOCK_TRANS_DETAIL")
     @SequenceGenerator(
-            name="SEQ_MJR_STOCK_TRANS_DETAIL",
-            sequenceName="SEQ_MJR_STOCK_TRANS_DETAIL",
+            name = "SEQ_MJR_STOCK_TRANS_DETAIL",
+            sequenceName = "SEQ_MJR_STOCK_TRANS_DETAIL",
             allocationSize = 1,
-            initialValue= 1000
+            initialValue = 1000
     )
     public Long getId() {
         return id;
@@ -76,7 +80,7 @@ public class MjrStockTransDetail extends BaseModel{
         this.id = id;
     }
 
-    @Column(name = "STOCK_TRANS_ID",nullable = false)
+    @Column(name = "STOCK_TRANS_ID", nullable = false)
     public Long getStockTransId() {
         return stockTransId;
     }
@@ -85,7 +89,7 @@ public class MjrStockTransDetail extends BaseModel{
         this.stockTransId = stockTransId;
     }
 
-    @Column(name = "GOODS_ID",nullable = false)
+    @Column(name = "GOODS_ID", nullable = false)
     public Long getGoodsId() {
         return goodsId;
     }
@@ -165,6 +169,7 @@ public class MjrStockTransDetail extends BaseModel{
     public void setCellCode(String cellCode) {
         this.cellCode = cellCode;
     }
+
     @Column(name = "UNIT_NAME")
     public String getUnitName() {
         return unitName;
@@ -173,6 +178,7 @@ public class MjrStockTransDetail extends BaseModel{
     public void setUnitName(String unitName) {
         this.unitName = unitName;
     }
+
     @Column(name = "TOTAL_MONEY")
     public Float getTotalMoney() {
         return totalMoney;
@@ -182,7 +188,7 @@ public class MjrStockTransDetail extends BaseModel{
         this.totalMoney = totalMoney;
     }
 
-    @Column(name = "PARTNER_ID",nullable = false)
+    @Column(name = "PARTNER_ID", nullable = false)
     public Long getPartnerId() {
         return partnerId;
     }
@@ -238,13 +244,13 @@ public class MjrStockTransDetail extends BaseModel{
 
     @Override
     public MjrStockTransDetailDTO toDTO() {
-        return new MjrStockTransDetailDTO(id==null?"":id+"",stockTransId==null?"":stockTransId+"",goodsId==null?"":goodsId+"",
-                goodsCode,goodsState,isSerial==null?"":isSerial+"",amount==null?"":amount+"",serial,inputPrice==null?"":inputPrice+"",outputPrice==null?"":outputPrice+"",
-                cellCode,unitName, partnerId==null?"":partnerId+"", totalMoney==null?"":totalMoney+"",
-                volume==null?"":volume+"", weight==null?"":weight+"",
-                produceDate==null?"": DateTimeUtils.convertDateTimeToString(produceDate),
-                expireDate==null?"": DateTimeUtils.convertDateTimeToString(expireDate),
+        return new MjrStockTransDetailDTO(id == null ? "" : id + "", stockTransId == null ? "" : stockTransId + "", goodsId == null ? "" : goodsId + "",
+                goodsCode, goodsState, isSerial == null ? "" : isSerial + "", amount == null ? "" : amount + "", serial, inputPrice == null ? "" : inputPrice + "", outputPrice == null ? "" : outputPrice + "",
+                cellCode, unitName, partnerId == null ? "" : partnerId + "", totalMoney == null ? "" : totalMoney + "",
+                volume == null ? "" : volume + "", weight == null ? "" : weight + "",
+                produceDate == null ? "" : DateTimeUtils.convertDateTimeToString(produceDate),
+                expireDate == null ? "" : DateTimeUtils.convertDateTimeToString(expireDate),
                 description
-                );
+        );
     }
 }

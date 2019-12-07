@@ -4,10 +4,9 @@ import com.wms.base.BaseBusinessImpl;
 import com.wms.dto.CatGoodsDTO;
 import com.wms.persistents.dao.CatGoodsDAO;
 import com.wms.persistents.model.CatGoods;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Created by duyot on 12/9/2016.

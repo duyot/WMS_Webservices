@@ -9,7 +9,7 @@ import com.wms.dto.CatPartnerDTO;
 public class JSONUtils {
     public static Gson gson = new Gson();
 
-    public static String object2JSONString(Object object){
+    public static String object2JSONString(Object object) {
         return gson.toJson(object);
     }
 
@@ -18,8 +18,8 @@ public class JSONUtils {
 //        return parser.parse(gson.toJson(object)).getAsJsonObject();
 //    }
 
-    public static  <T> T stringToObject(String jsonString,Class objectClass){
-        return (T)gson.fromJson(jsonString,objectClass);
+    public static <T> T stringToObject(String jsonString, Class objectClass) {
+        return (T) gson.fromJson(jsonString, objectClass);
     }
 
     public static void main(String[] args) {

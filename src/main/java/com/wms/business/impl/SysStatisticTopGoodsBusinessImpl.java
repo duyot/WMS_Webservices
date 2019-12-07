@@ -4,10 +4,9 @@ import com.wms.base.BaseBusinessImpl;
 import com.wms.dto.SysStatisticTopGoodsDTO;
 import com.wms.persistents.dao.SysStatisticTopGoodsDAO;
 import com.wms.persistents.model.SysStatisticTopGoods;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Created by duyot on 5/19/2017.

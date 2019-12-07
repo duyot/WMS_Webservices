@@ -4,6 +4,7 @@ import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
 import com.wms.persistents.model.CatDepartment;
 import com.wms.utils.StringUtils;
+
 /**
  * Created by doanlv4 on 2/17/2017.
  */
@@ -16,7 +17,7 @@ public class CatDepartmentDTO extends BaseDTO {
     private String path;
     private String parentId;
 
-    public CatDepartmentDTO(String id, String code, String name, String status, String custId, String path, String parentId ) {
+    public CatDepartmentDTO(String id, String code, String name, String status, String custId, String path, String parentId) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -87,7 +88,7 @@ public class CatDepartmentDTO extends BaseDTO {
 
     @Override
     public BaseModel toModel() {
-        return new CatDepartment(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,!StringUtils.validString(status) ? 0:Byte.parseByte(status),!StringUtils.validString(custId) ? null:Long.valueOf(custId), path,!StringUtils.validString(parentId) ? null:Long.valueOf(parentId) );
+        return new CatDepartment(!StringUtils.validString(id) ? null : Long.valueOf(id), code, name, !StringUtils.validString(status) ? 0 : Byte.parseByte(status), !StringUtils.validString(custId) ? null : Long.valueOf(custId), path, !StringUtils.validString(parentId) ? null : Long.valueOf(parentId));
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.wms.dto;
 
 import com.wms.base.BaseDTO;
 import com.wms.persistents.model.MjrOrder;
-import com.wms.persistents.model.MjrStockTrans;
 import com.wms.utils.DateTimeUtils;
 import com.wms.utils.StringUtils;
 
@@ -164,9 +163,9 @@ public class MjrOrderDTO extends BaseDTO {
 
     @Override
     public MjrOrder toModel() {
-        return new MjrOrder(!StringUtils.validString(id) ? null:Long.valueOf(id),code,!StringUtils.validString(custId) ? null:Long.valueOf(custId),
-                !StringUtils.validString(stockId) ? null:Long.valueOf(stockId),!StringUtils.validString(type) ? null:Long.valueOf(type),!StringUtils.validString(exportMethod) ? null:Long.valueOf(exportMethod),
-                !StringUtils.validString(status) ? 0:Byte.parseByte(status),!StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),
-                createdUser, description, !StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId), partnerName,receiveName,!StringUtils.validString(receiveId) ? null:Long.valueOf(receiveId));
+        return new MjrOrder(!StringUtils.validString(id) ? null : Long.valueOf(id), code, !StringUtils.validString(custId) ? null : Long.valueOf(custId),
+                !StringUtils.validString(stockId) ? null : Long.valueOf(stockId), !StringUtils.validString(type) ? null : Long.valueOf(type), !StringUtils.validString(exportMethod) ? null : Long.valueOf(exportMethod),
+                !StringUtils.validString(status) ? 0 : Byte.parseByte(status), !StringUtils.validString(createdDate) ? null : DateTimeUtils.convertStringToDate(createdDate),
+                createdUser, description, !StringUtils.validString(partnerId) ? null : Long.valueOf(partnerId), partnerName, receiveName, !StringUtils.validString(receiveId) ? null : Long.valueOf(receiveId));
     }
 }

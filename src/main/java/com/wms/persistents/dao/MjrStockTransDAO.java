@@ -6,27 +6,26 @@ import com.wms.enums.Responses;
 import com.wms.persistents.model.MjrStockTrans;
 import com.wms.utils.DataUtil;
 import com.wms.utils.FunctionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by duyot on 12/28/2016.
  */
 @Repository
 @Transactional
-public class MjrStockTransDAO extends BaseDAOImpl<MjrStockTrans,Long> {
+public class MjrStockTransDAO extends BaseDAOImpl<MjrStockTrans, Long> {
 
     Logger log = LoggerFactory.getLogger(MjrStockTransDAO.class);
 
-    public String saveStockTransByConnection(MjrStockTransDTO mjrStockTransDTO, Connection connection){
+    public String saveStockTransByConnection(MjrStockTransDTO mjrStockTransDTO, Connection connection) {
         StringBuilder sql = new StringBuilder();
         List params = initSaveParams(mjrStockTransDTO);
         sql.append("Insert into MJR_STOCK_TRANS ");
@@ -44,7 +43,7 @@ public class MjrStockTransDAO extends BaseDAOImpl<MjrStockTrans,Long> {
         } catch (SQLException ex) {
             log.info(ex.toString());
             return Responses.ERROR.getName();
-        }finally {
+        } finally {
             FunctionUtils.closeStatement(stm);
         }
         return Responses.SUCCESS.getName();
@@ -52,7 +51,7 @@ public class MjrStockTransDAO extends BaseDAOImpl<MjrStockTrans,Long> {
 
     }
 
-    public List initSaveParams(MjrStockTransDTO stockTrans){
+    public List initSaveParams(MjrStockTransDTO stockTrans) {
         List params = new ArrayList();
         params.add(stockTrans.getId());//
         params.add(stockTrans.getCode());//

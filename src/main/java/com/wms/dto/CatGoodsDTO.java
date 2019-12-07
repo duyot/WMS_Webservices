@@ -1,4 +1,3 @@
-
 package com.wms.dto;
 
 import com.wms.base.BaseDTO;
@@ -10,7 +9,7 @@ import com.wms.utils.StringUtils;
 /**
  * Created by duyot on 12/9/2016.
  */
-public class CatGoodsDTO extends BaseDTO{
+public class CatGoodsDTO extends BaseDTO {
     private String id;
     private String code;
     private String name;
@@ -192,16 +191,16 @@ public class CatGoodsDTO extends BaseDTO{
     @Override
     public BaseModel toModel() {
         return new CatGoods(
-                !StringUtils.validString(id) ? null:Long.valueOf(id), code, name, !StringUtils.validString(status) ? null:Byte.parseByte(status),
-                !StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),
-                Long.valueOf(custId), unitType, !StringUtils.validString(goodsGroupId) ? null:Long.valueOf(goodsGroupId),
-                !StringUtils.validString(isSerial) ? null:Byte.parseByte(isSerial), description,
-                !StringUtils.validString(inPrice) ? null:Double.valueOf(inPrice), !StringUtils.validString(outPrice) ? null:Double.valueOf(outPrice),
-                !StringUtils.validString(length) ? null:Double.valueOf(length),
-                !StringUtils.validString(width) ? null:Double.valueOf(width),
-                !StringUtils.validString(high) ? null:Double.valueOf(high),
-                !StringUtils.validString(weight) ? null:Double.valueOf(weight),
-                !StringUtils.validString(volume) ? null:Double.valueOf(volume)
+                !StringUtils.validString(id) ? null : Long.valueOf(id), code, name, !StringUtils.validString(status) ? null : Byte.parseByte(status),
+                !StringUtils.validString(createdDate) ? null : DateTimeUtils.convertStringToDate(createdDate),
+                Long.valueOf(custId), unitType, !StringUtils.validString(goodsGroupId) ? null : Long.valueOf(goodsGroupId),
+                !StringUtils.validString(isSerial) ? null : Byte.parseByte(isSerial), description,
+                !StringUtils.validString(inPrice) ? null : Double.valueOf(inPrice), !StringUtils.validString(outPrice) ? null : Double.valueOf(outPrice),
+                !StringUtils.validString(length) ? null : Double.valueOf(length),
+                !StringUtils.validString(width) ? null : Double.valueOf(width),
+                !StringUtils.validString(high) ? null : Double.valueOf(high),
+                !StringUtils.validString(weight) ? null : Double.valueOf(weight),
+                !StringUtils.validString(volume) ? null : Double.valueOf(volume)
         );
     }
 

@@ -17,8 +17,7 @@ public class AppParamsDTO extends BaseDTO {
     private String parOrder;
 
 
-
-    public AppParamsDTO(String id, String code, String name, String status, String type, String parOrder ) {
+    public AppParamsDTO(String id, String code, String name, String status, String type, String parOrder) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -80,7 +79,7 @@ public class AppParamsDTO extends BaseDTO {
 
     @Override
     public BaseModel toModel() {
-        return new AppParams(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,!StringUtils.validString(status) ? 0:Byte.parseByte(status),type, parOrder);
+        return new AppParams(!StringUtils.validString(id) ? null : Long.valueOf(id), code, name, !StringUtils.validString(status) ? 0 : Byte.parseByte(status), type, parOrder);
     }
 
     @Override

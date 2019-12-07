@@ -2,8 +2,11 @@ package com.wms.persistents.model;
 
 import com.wms.base.BaseModel;
 import com.wms.dto.SysMenuDTO;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Created by duyot on 11/2/2016.
@@ -11,8 +14,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "SYS_MENU")
 @javax.persistence.SequenceGenerator(
-        name="sequence",
-        sequenceName="SEQ_SYS_MENU"
+        name = "sequence",
+        sequenceName = "SEQ_SYS_MENU"
 )
 public class SysMenu extends BaseModel {
     private Long id;
@@ -27,7 +30,7 @@ public class SysMenu extends BaseModel {
 
     public SysMenu(Long id, String name, String code,
                    String parentActionId, String url, byte status,
-                   String levels,String orders, String imgClass) {
+                   String levels, String orders, String imgClass) {
 
         this.id = id;
         this.name = name;
@@ -129,7 +132,7 @@ public class SysMenu extends BaseModel {
 
     @Override
     public SysMenuDTO toDTO() {
-        return new SysMenuDTO(id==null?"":id+"", name, code, parentId,url,status+"",levels,orders,imgClass);
+        return new SysMenuDTO(id == null ? "" : id + "", name, code, parentId, url, status + "", levels, orders, imgClass);
     }
 }
 

@@ -3,18 +3,19 @@ package com.wms.persistents.model;
 import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
 import com.wms.dto.Err$MjrStockGoodsSerialDTO;
-import com.wms.dto.MjrStockGoodsSerialDTO;
 import com.wms.utils.DateTimeUtils;
-
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Created by duyot on 3/6/2017.
  */
 @Entity
 @Table(name = "err$_mjr_stock_goods_serial")
-public class Err$MjrStockGoodsSerial extends BaseModel{
+public class Err$MjrStockGoodsSerial extends BaseModel {
     private Long id;
     private Long custId;
     private Long stockId;
@@ -59,7 +60,7 @@ public class Err$MjrStockGoodsSerial extends BaseModel{
 
 
     @Id
-    @Column(name = "ID",nullable = false)
+    @Column(name = "ID", nullable = false)
     public Long getId() {
         return id;
     }
@@ -68,7 +69,7 @@ public class Err$MjrStockGoodsSerial extends BaseModel{
         this.id = id;
     }
 
-    @Column(name = "CUST_ID",nullable = false)
+    @Column(name = "CUST_ID", nullable = false)
     public Long getCustId() {
         return custId;
     }
@@ -77,7 +78,7 @@ public class Err$MjrStockGoodsSerial extends BaseModel{
         this.custId = custId;
     }
 
-    @Column(name = "STOCK_ID",nullable = false)
+    @Column(name = "STOCK_ID", nullable = false)
     public Long getStockId() {
         return stockId;
     }
@@ -86,7 +87,7 @@ public class Err$MjrStockGoodsSerial extends BaseModel{
         this.stockId = stockId;
     }
 
-    @Column(name = "GOODS_ID",nullable = false)
+    @Column(name = "GOODS_ID", nullable = false)
     public Long getGoodsId() {
         return goodsId;
     }
@@ -95,7 +96,7 @@ public class Err$MjrStockGoodsSerial extends BaseModel{
         this.goodsId = goodsId;
     }
 
-    @Column(name = "GOODS_STATE",nullable = false)
+    @Column(name = "GOODS_STATE", nullable = false)
     public String getGoodsState() {
         return goodsState;
     }
@@ -205,10 +206,10 @@ public class Err$MjrStockGoodsSerial extends BaseModel{
 
     @Override
     public BaseDTO toDTO() {
-        return new Err$MjrStockGoodsSerialDTO(id==null?"":id+"",custId==null?"":custId+"",stockId==null?"":stockId+"",
-                goodsId==null?"":goodsId+"",goodsState,cellCode,amount==null?"":amount+"",serial,importDate==null?"": DateTimeUtils.convertDateTimeToString(importDate),
-                changeDate==null?"": DateTimeUtils.convertDateTimeToString(changeDate),status,partnerId==null?"":partnerId+"",
-                importStockTransId==null?"":importStockTransId+"",inputPrice==null?"":inputPrice+"",outputPrice==null?"":outputPrice+"",oraErrorMessage
+        return new Err$MjrStockGoodsSerialDTO(id == null ? "" : id + "", custId == null ? "" : custId + "", stockId == null ? "" : stockId + "",
+                goodsId == null ? "" : goodsId + "", goodsState, cellCode, amount == null ? "" : amount + "", serial, importDate == null ? "" : DateTimeUtils.convertDateTimeToString(importDate),
+                changeDate == null ? "" : DateTimeUtils.convertDateTimeToString(changeDate), status, partnerId == null ? "" : partnerId + "",
+                importStockTransId == null ? "" : importStockTransId + "", inputPrice == null ? "" : inputPrice + "", outputPrice == null ? "" : outputPrice + "", oraErrorMessage
         );
     }
 }

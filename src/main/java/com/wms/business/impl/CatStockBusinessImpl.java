@@ -5,10 +5,10 @@ import com.wms.business.interfaces.CatStockBusinessInterface;
 import com.wms.dto.CatStockDTO;
 import com.wms.persistents.dao.CatStockDAO;
 import com.wms.persistents.model.CatStock;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import javax.annotation.PostConstruct;
-import java.util.List;
 
 @Service("catStockBusiness")
 public class CatStockBusinessImpl extends BaseBusinessImpl<CatStockDTO, CatStockDAO> implements CatStockBusinessInterface {

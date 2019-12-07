@@ -25,7 +25,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     public void configure(HttpSecurity http) throws Exception {
         http.
                 anonymous().disable()//disable anonymous authentication
-                .requestMatchers().antMatchers("/**","/services/catUserServices/login")
+                .requestMatchers().antMatchers("/**", "/services/catUserServices/login")
                 .and().authorizeRequests()
                 .antMatchers("/services/**").access("hasAnyRole('ADMIN','USER')")
                 .antMatchers("/admin/**").access("hasRole('ADMIN')")

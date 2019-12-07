@@ -1,7 +1,6 @@
 package com.wms.dto;
 
 import com.wms.base.BaseDTO;
-import com.wms.base.BaseModel;
 import com.wms.persistents.model.ErrorLog;
 import com.wms.utils.DateTimeUtils;
 import com.wms.utils.StringUtils;
@@ -9,7 +8,7 @@ import com.wms.utils.StringUtils;
 /**
  * Created by duyot on 12/23/2016.
  */
-public class ErrorLogDTO extends BaseDTO{
+public class ErrorLogDTO extends BaseDTO {
     private String id;
     private String function;
     private String className;
@@ -79,7 +78,7 @@ public class ErrorLogDTO extends BaseDTO{
 
     @Override
     public ErrorLog toModel() {
-        return new ErrorLog(!StringUtils.validString(id) ? null:Long.valueOf(id),
-                function,className,parameter,!StringUtils.validString(createDate) ? null: DateTimeUtils.convertStringToDate(createDate),errorInfo);
+        return new ErrorLog(!StringUtils.validString(id) ? null : Long.valueOf(id),
+                function, className, parameter, !StringUtils.validString(createDate) ? null : DateTimeUtils.convertStringToDate(createDate), errorInfo);
     }
 }

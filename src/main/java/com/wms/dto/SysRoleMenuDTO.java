@@ -47,8 +47,8 @@ public class SysRoleMenuDTO extends BaseDTO {
 
     @Override
     public BaseModel toModel() {
-        return new com.wms.persistents.model.SysRoleMenu(!StringUtils.validString(id) ? null:Long.valueOf(id),
-                !StringUtils.validString(menuId) ? null:Long.valueOf(menuId),!StringUtils.validString(roleId) ? null:Long.valueOf(roleId)
-                );
+        return new com.wms.persistents.model.SysRoleMenu(!StringUtils.validString(id) ? null : Long.valueOf(id),
+                !StringUtils.validString(menuId) ? null : Long.valueOf(menuId), !StringUtils.validString(roleId) ? null : Long.valueOf(roleId)
+        );
     }
 }

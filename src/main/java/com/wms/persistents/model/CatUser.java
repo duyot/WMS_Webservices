@@ -4,10 +4,15 @@ package com.wms.persistents.model;
 import com.wms.base.BaseModel;
 import com.wms.dto.CatUserDTO;
 import com.wms.utils.DateTimeUtils;
-import org.hibernate.annotations.DynamicUpdate;
-
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import org.hibernate.annotations.DynamicUpdate;
 
 /**
  * Created by duyot on 8/24/2016.
@@ -27,9 +32,9 @@ public class CatUser extends BaseModel {
     private String telNumber;
     private byte status;
     private Date createdDate;
-    private String  imgUrl;
-    private String  roleName;
-    private String  logReason;
+    private String imgUrl;
+    private String roleName;
+    private String logReason;
     //
     private byte block;
     private Long roleId;
@@ -63,12 +68,12 @@ public class CatUser extends BaseModel {
 
     @Id
     @Column(name = "ID", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_CAT_USER")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CAT_USER")
     @SequenceGenerator(
-            name="SEQ_CAT_USER",
-            sequenceName="SEQ_CAT_USER",
+            name = "SEQ_CAT_USER",
+            sequenceName = "SEQ_CAT_USER",
             allocationSize = 1,
-            initialValue= 1000
+            initialValue = 1000
     )
     public Long getId() {
         return id;
@@ -87,7 +92,7 @@ public class CatUser extends BaseModel {
         this.deptId = deptId;
     }
 
-    @Column(name = "CUST_ID",nullable = false)
+    @Column(name = "CUST_ID", nullable = false)
     public Long getCustId() {
         return custId;
     }
@@ -159,7 +164,7 @@ public class CatUser extends BaseModel {
         this.status = status;
     }
 
-    @Column(name = "CREATED_DATE" ,insertable = false)
+    @Column(name = "CREATED_DATE", insertable = false)
     public Date getCreatedDate() {
         return createdDate;
     }
@@ -234,10 +239,10 @@ public class CatUser extends BaseModel {
 
     @Override
     public CatUserDTO toDTO() {
-        return new CatUserDTO(id==null?"":id+"",deptId==null?"":deptId+"",custId==null?"":custId+"",
-                code,name,password,birthDate==null?"": DateTimeUtils.convertDateTimeToString(birthDate),
-                email,telNumber,status+"",createdDate==null?"": DateTimeUtils.convertDateTimeToString(createdDate),
-                imgUrl,roleName,logReason,roleId==null?"":roleId+"",block+"", partnerPermission==null?"":partnerPermission+"", stockPermission==null?"":stockPermission+""
+        return new CatUserDTO(id == null ? "" : id + "", deptId == null ? "" : deptId + "", custId == null ? "" : custId + "",
+                code, name, password, birthDate == null ? "" : DateTimeUtils.convertDateTimeToString(birthDate),
+                email, telNumber, status + "", createdDate == null ? "" : DateTimeUtils.convertDateTimeToString(createdDate),
+                imgUrl, roleName, logReason, roleId == null ? "" : roleId + "", block + "", partnerPermission == null ? "" : partnerPermission + "", stockPermission == null ? "" : stockPermission + ""
         );
     }
 }

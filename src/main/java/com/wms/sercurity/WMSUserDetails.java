@@ -1,14 +1,13 @@
 package com.wms.sercurity;
 
 import com.wms.dto.CatUserDTO;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by duyot on 11/18/2016.

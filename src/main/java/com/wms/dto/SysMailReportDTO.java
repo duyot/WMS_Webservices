@@ -3,11 +3,8 @@ package com.wms.dto;
 import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
 import com.wms.persistents.model.SysMailReport;
-import com.wms.persistents.model.SysMenu;
 import com.wms.utils.DateTimeUtils;
 import com.wms.utils.StringUtils;
-
-import java.util.Date;
 
 /**
  * Created by duyot on 5/17/2017.
@@ -83,13 +80,13 @@ public class SysMailReportDTO extends BaseDTO {
     @Override
     public BaseModel toModel() {
         try {
-            return new SysMailReport(!StringUtils.validString(id) ? null:Long.valueOf(id),
-                    !StringUtils.validString(custId) ? null:Long.valueOf(custId),
-                    !StringUtils.validString(totalImportMoney) ? null:Long.valueOf(totalImportMoney),
-                    !StringUtils.validString(totalExportMoney) ? null:Long.valueOf(totalExportMoney),
-                    !StringUtils.validString(totalMoney) ? null:Long.valueOf(totalMoney),
-                    !StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate)
-                    );
+            return new SysMailReport(!StringUtils.validString(id) ? null : Long.valueOf(id),
+                    !StringUtils.validString(custId) ? null : Long.valueOf(custId),
+                    !StringUtils.validString(totalImportMoney) ? null : Long.valueOf(totalImportMoney),
+                    !StringUtils.validString(totalExportMoney) ? null : Long.valueOf(totalExportMoney),
+                    !StringUtils.validString(totalMoney) ? null : Long.valueOf(totalMoney),
+                    !StringUtils.validString(createdDate) ? null : DateTimeUtils.convertStringToDate(createdDate)
+            );
         } catch (Exception e) {
             e.printStackTrace();
             return null;

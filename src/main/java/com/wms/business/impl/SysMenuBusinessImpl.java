@@ -5,10 +5,9 @@ import com.wms.business.interfaces.SysMenuBusinessInterface;
 import com.wms.dto.SysMenuDTO;
 import com.wms.persistents.dao.SysMenuDAO;
 import com.wms.persistents.model.SysMenu;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Created by duyot on 11/2/2016.

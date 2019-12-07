@@ -3,9 +3,14 @@ package com.wms.persistents.model;
 import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
 import com.wms.dto.CatPartnerDTO;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import org.hibernate.annotations.DynamicUpdate;
-
-import javax.persistence.*;
 
 /**
  * Created by doanlv4 on 2/17/2017.
@@ -22,7 +27,7 @@ public class CatPartner extends BaseModel {
     private String address;
     private String telNumber;
 
-    public CatPartner(Long id,String code, String name,String address, String telNumber, byte status, Long custId ) {
+    public CatPartner(Long id, String code, String name, String address, String telNumber, byte status, Long custId) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -37,12 +42,12 @@ public class CatPartner extends BaseModel {
 
     @Id
     @Column(name = "ID", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_CAT_PARTNER")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CAT_PARTNER")
     @SequenceGenerator(
-            name="SEQ_CAT_PARTNER",
-            sequenceName="SEQ_CAT_PARTNER",
+            name = "SEQ_CAT_PARTNER",
+            sequenceName = "SEQ_CAT_PARTNER",
             allocationSize = 1,
-            initialValue= 1000
+            initialValue = 1000
     )
     public Long getId() {
         return id;
@@ -108,6 +113,6 @@ public class CatPartner extends BaseModel {
 
     @Override
     public BaseDTO toDTO() {
-        return new CatPartnerDTO(id==null?"":id+"",code,name,address,telNumber,status+"",custId==null? "":String.valueOf(custId));
+        return new CatPartnerDTO(id == null ? "" : id + "", code, name, address, telNumber, status + "", custId == null ? "" : String.valueOf(custId));
     }
 }

@@ -1,17 +1,17 @@
 package com.wms.dto;
 
 public class StockGoodsInfor {
-    String  custId;
-    String  custName;
-    String  stockId;
-    String  stockName;
-    String  goodsId;
-    String  goodName;
-    String  goodsState;
-    String  goodsStateName;
-    String  partnerId;
-    String  serial;
-    String  amount;
+    String custId;
+    String custName;
+    String stockId;
+    String stockName;
+    String goodsId;
+    String goodName;
+    String goodsState;
+    String goodsStateName;
+    String partnerId;
+    String serial;
+    String amount;
     String cellCode;
     String importDate;
     String importStockTransId;

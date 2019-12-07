@@ -1,7 +1,6 @@
 package com.wms.dto;
 
 import com.wms.base.BaseDTO;
-import com.wms.base.BaseModel;
 import com.wms.persistents.model.MapUserPartner;
 import com.wms.utils.StringUtils;
 
@@ -46,6 +45,6 @@ public class MapUserPartnerDTO extends BaseDTO {
 
     @Override
     public MapUserPartner toModel() {
-        return new MapUserPartner(!StringUtils.validString(id) ? null:Long.valueOf(id),!StringUtils.validString(userId) ? null:Long.valueOf(userId),!StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId));
+        return new MapUserPartner(!StringUtils.validString(id) ? null : Long.valueOf(id), !StringUtils.validString(userId) ? null : Long.valueOf(userId), !StringUtils.validString(partnerId) ? null : Long.valueOf(partnerId));
     }
 }

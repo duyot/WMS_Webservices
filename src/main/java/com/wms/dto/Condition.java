@@ -2,10 +2,9 @@ package com.wms.dto;
 
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 /**
  * Created by duyot on 10/24/2016.
@@ -17,7 +16,7 @@ public class Condition {
     private String operator;
     private Object value;
     private List<Condition> lstCondition;
-    private  String expType ;
+    private String expType;
 
     public Condition() {
     }
@@ -33,18 +32,18 @@ public class Condition {
         this.property = property;
         this.propertyType = propertyType;
         this.operator = operator;
-        if(this.propertyType.equals(Constants.SQL_PRO_TYPE.LONG)){
-            if(operator.equals(Constants.SQL_OPERATOR.IN)){
+        if (this.propertyType.equals(Constants.SQL_PRO_TYPE.LONG)) {
+            if (operator.equals(Constants.SQL_OPERATOR.IN)) {
                 this.value = DataUtil.convertIntergerArr(value);
-            }else{
+            } else {
                 try {
-                    this.value = Long.parseLong((String)value);
+                    this.value = Long.parseLong((String) value);
                 } catch (NumberFormatException e) {
-                    log.info("Log in condition format: "+ e.toString());
+                    log.info("Log in condition format: " + e.toString());
                     this.value = value;
                 }
             }
-        } else{
+        } else {
             this.value = value;
         }
     }

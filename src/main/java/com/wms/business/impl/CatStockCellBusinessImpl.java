@@ -4,9 +4,9 @@ import com.wms.base.BaseBusinessImpl;
 import com.wms.dto.CatStockCellDTO;
 import com.wms.persistents.dao.CatStockCellDAO;
 import com.wms.persistents.model.CatStockCell;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import javax.annotation.PostConstruct;
 
 /**
  * Created by duyot on 4/19/2017.

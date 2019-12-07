@@ -9,14 +9,20 @@ package com.wms.utils;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Random;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Admin
@@ -26,11 +32,11 @@ import java.util.*;
 public class DataUtil {
     static Logger log = LoggerFactory.getLogger(DataUtil.class);
 
-    public static    List<Integer> convertIntergerArr(Object input){
-        String inputArr = (String)input;
-        String [] idArr = ((String) input).split(",");
-        List<Integer>lstInt = new ArrayList<>();
-        for(int i=0;i<idArr.length;i++){
+    public static List<Integer> convertIntergerArr(Object input) {
+        String inputArr = (String) input;
+        String[] idArr = ((String) input).split(",");
+        List<Integer> lstInt = new ArrayList<>();
+        for (int i = 0; i < idArr.length; i++) {
             try {
                 lstInt.add(Integer.parseInt(idArr[i]));
             } catch (NumberFormatException e) {
@@ -40,7 +46,7 @@ public class DataUtil {
         }
         return lstInt;
     }
-    
+
     //duyot: 22/01: bat truong hop serial truyen sang dang .0
     public static String getQuantity(String quantity) {
         //Nhung tham so con lai truyen vao doi tuong
@@ -50,7 +56,7 @@ public class DataUtil {
         if (fAmount == 0) {
             return String.valueOf(iAmount);
         } else {
-            return String.valueOf(quantity);
+            return quantity;
         }
     }
 
@@ -425,7 +431,7 @@ public class DataUtil {
         if (startIndex != -1) {
 
             String firstStr = addr.substring(0, startIndex);
-            String secondStr = addr.substring(startIndex + 2, addr.length());
+            String secondStr = addr.substring(startIndex + 2);
 
             BigInteger first = ipv6ToNumber(firstStr);
 
@@ -488,21 +494,14 @@ public class DataUtil {
 
         BigInteger broadcastIP = fromIP.xor(subnet);
 
-        if (toIP.compareTo(broadcastIP) == 1) {
-            return false;
-        }
-
-        return true;
+        return toIP.compareTo(broadcastIP) != 1;
     }
 
     public static boolean checkLengthIPV4numberRange(String fromIPAddress, String toIPAddress) {
         BigInteger fromIP = ipv4ToNumber(fromIPAddress);
         BigInteger toIP = ipv4ToNumber(toIPAddress);
         BigInteger limit = toIP.subtract(fromIP);
-        if (limit.compareTo(new BigInteger(MAX_NUMBER_RANGE)) == 1) {
-            return false;
-        }
-        return true;
+        return limit.compareTo(new BigInteger(MAX_NUMBER_RANGE)) != 1;
     }
 
     public static boolean checkValidateIPv6(String fromIPAddress, String toIPAddress, int mask) {
@@ -520,11 +519,7 @@ public class DataUtil {
 
         BigInteger broadcastIP = fromIP.xor(subnet);
 
-        if (toIP.compareTo(broadcastIP) == 1) {
-            return false;
-        }
-
-        return true;
+        return toIP.compareTo(broadcastIP) != 1;
     }
 
     public static String safeStringToSearch(String input) {
@@ -533,10 +528,7 @@ public class DataUtil {
 //
 
     public static boolean isInteger(String str) {
-        if (str == null || !str.matches("[0-9]+$")) {
-            return false;
-        }
-        return true;
+        return str != null && str.matches("[0-9]+$");
     }
 
     public static boolean isLongNumber(BigDecimal minCar) {
@@ -648,7 +640,7 @@ public class DataUtil {
     /**
      * Check an object is active
      *
-     * @param status status of object
+     * @param status   status of object
      * @param isDelete isdetete status of object
      * @return
      */
@@ -678,8 +670,8 @@ public class DataUtil {
         return null;
     }
 
-    public static Double parseDoubleWithEmptyValue(String s){
-        return isStringNullOrEmpty(s) == true?Double.parseDouble("0"):Double.parseDouble(s);
+    public static Double parseDoubleWithEmptyValue(String s) {
+        return isStringNullOrEmpty(s) == true ? Double.parseDouble("0") : Double.parseDouble(s);
     }
 
     public static String strNvl(String... objs) {
@@ -717,7 +709,7 @@ public class DataUtil {
 
     public static Long[] parseInputListLong(String input) {
 
-        List<String> lstString = parseInputList(input.replaceAll("\\[","").replaceAll("\\]",""));
+        List<String> lstString = parseInputList(input.replaceAll("\\[", "").replaceAll("\\]", ""));
         Long[] lstLong = new Long[lstString.size()];
         for (int i = 0; i < lstString.size(); i++) {
             lstLong[i] = (Long.parseLong(lstString.get(i)));
@@ -744,7 +736,6 @@ public class DataUtil {
     }
 
     /**
-     *
      * @param lstObj
      * @return lstClone
      */
@@ -800,7 +791,7 @@ public class DataUtil {
     public static List<String> splitListFile(String strFiles) {
         List<String> lstFile = Lists.newArrayList();
         if (!isStringNullOrEmpty(strFiles)) {
-            String lst[] = strFiles.split(",");
+            String[] lst = strFiles.split(",");
             lstFile = Arrays.asList(lst);
         }
         return lstFile;
@@ -809,6 +800,6 @@ public class DataUtil {
     public static boolean isListNullOrEmpty(List<?> lst) {
         return lst == null || lst.isEmpty();
     }
-    
+
 
 }

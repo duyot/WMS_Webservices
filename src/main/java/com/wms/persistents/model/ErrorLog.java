@@ -1,13 +1,17 @@
 package com.wms.persistents.model;
 
-import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
 import com.wms.dto.ErrorLogDTO;
 import com.wms.utils.DateTimeUtils;
-import org.hibernate.annotations.DynamicUpdate;
-
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import org.hibernate.annotations.DynamicUpdate;
 
 /**
  * Created by duyot on 12/23/2016.
@@ -15,7 +19,7 @@ import java.util.Date;
 @Entity
 @Table(name = "ERROR_LOG")
 @DynamicUpdate
-public class ErrorLog extends BaseModel{
+public class ErrorLog extends BaseModel {
     private Long id;
     private String function;
     private String className;
@@ -37,12 +41,12 @@ public class ErrorLog extends BaseModel{
 
     @Id
     @Column(name = "ID", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_ERROR_LOG")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ERROR_LOG")
     @SequenceGenerator(
-            name="SEQ_ERROR_LOG",
-            sequenceName="SEQ_ERROR_LOG",
+            name = "SEQ_ERROR_LOG",
+            sequenceName = "SEQ_ERROR_LOG",
             allocationSize = 1,
-            initialValue= 1000
+            initialValue = 1000
     )
     public Long getId() {
         return id;
@@ -99,6 +103,6 @@ public class ErrorLog extends BaseModel{
 
     @Override
     public ErrorLogDTO toDTO() {
-        return new ErrorLogDTO(id==null?"":id+"",function,className,parameter,createDate==null?"": DateTimeUtils.convertDateTimeToString(createDate),errorInfo);
+        return new ErrorLogDTO(id == null ? "" : id + "", function, className, parameter, createDate == null ? "" : DateTimeUtils.convertDateTimeToString(createDate), errorInfo);
     }
 }

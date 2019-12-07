@@ -4,12 +4,14 @@ import com.wms.base.BaseBusinessInterface;
 import com.wms.base.BaseServices;
 import com.wms.business.interfaces.CatPartnerBusinessInterface;
 import com.wms.dto.CatPartnerDTO;
-import com.wms.persistents.model.CatPartner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.PostConstruct;
 import java.util.List;
+import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by duyot on 12/7/2016.
@@ -28,14 +30,14 @@ public class CatPartnerServices extends BaseServices<CatPartnerDTO> {
         this.baseBusiness = catPartnerBusiness;
     }
 
-    @RequestMapping(value = "/getPartnerByUser",produces = "application/json",method = RequestMethod.GET)
-    public List<CatPartnerDTO> getPartnerByUser(@RequestParam("userId") String userId, @RequestParam("partnerPermission") String partnerPermission){
-        return catPartnerBusinessInterface.getPartnerByUser(Long.valueOf(userId),Long.valueOf(partnerPermission));
+    @RequestMapping(value = "/getPartnerByUser", produces = "application/json", method = RequestMethod.GET)
+    public List<CatPartnerDTO> getPartnerByUser(@RequestParam("userId") String userId, @RequestParam("partnerPermission") String partnerPermission) {
+        return catPartnerBusinessInterface.getPartnerByUser(Long.valueOf(userId), Long.valueOf(partnerPermission));
     }
 
-    @RequestMapping(value = "/updatePartnerByProperties",produces = "application/json",method = RequestMethod.GET)
-    public String getPartnerByUser(@RequestBody CatPartnerDTO partner){
-        String [] updateProperties = {"address"};
+    @RequestMapping(value = "/updatePartnerByProperties", produces = "application/json", method = RequestMethod.GET)
+    public String getPartnerByUser(@RequestBody CatPartnerDTO partner) {
+        String[] updateProperties = {"address"};
         return catPartnerBusiness.updateByProperties(partner, Long.parseLong(partner.getId()), updateProperties);
     }
 }

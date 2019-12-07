@@ -1,12 +1,9 @@
 package com.wms.dto;
 
 import com.wms.base.BaseDTO;
-import com.wms.base.BaseModel;
 import com.wms.persistents.model.MjrStockGoodsTotal;
 import com.wms.utils.DateTimeUtils;
 import com.wms.utils.StringUtils;
-
-import java.util.Date;
 
 /**
  * Created by duyot on 12/19/2016.
@@ -149,12 +146,12 @@ public class MjrStockGoodsTotalDTO extends BaseDTO {
 
     @Override
     public MjrStockGoodsTotal toModel() {
-        return new MjrStockGoodsTotal(!StringUtils.validString(id) ? null:Long.valueOf(id),
-                !StringUtils.validString(custId) ? null:Long.valueOf(custId),
-                !StringUtils.validString(goodsId) ? null:Long.valueOf(goodsId),goodsCode,goodsName,goodsState,
-                !StringUtils.validString(stockId) ? null:Long.valueOf(stockId),
-                !StringUtils.validString(amount) ? null:Double.valueOf(amount),!StringUtils.validString(changeDate) ? null: DateTimeUtils.convertStringToDate(changeDate),
-                !StringUtils.validString(preAmount) ? null:Double.valueOf(preAmount)
+        return new MjrStockGoodsTotal(!StringUtils.validString(id) ? null : Long.valueOf(id),
+                !StringUtils.validString(custId) ? null : Long.valueOf(custId),
+                !StringUtils.validString(goodsId) ? null : Long.valueOf(goodsId), goodsCode, goodsName, goodsState,
+                !StringUtils.validString(stockId) ? null : Long.valueOf(stockId),
+                !StringUtils.validString(amount) ? null : Double.valueOf(amount), !StringUtils.validString(changeDate) ? null : DateTimeUtils.convertStringToDate(changeDate),
+                !StringUtils.validString(preAmount) ? null : Double.valueOf(preAmount)
         );
     }
 

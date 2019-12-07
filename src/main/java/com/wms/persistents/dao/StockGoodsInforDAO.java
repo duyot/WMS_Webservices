@@ -2,11 +2,15 @@ package com.wms.persistents.dao;
 
 
 import com.wms.base.BaseDAOImpl;
-import com.wms.dto.Condition;
 import com.wms.dto.MjrStockTransDetailDTO;
 import com.wms.dto.StockGoodsInfor;
 import com.wms.persistents.model.SysMenu;
+import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -18,12 +22,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import com.wms.utils.Constants;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by truongbx on 7/7/2018.
@@ -49,101 +47,101 @@ public class StockGoodsInforDAO extends BaseDAOImpl<SysMenu, Long> {
         StringBuilder stockGoodsInforQuery = new StringBuilder();
         stockGoodsInforQuery.append(
                 "  SELECT a.cust_id as custId,\n" +
-                "         (SELECT c.name\n" +
-                "            FROM cat_partner c\n" +
-                "           WHERE c.id = a.partner_id)\n" +
-                "             AS custName,\n" +
-                "         a.stock_id stockId,\n" +
-                "          (SELECT cs.name\n" +
-                "            FROM cat_stock cs\n" +
-                "           WHERE cs.id = a.stock_id)\n" +
-                "             AS stockName,\n" +
-                "         a.goods_id goodsId,\n" +
-                "         (SELECT e.name\n" +
-                "            FROM cat_goods e\n" +
-                "           WHERE e.id = a.goods_id)\n" +
-                "             AS goodName,\n" +
-                "         a.goods_state goodsState,\n" +
-                "         (SELECT d.name\n" +
-                "            FROM app_params d\n" +
-                "           WHERE d.TYPE = 'GOODS_STATE' AND d.code = a.goods_state)\n" +
-                "             AS goodsStateName,\n" +
-                "         a.partner_id partnerId,\n" +
-                "         '0' AS serial,\n" +
-                "         SUM (a.amount) AS amount\n" +
-                "    FROM mjr_stock_goods a\n" +
-                "   WHERE  a.partner_id = ? AND a.cust_id = ?  AND a.status = '1' \n" +
-                "GROUP BY a.goods_id,\n" +
-                "         a.stock_id,\n" +
-                "         a.cust_id,\n" +
-                "         a.goods_state,\n" +
-                "         a.partner_id\n" +
-                "         \n" +
-                "         union all\n" +
-                "         \n" +
-                "           SELECT a.cust_id,\n" +
-                "         (SELECT c.name\n" +
-                "            FROM cat_partner c\n" +
-                "           WHERE c.id = a.partner_id)\n" +
-                "             AS cust_name,\n" +
-                "         a.stock_id,\n" +
-                "          (SELECT cs.name\n" +
-                "            FROM cat_stock cs\n" +
-                "           WHERE cs.id = a.stock_id)\n" +
-                "             AS stock_name,\n" +
-                "         a.goods_id,\n" +
-                "         (SELECT e.name\n" +
-                "            FROM cat_goods e\n" +
-                "           WHERE e.id = a.goods_id)\n" +
-                "             AS good_name,\n" +
-                "         a.goods_state,\n" +
-                "         (SELECT d.name\n" +
-                "            FROM app_params d\n" +
-                "           WHERE d.TYPE = 'GOODS_STATE' AND d.code = a.goods_state)\n" +
-                "             AS goods_state_name,\n" +
-                "         a.partner_id,\n" +
-                "         '1' AS serial,\n" +
-                "         SUM (a.amount) AS amount\n" +
-                "    FROM mjr_stock_goods_serial a\n" +
-                "   WHERE  a.partner_id = ? AND a.cust_id = ? AND a.status = '1' \n" +
-                "GROUP BY a.goods_id,\n" +
-                "         a.stock_id,\n" +
-                "         a.cust_id,\n" +
-                "         a.goods_state,\n" +
-                "         a.partner_id\n" +
-                "         \n" +
-                "         ");
+                        "         (SELECT c.name\n" +
+                        "            FROM cat_partner c\n" +
+                        "           WHERE c.id = a.partner_id)\n" +
+                        "             AS custName,\n" +
+                        "         a.stock_id stockId,\n" +
+                        "          (SELECT cs.name\n" +
+                        "            FROM cat_stock cs\n" +
+                        "           WHERE cs.id = a.stock_id)\n" +
+                        "             AS stockName,\n" +
+                        "         a.goods_id goodsId,\n" +
+                        "         (SELECT e.name\n" +
+                        "            FROM cat_goods e\n" +
+                        "           WHERE e.id = a.goods_id)\n" +
+                        "             AS goodName,\n" +
+                        "         a.goods_state goodsState,\n" +
+                        "         (SELECT d.name\n" +
+                        "            FROM app_params d\n" +
+                        "           WHERE d.TYPE = 'GOODS_STATE' AND d.code = a.goods_state)\n" +
+                        "             AS goodsStateName,\n" +
+                        "         a.partner_id partnerId,\n" +
+                        "         '0' AS serial,\n" +
+                        "         SUM (a.amount) AS amount\n" +
+                        "    FROM mjr_stock_goods a\n" +
+                        "   WHERE  a.partner_id = ? AND a.cust_id = ?  AND a.status = '1' \n" +
+                        "GROUP BY a.goods_id,\n" +
+                        "         a.stock_id,\n" +
+                        "         a.cust_id,\n" +
+                        "         a.goods_state,\n" +
+                        "         a.partner_id\n" +
+                        "         \n" +
+                        "         union all\n" +
+                        "         \n" +
+                        "           SELECT a.cust_id,\n" +
+                        "         (SELECT c.name\n" +
+                        "            FROM cat_partner c\n" +
+                        "           WHERE c.id = a.partner_id)\n" +
+                        "             AS cust_name,\n" +
+                        "         a.stock_id,\n" +
+                        "          (SELECT cs.name\n" +
+                        "            FROM cat_stock cs\n" +
+                        "           WHERE cs.id = a.stock_id)\n" +
+                        "             AS stock_name,\n" +
+                        "         a.goods_id,\n" +
+                        "         (SELECT e.name\n" +
+                        "            FROM cat_goods e\n" +
+                        "           WHERE e.id = a.goods_id)\n" +
+                        "             AS good_name,\n" +
+                        "         a.goods_state,\n" +
+                        "         (SELECT d.name\n" +
+                        "            FROM app_params d\n" +
+                        "           WHERE d.TYPE = 'GOODS_STATE' AND d.code = a.goods_state)\n" +
+                        "             AS goods_state_name,\n" +
+                        "         a.partner_id,\n" +
+                        "         '1' AS serial,\n" +
+                        "         SUM (a.amount) AS amount\n" +
+                        "    FROM mjr_stock_goods_serial a\n" +
+                        "   WHERE  a.partner_id = ? AND a.cust_id = ? AND a.status = '1' \n" +
+                        "GROUP BY a.goods_id,\n" +
+                        "         a.stock_id,\n" +
+                        "         a.cust_id,\n" +
+                        "         a.goods_state,\n" +
+                        "         a.partner_id\n" +
+                        "         \n" +
+                        "         ");
 
         Query ps = getSession().createSQLQuery(stockGoodsInforQuery.toString())
-                .addScalar("custId",      StringType.INSTANCE)
-                .addScalar("custName",      StringType.INSTANCE)
-                .addScalar("stockId",      StringType.INSTANCE)
-                .addScalar("stockName",      StringType.INSTANCE)
-                .addScalar("goodsId",      StringType.INSTANCE)
-                .addScalar("goodName",      StringType.INSTANCE)
-                .addScalar("goodsState",      StringType.INSTANCE)
-                .addScalar("goodsStateName",      StringType.INSTANCE)
-                .addScalar("partnerId",      StringType.INSTANCE)
-                .addScalar("serial",      StringType.INSTANCE)
-                .addScalar("amount",      StringType.INSTANCE);
+                .addScalar("custId", StringType.INSTANCE)
+                .addScalar("custName", StringType.INSTANCE)
+                .addScalar("stockId", StringType.INSTANCE)
+                .addScalar("stockName", StringType.INSTANCE)
+                .addScalar("goodsId", StringType.INSTANCE)
+                .addScalar("goodName", StringType.INSTANCE)
+                .addScalar("goodsState", StringType.INSTANCE)
+                .addScalar("goodsStateName", StringType.INSTANCE)
+                .addScalar("partnerId", StringType.INSTANCE)
+                .addScalar("serial", StringType.INSTANCE)
+                .addScalar("amount", StringType.INSTANCE);
         ps.setResultTransformer(Transformers.aliasToBean(StockGoodsInfor.class));
-        ps.setLong(0,Long.valueOf(partnerId));
-        ps.setLong(1,Long.valueOf(custId));
-        ps.setLong(2,Long.valueOf(partnerId));
-        ps.setLong(3,Long.valueOf(custId));
+        ps.setLong(0, Long.valueOf(partnerId));
+        ps.setLong(1, Long.valueOf(custId));
+        ps.setLong(2, Long.valueOf(partnerId));
+        ps.setLong(3, Long.valueOf(custId));
 
 
         try {
 
             lstStockGoodsInfor = ps.list();
-           return lstStockGoodsInfor;
+            return lstStockGoodsInfor;
         } catch (Exception e) {
             log.info(e.toString());
-            return lstStockGoodsInfor ;
+            return lstStockGoodsInfor;
         }
     }
 
-    public List<StockGoodsInfor> getStockGoodsDetailInfor(String partnerId, String custId,String stockId, String goodsId,String serial) {
+    public List<StockGoodsInfor> getStockGoodsDetailInfor(String partnerId, String custId, String stockId, String goodsId, String serial) {
         List<StockGoodsInfor> lstStockGoodsInfor = new ArrayList<>();
 
         StringBuilder stockGoodsDetailInforQuery = new StringBuilder();
@@ -173,39 +171,39 @@ public class StockGoodsInforDAO extends BaseDAOImpl<SysMenu, Long> {
                 "         a.changed_date changeDate,\n" +
                 "         a.amount amount,\n" +
                 "         a.import_stock_trans_id importStockTransId,\n" +
-                "         a.input_price imputPrice\n" );
-        if (!DataUtil.isNullOrEmpty(serial) && serial.equalsIgnoreCase("1")){
+                "         a.input_price imputPrice\n");
+        if (!DataUtil.isNullOrEmpty(serial) && serial.equalsIgnoreCase("1")) {
             stockGoodsDetailInforQuery.append("   , a.serial \n");
             stockGoodsDetailInforQuery.append("   FROM mjr_stock_goods_serial a \n");
-        }else{
+        } else {
             stockGoodsDetailInforQuery.append("   FROM mjr_stock_goods a \n");
         }
         stockGoodsDetailInforQuery.append("  WHERE  a.partner_id = ? AND a.cust_id = ? and a.stock_id = ? and a.goods_id = ? and a.status = '1'");
 
         SQLQuery ps = getSession().createSQLQuery(stockGoodsDetailInforQuery.toString())
-                .addScalar("custId",      StringType.INSTANCE)
-                .addScalar("custName",      StringType.INSTANCE)
-                .addScalar("stockId",      StringType.INSTANCE)
-                .addScalar("stockName",      StringType.INSTANCE)
-                .addScalar("goodsId",      StringType.INSTANCE)
-                .addScalar("goodName",      StringType.INSTANCE)
-                .addScalar("goodsState",      StringType.INSTANCE)
-                .addScalar("goodsStateName",      StringType.INSTANCE)
-                .addScalar("partnerId",      StringType.INSTANCE)
-                .addScalar("amount",      StringType.INSTANCE)
-                .addScalar("cellCode",      StringType.INSTANCE)
-                .addScalar("importDate",      StringType.INSTANCE)
-                .addScalar("changeDate",      StringType.INSTANCE)
-                .addScalar("importStockTransId",      StringType.INSTANCE)
-                .addScalar("imputPrice",      StringType.INSTANCE);
-        if (!DataUtil.isNullOrEmpty(serial) && serial.equalsIgnoreCase("1")){
-            ps.addScalar("serial",      StringType.INSTANCE);
+                .addScalar("custId", StringType.INSTANCE)
+                .addScalar("custName", StringType.INSTANCE)
+                .addScalar("stockId", StringType.INSTANCE)
+                .addScalar("stockName", StringType.INSTANCE)
+                .addScalar("goodsId", StringType.INSTANCE)
+                .addScalar("goodName", StringType.INSTANCE)
+                .addScalar("goodsState", StringType.INSTANCE)
+                .addScalar("goodsStateName", StringType.INSTANCE)
+                .addScalar("partnerId", StringType.INSTANCE)
+                .addScalar("amount", StringType.INSTANCE)
+                .addScalar("cellCode", StringType.INSTANCE)
+                .addScalar("importDate", StringType.INSTANCE)
+                .addScalar("changeDate", StringType.INSTANCE)
+                .addScalar("importStockTransId", StringType.INSTANCE)
+                .addScalar("imputPrice", StringType.INSTANCE);
+        if (!DataUtil.isNullOrEmpty(serial) && serial.equalsIgnoreCase("1")) {
+            ps.addScalar("serial", StringType.INSTANCE);
         }
         ps.setResultTransformer(Transformers.aliasToBean(StockGoodsInfor.class));
-        ps.setLong(0,Long.valueOf(partnerId));
-        ps.setLong(1,Long.valueOf(custId));
-        ps.setLong(2,Long.valueOf(stockId));
-        ps.setLong(3,Long.valueOf(goodsId));
+        ps.setLong(0, Long.valueOf(partnerId));
+        ps.setLong(1, Long.valueOf(custId));
+        ps.setLong(2, Long.valueOf(stockId));
+        ps.setLong(3, Long.valueOf(goodsId));
 
 
         try {
@@ -214,14 +212,14 @@ public class StockGoodsInforDAO extends BaseDAOImpl<SysMenu, Long> {
             return lstStockGoodsInfor;
         } catch (Exception e) {
             log.info(e.toString());
-            return lstStockGoodsInfor ;
+            return lstStockGoodsInfor;
         }
     }
 
-    public List<MjrStockTransDetailDTO> getAllStockGoodsDetail(String userId, String custId, String stockId,  String partnerId, String goodsId, String status) {
+    public List<MjrStockTransDetailDTO> getAllStockGoodsDetail(String userId, String custId, String stockId, String partnerId, String goodsId, String status) {
         //Lay thong tin cua user
         StringBuilder str = new StringBuilder();
-        StringBuilder initJoinQuery = new StringBuilder("");
+        StringBuilder initJoinQuery = new StringBuilder();
         Session session = getSession();
         str.append(" select a.partner_permission, a.stock_permission ")
                 .append(" from cat_user a")
@@ -251,7 +249,7 @@ public class StockGoodsInforDAO extends BaseDAOImpl<SysMenu, Long> {
 
 
         List<MjrStockTransDetailDTO> lstStockGoodsInfor = new ArrayList<>();
-        StringBuilder allStockGoodsQuery = new StringBuilder("");
+        StringBuilder allStockGoodsQuery = new StringBuilder();
         StringBuilder stockGoodsQuery = new StringBuilder(" , null as serial \n FROM mjr_stock_goods a ");
         StringBuilder stockGoodsSerialQuery = new StringBuilder(", a.serial as serial \n FROM mjr_stock_goods_serial a ");
 
@@ -268,24 +266,24 @@ public class StockGoodsInforDAO extends BaseDAOImpl<SysMenu, Long> {
                 "         a.amount amount,\n" +
                 "         a.weight weight,\n" +
                 "         a.volume volume,\n" +
-                "         a.input_price inputPrice,\n"  +
+                "         a.input_price inputPrice,\n" +
                 "         a.produce_date produceDate,\n" +
                 "         a.expire_date expireDate,\n" +
-                "         a.description description\n" ) ;
+                "         a.description description\n");
 
-        if(!DataUtil.isStringNullOrEmpty(custId) && !custId.equals(Constants.STATS_ALL)){
+        if (!DataUtil.isStringNullOrEmpty(custId) && !custId.equals(Constants.STATS_ALL)) {
             initWhereQuery.append(" and a.cust_id = ").append(custId);
         }
-        if(!DataUtil.isStringNullOrEmpty(stockId) && !stockId.equals(Constants.STATS_ALL)){
+        if (!DataUtil.isStringNullOrEmpty(stockId) && !stockId.equals(Constants.STATS_ALL)) {
             initWhereQuery.append(" and a.stock_id = ").append(stockId);
         }
-        if(!DataUtil.isStringNullOrEmpty(partnerId) && !partnerId.equals(Constants.STATS_ALL)){
+        if (!DataUtil.isStringNullOrEmpty(partnerId) && !partnerId.equals(Constants.STATS_ALL)) {
             initWhereQuery.append(" and a.partner_id = ").append(partnerId);
         }
-        if(!DataUtil.isStringNullOrEmpty(goodsId) && !goodsId.equals(Constants.STATS_ALL)){
+        if (!DataUtil.isStringNullOrEmpty(goodsId) && !goodsId.equals(Constants.STATS_ALL)) {
             initWhereQuery.append(" and a.goods_id = ").append(goodsId);
         }
-        if(!DataUtil.isStringNullOrEmpty(status) && !status.equals(Constants.STATS_ALL)){
+        if (!DataUtil.isStringNullOrEmpty(status) && !status.equals(Constants.STATS_ALL)) {
             initWhereQuery.append(" and a.goods_state = ").append(status);
         }
 
@@ -302,29 +300,29 @@ public class StockGoodsInforDAO extends BaseDAOImpl<SysMenu, Long> {
                 .append(" \n)gt order by gt.custid, gt.stockid, gt.goodsid desc");
 
         ps = getSession().createSQLQuery(allStockGoodsQuery.toString())
-                .addScalar("custId",      StringType.INSTANCE)
-                .addScalar("stockId",      StringType.INSTANCE)
-                .addScalar("goodsId",      StringType.INSTANCE)
-                .addScalar("goodsState",      StringType.INSTANCE)
-                .addScalar("partnerId",      StringType.INSTANCE)
-                .addScalar("amount",      StringType.INSTANCE)
-                .addScalar("volume",      StringType.INSTANCE)
-                .addScalar("weight",      StringType.INSTANCE)
-                .addScalar("cellCode",      StringType.INSTANCE)
-                .addScalar("importDate",      StringType.INSTANCE)
-                .addScalar("changeDate",      StringType.INSTANCE)
-                .addScalar("inputPrice",      StringType.INSTANCE)
-                .addScalar("serial",      StringType.INSTANCE)
-                .addScalar("produceDate",      StringType.INSTANCE)
-                .addScalar("expireDate",      StringType.INSTANCE)
-                .addScalar("description",      StringType.INSTANCE);
+                .addScalar("custId", StringType.INSTANCE)
+                .addScalar("stockId", StringType.INSTANCE)
+                .addScalar("goodsId", StringType.INSTANCE)
+                .addScalar("goodsState", StringType.INSTANCE)
+                .addScalar("partnerId", StringType.INSTANCE)
+                .addScalar("amount", StringType.INSTANCE)
+                .addScalar("volume", StringType.INSTANCE)
+                .addScalar("weight", StringType.INSTANCE)
+                .addScalar("cellCode", StringType.INSTANCE)
+                .addScalar("importDate", StringType.INSTANCE)
+                .addScalar("changeDate", StringType.INSTANCE)
+                .addScalar("inputPrice", StringType.INSTANCE)
+                .addScalar("serial", StringType.INSTANCE)
+                .addScalar("produceDate", StringType.INSTANCE)
+                .addScalar("expireDate", StringType.INSTANCE)
+                .addScalar("description", StringType.INSTANCE);
         ps.setResultTransformer(Transformers.aliasToBean(MjrStockTransDetailDTO.class));
         try {
             lstStockGoodsInfor = ps.list();
             return lstStockGoodsInfor;
         } catch (Exception e) {
             log.info(e.toString());
-            return lstStockGoodsInfor ;
+            return lstStockGoodsInfor;
         }
     }
 }

@@ -4,19 +4,17 @@
  */
 package com.wms.utils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- *
  * @author sondm2@viettel.com.vn
- * @since Apr,12,2010
  * @version 1.0
+ * @since Apr, 12, 2010
  */
 public class DateTimeUtils {
     public static Logger log = LoggerFactory.getLogger(DateTimeUtils.class);
@@ -68,12 +66,11 @@ public class DateTimeUtils {
     }
 
     /**
-     *
-     * @param date to convert
+     * @param date    to convert
      * @param pattern in converting
      * @return date
      */
-    public static Date convertStringToTime(String date, String pattern)  {
+    public static Date convertStringToTime(String date, String pattern) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
         try {
             return dateFormat.parse(date);
@@ -85,12 +82,11 @@ public class DateTimeUtils {
     }
 
     /**
-     *
      * @param date to convert
      * @return String
      * @throws Exception if error
      */
-    public static Date convertStringToDate(String date){
+    public static Date convertStringToDate(String date) {
         String pattern = "dd/MM/yyyy HH:mm:ss";
         if (date.length() <= 10) {
             date = date + " 00:00:00";
@@ -99,7 +95,6 @@ public class DateTimeUtils {
     }
 
     /**
-     *
      * @param date to convert
      * @return String
      * @throws Exception if error
@@ -116,20 +111,21 @@ public class DateTimeUtils {
         }
     }
 
-    public static Date getDateCompareToCurrent(int amount){
+    public static Date getDateCompareToCurrent(int amount) {
         final Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, amount);
         return cal.getTime();
     }
-    public static Date getNextDate(Date fromDate, int amount){
+
+    public static Date getNextDate(Date fromDate, int amount) {
         final Calendar cal = Calendar.getInstance();
         cal.setTime(fromDate);
         cal.add(Calendar.DATE, amount);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        return convertStringToTime(dateFormat.format(cal.getTime()), "dd/MM/yyyy" );
+        return convertStringToTime(dateFormat.format(cal.getTime()), "dd/MM/yyyy");
     }
 
-    public static Date getFirstDateInMonth(){
+    public static Date getFirstDateInMonth() {
         Calendar c = Calendar.getInstance();   // this takes current date
         c.set(Calendar.DAY_OF_MONTH, 1);
         return c.getTime();
@@ -149,7 +145,6 @@ public class DateTimeUtils {
     }
 
     /**
-     *
      * @return String
      * @throws Exception if error
      */
@@ -159,7 +154,6 @@ public class DateTimeUtils {
     }
 
     /**
-     *
      * @return String
      * @throws Exception if error
      */
@@ -174,7 +168,6 @@ public class DateTimeUtils {
     }
 
     /**
-     *
      * @param pattern to convert
      * @return String
      * @throws Exception if error
@@ -190,7 +183,6 @@ public class DateTimeUtils {
     }
 
     /**
-     *
      * @param date to convert
      * @return String
      * @throws Exception if error
@@ -201,12 +193,11 @@ public class DateTimeUtils {
     }
 
     /**
-     *
      * @param date to convert
      * @return String
      * @throws Exception if error
      */
-    public static String convertDateTimeToString(Date date){
+    public static String convertDateTimeToString(Date date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         try {
             return dateFormat.format(date);
@@ -215,7 +206,7 @@ public class DateTimeUtils {
         }
     }
 
-    public static String convertDateTimeToString(Date date, String pattern){
+    public static String convertDateTimeToString(Date date, String pattern) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
         try {
             return dateFormat.format(date);
@@ -225,7 +216,6 @@ public class DateTimeUtils {
     }
 
     /**
-     *
      * @param utilDate to convert
      * @return date
      */
@@ -234,7 +224,6 @@ public class DateTimeUtils {
     }
 
     /**
-     *
      * @param monthInput to parse
      * @return String
      */

@@ -7,7 +7,16 @@ import com.wms.utils.AccessorUtil;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import com.wms.utils.FunctionUtils;
-import org.hibernate.*;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
@@ -16,12 +25,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * Created by duyot on 8/24/2016.
@@ -47,6 +50,7 @@ public class BaseDAOImpl<T extends BaseModel, ID extends Serializable> implement
     public Session getSession() {
         return sessionFactory.getCurrentSession();
     }
+
     //SEQUENCE----------------------------------------------------------------------------------------------------------
     @Transactional(readOnly = true)
     public Long getSequence(String sequence) {
@@ -85,19 +89,21 @@ public class BaseDAOImpl<T extends BaseModel, ID extends Serializable> implement
     //@DELETE-----------------------------------------------------------------------------------------------------------
     @Transactional
     public String deleteById(long id) {
-        T object = (T) getSession().get(modelClass, id);
+        T object = getSession().get(modelClass, id);
         if (object == null) {
             return Responses.NOT_FOUND.getName();
         }
         return deleteByObject(object);
     }
-	public String deleteByIdSession(long id,Session session) {
-		T object = (T) session.get(modelClass, id);
-		if (object == null) {
-			return Responses.NOT_FOUND.getName();
-		}
-		return deleteByObject(object);
-	}
+
+    public String deleteByIdSession(long id, Session session) {
+        T object = session.get(modelClass, id);
+        if (object == null) {
+            return Responses.NOT_FOUND.getName();
+        }
+        return deleteByObject(object);
+    }
+
     @Transactional
     public String deleteByObject(T obj) {
         try {
@@ -108,8 +114,9 @@ public class BaseDAOImpl<T extends BaseModel, ID extends Serializable> implement
             return Responses.ERROR.getName();
         }
     }
+
     @Transactional
-    public String deleteByObject(T obj,Session session) {
+    public String deleteByObject(T obj, Session session) {
         try {
             session.delete(obj);
             return Responses.SUCCESS.getName();
@@ -176,8 +183,9 @@ public class BaseDAOImpl<T extends BaseModel, ID extends Serializable> implement
             return Responses.ERROR.getName();
         }
     }
+
     @Transactional
-    public String saveOrUpdateSession(T obj,Session session) {
+    public String saveOrUpdateSession(T obj, Session session) {
         try {
             session.saveOrUpdate(obj);
             return Responses.SUCCESS.getName();
@@ -186,6 +194,7 @@ public class BaseDAOImpl<T extends BaseModel, ID extends Serializable> implement
             return Responses.ERROR.getName();
         }
     }
+
     @Transactional
     public String save(T obj) {
         try {
@@ -249,6 +258,7 @@ public class BaseDAOImpl<T extends BaseModel, ID extends Serializable> implement
             return Responses.ERROR.getName();
         }
     }
+
     //GET--------------------------------------------------------------------------------------------------------------
     @Transactional(readOnly = true)
     public List<T> getAll() {
@@ -335,15 +345,15 @@ public class BaseDAOImpl<T extends BaseModel, ID extends Serializable> implement
             sql.append(con.getOperator());
             if (con.getPropertyType().equals(Constants.SQL_PRO_TYPE.LONG)) {
                 if (!con.getOperator().equals(Constants.SQL_OP.OP_IN)) {
-                    sql.append(" :idx").append(String.valueOf(index++));
+                    sql.append(" :idx").append(index++);
                 } else {
-                    sql.append("( :idx").append(String.valueOf(index++)).append(" )");
+                    sql.append("( :idx").append(index++).append(" )");
                 }
             } else if (con.getPropertyType().equals(Constants.SQL_PRO_TYPE.DATE)) {
-                sql.append(" to_date(:idx").append(String.valueOf(index++))
+                sql.append(" to_date(:idx").append(index++)
                         .append(", '").append(Constants.DATETIME_FORMAT.ddMMyyyy).append("')");
             } else if (con.getPropertyType().equals(Constants.SQL_PRO_TYPE.STRING)) {
-                sql.append(":idx").append(String.valueOf(index++));
+                sql.append(":idx").append(index++);
                 if (con.getOperator().equals(Constants.SQL_OP.OP_LIKE)) {
                     sql.append(" ESCAPE '\\' ");
                 }
@@ -358,19 +368,19 @@ public class BaseDAOImpl<T extends BaseModel, ID extends Serializable> implement
         for (Condition con : lstCondition) {
             if (con.getPropertyType().equals(Constants.SQL_PRO_TYPE.LONG)) {
                 if (!con.getOperator().equals(Constants.SQL_OP.OP_IN)) {
-                    query.setParameter("idx" + String.valueOf(index++), Long.parseLong(con.getValue().toString()));
+                    query.setParameter("idx" + index++, Long.parseLong(con.getValue().toString()));
                 } else {
-                    query.setParameterList("idx" + String.valueOf(index++), DataUtil.parseInputListLong(con.getValue().toString()));
+                    query.setParameterList("idx" + index++, DataUtil.parseInputListLong(con.getValue().toString()));
                 }
 
             } else if (con.getPropertyType().equals(Constants.SQL_PRO_TYPE.STRING)) {
                 if (con.getOperator().equals(Constants.SQL_OP.OP_IN)) {
-                    query.setParameterList("idx" + String.valueOf(index++), DataUtil.parseInputListString(con.getValue().toString()));
+                    query.setParameterList("idx" + index++, DataUtil.parseInputListString(con.getValue().toString()));
                 } else {
-                    query.setParameter("idx" + String.valueOf(index++), con.getValue().toString());
+                    query.setParameter("idx" + index++, con.getValue().toString());
                 }
             } else {
-                query.setParameter("idx" + String.valueOf(index++), con.getValue().toString());
+                query.setParameter("idx" + index++, con.getValue().toString());
             }
 
         }

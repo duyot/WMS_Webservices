@@ -1,16 +1,12 @@
 package com.wms.business.impl;
 
 import com.wms.base.BaseBusinessImpl;
-import com.wms.dto.MjrStockGoodsTotalDTO;
 import com.wms.dto.MjrStockTransDTO;
-import com.wms.persistents.dao.MjrStockGoodsTotalDAO;
 import com.wms.persistents.dao.MjrStockTransDAO;
-import com.wms.persistents.model.MjrStockGoodsTotal;
 import com.wms.persistents.model.MjrStockTrans;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
 
 /**
  * Created by duyot on 12/28/2016.

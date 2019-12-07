@@ -4,16 +4,21 @@ import com.wms.base.BaseModel;
 import com.wms.dto.MjrStockGoodsDTO;
 import com.wms.utils.Constants;
 import com.wms.utils.DateTimeUtils;
-
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 /**
  * Created by duyot on 1/3/2017.
  */
 @Entity
 @Table(name = "MJR_STOCK_GOODS")
-public class MjrStockGoods extends BaseModel{
+public class MjrStockGoods extends BaseModel {
     private Long id;
     private Long custId;
     private Long stockId;
@@ -65,12 +70,12 @@ public class MjrStockGoods extends BaseModel{
 
     @Id
     @Column(name = "ID", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_MJR_STOCK_GOODS")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MJR_STOCK_GOODS")
     @SequenceGenerator(
-            name="SEQ_MJR_STOCK_GOODS",
-            sequenceName="SEQ_MJR_STOCK_GOODS",
+            name = "SEQ_MJR_STOCK_GOODS",
+            sequenceName = "SEQ_MJR_STOCK_GOODS",
             allocationSize = 1,
-            initialValue= 1000
+            initialValue = 1000
     )
     public Long getId() {
         return id;
@@ -80,7 +85,7 @@ public class MjrStockGoods extends BaseModel{
         this.id = id;
     }
 
-    @Column(name = "CUST_ID",nullable = false)
+    @Column(name = "CUST_ID", nullable = false)
     public Long getCustId() {
         return custId;
     }
@@ -89,7 +94,7 @@ public class MjrStockGoods extends BaseModel{
         this.custId = custId;
     }
 
-    @Column(name = "STOCK_ID",nullable = false)
+    @Column(name = "STOCK_ID", nullable = false)
     public Long getStockId() {
         return stockId;
     }
@@ -98,7 +103,7 @@ public class MjrStockGoods extends BaseModel{
         this.stockId = stockId;
     }
 
-    @Column(name = "GOODS_ID",nullable = false)
+    @Column(name = "GOODS_ID", nullable = false)
     public Long getGoodsId() {
         return goodsId;
     }
@@ -107,7 +112,7 @@ public class MjrStockGoods extends BaseModel{
         this.goodsId = goodsId;
     }
 
-    @Column(name = "GOODS_STATE",nullable = false)
+    @Column(name = "GOODS_STATE", nullable = false)
     public String getGoodsState() {
         return goodsState;
     }
@@ -261,18 +266,17 @@ public class MjrStockGoods extends BaseModel{
     }
 
 
-
     @Override
     public MjrStockGoodsDTO toDTO() {
-        return new MjrStockGoodsDTO(id==null?"":id+"",custId==null?"":custId+"",stockId==null?"":stockId+"",
-                goodsId==null?"":goodsId+"",goodsState,cellCode,amount==null?"":amount+"",importDate==null?"": DateTimeUtils.convertDateTimeToString(importDate),
-                changeDate ==null?"": DateTimeUtils.convertDateTimeToString(changeDate),status+"",partnerId==null?"":partnerId+"",
-                importStockTransId==null?"":importStockTransId+"",inputPrice==null?"":inputPrice+"",outputPrice==null?"":outputPrice+"",
-                exportDate==null?"": DateTimeUtils.convertDateTimeToString(exportDate),exportStockTransId==null?"":exportStockTransId+"",
-                volume==null?"":volume+"",weight==null?"":weight+"",
-                produceDate==null?"": DateTimeUtils.convertDateTimeToString(produceDate, Constants.DATETIME_FORMAT.ddMMyyyy),
-                expireDate==null?"": DateTimeUtils.convertDateTimeToString(expireDate, Constants.DATETIME_FORMAT.ddMMyyyy),
+        return new MjrStockGoodsDTO(id == null ? "" : id + "", custId == null ? "" : custId + "", stockId == null ? "" : stockId + "",
+                goodsId == null ? "" : goodsId + "", goodsState, cellCode, amount == null ? "" : amount + "", importDate == null ? "" : DateTimeUtils.convertDateTimeToString(importDate),
+                changeDate == null ? "" : DateTimeUtils.convertDateTimeToString(changeDate), status + "", partnerId == null ? "" : partnerId + "",
+                importStockTransId == null ? "" : importStockTransId + "", inputPrice == null ? "" : inputPrice + "", outputPrice == null ? "" : outputPrice + "",
+                exportDate == null ? "" : DateTimeUtils.convertDateTimeToString(exportDate), exportStockTransId == null ? "" : exportStockTransId + "",
+                volume == null ? "" : volume + "", weight == null ? "" : weight + "",
+                produceDate == null ? "" : DateTimeUtils.convertDateTimeToString(produceDate, Constants.DATETIME_FORMAT.ddMMyyyy),
+                expireDate == null ? "" : DateTimeUtils.convertDateTimeToString(expireDate, Constants.DATETIME_FORMAT.ddMMyyyy),
                 description
-                );
+        );
     }
 }

@@ -26,7 +26,7 @@ public class Constants {
 //        public static String ERROR_OVER_GOODS_NUMBER = "ERROR_OVER_GOODS_NUMBER";
 //    }
 
-    public static class SQL_OPERATOR{
+    public static class SQL_OPERATOR {
         public static String EQUAL = "EQUAL";
         public static String NOT_EQUAL = "NOT_EQUAL";
         public static String GREATER = "GREATER";
@@ -42,18 +42,20 @@ public class Constants {
 
     }
 
-    public static class SQL_PRO_TYPE{
+    public static class SQL_PRO_TYPE {
         public static String STRING = "string";
-        public static String LONG   = "long";
-        public static String DATE   = "date";
-        public static String BYTE   = "byte";
-        public static String INT   = "int";
+        public static String LONG = "long";
+        public static String DATE = "date";
+        public static String BYTE = "byte";
+        public static String INT = "int";
     }
-    public static class SQL_LOGIC{
+
+    public static class SQL_LOGIC {
         public static String OR = " or ";
         public static String AND = " and ";
     }
-    public  static class SQL_OP{
+
+    public static class SQL_OP {
         public static final String OP_EQUAL = " = ";
         public static final String OP_NOT_EQUAL = " != ";
         public static final String OP_GREATER = " > ";
@@ -63,19 +65,21 @@ public class Constants {
         public static final String OP_LIKE = " like ";
         public static final String OP_IN = " in ";
     }
-    public static class TRANSACTION_TYPE{
+
+    public static class TRANSACTION_TYPE {
         public static String IMPORT = "1";
         public static String EXPORT = "2";
     }
 
-    public static class STATUS{
+    public static class STATUS {
         public static String ACTIVE = "1";
         public static String INACTIVE = "0";
         public static String EXPORTED = "2";
         public static byte BYTE_EXPORTED = 2;
 
     }
-   public static class DATETIME_FORMAT{
+
+    public static class DATETIME_FORMAT {
         public static final String ddMMyyyy = "dd/MM/yyyy";
         public static final String ddMMyyyyHHmmss = "dd/MM/yyyy HH:mm:ss";
     }

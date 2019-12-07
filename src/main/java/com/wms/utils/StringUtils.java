@@ -5,15 +5,13 @@
 package com.wms.utils;
 
 import com.wms.dto.Condition;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
  * @author binhnt22@viettel.com.vn
- * @since May 2012
  * @version 1.1
+ * @since May 2012
  */
 public final class StringUtils {
 
@@ -27,8 +25,8 @@ public final class StringUtils {
      * ZERO.
      */
     private static final String ZERO = "0";
-    private static final String c[] = {"<", ">", "'", "\""};
-    private static final String expansion[] = {"&lt;", "&gt;",  "&apos;", "&quot;"};
+    private static final String[] c = {"<", ">", "'", "\""};
+    private static final String[] expansion = {"&lt;", "&gt;", "&apos;", "&quot;"};
 
     public static String HTMLEncode(String s) {
         for (int j = 0; j < c.length; j++) {
@@ -54,6 +52,7 @@ public final class StringUtils {
         System.out.println(s);
         System.out.println(HTMLEncode(s));
     }
+
     /**
      * method compare two string
      *
@@ -69,10 +68,7 @@ public final class StringUtils {
             str2 = "";
         }
 
-        if (str1.equals(str2)) {
-            return true;
-        }
-        return false;
+        return str1.equals(str2);
     }
 
     /**
@@ -80,7 +76,7 @@ public final class StringUtils {
      *
      * @param lng Long
      * @return String
-     * @throws  Exception
+     * @throws Exception
      */
     public static String convertFromLongToString(Long lng) throws Exception {
         return Long.toString(lng);
@@ -133,10 +129,7 @@ public final class StringUtils {
     }
 
     public static boolean validString(Object temp) {
-        if (temp == null || temp.toString().trim().equals("")) {
-            return false;
-        }
-        return true;
+        return temp != null && !temp.toString().trim().equals("");
     }
 
     public static boolean maskVN(String str) {
@@ -154,17 +147,11 @@ public final class StringUtils {
                 return false;
             }
         }
-        if (str.toLowerCase().charAt(0) < 'a' || str.toLowerCase().charAt(0) > 'z') {
-            return false;
-        }
-        return true;
+        return str.toLowerCase().charAt(0) >= 'a' && str.toLowerCase().charAt(0) <= 'z';
     }
 
     public static boolean isInteger(String str) {
-        if (str == null || !str.matches("[0-9]+$")) {
-            return false;
-        }
-        return true;
+        return str != null && str.matches("[0-9]+$");
     }
 
     public static String formatString(String str) {
@@ -193,9 +180,9 @@ public final class StringUtils {
                 index = i;
             }
         }
-        str1 = str1 + str.substring(index, str.length()).toUpperCase() + "_";
+        str1 = str1 + str.substring(index).toUpperCase() + "_";
         return str1;
-    }    
+    }
 
     public static boolean isLong(String str) {
         try {
@@ -241,9 +228,9 @@ public final class StringUtils {
         if (StringUtils.isNullOrEmpty(operator)) {
             return opConvert;
         }
-        switch (operator){
+        switch (operator) {
             case "EQUAL":
-                opConvert =  Constants.SQL_OP.OP_EQUAL;
+                opConvert = Constants.SQL_OP.OP_EQUAL;
                 break;
             case "NOT_EQUAL":
                 opConvert = Constants.SQL_OP.OP_NOT_EQUAL;
@@ -252,19 +239,19 @@ public final class StringUtils {
                 opConvert = Constants.SQL_OP.OP_GREATER;
                 break;
             case "GREATER_EQUAL":
-                opConvert =  Constants.SQL_OP.OP_GREATER_EQUAL;
+                opConvert = Constants.SQL_OP.OP_GREATER_EQUAL;
                 break;
             case "LOWER":
-                opConvert =  Constants.SQL_OP.OP_LESS;
+                opConvert = Constants.SQL_OP.OP_LESS;
                 break;
             case "LOWER_EQUAL":
-                opConvert =  Constants.SQL_OP.OP_LESS_EQUAL;
+                opConvert = Constants.SQL_OP.OP_LESS_EQUAL;
                 break;
             case "IN":
-                opConvert =  Constants.SQL_OP.OP_IN;
+                opConvert = Constants.SQL_OP.OP_IN;
                 break;
             case "LIKE":
-                opConvert =  Constants.SQL_OP.OP_LIKE;
+                opConvert = Constants.SQL_OP.OP_LIKE;
                 break;
             default:
                 opConvert = "";
@@ -272,14 +259,15 @@ public final class StringUtils {
         }
         return opConvert;
     }
-    public static List<Condition>  convertCondition(List<Condition> lstCondition){
+
+    public static List<Condition> convertCondition(List<Condition> lstCondition) {
 
         for (Condition con : lstCondition) {
             if (con.getPropertyType().equalsIgnoreCase(Constants.SQL_PRO_TYPE.DATE)) {
                 con.setProperty(StringUtils.formatFunction("trunc", con.getProperty()));
             }
             con.setOperator(StringUtils.convertTypeOperator(con.getOperator()));
-            con.setProperty(" " + con.getProperty()+" ");
+            con.setProperty(" " + con.getProperty() + " ");
             con.setValue(con.getValue());
         }
         return lstCondition;

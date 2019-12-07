@@ -1,11 +1,15 @@
 package com.wms.persistents.model;
 
-import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
 import com.wms.dto.CatStockDTO;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import org.hibernate.annotations.DynamicUpdate;
-
-import javax.persistence.*;
 
 /**
  * Created by duyot on 2/17/2017.
@@ -13,7 +17,7 @@ import javax.persistence.*;
 @Entity
 @DynamicUpdate
 @Table(name = "CAT_STOCK")
-public class CatStock  extends BaseModel{
+public class CatStock extends BaseModel {
     private Long id;
     private Long custId;
     private String code;
@@ -37,12 +41,12 @@ public class CatStock  extends BaseModel{
 
     @Id
     @Column(name = "ID", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_CAT_STOCK")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CAT_STOCK")
     @SequenceGenerator(
-            name="SEQ_CAT_STOCK",
-            sequenceName="SEQ_CAT_STOCK",
+            name = "SEQ_CAT_STOCK",
+            sequenceName = "SEQ_CAT_STOCK",
             allocationSize = 1,
-            initialValue= 1000
+            initialValue = 1000
     )
     public Long getId() {
         return id;
@@ -108,6 +112,6 @@ public class CatStock  extends BaseModel{
 
     @Override
     public CatStockDTO toDTO() {
-        return new CatStockDTO(id==null?"":id+"",custId==null?"":custId+"",code,name,address,status+"",managerInfo);
+        return new CatStockDTO(id == null ? "" : id + "", custId == null ? "" : custId + "", code, name, address, status + "", managerInfo);
     }
 }

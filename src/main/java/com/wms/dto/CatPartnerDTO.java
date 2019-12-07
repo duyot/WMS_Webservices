@@ -4,6 +4,7 @@ import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
 import com.wms.persistents.model.CatPartner;
 import com.wms.utils.StringUtils;
+
 /**
  * Created by doanlv4 on 2/17/2017.
  */
@@ -17,8 +18,7 @@ public class CatPartnerDTO extends BaseDTO {
     private String telNumber;
 
 
-
-    public CatPartnerDTO(String id, String code, String name,String address,String telNumber, String status, String custId ) {
+    public CatPartnerDTO(String id, String code, String name, String address, String telNumber, String status, String custId) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -88,11 +88,10 @@ public class CatPartnerDTO extends BaseDTO {
     }
 
 
-
     @Override
     public BaseModel toModel() {
-        return new CatPartner(!StringUtils.validString(id) ? null:Long.valueOf(id),code,name,address,telNumber,
-                !StringUtils.validString(status) ? 0:Byte.parseByte(status),!StringUtils.validString(custId) ? null:Long.valueOf(custId));
+        return new CatPartner(!StringUtils.validString(id) ? null : Long.valueOf(id), code, name, address, telNumber,
+                !StringUtils.validString(status) ? 0 : Byte.parseByte(status), !StringUtils.validString(custId) ? null : Long.valueOf(custId));
     }
 
     @Override

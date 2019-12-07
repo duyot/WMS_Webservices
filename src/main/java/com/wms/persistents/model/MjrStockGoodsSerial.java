@@ -1,21 +1,24 @@
 package com.wms.persistents.model;
 
-import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
-import com.wms.dto.MjrStockGoodsDTO;
 import com.wms.dto.MjrStockGoodsSerialDTO;
 import com.wms.utils.Constants;
 import com.wms.utils.DateTimeUtils;
-
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 /**
  * Created by duyot on 1/3/2017.
  */
 @Entity
 @Table(name = "MJR_STOCK_GOODS_SERIAL")
-public class MjrStockGoodsSerial extends BaseModel{
+public class MjrStockGoodsSerial extends BaseModel {
     private Long id;
     private Long custId;
     private Long stockId;
@@ -69,12 +72,12 @@ public class MjrStockGoodsSerial extends BaseModel{
 
     @Id
     @Column(name = "ID", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_MJR_STOCK_GOODS_SERIAL")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MJR_STOCK_GOODS_SERIAL")
     @SequenceGenerator(
-            name="SEQ_MJR_STOCK_GOODS_SERIAL",
-            sequenceName="SEQ_MJR_STOCK_GOODS_SERIAL",
+            name = "SEQ_MJR_STOCK_GOODS_SERIAL",
+            sequenceName = "SEQ_MJR_STOCK_GOODS_SERIAL",
             allocationSize = 1,
-            initialValue= 1000
+            initialValue = 1000
     )
     public Long getId() {
         return id;
@@ -84,7 +87,7 @@ public class MjrStockGoodsSerial extends BaseModel{
         this.id = id;
     }
 
-    @Column(name = "CUST_ID",nullable = false)
+    @Column(name = "CUST_ID", nullable = false)
     public Long getCustId() {
         return custId;
     }
@@ -93,7 +96,7 @@ public class MjrStockGoodsSerial extends BaseModel{
         this.custId = custId;
     }
 
-    @Column(name = "STOCK_ID",nullable = false)
+    @Column(name = "STOCK_ID", nullable = false)
     public Long getStockId() {
         return stockId;
     }
@@ -102,7 +105,7 @@ public class MjrStockGoodsSerial extends BaseModel{
         this.stockId = stockId;
     }
 
-    @Column(name = "GOODS_ID",nullable = false)
+    @Column(name = "GOODS_ID", nullable = false)
     public Long getGoodsId() {
         return goodsId;
     }
@@ -111,7 +114,7 @@ public class MjrStockGoodsSerial extends BaseModel{
         this.goodsId = goodsId;
     }
 
-    @Column(name = "GOODS_STATE",nullable = false)
+    @Column(name = "GOODS_STATE", nullable = false)
     public String getGoodsState() {
         return goodsState;
     }
@@ -274,18 +277,16 @@ public class MjrStockGoodsSerial extends BaseModel{
     }
 
 
-
-
     @Override
     public MjrStockGoodsSerialDTO toDTO() {
-        return new MjrStockGoodsSerialDTO(id==null?"":id+"",custId==null?"":custId+"",stockId==null?"":stockId+"",
-                goodsId==null?"":goodsId+"",goodsState,cellCode,amount==null?"":amount+"",serial,importDate==null?"": DateTimeUtils.convertDateTimeToString(importDate),
-                changeDate==null?"": DateTimeUtils.convertDateTimeToString(changeDate),status +"",partnerId==null?"":partnerId+"",
-                importStockTransId==null?"":importStockTransId+"",inputPrice==null?"":inputPrice+"",outputPrice==null?"":outputPrice+"",
-                exportDate==null?"": DateTimeUtils.convertDateTimeToString(exportDate),exportStockTransId==null?"":exportStockTransId+"",
-                volume==null?"":volume+"",weight==null?"":weight+"",
-                produceDate==null?"": DateTimeUtils.convertDateTimeToString(produceDate, Constants.DATETIME_FORMAT.ddMMyyyy),
-                expireDate==null?"": DateTimeUtils.convertDateTimeToString(expireDate, Constants.DATETIME_FORMAT.ddMMyyyy),
+        return new MjrStockGoodsSerialDTO(id == null ? "" : id + "", custId == null ? "" : custId + "", stockId == null ? "" : stockId + "",
+                goodsId == null ? "" : goodsId + "", goodsState, cellCode, amount == null ? "" : amount + "", serial, importDate == null ? "" : DateTimeUtils.convertDateTimeToString(importDate),
+                changeDate == null ? "" : DateTimeUtils.convertDateTimeToString(changeDate), status + "", partnerId == null ? "" : partnerId + "",
+                importStockTransId == null ? "" : importStockTransId + "", inputPrice == null ? "" : inputPrice + "", outputPrice == null ? "" : outputPrice + "",
+                exportDate == null ? "" : DateTimeUtils.convertDateTimeToString(exportDate), exportStockTransId == null ? "" : exportStockTransId + "",
+                volume == null ? "" : volume + "", weight == null ? "" : weight + "",
+                produceDate == null ? "" : DateTimeUtils.convertDateTimeToString(produceDate, Constants.DATETIME_FORMAT.ddMMyyyy),
+                expireDate == null ? "" : DateTimeUtils.convertDateTimeToString(expireDate, Constants.DATETIME_FORMAT.ddMMyyyy),
                 description
         );
     }

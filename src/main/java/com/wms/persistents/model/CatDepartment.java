@@ -3,9 +3,14 @@ package com.wms.persistents.model;
 import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
 import com.wms.dto.CatDepartmentDTO;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import org.hibernate.annotations.DynamicUpdate;
-
-import javax.persistence.*;
 
 /**
  * Created by doanlv4 on 2/17/2017.
@@ -13,7 +18,7 @@ import javax.persistence.*;
 @Entity
 @DynamicUpdate
 @Table(name = "CAT_DEPARTMENT")
-public class CatDepartment  extends BaseModel {
+public class CatDepartment extends BaseModel {
     private Long id;
     private String code;
     private String name;
@@ -22,7 +27,7 @@ public class CatDepartment  extends BaseModel {
     private String path;
     private Long parentId;
 
-    public CatDepartment(Long id,String code, String name, byte status, Long custId, String path, Long parentId) {
+    public CatDepartment(Long id, String code, String name, byte status, Long custId, String path, Long parentId) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -34,14 +39,15 @@ public class CatDepartment  extends BaseModel {
 
     public CatDepartment() {
     }
+
     @Id
     @Column(name = "ID", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_CAT_DEPARTMENT")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CAT_DEPARTMENT")
     @SequenceGenerator(
-            name="SEQ_CAT_DEPARTMENT",
-            sequenceName="SEQ_CAT_DEPARTMENT",
+            name = "SEQ_CAT_DEPARTMENT",
+            sequenceName = "SEQ_CAT_DEPARTMENT",
             allocationSize = 1,
-            initialValue= 1000
+            initialValue = 1000
     )
     public Long getId() {
         return id;
@@ -107,7 +113,7 @@ public class CatDepartment  extends BaseModel {
 
     @Override
     public BaseDTO toDTO() {
-        return new CatDepartmentDTO(id==null?"":id+"",code,name,status+"",custId+"", path, parentId+"");
+        return new CatDepartmentDTO(id == null ? "" : id + "", code, name, status + "", custId + "", path, parentId + "");
     }
 }
 

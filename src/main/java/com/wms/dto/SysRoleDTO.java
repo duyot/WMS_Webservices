@@ -2,13 +2,12 @@ package com.wms.dto;
 
 import com.wms.base.BaseDTO;
 import com.wms.persistents.model.SysRole;
-import com.wms.utils.DateTimeUtils;
 import com.wms.utils.StringUtils;
 
 /**
  * Created by duyot on 11/2/2016.
  */
-public class SysRoleDTO extends BaseDTO{
+public class SysRoleDTO extends BaseDTO {
     private String id;
     private String code;
     private String name;
@@ -19,7 +18,7 @@ public class SysRoleDTO extends BaseDTO{
     public SysRoleDTO() {
     }
 
-    public SysRoleDTO(String id, String code, String name, String status,String cusId,String type) {
+    public SysRoleDTO(String id, String code, String name, String status, String cusId, String type) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -79,7 +78,7 @@ public class SysRoleDTO extends BaseDTO{
     @Override
     public SysRole toModel() {
         try {
-            return new SysRole(!StringUtils.validString(id) ? null:Long.valueOf(id), code, name,!StringUtils.validString(status) ? null:Byte.parseByte(status),!StringUtils.validString(custId)? null: Long.valueOf(custId),!StringUtils.validString(type) ? null:Long.valueOf(type));
+            return new SysRole(!StringUtils.validString(id) ? null : Long.valueOf(id), code, name, !StringUtils.validString(status) ? null : Byte.parseByte(status), !StringUtils.validString(custId) ? null : Long.valueOf(custId), !StringUtils.validString(type) ? null : Long.valueOf(type));
         } catch (Exception e) {
             e.printStackTrace();
             return null;

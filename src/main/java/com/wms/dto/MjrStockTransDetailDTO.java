@@ -5,14 +5,11 @@ import com.wms.persistents.model.MjrStockTransDetail;
 import com.wms.utils.Constants;
 import com.wms.utils.DateTimeUtils;
 import com.wms.utils.StringUtils;
-import org.hibernate.type.StringType;
-
-import java.util.Date;
 
 /**
  * Created by duyot on 12/29/2016.
  */
-public class MjrStockTransDetailDTO  extends BaseDTO{
+public class MjrStockTransDetailDTO extends BaseDTO {
     private String id;
     private String stockTransId;
     private String goodsId;
@@ -316,19 +313,19 @@ public class MjrStockTransDetailDTO  extends BaseDTO{
 
     @Override
     public MjrStockTransDetail toModel() {
-        return new MjrStockTransDetail(!StringUtils.validString(id) ? null:Long.valueOf(id),!StringUtils.validString(stockTransId) ? null:Long.valueOf(stockTransId),
-                !StringUtils.validString(goodsId) ? null:Long.valueOf(goodsId),goodsCode,goodsState,
-                !StringUtils.validString(isSerial) ? null:Long.valueOf(isSerial),
-                !StringUtils.validString(amount) ? null:Float.valueOf(amount),serial,
-                !StringUtils.validString(inputPrice) ? null:Float.valueOf(inputPrice),
-                !StringUtils.validString(outputPrice) ? null:Float.valueOf(outputPrice),
-                cellCode,unitName,
-                !StringUtils.validString(totalMoney) ? null:Float.valueOf(totalMoney),
-                !StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId),
-                !StringUtils.validString(volume) ? null:Float.valueOf(volume),
-                !StringUtils.validString(weight) ? null:Float.valueOf(weight),
-                !StringUtils.validString(produceDate) ? null: DateTimeUtils.convertStringToDate(produceDate),
-                !StringUtils.validString(expireDate) ? null: DateTimeUtils.convertStringToDate(expireDate), description
+        return new MjrStockTransDetail(!StringUtils.validString(id) ? null : Long.valueOf(id), !StringUtils.validString(stockTransId) ? null : Long.valueOf(stockTransId),
+                !StringUtils.validString(goodsId) ? null : Long.valueOf(goodsId), goodsCode, goodsState,
+                !StringUtils.validString(isSerial) ? null : Long.valueOf(isSerial),
+                !StringUtils.validString(amount) ? null : Float.valueOf(amount), serial,
+                !StringUtils.validString(inputPrice) ? null : Float.valueOf(inputPrice),
+                !StringUtils.validString(outputPrice) ? null : Float.valueOf(outputPrice),
+                cellCode, unitName,
+                !StringUtils.validString(totalMoney) ? null : Float.valueOf(totalMoney),
+                !StringUtils.validString(partnerId) ? null : Long.valueOf(partnerId),
+                !StringUtils.validString(volume) ? null : Float.valueOf(volume),
+                !StringUtils.validString(weight) ? null : Float.valueOf(weight),
+                !StringUtils.validString(produceDate) ? null : DateTimeUtils.convertStringToDate(produceDate),
+                !StringUtils.validString(expireDate) ? null : DateTimeUtils.convertStringToDate(expireDate), description
         );
     }
 

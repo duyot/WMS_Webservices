@@ -139,7 +139,7 @@ public class MjrStockTransDTO extends BaseDTO {
     public MjrStockTransDTO() {
     }
 
-    public MjrStockTransDTO(String id, String code, String custId, String stockId, String contractNumber, String invoiceNumber, String type, String status, String createdDate, String createdUser, String transMoneyTotal, String transMoneyDiscount, String discountAmount, String transMoneyRequire, String description, String partnerId, String partnerName,String receiveId, String receiveName,String orderId, String orderCode) {
+    public MjrStockTransDTO(String id, String code, String custId, String stockId, String contractNumber, String invoiceNumber, String type, String status, String createdDate, String createdUser, String transMoneyTotal, String transMoneyDiscount, String discountAmount, String transMoneyRequire, String description, String partnerId, String partnerName, String receiveId, String receiveName, String orderId, String orderCode) {
         this.id = id;
         this.code = code;
         this.custId = custId;
@@ -302,13 +302,13 @@ public class MjrStockTransDTO extends BaseDTO {
 
     @Override
     public MjrStockTrans toModel() {
-        return new MjrStockTrans(!StringUtils.validString(id) ? null:Long.valueOf(id),code,!StringUtils.validString(custId) ? null:Long.valueOf(custId),
-                !StringUtils.validString(stockId) ? null:Long.valueOf(stockId),contractNumber, invoiceNumber,!StringUtils.validString(type) ? null:Long.valueOf(type),
-                !StringUtils.validString(status) ? 0:Byte.parseByte(status),!StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),
-                createdUser,!StringUtils.validString(transMoneyTotal) ? null:Float.valueOf(transMoneyTotal),!StringUtils.validString(transMoneyDiscount) ? null:Float.valueOf(transMoneyDiscount),
-                !StringUtils.validString(discountAmount) ? null:Float.valueOf(discountAmount),!StringUtils.validString(transMoneyRequire) ? null:Float.valueOf(transMoneyRequire),
-                description, !StringUtils.validString(partnerId) ? null:Long.valueOf(partnerId), partnerName,!StringUtils.validString(receiveId) ? null:Long.valueOf(receiveId), receiveName
-                ,!StringUtils.validString(orderId) ? null:Long.valueOf(orderId), orderCode
-                );
+        return new MjrStockTrans(!StringUtils.validString(id) ? null : Long.valueOf(id), code, !StringUtils.validString(custId) ? null : Long.valueOf(custId),
+                !StringUtils.validString(stockId) ? null : Long.valueOf(stockId), contractNumber, invoiceNumber, !StringUtils.validString(type) ? null : Long.valueOf(type),
+                !StringUtils.validString(status) ? 0 : Byte.parseByte(status), !StringUtils.validString(createdDate) ? null : DateTimeUtils.convertStringToDate(createdDate),
+                createdUser, !StringUtils.validString(transMoneyTotal) ? null : Float.valueOf(transMoneyTotal), !StringUtils.validString(transMoneyDiscount) ? null : Float.valueOf(transMoneyDiscount),
+                !StringUtils.validString(discountAmount) ? null : Float.valueOf(discountAmount), !StringUtils.validString(transMoneyRequire) ? null : Float.valueOf(transMoneyRequire),
+                description, !StringUtils.validString(partnerId) ? null : Long.valueOf(partnerId), partnerName, !StringUtils.validString(receiveId) ? null : Long.valueOf(receiveId), receiveName
+                , !StringUtils.validString(orderId) ? null : Long.valueOf(orderId), orderCode
+        );
     }
 }

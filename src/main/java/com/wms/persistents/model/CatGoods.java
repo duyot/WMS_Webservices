@@ -4,10 +4,15 @@ import com.wms.base.BaseDTO;
 import com.wms.base.BaseModel;
 import com.wms.dto.CatGoodsDTO;
 import com.wms.utils.DateTimeUtils;
-import org.hibernate.annotations.DynamicUpdate;
-
-import javax.persistence.*;
 import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import org.hibernate.annotations.DynamicUpdate;
 
 /**
  * Created by duyot on 12/9/2016.
@@ -59,12 +64,12 @@ public class CatGoods extends BaseModel {
 
     @Id
     @Column(name = "ID", unique = true, nullable = false)
-    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_CAT_GOODS")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CAT_GOODS")
     @SequenceGenerator(
-            name="SEQ_CAT_GOODS",
-            sequenceName="SEQ_CAT_GOODS",
+            name = "SEQ_CAT_GOODS",
+            sequenceName = "SEQ_CAT_GOODS",
             allocationSize = 1,
-            initialValue= 1000
+            initialValue = 1000
     )
     public Long getId() {
         return id;
@@ -220,15 +225,15 @@ public class CatGoods extends BaseModel {
 
     @Override
     public BaseDTO toDTO() {
-        return new CatGoodsDTO(id==null?"":id+"",code,name,status+"",
-                createdDate ==null?"": DateTimeUtils.convertDateTimeToString(createdDate),String.valueOf(custId),
-                unitType,goodsGroupId==null?"":goodsGroupId+"", isSerial+"",description,inPrice==null?"":inPrice+"",
-                outPrice==null?"":outPrice+"",
-                length==null?"":length+"",
-                width==null?"":width+"",
-                high ==null?"": high +"",
-                weight==null?"":weight+"",
-                volume==null?"":volume+""
-                );
+        return new CatGoodsDTO(id == null ? "" : id + "", code, name, status + "",
+                createdDate == null ? "" : DateTimeUtils.convertDateTimeToString(createdDate), String.valueOf(custId),
+                unitType, goodsGroupId == null ? "" : goodsGroupId + "", isSerial + "", description, inPrice == null ? "" : inPrice + "",
+                outPrice == null ? "" : outPrice + "",
+                length == null ? "" : length + "",
+                width == null ? "" : width + "",
+                high == null ? "" : high + "",
+                weight == null ? "" : weight + "",
+                volume == null ? "" : volume + ""
+        );
     }
 }

@@ -6,8 +6,6 @@ import com.wms.persistents.model.SysStatisticTopGoods;
 import com.wms.utils.DateTimeUtils;
 import com.wms.utils.StringUtils;
 
-import java.util.Date;
-
 /**
  * Created by duyot on 5/19/2017.
  */
@@ -71,9 +69,9 @@ public class SysStatisticTopGoodsDTO extends BaseDTO {
 
     @Override
     public BaseModel toModel() {
-        return new SysStatisticTopGoods(!StringUtils.validString(id) ? null:Long.valueOf(id),
-                !StringUtils.validString(custId) ? null:Long.valueOf(custId),statisticInfo,
-                !StringUtils.validString(createdDate) ? null: DateTimeUtils.convertStringToDate(createdDate),
+        return new SysStatisticTopGoods(!StringUtils.validString(id) ? null : Long.valueOf(id),
+                !StringUtils.validString(custId) ? null : Long.valueOf(custId), statisticInfo,
+                !StringUtils.validString(createdDate) ? null : DateTimeUtils.convertStringToDate(createdDate),
                 type);
 
     }
