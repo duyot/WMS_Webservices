@@ -19,12 +19,13 @@ public class MjrStockGoodsTotalDTO extends BaseDTO {
     private String amount;
     private String changeDate;
     private String preAmount;
-    private String stockName;
+    private String issueAmount;
     //DoanLV lay cac kho thuoc user dang login vao he thong (join qua bang map_user_stock)
+    private String stockName;
     private String userId;
     private String partnerId;
 
-    public MjrStockGoodsTotalDTO(String id, String custId, String goodsId, String goodsCode, String goodsName, String goodsState, String stockId, String amount, String changeDate, String preAmount) {
+    public MjrStockGoodsTotalDTO(String id, String custId, String goodsId, String goodsCode, String goodsName, String goodsState, String stockId, String amount, String changeDate, String preAmount, String issueAmount) {
         this.id = id;
         this.custId = custId;
         this.goodsId = goodsId;
@@ -35,6 +36,7 @@ public class MjrStockGoodsTotalDTO extends BaseDTO {
         this.amount = amount;
         this.changeDate = changeDate;
         this.preAmount = preAmount;
+        this.issueAmount = issueAmount;
     }
 
     public String getPartnerId() {
@@ -144,6 +146,14 @@ public class MjrStockGoodsTotalDTO extends BaseDTO {
         this.preAmount = preAmount;
     }
 
+    public String getIssueAmount() {
+        return issueAmount;
+    }
+
+    public void setIssueAmount(String issueAmount) {
+        this.issueAmount = issueAmount;
+    }
+
     @Override
     public MjrStockGoodsTotal toModel() {
         return new MjrStockGoodsTotal(!StringUtils.validString(id) ? null : Long.valueOf(id),
@@ -151,7 +161,8 @@ public class MjrStockGoodsTotalDTO extends BaseDTO {
                 !StringUtils.validString(goodsId) ? null : Long.valueOf(goodsId), goodsCode, goodsName, goodsState,
                 !StringUtils.validString(stockId) ? null : Long.valueOf(stockId),
                 !StringUtils.validString(amount) ? null : Double.valueOf(amount), !StringUtils.validString(changeDate) ? null : DateTimeUtils.convertStringToDate(changeDate),
-                !StringUtils.validString(preAmount) ? null : Double.valueOf(preAmount)
+                !StringUtils.validString(preAmount) ? null : Double.valueOf(preAmount),
+                !StringUtils.validString(issueAmount) ? null : Double.valueOf(issueAmount)
         );
     }
 
@@ -167,6 +178,8 @@ public class MjrStockGoodsTotalDTO extends BaseDTO {
                 ", stockId='" + stockId + '\'' +
                 ", amount='" + amount + '\'' +
                 ", changeDate='" + changeDate + '\'' +
+                ", preAmount='" + preAmount + '\'' +
+                ", issueAmount='" + issueAmount + '\'' +
                 '}';
     }
 }

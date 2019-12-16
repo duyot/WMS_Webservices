@@ -9,10 +9,10 @@ spring:
   profiles: wms_service_note0
 eureka:
   instance:
-     appname: WMS_SERVICE
-     hostname: 207.148.121.185
-     leaseRenewalIntervalInSeconds: 1
-     leaseExpirationDurationInSeconds: 5
+    appname: WMS_SERVICE
+    hostname: 207.148.121.185
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 5
   client:
     enabled: false
     fetchRegistry: true

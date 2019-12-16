@@ -2,12 +2,7 @@ package com.wms.persistents.model;
 
 import com.wms.base.BaseModel;
 import com.wms.dto.MapUserPartnerDTO;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by duyot on 11/1/2016.

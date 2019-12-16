@@ -4,13 +4,7 @@ import com.wms.base.BaseModel;
 import com.wms.dto.MjrStockGoodsTotalDTO;
 import com.wms.utils.DateTimeUtils;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by duyot on 12/19/2016.
@@ -28,8 +22,9 @@ public class MjrStockGoodsTotal extends BaseModel {
     private Double amount;
     private Date changeDate;
     private Double preAmount;
+    private Double iSsueAmount;
 
-    public MjrStockGoodsTotal(Long id, Long custId, Long goodsId, String goodsCode, String goodsName, String goodsState, Long stockId, Double amount, Date changeDate, Double preAmount) {
+    public MjrStockGoodsTotal(Long id, Long custId, Long goodsId, String goodsCode, String goodsName, String goodsState, Long stockId, Double amount, Date changeDate, Double preAmount, Double issueAmount) {
         this.id = id;
         this.custId = custId;
         this.goodsId = goodsId;
@@ -40,6 +35,7 @@ public class MjrStockGoodsTotal extends BaseModel {
         this.amount = amount;
         this.changeDate = changeDate;
         this.preAmount = preAmount;
+        this.iSsueAmount = issueAmount;
     }
 
     public MjrStockGoodsTotal() {
@@ -143,11 +139,21 @@ public class MjrStockGoodsTotal extends BaseModel {
         this.preAmount = preAmount;
     }
 
+    @Column(name = "ISSUE_AMOUNT")
+    public Double getiSsueAmount() {
+        return iSsueAmount;
+    }
+
+    public void setiSsueAmount(Double iSsueAmount) {
+        this.iSsueAmount = iSsueAmount;
+    }
+
     @Override
     public MjrStockGoodsTotalDTO toDTO() {
         return new MjrStockGoodsTotalDTO(id == null ? "" : id + "", custId == null ? "" : custId + "", goodsId == null ? "" : goodsId + "",
                 goodsCode, goodsName, goodsState, stockId == null ? "" : stockId + "", amount == null ? "" : amount + "", changeDate == null ? "" : DateTimeUtils.convertDateTimeToString(changeDate),
-                preAmount == null ? "" : preAmount + ""
+                preAmount == null ? "" : preAmount + "",
+                iSsueAmount == null ? "" : iSsueAmount + ""
         );
     }
 
@@ -164,6 +170,8 @@ public class MjrStockGoodsTotal extends BaseModel {
                 ", stockId=" + stockId +
                 ", amount=" + amount +
                 ", changeDate=" + changeDate +
+                ", preAmount=" + preAmount +
+                ", issueAmount=" + iSsueAmount +
                 '}';
     }
 }

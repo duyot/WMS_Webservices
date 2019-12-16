@@ -1,32 +1,26 @@
 package com.wms.business.impl;
 
+import com.google.common.collect.Lists;
 import com.wms.base.BaseBusinessImpl;
 import com.wms.base.BaseBusinessInterface;
 import com.wms.business.interfaces.MjrOrderBusinessInterface;
 import com.wms.business.interfaces.StockFunctionInterface;
-import com.wms.dto.CatStockDTO;
-import com.wms.dto.MjrOrderDTO;
-import com.wms.dto.MjrOrderDetailDTO;
-import com.wms.dto.MjrStockGoodsDTO;
-import com.wms.dto.MjrStockGoodsSerialDTO;
-import com.wms.dto.RealExportExcelDTO;
-import com.wms.dto.ResponseObject;
+import com.wms.dto.*;
 import com.wms.enums.Responses;
 import com.wms.persistents.dao.MjrOrderDAO;
-import com.wms.persistents.dao.MjrOrderDetailDAO;
 import com.wms.persistents.dao.MjrStockGoodsDAO;
 import com.wms.persistents.dao.MjrStockGoodsSerialDAO;
 import com.wms.persistents.model.MjrOrder;
-import com.wms.persistents.model.MjrOrderDetail;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import javax.annotation.PostConstruct;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,25 +29,25 @@ import org.springframework.stereotype.Service;
  */
 @Service("mjrOrderBusiness")
 public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrderDAO> implements MjrOrderBusinessInterface {
+    private final String[] TOTAL_UPDATE_PROPERTIES = {"iSsueAmount"};
     @Autowired
     MjrOrderDAO mjrOrderDAO;
-
     @Autowired
     MjrStockGoodsDAO mjrStockGoodsDAO;
-
     @Autowired
     MjrStockGoodsSerialDAO mjrStockGoodsSerialDAO;
     @Autowired
-    MjrOrderDetailDAO mjrOrderDetailDAO;
-
+    BaseBusinessInterface mjrOrderDetailBusiness;
     @Autowired
     SessionFactory sessionFactory;
-
     @Autowired
     StockFunctionInterface stockFunctionBusiness;
-
     @Autowired
     BaseBusinessInterface catStockBusiness;
+    @Autowired
+    BaseBusinessInterface mjrStockGoodsTotalBusiness;
+
+    private Logger log = LoggerFactory.getLogger(MjrOrderBusinessImpl.class);
 
     @PostConstruct
     public void setupService() {
@@ -63,48 +57,7 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
         this.tDTO = new MjrOrderDTO();
     }
 
-    @Override
-    public ResponseObject orderExport(MjrOrderDTO mjrOrder, List<MjrOrderDetailDTO> lstMjrOrderDetails) {
-        ResponseObject responseObject = new ResponseObject();
-        responseObject.setStatusName(Responses.SUCCESS.getName());
-        Session session = sessionFactory.openSession();
-        Transaction transaction = session.getTransaction();
-        transaction.begin();
-        List<MjrOrderDetail> mjrOrderDetails = new ArrayList<>();
-        try {
-            String id = null;
-            if (!DataUtil.isNullOrEmpty(mjrOrder.getId())) {
-                id = mjrOrder.getId();
-                mjrOrderDAO.updateBySession(mjrOrder.toModel(), session);
-                List<MjrOrderDetail> mjrOrderDetails1 = mjrOrderDetailDAO.findByProperty("orderId", Long.parseLong(mjrOrder.getId()));
-                for (MjrOrderDetail mjrOrderDetail : mjrOrderDetails1) {
-                    mjrOrderDetailDAO.deleteByObjectSession(mjrOrderDetail, session);
-                }
-            } else {
-                String createdDatePartition = getSysDate("ddMMyyyy");
-                mjrOrder.setCode(initTransCode(mjrOrder, createdDatePartition, session, null));
-                id = mjrOrderDAO.saveBySession(mjrOrder.toModel(), session);
-            }
-
-
-            for (MjrOrderDetailDTO mjrOrderDetailDTO : lstMjrOrderDetails) {
-                MjrOrderDetail mjrOrderDetail = mjrOrderDetailDTO.toModel();
-                mjrOrderDetail.setOrderId(Long.parseLong(id));
-                mjrOrderDetails.add(mjrOrderDetail);
-            }
-
-            mjrOrderDetailDAO.saveBySession(mjrOrderDetails, session);
-            transaction.commit();
-        } catch (Exception e) {
-            e.printStackTrace();
-            transaction.rollback();
-            responseObject.setStatusName(Responses.ERROR.getName());
-        } finally {
-            session.close();
-        }
-        return responseObject;
-    }
-
+    //------------------------------------------------------------------------------------------------------------------
     @Override
     public ResponseObject deleteOrder(Long orderId) {
         ResponseObject responseObject = new ResponseObject();
@@ -113,22 +66,159 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
         Transaction transaction = session.getTransaction();
         transaction.begin();
         try {
-            mjrOrderDAO.deleteByIdSession(orderId, session);
-            List<MjrOrderDetail> mjrOrderDetails1 = mjrOrderDetailDAO.findByProperty("orderId", orderId);
-            for (MjrOrderDetail mjrOrderDetail : mjrOrderDetails1) {
-                mjrOrderDetailDAO.deleteByObjectSession(mjrOrderDetail, session);
+            deleteByIdSession(orderId, session);
+            List<MjrOrderDetailDTO> orderDetails = mjrOrderDetailBusiness.findByProperty("orderId", orderId);
+            for (MjrOrderDetailDTO mjrOrderDetail : orderDetails) {
+                mjrOrderDetailBusiness.deleteByObjectSession(mjrOrderDetail, session);
             }
+            MjrOrderDTO order = findById(orderId);
+            updateGoodsTotal(order, orderDetails, true, session);
             transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
             transaction.rollback();
             responseObject.setStatusName(Responses.ERROR.getName());
             responseObject.setKey("FAIL");
+            log.error(e.toString());
         } finally {
             session.close();
         }
         return responseObject;
     }
+
+    @Override
+    public ResponseObject orderExport(MjrOrderDTO mjrOrder, List<MjrOrderDetailDTO> lstMjrOrderDetails) {
+        ResponseObject responseObject = new ResponseObject();
+        responseObject.setStatusName(Responses.SUCCESS.getName());
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.getTransaction();
+        transaction.begin();
+        List<MjrOrderDetailDTO> mjrOrderDetails = new ArrayList<>();
+        try {
+            String id;
+            if (!DataUtil.isNullOrEmpty(mjrOrder.getId())) {
+                id = mjrOrder.getId();
+                updateBySession(mjrOrder, session);
+                List<MjrOrderDetailDTO> orderDetails = mjrOrderDetailBusiness.findByProperty("orderId", mjrOrder.getId());
+                for (MjrOrderDetailDTO mjrOrderDetail : orderDetails) {
+                    mjrOrderDetailBusiness.deleteByObjectSession(mjrOrderDetail, session);
+                }
+            } else {
+                String createdDatePartition = getSysDate("ddMMyyyy");
+                mjrOrder.setCode(initTransCode(mjrOrder, createdDatePartition, session, null));
+                id = saveBySession(mjrOrder, session);
+            }
+
+
+            for (MjrOrderDetailDTO mjrOrderDetailDTO : lstMjrOrderDetails) {
+                MjrOrderDetailDTO mjrOrderDetail = mjrOrderDetailDTO;
+                mjrOrderDetail.setOrderId(id);
+                mjrOrderDetails.add(mjrOrderDetail);
+            }
+
+            mjrOrderDetailBusiness.saveBySession(mjrOrderDetails, session);
+
+            updateGoodsTotal(mjrOrder, mjrOrderDetails, false, session);
+
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            transaction.rollback();
+            responseObject.setStatusName(Responses.ERROR.getName());
+            log.error(e.toString());
+        } finally {
+            session.close();
+        }
+        return responseObject;
+    }
+
+    @Override
+    public List<RealExportExcelDTO> orderExportData(Long mjrOrderId) {
+        List<RealExportExcelDTO> realExportExcelDTOS = new ArrayList<>();
+        MjrOrderDTO mjrOrder = findById(mjrOrderId);
+        List<MjrOrderDetailDTO> mjrOrderDetail = mjrOrderDetailBusiness.findByProperty("orderId", mjrOrderId);
+        for (MjrOrderDetailDTO detail : mjrOrderDetail) {
+            if (detail.getIsSerial() != null && Constants.IS_SERIAL.equalsIgnoreCase(detail.getIsSerial())) {
+                List<MjrStockGoodsSerialDTO> mjrStockGoodsSerials = mjrStockGoodsSerialDAO.exportOrderStockGoodsSerial(mjrOrder, detail);
+                realExportExcelDTOS.addAll(convertStockGoodsSerialToExcelData(mjrStockGoodsSerials, detail));
+            } else {
+                List<MjrStockGoodsDTO> mjrStockGoods = mjrStockGoodsDAO.exportOrderStockGoods(mjrOrder, detail);
+                realExportExcelDTOS.addAll(convertStockGoodsToExcelData(mjrStockGoods, detail));
+            }
+        }
+        return realExportExcelDTOS;
+    }
+
+    @Override
+    public List<MjrOrderDetailDTO> getListOrderDetail(Long orderId) {
+        return mjrOrderDetailBusiness.findByProperty("orderId", orderId);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    private void updateGoodsTotal(MjrOrderDTO mjrOrder, List<MjrOrderDetailDTO> mjrOrderDetails, boolean isAdd, Session session) {
+        Map<String, Float> mapGoodsAmount = initMapGoodsAmount(mjrOrderDetails);
+        if (mapGoodsAmount != null && mapGoodsAmount.size() > 0) {
+            //
+            Iterator iterator = mapGoodsAmount.entrySet().iterator();
+            String goodsInfo;
+            Float amount;
+            String updateResult;
+            while (iterator.hasNext()) {
+                Map.Entry pair = (Map.Entry) iterator.next();
+                //
+                goodsInfo = (String) pair.getKey();
+                amount = (Float) pair.getValue();
+                String[] goodsInfoArr = goodsInfo.split(",");
+                String goodsId = goodsInfoArr[0];
+                String goodsState = goodsInfoArr[1];
+                //
+                MjrStockGoodsTotalDTO goodsTotal = findGoodsTotal(mjrOrder.getCustId(), mjrOrder.getStockId(), goodsId, goodsState);
+                if (goodsTotal != null) {
+                    //update amount issue
+                    updateTotalDetails(goodsTotal, amount, isAdd);
+                    updateResult = mjrStockGoodsTotalBusiness.updateByPropertiesBySession(goodsTotal, Long.parseLong(goodsTotal.getId()), TOTAL_UPDATE_PROPERTIES, session);
+                    log.info("Update amount issue " + updateResult + " : " + mjrOrder.getCustId() + " - " + mjrOrder.getStockId() + " - " + goodsId + " - " + goodsState);
+                }
+            }
+        }
+    }
+
+    private void updateTotalDetails(MjrStockGoodsTotalDTO goodsTotal, Float amount, boolean isAddAmount) {
+        Float totalCurrentAmount = Float.valueOf(goodsTotal.getIssueAmount());
+        if (isAddAmount) {
+            totalCurrentAmount += amount;
+        } else {
+            totalCurrentAmount -= amount;
+        }
+        goodsTotal.setIssueAmount(String.valueOf(totalCurrentAmount));
+    }
+
+    private Map<String, Float> initMapGoodsAmount(List<MjrOrderDetailDTO> mjrOrderDetails) {
+        Map<String, Float> mapGoodsAmount = new HashMap<>();
+        for (MjrOrderDetailDTO i : mjrOrderDetails) {
+            String key = i.getGoodsId() + "," + i.getGoodsState();
+            if (mapGoodsAmount.containsKey(key)) {
+                mapGoodsAmount.put(key, mapGoodsAmount.get(key) + Float.valueOf(i.getAmount()));
+            } else {
+                mapGoodsAmount.put(key, Float.valueOf(i.getAmount()));
+            }
+        }
+        return mapGoodsAmount;
+    }
+
+    private MjrStockGoodsTotalDTO findGoodsTotal(String custId, String stockId, String goodsId, String goodsState) {
+        List<Condition> lstCon = Lists.newArrayList();
+        lstCon.add(new Condition("custId", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, custId));
+        lstCon.add(new Condition("stockId", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, stockId));
+        lstCon.add(new Condition("goodsId", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, goodsId));
+        lstCon.add(new Condition("goodsState", Constants.SQL_OPERATOR.EQUAL, goodsState));
+        List<MjrStockGoodsTotalDTO> goodsTotals = mjrStockGoodsTotalBusiness.findByCondition(lstCon);
+        if (!DataUtil.isListNullOrEmpty(goodsTotals)) {
+            return goodsTotals.get(0);
+        }
+        return null;
+    }
+
 
     //
     private String initTransCode(MjrOrderDTO mjrOrderDTO, String createdTime, Session session, Connection con) {
@@ -155,34 +245,8 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
         return stringBuilder.toString();
     }
 
-    @Override
-    public List<RealExportExcelDTO> orderExportData(Long mjrOrderId) {
-        List<RealExportExcelDTO> realExportExcelDTOS = new ArrayList<>();
-        MjrOrder mjrOrder = mjrOrderDAO.findById(mjrOrderId);
-        List<MjrOrderDetail> mjrOrderDetail = mjrOrderDetailDAO.findByProperty("orderId", mjrOrderId);
-        for (MjrOrderDetail detail : mjrOrderDetail) {
-            if (detail.isSerial()) {
-                List<MjrStockGoodsSerialDTO> mjrStockGoodsSerials = mjrStockGoodsSerialDAO.exportOrderStockGoodsSerial(mjrOrder.toDTO(), detail.toDTO());
-                realExportExcelDTOS.addAll(convertStockGoodsSerialToExcelData(mjrStockGoodsSerials, detail));
-            } else {
-                List<MjrStockGoodsDTO> mjrStockGoods = mjrStockGoodsDAO.exportOrderStockGoods(mjrOrder.toDTO(), detail.toDTO());
-                realExportExcelDTOS.addAll(convertStockGoodsToExcelData(mjrStockGoods, detail));
-            }
-        }
-        return realExportExcelDTOS;
-    }
 
-    @Override
-    public List<MjrOrderDetailDTO> getListOrderDetail(Long orderId) {
-        List<MjrOrderDetail> lstData = mjrOrderDetailDAO.findByProperty("orderId", orderId);
-        List<MjrOrderDetailDTO> data = new ArrayList<>();
-        lstData.forEach(e -> {
-            data.add(e.toDTO());
-        });
-        return data;
-    }
-
-    public List<RealExportExcelDTO> convertStockGoodsToExcelData(List<MjrStockGoodsDTO> mjrStockGoods, MjrOrderDetail mjrOrderDetail) {
+    public List<RealExportExcelDTO> convertStockGoodsToExcelData(List<MjrStockGoodsDTO> mjrStockGoods, MjrOrderDetailDTO mjrOrderDetail) {
         List<RealExportExcelDTO> realExportExcelDTOS = new ArrayList<>();
         for (MjrStockGoodsDTO mjrStockGoods1 : mjrStockGoods) {
             RealExportExcelDTO realExportExcelDTO = new RealExportExcelDTO();
@@ -201,7 +265,7 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
         return realExportExcelDTOS;
     }
 
-    public List<RealExportExcelDTO> convertStockGoodsSerialToExcelData(List<MjrStockGoodsSerialDTO> mjrStockGoodsSerials, MjrOrderDetail mjrOrderDetail) {
+    public List<RealExportExcelDTO> convertStockGoodsSerialToExcelData(List<MjrStockGoodsSerialDTO> mjrStockGoodsSerials, MjrOrderDetailDTO mjrOrderDetail) {
         List<RealExportExcelDTO> realExportExcelDTOS = new ArrayList<>();
         for (MjrStockGoodsSerialDTO mjrStockGoodsSerial : mjrStockGoodsSerials) {
             RealExportExcelDTO realExportExcelDTO = new RealExportExcelDTO();

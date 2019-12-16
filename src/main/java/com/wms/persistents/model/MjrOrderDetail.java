@@ -2,14 +2,7 @@ package com.wms.persistents.model;
 
 import com.wms.base.BaseModel;
 import com.wms.dto.MjrOrderDetailDTO;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 /**
  * Created by truongbx
@@ -200,6 +193,6 @@ public class MjrOrderDetail extends BaseModel {
 
     @Transient
     public boolean isSerial() {
-		return isSerial != null && isSerial != 0;
-	}
+        return isSerial != null && isSerial != 0;
+    }
 }

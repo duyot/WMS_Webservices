@@ -70,8 +70,8 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal, Long>
         StringBuilder sqlInsert = new StringBuilder();
         PreparedStatement prstmtInsertTotal = null;
         sqlInsert.append(" Insert into MJR_STOCK_GOODS_TOTAL ");
-        sqlInsert.append(" (ID,CUST_ID,GOODS_ID,GOODS_CODE,GOODS_NAME,GOODS_STATE,STOCK_ID,AMOUNT,CHANGED_DATE,PRE_AMOUNT) ");
-        sqlInsert.append(" Values(SEQ_MJR_STOCK_GOODS_TOTAL.nextval,?,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),?)");
+        sqlInsert.append(" (ID,CUST_ID,GOODS_ID,GOODS_CODE,GOODS_NAME,GOODS_STATE,STOCK_ID,AMOUNT,CHANGED_DATE,PRE_AMOUNT, ISSUE_AMOUNT) ");
+        sqlInsert.append(" Values(SEQ_MJR_STOCK_GOODS_TOTAL.nextval,?,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),?,?)");
         List<String> lstParams = initSaveTotalParams(stockGoodsTotal);
         try {
             prstmtInsertTotal = connection.prepareStatement(sqlInsert.toString());
@@ -80,7 +80,7 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal, Long>
             }
             prstmtInsertTotal.execute();
         } catch (SQLException e) {
-            log.info(e.toString());
+            log.error(e.toString());
             e.printStackTrace();
             return Responses.ERROR.getName();
         } finally {
@@ -227,11 +227,12 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal, Long>
         params.add(stockGoodsTotal.getAmount());
         params.add(stockGoodsTotal.getChangeDate());
         params.add(stockGoodsTotal.getAmount());
+        params.add(stockGoodsTotal.getAmount());
 
         return params;
     }
 
-    public ResponseObject updateExportTotal(MjrStockGoodsTotalDTO stockGoodsTotal, Session session) {
+    public ResponseObject updateExportTotal(MjrStockGoodsTotalDTO stockGoodsTotal, boolean isNeedUpdateIssueAmount, Session session) {
         //
         ResponseObject responseObject = new ResponseObject();
         responseObject.setStatusCode(Responses.ERROR.getName());
@@ -269,6 +270,9 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal, Long>
         currentTotal.setPreAmount(currentTotal.getAmount());
         currentTotal.setAmount(currentTotal.getAmount() - changeAmount);
         currentTotal.setChangeDate(DateTimeUtils.convertStringToDate(stockGoodsTotal.getChangeDate()));
+        if (isNeedUpdateIssueAmount) {
+            currentTotal.setiSsueAmount(currentTotal.getiSsueAmount() - changeAmount);
+        }
         //
         String updateTotalResult = updateBySession(currentTotal, session);
         if (!Responses.SUCCESS.getName().equalsIgnoreCase(updateTotalResult)) {
@@ -289,8 +293,9 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal, Long>
 
         StringBuilder sqlUpdateTotal = new StringBuilder();
         sqlUpdateTotal.append(" UPDATE  mjr_stock_goods_total a ");
-        sqlUpdateTotal.append(" SET  a.pre_amount      = a.amount, ");
-        sqlUpdateTotal.append("      a.amount      = a.amount + ?, ");
+        sqlUpdateTotal.append(" SET  a.pre_amount     = a.amount, ");
+        sqlUpdateTotal.append("      a.amount         = a.amount + ?, ");
+        sqlUpdateTotal.append("      a.issue_amount   = nvl(a.amount, 0) + ?, ");
         sqlUpdateTotal.append("      a.changed_date = to_date(?,'dd/MM/yyyy hh24:mi:ss') ");
         sqlUpdateTotal.append(" WHERE a.cust_id = ? ");
         sqlUpdateTotal.append("   AND a.stock_id = ? ");
@@ -300,11 +305,12 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal, Long>
         try {
             ps = connection.prepareStatement(sqlUpdateTotal.toString());
             ps.setString(1, stockGoodsTotal.getAmount() + "");
-            ps.setString(2, stockGoodsTotal.getChangeDate());
-            ps.setString(3, stockGoodsTotal.getCustId());
-            ps.setString(4, stockGoodsTotal.getStockId());
-            ps.setString(5, stockGoodsTotal.getGoodsId());
-            ps.setString(6, stockGoodsTotal.getGoodsState());
+            ps.setString(2, stockGoodsTotal.getAmount() + "");
+            ps.setString(3, stockGoodsTotal.getChangeDate());
+            ps.setString(4, stockGoodsTotal.getCustId());
+            ps.setString(5, stockGoodsTotal.getStockId());
+            ps.setString(6, stockGoodsTotal.getGoodsId());
+            ps.setString(7, stockGoodsTotal.getGoodsState());
             int updateCount = ps.executeUpdate();
             if (updateCount == 0) {
                 log.info("Found no row to update, create new one.");

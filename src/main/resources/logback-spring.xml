@@ -48,7 +48,7 @@
     </appender>
 
     <root level="INFO">
-        <appender-ref ref="STDOUT" />
+        <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILEBYTIME"/>
         <appender-ref ref="ERROR"/>
     </root>

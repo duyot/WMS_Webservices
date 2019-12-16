@@ -8,11 +8,11 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-  <head>
+<head>
     <title>WMS Rest Service</title>
-  </head>
-  <body>
-  <h3>Rest Webservices</h3>
+</head>
+<body>
+<h3>Rest Webservices</h3>
 <img src="<c:url value='/images/running.gif'/>"/>
 </body>
 </html>

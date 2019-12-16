@@ -48,6 +48,15 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
         return tdao.deleteByCondition(StringUtils.convertCondition(lstCondition));
     }
 
+    @Override
+    public String deleteByIdSession(long id, Session session) {
+        return tdao.deleteByIdSession(id, session);
+    }
+
+    public String deleteByObjectSession(T obj, Session session) {
+        return tdao.deleteByObjectSession(obj.toModel(), session);
+    }
+
     //------------------------------------------------------------------------------------------------------------------
     @Override
     public String saveOrUpdate(T obj) {
@@ -69,15 +78,27 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
         return tdao.save(listDTOToModel(lstObj));
     }
 
+    public String saveBySession(List<T> objs, Session session) {
+        return tdao.saveBySession(listDTOToModel(objs), session);
+    }
+
     //------------------------------------------------------------------------------------------------------------------
     @Override
     public String update(T obj) {
         return tdao.update(obj.toModel());
     }
 
-    @Transactional
     public String updateByProperties(T sourceObject, Long id, String[] copiedProperties) {
         return tdao.updateByProperties(sourceObject.toModel(), id, copiedProperties);
+    }
+
+    @Override
+    public String updateByPropertiesBySession(T sourceObject, Long id, String[] copiedProperties, Session session) {
+        return tdao.updateByPropertiesBySession(sourceObject.toModel(), id, copiedProperties, session);
+    }
+
+    public String updateBySession(T obj, Session session) {
+        return tdao.updateBySession(obj.toModel(), session);
     }
 
     //--------------------------------------------------------------------
@@ -107,7 +128,7 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
     }
 
     @Override
-    public List<T> findByProperty(String property, String value) {
+    public List<T> findByProperty(String property, Object value) {
         return listModelToDTO(tdao.findByProperty(property, value));
     }
 

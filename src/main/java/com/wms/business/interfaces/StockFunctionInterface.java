@@ -1,10 +1,6 @@
 package com.wms.business.interfaces;
 
-import com.wms.dto.CatGoodsDTO;
-import com.wms.dto.ChartDTO;
-import com.wms.dto.MjrStockTransDTO;
-import com.wms.dto.MjrStockTransDetailDTO;
-import com.wms.dto.ResponseObject;
+import com.wms.dto.*;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;

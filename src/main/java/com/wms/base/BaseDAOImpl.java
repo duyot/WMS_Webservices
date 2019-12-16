@@ -12,11 +12,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
@@ -101,24 +97,13 @@ public class BaseDAOImpl<T extends BaseModel, ID extends Serializable> implement
         if (object == null) {
             return Responses.NOT_FOUND.getName();
         }
-        return deleteByObject(object);
+        return deleteByObjectSession(object, session);
     }
 
     @Transactional
     public String deleteByObject(T obj) {
         try {
             getSession().delete(obj);
-            return Responses.SUCCESS.getName();
-        } catch (Exception e) {
-            log.info(e.toString());
-            return Responses.ERROR.getName();
-        }
-    }
-
-    @Transactional
-    public String deleteByObject(T obj, Session session) {
-        try {
-            session.delete(obj);
             return Responses.SUCCESS.getName();
         } catch (Exception e) {
             log.info(e.toString());
@@ -151,6 +136,18 @@ public class BaseDAOImpl<T extends BaseModel, ID extends Serializable> implement
     public String updateBySession(T obj, Session session) {
         try {
             session.update(obj);
+            return Responses.SUCCESS.getName();
+        } catch (Exception e) {
+            log.info(e.toString());
+            return Responses.ERROR.getName();
+        }
+    }
+
+    public String updateByPropertiesBySession(T sourceObject, Long id, String[] copiedProperties, Session session) {
+        try {
+            T targetObject = session.get(modelClass, id);
+            AccessorUtil.copyClass(sourceObject, targetObject, copiedProperties);
+            session.update(targetObject);
             return Responses.SUCCESS.getName();
         } catch (Exception e) {
             log.info(e.toString());

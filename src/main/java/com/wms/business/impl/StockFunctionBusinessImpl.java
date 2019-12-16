@@ -1,11 +1,7 @@
 package com.wms.business.impl;
 
 import com.wms.business.interfaces.StockFunctionInterface;
-import com.wms.dto.CatGoodsDTO;
-import com.wms.dto.ChartDTO;
-import com.wms.dto.MjrStockTransDTO;
-import com.wms.dto.MjrStockTransDetailDTO;
-import com.wms.dto.ResponseObject;
+import com.wms.dto.*;
 import com.wms.persistents.dao.StockFunctionDAO;
 import java.sql.Connection;
 import java.util.List;

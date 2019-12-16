@@ -5,21 +5,13 @@ import com.wms.base.BaseBusinessInterface;
 import com.wms.base.BaseServices;
 import com.wms.business.interfaces.MjrStockGoodsTotalBusinessInterface;
 import com.wms.business.interfaces.StockGoodsInforBusinessInterface;
-import com.wms.dto.Condition;
-import com.wms.dto.MjrStockGoodsDTO;
-import com.wms.dto.MjrStockGoodsSerialDTO;
-import com.wms.dto.MjrStockGoodsTotalDTO;
-import com.wms.dto.MjrStockTransDetailDTO;
+import com.wms.dto.*;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by duyot on 3/24/2017.

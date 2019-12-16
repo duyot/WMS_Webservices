@@ -3,12 +3,7 @@ package com.wms.persistents.dao;
 import com.google.common.collect.Lists;
 import com.wms.base.BaseDAOImpl;
 import com.wms.business.impl.StockManagementBusinessImpl;
-import com.wms.dto.CatGoodsDTO;
-import com.wms.dto.ChartDTO;
-import com.wms.dto.MjrStockGoodsTotalDTO;
-import com.wms.dto.MjrStockTransDTO;
-import com.wms.dto.MjrStockTransDetailDTO;
-import com.wms.dto.ResponseObject;
+import com.wms.dto.*;
 import com.wms.enums.Responses;
 import com.wms.persistents.model.SysMenu;
 import com.wms.utils.Constants;
@@ -20,11 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
@@ -645,12 +636,16 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
             total.setAmount(amount + "");
             total.setGoodsId(goodsId);
             total.setGoodsState(goodsState);
-            updateTotalResult = mjrStockGoodsTotalDAO.updateExportTotal(total, session);
+            updateTotalResult = mjrStockGoodsTotalDAO.updateExportTotal(total, isNeedUpdateIssueAmount(mjrStockTransDTO) , session);
             if (!Responses.SUCCESS.getName().equalsIgnoreCase(updateTotalResult.getStatusCode())) {
                 return updateTotalResult;
             }
         }
         return new ResponseObject(Responses.SUCCESS.getName(), Responses.SUCCESS.getName());
+    }
+
+    private boolean isNeedUpdateIssueAmount(MjrStockTransDTO mjrStockTransDTO){
+        return DataUtil.isStringNullOrEmpty(mjrStockTransDTO.getOrderId());
     }
 
     public String saveStockTransByConnection(MjrStockTransDTO mjrStockTransDTO, Connection connection) {
@@ -678,6 +673,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
             stockGoodsTotal.setGoodsName(goods.getName());
             stockGoodsTotal.setGoodsState(goodsState);
             stockGoodsTotal.setAmount(amount + "");
+            stockGoodsTotal.setIssueAmount(amount + "");
             stockGoodsTotal.setChangeDate(mjrStockTransDTO.getCreatedDate());
 
             updateResult = mjrStockGoodsTotalDAO.updateImportTotal(stockGoodsTotal, connection);

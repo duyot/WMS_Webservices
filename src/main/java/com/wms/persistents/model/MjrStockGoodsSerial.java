@@ -5,13 +5,7 @@ import com.wms.dto.MjrStockGoodsSerialDTO;
 import com.wms.utils.Constants;
 import com.wms.utils.DateTimeUtils;
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by duyot on 1/3/2017.
