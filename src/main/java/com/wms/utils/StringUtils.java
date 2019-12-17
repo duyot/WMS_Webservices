@@ -1,7 +1,4 @@
-/*
- * Copyright (C) 2012 Viettel Telecom. All rights reserved.
- * VIETTEL PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
+
 package com.wms.utils;
 
 import com.wms.dto.Condition;
