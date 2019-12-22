@@ -3,6 +3,7 @@ package com.wms.base;
 import com.wms.dto.Condition;
 import java.util.List;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 
 /**
  * Created by duyot on 8/29/2016.
@@ -48,6 +49,7 @@ public interface BaseBusinessInterface<T extends BaseDTO> {
 
     //------------------------------------------------------------------------------------------------------------------
     List<T> findByProperty(String property, Object value);
+    List<T> findByProperty(String property, Object value, Order order);
 
     List<T> findByCondition(List<Condition> lstCondition);
 

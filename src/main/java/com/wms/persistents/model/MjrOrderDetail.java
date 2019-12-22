@@ -24,11 +24,12 @@ public class MjrOrderDetail extends BaseModel {
     private Float volume;
     private Float weight;
     private String description;
+    private Long goodsOrder;
 
     public MjrOrderDetail() {
     }
 
-    public MjrOrderDetail(Long id, Long orderId, Long goodsId, String goodsCode, String goodsState, Long isSerial, Float amount, String serial, String unitName, Long partnerId, Float totalMoney, Float volume, Float weight, String description) {
+    public MjrOrderDetail(Long id, Long orderId, Long goodsId, String goodsCode, String goodsState, Long isSerial, Float amount, String serial, String unitName, Long partnerId, Float totalMoney, Float volume, Float weight, String description,Long goodsOrder) {
         this.id = id;
         this.orderId = orderId;
         this.goodsId = goodsId;
@@ -43,6 +44,7 @@ public class MjrOrderDetail extends BaseModel {
         this.volume = volume;
         this.weight = weight;
         this.description = description;
+        this.goodsOrder = goodsOrder;
     }
 
     @Id
@@ -181,13 +183,22 @@ public class MjrOrderDetail extends BaseModel {
         this.description = description;
     }
 
+    @Column(name = "GOODS_ORDER")
+    public Long getGoodsOrder() {
+        return goodsOrder;
+    }
+
+    public void setGoodsOrder(Long goodsOrder) {
+        this.goodsOrder = goodsOrder;
+    }
+
     @Override
     public MjrOrderDetailDTO toDTO() {
         return new MjrOrderDetailDTO(id == null ? "" : id + "", orderId == null ? "" : orderId + "", goodsId == null ? "" : goodsId + "",
                 goodsCode, goodsState, isSerial == null ? "" : isSerial + "", amount == null ? "" : amount + "", serial,
                 unitName, partnerId == null ? "" : partnerId + "", totalMoney == null ? "" : totalMoney + "",
                 volume == null ? "" : volume + "", weight == null ? "" : weight + "",
-                description
+                description,goodsOrder ==null ? "":goodsOrder +""
         );
     }
 

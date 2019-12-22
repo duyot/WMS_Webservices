@@ -22,11 +22,12 @@ public class MjrOrderDetailDTO extends BaseDTO {
     private String volume;
     private String weight;
     private String description;
+    private String goodsOrder;
 
     public MjrOrderDetailDTO() {
     }
 
-    public MjrOrderDetailDTO(String id, String orderId, String goodsId, String goodsCode, String goodsState, String isSerial, String amount, String serial, String unitName, String partnerId, String totalMoney, String volume, String weight, String description) {
+    public MjrOrderDetailDTO(String id, String orderId, String goodsId, String goodsCode, String goodsState, String isSerial, String amount, String serial, String unitName, String partnerId, String totalMoney, String volume, String weight, String description,String goodsOrder) {
         this.id = id;
         this.orderId = orderId;
         this.goodsId = goodsId;
@@ -41,6 +42,7 @@ public class MjrOrderDetailDTO extends BaseDTO {
         this.volume = volume;
         this.weight = weight;
         this.description = description;
+        this.goodsOrder = goodsOrder;
     }
 
     public String getId() {
@@ -155,6 +157,14 @@ public class MjrOrderDetailDTO extends BaseDTO {
         this.description = description;
     }
 
+    public String getGoodsOrder() {
+        return goodsOrder;
+    }
+
+    public void setGoodsOrder(String goodsOrder) {
+        this.goodsOrder = goodsOrder;
+    }
+
     @Override
     public MjrOrderDetail toModel() {
         return new MjrOrderDetail(!StringUtils.validString(id) ? null : Long.valueOf(id),
@@ -166,7 +176,8 @@ public class MjrOrderDetailDTO extends BaseDTO {
                 !StringUtils.validString(partnerId) ? null : Long.valueOf(partnerId),
                 !StringUtils.validString(totalMoney) ? null : Float.valueOf(totalMoney),
                 !StringUtils.validString(volume) ? null : Float.valueOf(volume),
-                !StringUtils.validString(weight) ? null : Float.valueOf(weight), description
+                !StringUtils.validString(weight) ? null : Float.valueOf(weight), description,
+                !StringUtils.validString(goodsOrder) ? null : Long.valueOf(goodsOrder)
         );
     }
 

@@ -5,6 +5,7 @@ import com.wms.dto.Condition;
 import com.wms.utils.StringUtils;
 import java.util.List;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -130,6 +131,10 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
     @Override
     public List<T> findByProperty(String property, Object value) {
         return listModelToDTO(tdao.findByProperty(property, value));
+    }
+    @Override
+    public List<T> findByProperty(String property, Object value, Order order) {
+        return listModelToDTO(tdao.findByProperty(property, value,order));
     }
 
     @Override

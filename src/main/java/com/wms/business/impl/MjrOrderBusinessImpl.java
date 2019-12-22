@@ -19,6 +19,7 @@ import javax.annotation.PostConstruct;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,7 +139,7 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
     public List<RealExportExcelDTO> orderExportData(Long mjrOrderId) {
         List<RealExportExcelDTO> realExportExcelDTOS = new ArrayList<>();
         MjrOrderDTO mjrOrder = findById(mjrOrderId);
-        List<MjrOrderDetailDTO> mjrOrderDetail = mjrOrderDetailBusiness.findByProperty("orderId", mjrOrderId);
+        List<MjrOrderDetailDTO> mjrOrderDetail = getListOrderDetail( mjrOrderId);
         for (MjrOrderDetailDTO detail : mjrOrderDetail) {
             if (detail.getIsSerial() != null && Constants.IS_SERIAL.equalsIgnoreCase(detail.getIsSerial())) {
                 List<MjrStockGoodsSerialDTO> mjrStockGoodsSerials = mjrStockGoodsSerialDAO.exportOrderStockGoodsSerial(mjrOrder, detail);
@@ -153,7 +154,7 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
 
     @Override
     public List<MjrOrderDetailDTO> getListOrderDetail(Long orderId) {
-        return mjrOrderDetailBusiness.findByProperty("orderId", orderId);
+        return mjrOrderDetailBusiness.findByProperty("orderId", orderId, Order.asc("goodsOrder"));
     }
 
     //------------------------------------------------------------------------------------------------------------------

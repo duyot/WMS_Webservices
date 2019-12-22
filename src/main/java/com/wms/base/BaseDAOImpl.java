@@ -13,6 +13,12 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.hibernate.*;
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
@@ -285,6 +291,10 @@ public class BaseDAOImpl<T extends BaseModel, ID extends Serializable> implement
     @Transactional(readOnly = true)
     public List<T> findByProperty(String property, Object value) {
         return (List<T>) getSession().createCriteria(modelClass).add(Restrictions.eq(property, value)).list();
+    }
+    @Transactional(readOnly = true)
+    public List<T> findByProperty(String property, Object value,Order order) {
+        return (List<T>) getSession().createCriteria(modelClass).add(Restrictions.eq(property, value)).addOrder(order).list();
     }
 
     @Transactional(readOnly = true)
