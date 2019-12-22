@@ -51,11 +51,13 @@ public interface BaseBusinessInterface<T extends BaseDTO> {
 
     List<T> findByCondition(List<Condition> lstCondition);
 
+    List<T> findByConditionSession(List<Condition> lstCondition, Session session);
+
     T findById(long id);
 
     Long countByCondition(List<Condition> lstCondition);
 
-
+    //------------------------------------------------------------------------------------------------------------------
     List<T> getAll();
 
     List<T> getList(int count);

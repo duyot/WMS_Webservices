@@ -103,6 +103,8 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
                 for (MjrOrderDetailDTO mjrOrderDetail : orderDetails) {
                     mjrOrderDetailBusiness.deleteByObjectSession(mjrOrderDetail, session);
                 }
+
+                updateGoodsTotal(mjrOrder, orderDetails, true, session);
             } else {
                 String createdDatePartition = getSysDate("ddMMyyyy");
                 mjrOrder.setCode(initTransCode(mjrOrder, createdDatePartition, session, null));
@@ -172,7 +174,7 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
                 String goodsId = goodsInfoArr[0];
                 String goodsState = goodsInfoArr[1];
                 //
-                MjrStockGoodsTotalDTO goodsTotal = findGoodsTotal(mjrOrder.getCustId(), mjrOrder.getStockId(), goodsId, goodsState);
+                MjrStockGoodsTotalDTO goodsTotal = findGoodsTotal(mjrOrder.getCustId(), mjrOrder.getStockId(), goodsId, goodsState, session);
                 if (goodsTotal != null) {
                     //update amount issue
                     updateTotalDetails(goodsTotal, amount, isAdd);
@@ -206,13 +208,13 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
         return mapGoodsAmount;
     }
 
-    private MjrStockGoodsTotalDTO findGoodsTotal(String custId, String stockId, String goodsId, String goodsState) {
+    private MjrStockGoodsTotalDTO findGoodsTotal(String custId, String stockId, String goodsId, String goodsState, Session session) {
         List<Condition> lstCon = Lists.newArrayList();
         lstCon.add(new Condition("custId", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, custId));
         lstCon.add(new Condition("stockId", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, stockId));
         lstCon.add(new Condition("goodsId", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, goodsId));
         lstCon.add(new Condition("goodsState", Constants.SQL_OPERATOR.EQUAL, goodsState));
-        List<MjrStockGoodsTotalDTO> goodsTotals = mjrStockGoodsTotalBusiness.findByCondition(lstCon);
+        List<MjrStockGoodsTotalDTO> goodsTotals = mjrStockGoodsTotalBusiness.findByConditionSession(lstCon, session);
         if (!DataUtil.isListNullOrEmpty(goodsTotals)) {
             return goodsTotals.get(0);
         }

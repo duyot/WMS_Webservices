@@ -137,6 +137,10 @@ public class BaseBusinessImpl<T extends BaseDTO, TDAO extends BaseDAOImpl> imple
         return listModelToDTO(tdao.findByCondition(lstCondition));
     }
 
+    public List<T> findByConditionSession(List<Condition> lstCondition, Session session) {
+        return listModelToDTO(tdao.findByConditionSession(lstCondition, session));
+    }
+
     @Override
     public Long countByCondition(List<Condition> lstCondition) {
         return tdao.countByCondition(lstCondition);
