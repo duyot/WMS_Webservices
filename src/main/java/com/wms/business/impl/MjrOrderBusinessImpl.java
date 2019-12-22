@@ -100,7 +100,7 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
             if (!DataUtil.isNullOrEmpty(mjrOrder.getId())) {
                 id = mjrOrder.getId();
                 updateBySession(mjrOrder, session);
-                List<MjrOrderDetailDTO> orderDetails = mjrOrderDetailBusiness.findByProperty("orderId", mjrOrder.getId());
+                List<MjrOrderDetailDTO> orderDetails = mjrOrderDetailBusiness.findByProperty("orderId", Long.valueOf(mjrOrder.getId()));
                 for (MjrOrderDetailDTO mjrOrderDetail : orderDetails) {
                     mjrOrderDetailBusiness.deleteByObjectSession(mjrOrderDetail, session);
                 }
@@ -185,7 +185,7 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
     }
 
     private void updateTotalDetails(MjrStockGoodsTotalDTO goodsTotal, Float amount, boolean isAddAmount) {
-        Float totalCurrentAmount = Float.valueOf(goodsTotal.getIssueAmount());
+        Float totalCurrentAmount = Float.valueOf("".equals(goodsTotal.getIssueAmount()) == false ? goodsTotal.getIssueAmount() : "0" );
         if (isAddAmount) {
             totalCurrentAmount += amount;
         } else {

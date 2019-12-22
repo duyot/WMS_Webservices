@@ -271,7 +271,7 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal, Long>
         currentTotal.setAmount(currentTotal.getAmount() - changeAmount);
         currentTotal.setChangeDate(DateTimeUtils.convertStringToDate(stockGoodsTotal.getChangeDate()));
         if (isNeedUpdateIssueAmount) {
-            currentTotal.setiSsueAmount(currentTotal.getiSsueAmount() - changeAmount);
+            currentTotal.setiSsueAmount((currentTotal.getiSsueAmount() != null ? currentTotal.getiSsueAmount() : 0) - changeAmount);
         }
         //
         String updateTotalResult = updateBySession(currentTotal, session);
@@ -295,7 +295,7 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal, Long>
         sqlUpdateTotal.append(" UPDATE  mjr_stock_goods_total a ");
         sqlUpdateTotal.append(" SET  a.pre_amount     = a.amount, ");
         sqlUpdateTotal.append("      a.amount         = a.amount + ?, ");
-        sqlUpdateTotal.append("      a.issue_amount   = nvl(a.amount, 0) + ?, ");
+        sqlUpdateTotal.append("      a.issue_amount   = nvl(a.issue_amount, 0) + ?, ");
         sqlUpdateTotal.append("      a.changed_date = to_date(?,'dd/MM/yyyy hh24:mi:ss') ");
         sqlUpdateTotal.append(" WHERE a.cust_id = ? ");
         sqlUpdateTotal.append("   AND a.stock_id = ? ");
