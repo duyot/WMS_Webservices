@@ -271,7 +271,7 @@ public class MjrStockGoodsTotalDAO extends BaseDAOImpl<MjrStockGoodsTotal, Long>
         currentTotal.setAmount(currentTotal.getAmount() - changeAmount);
         currentTotal.setChangeDate(DateTimeUtils.convertStringToDate(stockGoodsTotal.getChangeDate()));
         if (isNeedUpdateIssueAmount) {
-            currentTotal.setiSsueAmount(currentTotal.getiSsueAmount() - changeAmount);
+            currentTotal.setiSsueAmount(currentTotal.getiSsueAmount() != null ? currentTotal.getiSsueAmount() : 0 - changeAmount);
         }
         //
         String updateTotalResult = updateBySession(currentTotal, session);
