@@ -91,13 +91,25 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
     @Transactional
     public List<MjrStockTransDetailDTO> getListTransGoodsDetail(String transId) {
         Session session = getSession();
+        String[] lstTransId = transId.split("or");
+        StringBuilder idConditionStr = new StringBuilder();
+        if(transId == null || "".equals(transId)){
+            idConditionStr.append("a.id in (-1)");
+        }else{
+            for(int i=0; i< lstTransId.length; i++){
+                idConditionStr.append("a.id in (").append(lstTransId[i]).append(")");
+                if (i != lstTransId.length - 1) {
+                    idConditionStr.append(" or ");
+                }
+            }
+        }
         //
         StringBuilder str = new StringBuilder();
         str.append(" select a.code,c.name, a.type, b.goods_code, b.goods_id, b.goods_state,b.amount, b.unit_name, to_char(a.created_date,'dd/MM/yyyy') created_date, a.CREATED_USER, b.input_price, b.output_price, b.cell_code, b.serial, b.total_money, b.weight, b.volume, d.name as goods_name, a.description, to_char(b.produce_date,'dd/MM/yyyy') produce_date , to_char(b.expire_date,'dd/MM/yyyy') expire_date ")
                 .append(" from mjr_stock_trans a, mjr_stock_trans_detail b, cat_stock c, cat_goods d")
                 .append(" WHERE 1 = 1 ")
-                .append(" and a.id in (  ")
-                .append(transId)
+                .append(" and (  ")
+                .append(idConditionStr)
                 .append(" ) ")
                 .append(" and a.id= b.STOCK_TRANS_ID")
                 .append(" and a.stock_id = c.id")
