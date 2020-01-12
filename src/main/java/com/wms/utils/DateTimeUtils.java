@@ -90,13 +90,19 @@ public class DateTimeUtils {
         }
         return convertStringToTime(date, pattern);
     }
+    public static Date convertStringToDate(String date, String pattern) {
+        if(!StringUtils.validString(pattern)){
+            pattern = "dd/MM/yyyy HH:mm:ss";
+        }
+        return convertStringToTime(date, pattern);
+    }
 
     /**
      * @param date to convert
      * @return String
      * @throws Exception if error
      */
-    public static String convertDateToString(Date date) throws Exception {
+    public static String convertDateToString(Date date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         if (date == null) {
             return "";
@@ -104,8 +110,9 @@ public class DateTimeUtils {
         try {
             return dateFormat.format(date);
         } catch (Exception e) {
-            throw e;
+            e.printStackTrace();
         }
+        return "";
     }
 
     public static Date getDateCompareToCurrent(int amount) {

@@ -73,7 +73,9 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
                 mjrOrderDetailBusiness.deleteByObjectSession(mjrOrderDetail, session);
             }
             MjrOrderDTO order = findById(orderId);
-            updateGoodsTotal(order, orderDetails, true, session);
+            if(order != null && order.getType().equals("2")){
+                updateGoodsTotal(order, orderDetails, true, session);
+            }
             transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -104,8 +106,9 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
                 for (MjrOrderDetailDTO mjrOrderDetail : orderDetails) {
                     mjrOrderDetailBusiness.deleteByObjectSession(mjrOrderDetail, session);
                 }
-
-                updateGoodsTotal(mjrOrder, orderDetails, true, session);
+                if(mjrOrder != null && mjrOrder.getType().equals("2")){
+                    updateGoodsTotal(mjrOrder, orderDetails, true, session);
+                }
             } else {
                 String createdDatePartition = getSysDate("ddMMyyyy");
                 mjrOrder.setCode(initTransCode(mjrOrder, createdDatePartition, session, null));
@@ -118,11 +121,10 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
                 mjrOrderDetail.setOrderId(id);
                 mjrOrderDetails.add(mjrOrderDetail);
             }
-
             mjrOrderDetailBusiness.saveBySession(mjrOrderDetails, session);
-
-            updateGoodsTotal(mjrOrder, mjrOrderDetails, false, session);
-
+            if(mjrOrder != null && mjrOrder.getType().equals("2")) {
+                updateGoodsTotal(mjrOrder, mjrOrderDetails, false, session);
+            }
             transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();

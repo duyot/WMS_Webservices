@@ -2,7 +2,11 @@ package com.wms.persistents.model;
 
 import com.wms.base.BaseModel;
 import com.wms.dto.MjrOrderDetailDTO;
+import com.wms.utils.DateTimeUtils;
+
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Created by truongbx
@@ -25,11 +29,16 @@ public class MjrOrderDetail extends BaseModel {
     private Float weight;
     private String description;
     private Long goodsOrder;
+    private Date produceDate;
+    private Date expireDate;
+    private BigDecimal inputPrice;
+    private BigDecimal outputPrice;
+
 
     public MjrOrderDetail() {
     }
 
-    public MjrOrderDetail(Long id, Long orderId, Long goodsId, String goodsCode, String goodsState, Long isSerial, Float amount, String serial, String unitName, Long partnerId, Float totalMoney, Float volume, Float weight, String description,Long goodsOrder) {
+    public MjrOrderDetail(Long id, Long orderId, Long goodsId, String goodsCode, String goodsState, Long isSerial, Float amount, String serial, String unitName, Long partnerId, Float totalMoney, Float volume, Float weight, String description,Long goodsOrder,Date produceDate,Date expireDate,BigDecimal inputPrice,BigDecimal outputPrice) {
         this.id = id;
         this.orderId = orderId;
         this.goodsId = goodsId;
@@ -45,6 +54,10 @@ public class MjrOrderDetail extends BaseModel {
         this.weight = weight;
         this.description = description;
         this.goodsOrder = goodsOrder;
+        this.produceDate = produceDate;
+        this.expireDate = expireDate;
+        this.inputPrice = inputPrice;
+        this.outputPrice = outputPrice;
     }
 
     @Id
@@ -192,13 +205,53 @@ public class MjrOrderDetail extends BaseModel {
         this.goodsOrder = goodsOrder;
     }
 
+    @Column(name = "PRODUCE_DATE")
+    public Date getProduceDate() {
+        return produceDate;
+    }
+
+    public void setProduceDate(Date produceDate) {
+        this.produceDate = produceDate;
+    }
+
+    @Column(name = "EXPIRE_DATE")
+    public Date getExpireDate() {
+        return expireDate;
+    }
+
+    public void setExpireDate(Date expireDate) {
+        this.expireDate = expireDate;
+    }
+
+    @Column(name = "INPUT_PRICE")
+    public BigDecimal getInputPrice() {
+        return inputPrice;
+    }
+
+    public void setInputPrice(BigDecimal inputPrice) {
+        this.inputPrice = inputPrice;
+    }
+
+    @Column(name = "OUTPUT_PRICE")
+    public BigDecimal getOutputPrice() {
+        return outputPrice;
+    }
+
+    public void setOutputPrice(BigDecimal outputPrice) {
+        this.outputPrice = outputPrice;
+    }
+
     @Override
     public MjrOrderDetailDTO toDTO() {
         return new MjrOrderDetailDTO(id == null ? "" : id + "", orderId == null ? "" : orderId + "", goodsId == null ? "" : goodsId + "",
                 goodsCode, goodsState, isSerial == null ? "" : isSerial + "", amount == null ? "" : amount + "", serial,
                 unitName, partnerId == null ? "" : partnerId + "", totalMoney == null ? "" : totalMoney + "",
                 volume == null ? "" : volume + "", weight == null ? "" : weight + "",
-                description,goodsOrder ==null ? "":goodsOrder +""
+                description,goodsOrder ==null ? "":goodsOrder +"",
+                produceDate == null ? "" : DateTimeUtils.convertDateToString(produceDate),
+                expireDate == null ? "" : DateTimeUtils.convertDateToString(expireDate),
+                inputPrice == null ? "" : inputPrice + "",
+                outputPrice == null ? "" : outputPrice + ""
         );
     }
 

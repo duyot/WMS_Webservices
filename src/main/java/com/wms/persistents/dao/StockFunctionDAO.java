@@ -114,7 +114,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
                 .append(" and a.id= b.STOCK_TRANS_ID")
                 .append(" and a.stock_id = c.id")
                 .append(" and b.goods_id = d.id")
-                .append(" order by a.id desc ");
+                .append(" order by a.id desc");
         Query ps = session.createSQLQuery(str.toString())
                 .addScalar("code", StringType.INSTANCE)
                 .addScalar("name", StringType.INSTANCE)

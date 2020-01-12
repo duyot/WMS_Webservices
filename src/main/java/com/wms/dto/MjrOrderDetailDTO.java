@@ -2,7 +2,12 @@ package com.wms.dto;
 
 import com.wms.base.BaseDTO;
 import com.wms.persistents.model.MjrOrderDetail;
+import com.wms.utils.DateTimeUtils;
+import com.wms.utils.DateUtil;
 import com.wms.utils.StringUtils;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * Created by duyot on 12/29/2016.
@@ -23,11 +28,15 @@ public class MjrOrderDetailDTO extends BaseDTO {
     private String weight;
     private String description;
     private String goodsOrder;
+    private String produceDate;
+    private String expireDate;
+    private String inputPrice;
+    private String outputPrice;
 
     public MjrOrderDetailDTO() {
     }
 
-    public MjrOrderDetailDTO(String id, String orderId, String goodsId, String goodsCode, String goodsState, String isSerial, String amount, String serial, String unitName, String partnerId, String totalMoney, String volume, String weight, String description,String goodsOrder) {
+    public MjrOrderDetailDTO(String id, String orderId, String goodsId, String goodsCode, String goodsState, String isSerial, String amount, String serial, String unitName, String partnerId, String totalMoney, String volume, String weight, String description,String goodsOrder,String produceDate,String expireDate,String inputPrice,String outputPrice) {
         this.id = id;
         this.orderId = orderId;
         this.goodsId = goodsId;
@@ -43,6 +52,11 @@ public class MjrOrderDetailDTO extends BaseDTO {
         this.weight = weight;
         this.description = description;
         this.goodsOrder = goodsOrder;
+        this.produceDate = produceDate;
+        this.expireDate = expireDate;
+        this.inputPrice = inputPrice;
+        this.outputPrice = outputPrice;
+
     }
 
     public String getId() {
@@ -165,6 +179,38 @@ public class MjrOrderDetailDTO extends BaseDTO {
         this.goodsOrder = goodsOrder;
     }
 
+    public String getProduceDate() {
+        return produceDate;
+    }
+
+    public void setProduceDate(String produceDate) {
+        this.produceDate = produceDate;
+    }
+
+    public String getExpireDate() {
+        return expireDate;
+    }
+
+    public void setExpireDate(String expireDate) {
+        this.expireDate = expireDate;
+    }
+
+    public String getInputPrice() {
+        return inputPrice;
+    }
+
+    public void setInputPrice(String inputPrice) {
+        this.inputPrice = inputPrice;
+    }
+
+    public String getOutputPrice() {
+        return outputPrice;
+    }
+
+    public void setOutputPrice(String outputPrice) {
+        this.outputPrice = outputPrice;
+    }
+
     @Override
     public MjrOrderDetail toModel() {
         return new MjrOrderDetail(!StringUtils.validString(id) ? null : Long.valueOf(id),
@@ -177,9 +223,12 @@ public class MjrOrderDetailDTO extends BaseDTO {
                 !StringUtils.validString(totalMoney) ? null : Float.valueOf(totalMoney),
                 !StringUtils.validString(volume) ? null : Float.valueOf(volume),
                 !StringUtils.validString(weight) ? null : Float.valueOf(weight), description,
-                !StringUtils.validString(goodsOrder) ? null : Long.valueOf(goodsOrder)
-        );
+                !StringUtils.validString(goodsOrder) ? null : Long.valueOf(goodsOrder),
+                !StringUtils.validString(produceDate) ? null :  DateTimeUtils.convertStringToDate(produceDate,"dd/MM/yyyy"),
+                !StringUtils.validString(expireDate) ? null : DateTimeUtils.convertStringToDate(expireDate,"dd/MM/yyyy"),
+                !StringUtils.validString(inputPrice) ? null : BigDecimal.valueOf(Double.valueOf(inputPrice)),
+                !StringUtils.validString(outputPrice) ? null : BigDecimal.valueOf(Double.valueOf(outputPrice))
+                );
     }
-
 
 }
