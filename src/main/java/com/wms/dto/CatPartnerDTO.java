@@ -16,9 +16,9 @@ public class CatPartnerDTO extends BaseDTO {
     private String custId;
     private String address;
     private String telNumber;
+    private String parentId;
 
-
-    public CatPartnerDTO(String id, String code, String name, String address, String telNumber, String status, String custId) {
+    public CatPartnerDTO(String id, String code, String name, String address, String telNumber, String status, String custId, String parentId) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -26,9 +26,18 @@ public class CatPartnerDTO extends BaseDTO {
         this.address = address;
         this.code = code;
         this.telNumber = telNumber;
+        this.parentId = parentId;
     }
 
     public CatPartnerDTO() {
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 
     public String getTelNumber() {
@@ -91,7 +100,7 @@ public class CatPartnerDTO extends BaseDTO {
     @Override
     public BaseModel toModel() {
         return new CatPartner(!StringUtils.validString(id) ? null : Long.valueOf(id), code, name, address, telNumber,
-                !StringUtils.validString(status) ? 0 : Byte.parseByte(status), !StringUtils.validString(custId) ? null : Long.valueOf(custId));
+                !StringUtils.validString(status) ? 0 : Byte.parseByte(status), !StringUtils.validString(custId) ? null : Long.valueOf(custId), !StringUtils.validString(parentId) ? null : Long.valueOf(parentId));
     }
 
     @Override
@@ -104,6 +113,7 @@ public class CatPartnerDTO extends BaseDTO {
                 ", telNumber='" + telNumber + '\'' +
                 ", status='" + status + '\'' +
                 ", custId='" + custId + '\'' +
+                ", parentId='" + parentId + '\'' +
                 '}';
     }
 }
