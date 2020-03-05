@@ -32,11 +32,12 @@ public class CatGoods extends BaseModel {
     private Double high;
     private Double weight;
     private Double volume;
+    private Double amountStorageQuota;
 
     public CatGoods() {
     }
 
-    public CatGoods(Long id, String code, String name, byte status, Date createdDate, Long custId, String unitType, Long goodsGroupId, byte isSerial, String description, Double inPrice, Double outPrice, Double length, Double width, Double high, Double weight, Double volume) {
+    public CatGoods(Long id, String code, String name, byte status, Date createdDate, Long custId, String unitType, Long goodsGroupId, byte isSerial, String description, Double inPrice, Double outPrice, Double length, Double width, Double high, Double weight, Double volume, Double amountStorageQuota) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -54,6 +55,7 @@ public class CatGoods extends BaseModel {
         this.high = high;
         this.weight = weight;
         this.volume = volume;
+        this.amountStorageQuota = amountStorageQuota;
     }
 
     @Id
@@ -217,6 +219,15 @@ public class CatGoods extends BaseModel {
         this.volume = volume;
     }
 
+    @Column(name = "AMOUNT_STORAGE_QUOTA")
+    public Double getAmountStorageQuota() {
+        return amountStorageQuota;
+    }
+
+    public void setAmountStorageQuota(Double amountStorageQuota) {
+        this.amountStorageQuota = amountStorageQuota;
+    }
+
     @Override
     public BaseDTO toDTO() {
         return new CatGoodsDTO(id == null ? "" : id + "", code, name, status + "",
@@ -227,7 +238,8 @@ public class CatGoods extends BaseModel {
                 width == null ? "" : width + "",
                 high == null ? "" : high + "",
                 weight == null ? "" : weight + "",
-                volume == null ? "" : volume + ""
+                volume == null ? "" : volume + "",
+                amountStorageQuota == null ? "" : amountStorageQuota + ""
         );
     }
 }

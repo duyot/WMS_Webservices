@@ -27,11 +27,12 @@ public class CatGoodsDTO extends BaseDTO {
     private String high;
     private String weight;
     private String volume;
+    private String amountStorageQuota;
 
     public CatGoodsDTO() {
     }
 
-    public CatGoodsDTO(String id, String code, String name, String status, String createdDate, String custId, String unitType, String goodsGroupId, String isSerial, String description, String inPrice, String outPrice, String length, String width, String high, String weight, String volume) {
+    public CatGoodsDTO(String id, String code, String name, String status, String createdDate, String custId, String unitType, String goodsGroupId, String isSerial, String description, String inPrice, String outPrice, String length, String width, String high, String weight, String volume, String amountStorageQuota) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -49,6 +50,7 @@ public class CatGoodsDTO extends BaseDTO {
         this.high = high;
         this.weight = weight;
         this.volume = volume;
+        this.amountStorageQuota = amountStorageQuota;
     }
 
     public String getLength() {
@@ -188,6 +190,14 @@ public class CatGoodsDTO extends BaseDTO {
         this.volume = volume;
     }
 
+    public String getAmountStorageQuota() {
+        return amountStorageQuota;
+    }
+
+    public void setAmountStorageQuota(String amountStorageQuota) {
+        this.amountStorageQuota = amountStorageQuota;
+    }
+
     @Override
     public BaseModel toModel() {
         return new CatGoods(
@@ -200,7 +210,8 @@ public class CatGoodsDTO extends BaseDTO {
                 !StringUtils.validString(width) ? null : Double.valueOf(width),
                 !StringUtils.validString(high) ? null : Double.valueOf(high),
                 !StringUtils.validString(weight) ? null : Double.valueOf(weight),
-                !StringUtils.validString(volume) ? null : Double.valueOf(volume)
+                !StringUtils.validString(volume) ? null : Double.valueOf(volume),
+                !StringUtils.validString(amountStorageQuota) ? null : Double.valueOf(amountStorageQuota)
         );
     }
 
@@ -224,6 +235,7 @@ public class CatGoodsDTO extends BaseDTO {
                 ", high='" + high + '\'' +
                 ", weight='" + weight + '\'' +
                 ", volume='" + volume + '\'' +
+                ", amountStorageQuota='" + amountStorageQuota + '\'' +
                 '}';
     }
 }
