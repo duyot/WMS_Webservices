@@ -501,7 +501,6 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
             temp.setReasonName(i[23] == null ? "" : String.valueOf(i[23]));
             temp.setReceiveName(i[24] == null ? "" : String.valueOf(i[24]));
             temp.setPartnerName(i[25] == null ? "" : String.valueOf(i[25]));
-
             //
             lstResult.add(temp);
         }
