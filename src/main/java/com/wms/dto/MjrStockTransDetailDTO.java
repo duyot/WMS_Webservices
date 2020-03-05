@@ -45,6 +45,12 @@ public class MjrStockTransDetailDTO extends BaseDTO {
     private String partnerName;
     private String custId;
     private String changeDate;
+    private String orderCode;
+    private String receiveName;
+    private String reasonName;
+    private String content;
+
+
 
     public MjrStockTransDetailDTO() {
     }
@@ -104,6 +110,38 @@ public class MjrStockTransDetailDTO extends BaseDTO {
         this.partnerName = partnerName;
         this.custId = custId;
         this.changeDate = changeDate;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
+    }
+
+    public String getReceiveName() {
+        return receiveName;
+    }
+
+    public void setReceiveName(String receiveName) {
+        this.receiveName = receiveName;
+    }
+
+    public String getReasonName() {
+        return reasonName;
+    }
+
+    public void setReasonName(String reasonName) {
+        this.reasonName = reasonName;
     }
 
     public String getCustId() {

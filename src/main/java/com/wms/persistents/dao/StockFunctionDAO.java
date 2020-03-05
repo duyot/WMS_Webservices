@@ -105,7 +105,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         }
         //
         StringBuilder str = new StringBuilder();
-        str.append(" select a.code,c.name, a.type, b.goods_code, b.goods_id, b.goods_state,b.amount, b.unit_name, to_char(a.created_date,'dd/MM/yyyy') created_date, a.CREATED_USER, b.input_price, b.output_price, b.cell_code, b.serial, b.total_money, b.weight, b.volume, d.name as goods_name, a.description, to_char(b.produce_date,'dd/MM/yyyy') produce_date , to_char(b.expire_date,'dd/MM/yyyy') expire_date ")
+        str.append(" select a.code,c.name, a.type, b.goods_code, b.goods_id, b.goods_state,b.amount, b.unit_name, to_char(a.created_date,'dd/MM/yyyy') created_date, a.CREATED_USER, b.input_price, b.output_price, b.cell_code, b.serial, b.total_money, b.weight, b.volume, d.name as goods_name, a.description, to_char(b.produce_date,'dd/MM/yyyy') produce_date , to_char(b.expire_date,'dd/MM/yyyy') expire_date, b.content, a.order_code, a.reason_name, a.receive_name, a.partner_name ")
                 .append(" from mjr_stock_trans a, mjr_stock_trans_detail b, cat_stock c, cat_goods d")
                 .append(" WHERE 1 = 1 ")
                 .append(" and (  ")
@@ -136,7 +136,13 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
                 .addScalar("goods_name", StringType.INSTANCE)
                 .addScalar("description", StringType.INSTANCE)
                 .addScalar("produce_date", StringType.INSTANCE)
-                .addScalar("expire_date", StringType.INSTANCE);
+                .addScalar("expire_date", StringType.INSTANCE)
+                .addScalar("content", StringType.INSTANCE)
+                .addScalar("order_code", StringType.INSTANCE)
+                .addScalar("reason_name", StringType.INSTANCE)
+                .addScalar("receive_name", StringType.INSTANCE)
+                .addScalar("partner_name", StringType.INSTANCE)
+                ;
         //
         return convertToStockTransDetail(ps.list());
     }
@@ -490,6 +496,12 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
             temp.setDescription(i[18] == null ? "" : String.valueOf(i[18]));
             temp.setProduceDate(i[19] == null ? "" : String.valueOf(i[19]));
             temp.setExpireDate(i[20] == null ? "" : String.valueOf(i[20]));
+            temp.setContent(i[21] == null ? "" : String.valueOf(i[21]));
+            temp.setOrderCode(i[22] == null ? "" : String.valueOf(i[22]));
+            temp.setReasonName(i[23] == null ? "" : String.valueOf(i[23]));
+            temp.setReceiveName(i[24] == null ? "" : String.valueOf(i[24]));
+            temp.setPartnerName(i[25] == null ? "" : String.valueOf(i[25]));
+
             //
             lstResult.add(temp);
         }
