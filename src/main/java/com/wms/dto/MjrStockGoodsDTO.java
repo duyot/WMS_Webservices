@@ -30,8 +30,9 @@ public class MjrStockGoodsDTO extends BaseDTO {
     private String produceDate;
     private String expireDate;
     private String description;
+    private String content;
 
-    public MjrStockGoodsDTO(String id, String custId, String stockId, String goodsId, String goodsState, String cellCode, String amount, String importDate, String changeDate, String status, String partnerId, String importStockTransId, String inputPrice, String outputPrice, String exportDate, String exportStockTransId, String volume, String weight, String produceDate, String expireDate, String description) {
+    public MjrStockGoodsDTO(String id, String custId, String stockId, String goodsId, String goodsState, String cellCode, String amount, String importDate, String changeDate, String status, String partnerId, String importStockTransId, String inputPrice, String outputPrice, String exportDate, String exportStockTransId, String volume, String weight, String produceDate, String expireDate, String description, String content) {
         this.id = id;
         this.custId = custId;
         this.stockId = stockId;
@@ -53,9 +54,18 @@ public class MjrStockGoodsDTO extends BaseDTO {
         this.produceDate = produceDate;
         this.expireDate = expireDate;
         this.description = description;
+        this.content = content;
     }
 
     public MjrStockGoodsDTO() {
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getId() {
@@ -237,7 +247,7 @@ public class MjrStockGoodsDTO extends BaseDTO {
                 !StringUtils.validString(exportDate) ? null : DateTimeUtils.convertStringToDate(exportDate), !StringUtils.validString(exportStockTransId) ? 0L : Long.valueOf(exportStockTransId),
                 !StringUtils.validString(volume) ? null : Float.valueOf(volume), !StringUtils.validString(weight) ? null : Float.valueOf(weight),
                 !StringUtils.validString(produceDate) ? null : DateTimeUtils.convertStringToDate(produceDate),
-                !StringUtils.validString(expireDate) ? null : DateTimeUtils.convertStringToDate(expireDate), description
+                !StringUtils.validString(expireDate) ? null : DateTimeUtils.convertStringToDate(expireDate), description, content
         );
     }
 }

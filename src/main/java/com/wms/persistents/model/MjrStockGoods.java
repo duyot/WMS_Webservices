@@ -34,8 +34,10 @@ public class MjrStockGoods extends BaseModel {
     private Date produceDate;
     private Date expireDate;
     private String description;
+    private String content;
 
-    public MjrStockGoods(Long id, Long custId, Long stockId, Long goodsId, String goodsState, String cellCode, Float amount, Date importDate, Date changedDate, byte status, Long partnerId, Long importStockTransId, Float inputPrice, Float outputPrice, Date exportDate, Long exportStockTransId, Float volume, Float weight, Date produceDate, Date expireDate, String description) {
+
+    public MjrStockGoods(Long id, Long custId, Long stockId, Long goodsId, String goodsState, String cellCode, Float amount, Date importDate, Date changedDate, byte status, Long partnerId, Long importStockTransId, Float inputPrice, Float outputPrice, Date exportDate, Long exportStockTransId, Float volume, Float weight, Date produceDate, Date expireDate, String description, String content) {
         this.id = id;
         this.custId = custId;
         this.stockId = stockId;
@@ -57,6 +59,7 @@ public class MjrStockGoods extends BaseModel {
         this.produceDate = produceDate;
         this.expireDate = expireDate;
         this.description = description;
+        this.content = content;
     }
 
     public MjrStockGoods() {
@@ -259,6 +262,14 @@ public class MjrStockGoods extends BaseModel {
         this.description = description;
     }
 
+    @Column(name = "CONTENT")
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     @Override
     public MjrStockGoodsDTO toDTO() {
@@ -270,7 +281,7 @@ public class MjrStockGoods extends BaseModel {
                 volume == null ? "" : volume + "", weight == null ? "" : weight + "",
                 produceDate == null ? "" : DateTimeUtils.convertDateTimeToString(produceDate, Constants.DATETIME_FORMAT.ddMMyyyy),
                 expireDate == null ? "" : DateTimeUtils.convertDateTimeToString(expireDate, Constants.DATETIME_FORMAT.ddMMyyyy),
-                description
+                description, content
         );
     }
 }

@@ -269,7 +269,8 @@ public class StockGoodsInforDAO extends BaseDAOImpl<SysMenu, Long> {
                 "         a.input_price inputPrice,\n" +
                 "         a.produce_date produceDate,\n" +
                 "         a.expire_date expireDate,\n" +
-                "         a.description description\n");
+                "         a.description description,\n" +
+                "         a.content content\n");
 
         if (!DataUtil.isStringNullOrEmpty(custId) && !custId.equals(Constants.STATS_ALL)) {
             initWhereQuery.append(" and a.cust_id = ").append(custId);
@@ -315,7 +316,9 @@ public class StockGoodsInforDAO extends BaseDAOImpl<SysMenu, Long> {
                 .addScalar("serial", StringType.INSTANCE)
                 .addScalar("produceDate", StringType.INSTANCE)
                 .addScalar("expireDate", StringType.INSTANCE)
-                .addScalar("description", StringType.INSTANCE);
+                .addScalar("description", StringType.INSTANCE)
+                .addScalar("content", StringType.INSTANCE);
+
         ps.setResultTransformer(Transformers.aliasToBean(MjrStockTransDetailDTO.class));
         try {
             lstStockGoodsInfor = ps.list();

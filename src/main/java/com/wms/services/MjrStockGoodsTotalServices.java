@@ -127,6 +127,7 @@ public class MjrStockGoodsTotalServices extends BaseServices<MjrStockGoodsTotalD
                 temp.setProduceDate(i.getProduceDate());
                 temp.setExpireDate(i.getExpireDate());
                 temp.setDescription(i.getDescription());
+                temp.setContent(i.getContent());
                 //
                 lstResult.add(temp);
             }
