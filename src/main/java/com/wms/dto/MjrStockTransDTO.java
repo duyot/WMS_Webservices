@@ -46,6 +46,24 @@ public class MjrStockTransDTO extends BaseDTO {
     private String orderId;
 
     private String exportMethod;
+    private String reasonId;
+    private String reasonName;
+
+    public String getReasonId() {
+        return reasonId;
+    }
+
+    public void setReasonId(String reasonId) {
+        this.reasonId = reasonId;
+    }
+
+    public String getReasonName() {
+        return reasonName;
+    }
+
+    public void setReasonName(String reasonName) {
+        this.reasonName = reasonName;
+    }
 
     public String getOrderCode() {
         return orderCode;
@@ -139,7 +157,7 @@ public class MjrStockTransDTO extends BaseDTO {
     public MjrStockTransDTO() {
     }
 
-    public MjrStockTransDTO(String id, String code, String custId, String stockId, String contractNumber, String invoiceNumber, String type, String status, String createdDate, String createdUser, String transMoneyTotal, String transMoneyDiscount, String discountAmount, String transMoneyRequire, String description, String partnerId, String partnerName, String receiveId, String receiveName, String orderId, String orderCode) {
+    public MjrStockTransDTO(String id, String code, String custId, String stockId, String contractNumber, String invoiceNumber, String type, String status, String createdDate, String createdUser, String transMoneyTotal, String transMoneyDiscount, String discountAmount, String transMoneyRequire, String description, String partnerId, String partnerName, String receiveId, String receiveName, String orderId, String orderCode,String reasonId, String reasonName) {
         this.id = id;
         this.code = code;
         this.custId = custId;
@@ -161,6 +179,8 @@ public class MjrStockTransDTO extends BaseDTO {
         this.receiveName = receiveName;
         this.orderId = orderId;
         this.orderCode = orderCode;
+        this.reasonId = reasonId;
+        this.reasonName = reasonName;
     }
 
     public String getPartnerId() {
@@ -308,7 +328,7 @@ public class MjrStockTransDTO extends BaseDTO {
                 createdUser, !StringUtils.validString(transMoneyTotal) ? null : Float.valueOf(transMoneyTotal), !StringUtils.validString(transMoneyDiscount) ? null : Float.valueOf(transMoneyDiscount),
                 !StringUtils.validString(discountAmount) ? null : Float.valueOf(discountAmount), !StringUtils.validString(transMoneyRequire) ? null : Float.valueOf(transMoneyRequire),
                 description, !StringUtils.validString(partnerId) ? null : Long.valueOf(partnerId), partnerName, !StringUtils.validString(receiveId) ? null : Long.valueOf(receiveId), receiveName
-                , !StringUtils.validString(orderId) ? null : Long.valueOf(orderId), orderCode
+                , !StringUtils.validString(orderId) ? null : Long.valueOf(orderId), orderCode,!StringUtils.validString(reasonId) ? null : Long.valueOf(reasonId), reasonName
         );
     }
 }
