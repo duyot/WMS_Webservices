@@ -27,12 +27,14 @@ public class MjrOrderDTO extends BaseDTO {
 
     private String receiveName;
     private String receiveId;
+    private String reasonName;
+    private String reasonId;
 
 
     public MjrOrderDTO() {
     }
 
-    public MjrOrderDTO(String id, String code, String custId, String stockId, String type, String exportMethod, String status, String createdDate, String createdUser, String description, String partnerId, String partnerName, String receiveName, String receiveId) {
+    public MjrOrderDTO(String id, String code, String custId, String stockId, String type, String exportMethod, String status, String createdDate, String createdUser, String description, String partnerId, String partnerName, String receiveName, String receiveId,String reasonId, String reasonName) {
         this.id = id;
         this.code = code;
         this.custId = custId;
@@ -47,6 +49,24 @@ public class MjrOrderDTO extends BaseDTO {
         this.partnerName = partnerName;
         this.receiveName = receiveName;
         this.receiveId = receiveId;
+        this.reasonId = reasonId;
+        this.reasonName = reasonName;
+    }
+
+    public String getReasonName() {
+        return reasonName;
+    }
+
+    public void setReasonName(String reasonName) {
+        this.reasonName = reasonName;
+    }
+
+    public String getReasonId() {
+        return reasonId;
+    }
+
+    public void setReasonId(String reasonId) {
+        this.reasonId = reasonId;
     }
 
     public String getId() {
@@ -166,6 +186,6 @@ public class MjrOrderDTO extends BaseDTO {
         return new MjrOrder(!StringUtils.validString(id) ? null : Long.valueOf(id), code, !StringUtils.validString(custId) ? null : Long.valueOf(custId),
                 !StringUtils.validString(stockId) ? null : Long.valueOf(stockId), !StringUtils.validString(type) ? null : Long.valueOf(type), !StringUtils.validString(exportMethod) ? null : Long.valueOf(exportMethod),
                 !StringUtils.validString(status) ? 0 : Byte.parseByte(status), !StringUtils.validString(createdDate) ? null : DateTimeUtils.convertStringToDate(createdDate),
-                createdUser, description, !StringUtils.validString(partnerId) ? null : Long.valueOf(partnerId), partnerName, receiveName, !StringUtils.validString(receiveId) ? null : Long.valueOf(receiveId));
+                createdUser, description, !StringUtils.validString(partnerId) ? null : Long.valueOf(partnerId), partnerName, receiveName, !StringUtils.validString(receiveId) ? null : Long.valueOf(receiveId), !StringUtils.validString(reasonId) ? null : Long.valueOf(reasonId), reasonName);
     }
 }

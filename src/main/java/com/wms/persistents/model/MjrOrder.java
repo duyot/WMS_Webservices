@@ -26,11 +26,13 @@ public class MjrOrder extends BaseModel {
     private String partnerName;
     private String receiveName;
     private Long receiveId;
+    private String reasonName;
+    private Long reasonId;
 
     public MjrOrder() {
     }
 
-    public MjrOrder(Long id, String code, Long custId, Long stockId, Long type, Long exportMethod, byte status, Date createdDate, String createdUser, String description, Long partnerId, String partnerName, String receiveName, Long receiveId) {
+    public MjrOrder(Long id, String code, Long custId, Long stockId, Long type, Long exportMethod, byte status, Date createdDate, String createdUser, String description, Long partnerId, String partnerName, String receiveName, Long receiveId,  Long reasonId, String reasonName) {
         this.id = id;
         this.code = code;
         this.custId = custId;
@@ -45,6 +47,8 @@ public class MjrOrder extends BaseModel {
         this.partnerName = partnerName;
         this.receiveName = receiveName;
         this.receiveId = receiveId;
+        this.reasonId = reasonId;
+        this.reasonName = reasonName;
     }
 
     @Id
@@ -184,10 +188,27 @@ public class MjrOrder extends BaseModel {
         this.receiveName = receiveName;
     }
 
+    @Column(name = "REASON_NAME")
+    public String getReasonName() {
+        return reasonName;
+    }
+
+    public void setReasonName(String reasonName) {
+        this.reasonName = reasonName;
+    }
+    @Column(name = "REASON_ID")
+    public Long getReasonId() {
+        return reasonId;
+    }
+
+    public void setReasonId(Long reasonId) {
+        this.reasonId = reasonId;
+    }
+
     @Override
     public MjrOrderDTO toDTO() {
         return new MjrOrderDTO(id == null ? "" : id + "", code, custId == null ? "" : custId + "", stockId == null ? "" : stockId + "", type == null ? "" : type + "", exportMethod == null ? "" : exportMethod + "", status + "",
                 createdDate == null ? "" : DateTimeUtils.convertDateTimeToString(createdDate), createdUser, description,
-                partnerId == null ? "" : partnerId + "", partnerName, receiveName, receiveId == null ? "" : receiveId + "");
+                partnerId == null ? "" : partnerId + "", partnerName, receiveName, receiveId == null ? "" : receiveId + "",reasonId == null ? "" : reasonId + "", reasonName);
     }
 }
