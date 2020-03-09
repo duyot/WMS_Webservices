@@ -148,6 +148,48 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
     }
 
     @Transactional
+    public List<MjrStockTransDTO> getListTransSerial(String custId, String goodsId, String serial) {
+        Session session = getSession();
+
+        StringBuilder str = new StringBuilder();
+        str.append(" select d.name as customer_name, a.code as trans_code,c.name as stock_name, c.code as stock_code, a.created_date, a.description,\n" +
+                " b.code as partner_code, b.name as partner_name, b.tel_number, b.address , a.CUST_ID , a.stock_id, a.CREATED_USER , a.type,a.receive_name , a.ORDER_CODE orderCode, a.reason_name")
+                .append(" from mjr_stock_trans a " +
+                        " left join CAT_PARTNER b on a.partner_id = b.id " +
+                        " left join cat_stock c on a.stock_id = c.id " +
+                        " left join CAT_CUSTOMER d on a.CUST_ID = d.id ")
+                .append(" WHERE a.cust_id = ? \n ")
+                .append(" and a.id in (\n")
+                .append("   select mstdl.STOCK_TRANS_ID from MJR_STOCK_TRANS_DETAIL mstdl\n")
+                .append("   where mstdl.serial = ?\n")
+                .append("   and mstdl.goods_id = ?\n")
+                .append(" )order by a.CREATED_DATE desc");
+        Query ps = session.createSQLQuery(str.toString())
+                .addScalar("customer_name", StringType.INSTANCE)
+                .addScalar("trans_code", StringType.INSTANCE)
+                .addScalar("stock_name", StringType.INSTANCE)
+                .addScalar("stock_code", StringType.INSTANCE)
+                .addScalar("created_date", DateType.INSTANCE)
+                .addScalar("description", StringType.INSTANCE)
+                .addScalar("partner_code", StringType.INSTANCE)
+                .addScalar("partner_name", StringType.INSTANCE)
+                .addScalar("tel_number", StringType.INSTANCE)
+                .addScalar("address", StringType.INSTANCE)
+                .addScalar("cust_id", StringType.INSTANCE)
+                .addScalar("stock_id", StringType.INSTANCE)
+                .addScalar("created_user", StringType.INSTANCE)
+                .addScalar("type", StringType.INSTANCE)
+                .addScalar("receive_name", StringType.INSTANCE)
+                .addScalar("orderCode", StringType.INSTANCE)
+                .addScalar("reason_name", StringType.INSTANCE);
+        ps.setString(0, custId);
+        ps.setString(1, serial);
+        ps.setString(2, goodsId);
+
+        return convertToStockTransInfo(ps.list());
+    }
+
+    @Transactional
     public List<MjrStockTransDTO> getStockTransInfo(String lstStockTransId) {
 
         Session session = getSession();
@@ -167,7 +209,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
 
         StringBuilder str = new StringBuilder();
         str.append(" select d.name as customer_name, a.code as trans_code,c.name as stock_name, c.code as stock_code, a.created_date, a.description,\n" +
-                " b.code as partner_code, b.name as partner_name, b.tel_number, b.address , a.CUST_ID , a.stock_id, a.CREATED_USER , a.type,a.receive_name , a.ORDER_CODE orderCode")
+                " b.code as partner_code, b.name as partner_name, b.tel_number, b.address , a.CUST_ID , a.stock_id, a.CREATED_USER , a.type,a.receive_name , a.ORDER_CODE orderCode, a.reason_name")
                 .append(" from mjr_stock_trans a " +
                         " left join CAT_PARTNER b on a.partner_id = b.id " +
                         " left join cat_stock c on a.stock_id = c.id " +
@@ -193,7 +235,8 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
                 .addScalar("created_user", StringType.INSTANCE)
                 .addScalar("type", StringType.INSTANCE)
                 .addScalar("receive_name", StringType.INSTANCE)
-                .addScalar("orderCode", StringType.INSTANCE);
+                .addScalar("orderCode", StringType.INSTANCE)
+                .addScalar("reason_name", StringType.INSTANCE);
         if ("".equalsIgnoreCase(lstStockTransId.trim())) {
             ps.setString("1", "-1");
         } else {
@@ -428,6 +471,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
     }
 
 
+
     private List<MjrStockTransDTO> convertToStockTransInfo(List<Object[]> lstData) {
         List<MjrStockTransDTO> lstResult = Lists.newArrayList();
         for (Object[] i : lstData) {
@@ -448,6 +492,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
             temp.setType(i[13] == null ? "" : String.valueOf(i[13]));
             temp.setReceiveName(i[14] == null ? "" : String.valueOf(i[14]));
             temp.setOrderCode(i[15] == null ? "" : String.valueOf(i[15]));
+            temp.setReasonName(i[16] == null ? "" : String.valueOf(i[16]));
             lstResult.add(temp);
         }
         return lstResult;
