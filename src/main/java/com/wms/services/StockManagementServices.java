@@ -85,4 +85,10 @@ public class StockManagementServices {
         return stockFunctionBusiness.getStockTransInfo(lstStockTransId);
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    @RequestMapping(value = "/getListTransSerial", produces = "application/json", method = RequestMethod.GET)
+    public List<MjrStockTransDTO> getListTransSerial(String custId, String goodsId, String serial) {
+        return stockFunctionBusiness.getListTransSerial(custId,  goodsId, serial);
+    }
+
 }

@@ -45,6 +45,7 @@ public interface StockFunctionInterface {
     //
     List<MjrStockTransDetailDTO> getListTransGoodsDetail(String transId);
 
+    List<MjrStockTransDTO> getListTransSerial(String custId, String goodsId, String serial);
     //
     List<MjrStockTransDTO> getStockTransInfo(String lstStockTransId);
 
