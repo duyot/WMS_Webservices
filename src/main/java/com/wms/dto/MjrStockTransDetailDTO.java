@@ -29,7 +29,7 @@ public class MjrStockTransDetailDTO extends BaseDTO {
     private String produceDate;
     private String expireDate;
     private String description;
-
+    private String content;
 
     //unmap db field
     private String goodsName;
@@ -48,7 +48,7 @@ public class MjrStockTransDetailDTO extends BaseDTO {
     private String orderCode;
     private String receiveName;
     private String reasonName;
-    private String content;
+
 
 
 

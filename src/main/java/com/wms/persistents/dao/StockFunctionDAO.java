@@ -709,7 +709,166 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         return Responses.SUCCESS.getName();
     }
 
+    private boolean isRetrievalSerial(MjrStockTransDetailDTO item, Map<String, Long> exportedSerial) {
+        return Constants.IS_SERIAL.equalsIgnoreCase(item.getIsSerial())  && exportedSerial.containsKey(item.getGoodsId() + "-" + item.getGoodsState() + "-" + item.getSerial());
+    }
+
+    private Map<String, Long> getListExportedSerial(MjrStockTransDTO mjrStockTransDTO, List<MjrStockTransDetailDTO> lstGoodsDetail, Connection connection){
+        List<String> serials = new ArrayList<>();
+        Map<String, Long> result = new HashMap<>();
+        if (lstGoodsDetail.size() > 0) {
+            for (MjrStockTransDetailDTO item : lstGoodsDetail) {
+                if (Constants.IS_SERIAL.equalsIgnoreCase(item.getIsSerial())) {
+                    serials.add(item.getSerial());
+                }
+            }
+        }
+        //
+        StringBuilder idConditionStr;
+        if (serials.size() > 0) {
+            idConditionStr = new StringBuilder();
+            for (int i = 0; i < serials.size(); i++) {
+                idConditionStr.append("a.serial in ('").append(serials.get(i)).append("')");
+                if (i != serials.size() - 1) {
+                    idConditionStr.append(" or ");
+                }
+            }
+        } else {
+            return result;
+        }
+        StringBuilder queryStringBuilder = new StringBuilder();
+        queryStringBuilder.append("SELECT id, goods_id, goods_state, serial FROM mjr_stock_goods_serial a")
+                .append(" WHERE ")
+                .append("     a.cust_id  = ? ")
+                .append(" and a.stock_id = ? ")
+                .append(" and a.status = 2 ")
+                .append(" and ( ")
+                .append(idConditionStr)
+                .append(" ) ")
+                .append(" order by serial desc ");
+        PreparedStatement ps = null;
+         try {
+             ps = connection.prepareStatement(queryStringBuilder.toString());
+             ps.setInt(1, Integer.parseInt(mjrStockTransDTO.getCustId()));
+             ps.setInt(2, Integer.parseInt(mjrStockTransDTO.getStockId()));
+             ResultSet rs = ps.executeQuery();
+             while (rs.next()) {
+                 String goodsId = rs.getString("goods_id");
+                 String goodsState = rs.getString("goods_state");
+                 String serial = rs.getString("serial");
+                 result.put(goodsId + "-" + goodsState + "-" + serial, rs.getLong("id"));
+             }
+        } catch (SQLException e) {
+             log.error(e.toString());
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private void processRetrievalSerial(MjrStockTransDTO mjrStockTransDTO, List<MjrStockTransDetailDTO> retrievalImport, Connection connection){
+        List paramsStockTransDetail;
+        List paramsStockGoodsSerial;
+        //PREPARE STATEMENTS
+        PreparedStatement prstmtInsertStockTransDetail = null;
+        PreparedStatement prstmtInsertStockGoodsSerial = null;
+        //SQL
+        StringBuilder sqlStockTransDetail = new StringBuilder();
+        StringBuilder sqlStockGoodsSerial = new StringBuilder();
+        //STOCK_TRANS_DETAIL
+        sqlStockTransDetail.append(" Insert into MJR_STOCK_TRANS_DETAIL ");
+        sqlStockTransDetail.append(" (ID,STOCK_TRANS_ID,GOODS_ID,GOODS_CODE,GOODS_STATE,IS_SERIAL,AMOUNT,SERIAL,INPUT_PRICE,CELL_CODE, total_money, unit_name, volume, weight,PRODUCE_DATE,EXPIRE_DATE,DESCRIPTION, content)  ");
+        sqlStockTransDetail.append(" values  (SEQ_MJR_STOCK_TRANS_DETAIL.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?, ?) ");
+        //STOCK_GOODS_SERIAL
+        sqlStockGoodsSerial.append(" Update MJR_STOCK_GOODS_SERIAL  ");
+        sqlStockGoodsSerial.append(" set cell_code = ?, ");
+        sqlStockGoodsSerial.append("     import_date = to_date(?,'dd/MM/yyyy hh24:mi:ss'), ");
+        sqlStockGoodsSerial.append("     changed_date = to_date(?,'dd/MM/yyyy hh24:mi:ss'), ");
+        sqlStockGoodsSerial.append("     partner_id = ?, ");
+        sqlStockGoodsSerial.append("     import_stock_trans_id = ?, ");
+        sqlStockGoodsSerial.append("     input_price = ?, ");
+        sqlStockGoodsSerial.append("     output_price = ?, ");
+        sqlStockGoodsSerial.append("     export_date = null, ");
+        sqlStockGoodsSerial.append("     export_stock_trans_id = null, ");
+        sqlStockGoodsSerial.append("     status = ?, ");
+        sqlStockGoodsSerial.append("     weight = ?, ");
+        sqlStockGoodsSerial.append("     volume = ?, ");
+        sqlStockGoodsSerial.append("     description = ?, ");
+        sqlStockGoodsSerial.append("     produce_date = to_date(?,'dd/MM/yyyy hh24:mi:ss'), ");
+        sqlStockGoodsSerial.append("     expire_date = to_date(?,'dd/MM/yyyy hh24:mi:ss'), ");
+        sqlStockGoodsSerial.append("     content = ? ");
+        sqlStockGoodsSerial.append(" where id = ? ");
+        sqlStockGoodsSerial.append(" LOG ERRORS INTO ERR$_MJR_STOCK_GOODS_SERIAL REJECT LIMIT UNLIMITED ");
+        try {
+            prstmtInsertStockTransDetail = connection.prepareStatement(sqlStockTransDetail.toString());
+            prstmtInsertStockGoodsSerial = connection.prepareStatement(sqlStockGoodsSerial.toString());
+            int count = 0;
+            for (MjrStockTransDetailDTO goods : retrievalImport) {
+                //
+                count++;
+                //DETAIL
+                paramsStockTransDetail = setParamsStockTransDetail(mjrStockTransDTO, goods);
+                //SET PARAMS AND ADD TO BATCH
+                for (int idx = 0; idx < paramsStockTransDetail.size(); idx++) {
+                    prstmtInsertStockTransDetail.setString(idx + 1, DataUtil.nvl(paramsStockTransDetail.get(idx), "").toString());
+                }
+                prstmtInsertStockTransDetail.addBatch();
+                //
+                paramsStockGoodsSerial = setParamsRetrievalStockGoodsSerial(mjrStockTransDTO, goods);
+                for (int idx = 0; idx < paramsStockGoodsSerial.size(); idx++) {
+                    prstmtInsertStockGoodsSerial.setString(idx + 1, DataUtil.nvl(paramsStockGoodsSerial.get(idx), "").toString());
+                }
+                prstmtInsertStockGoodsSerial.addBatch();
+                //
+                if (count >= Constants.COMMIT_NUMBER) {
+                    try {
+                        prstmtInsertStockTransDetail.executeBatch();
+                        prstmtInsertStockGoodsSerial.executeBatch();
+                    } catch (SQLException e) {
+                        log.error(e.toString());
+                        e.printStackTrace();
+                    }
+                    count = 0;
+                }
+            }
+            if (count > 0) {
+                try {
+                    prstmtInsertStockTransDetail.executeBatch();
+                    prstmtInsertStockGoodsSerial.executeBatch();
+                } catch (SQLException e) {
+                    log.error(e.toString());
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e) {
+            log.error(e.toString());
+            e.printStackTrace();
+        }finally {
+            FunctionUtils.closeStatement(prstmtInsertStockTransDetail);
+            FunctionUtils.closeStatement(prstmtInsertStockGoodsSerial);
+        }
+    }
+
     public String importStockGoods(MjrStockTransDTO mjrStockTransDTO, List<MjrStockTransDetailDTO> lstGoodsDetail, Connection connection) {
+        //
+        Map<String, Long> exportedSerialInTrans =  getListExportedSerial(mjrStockTransDTO, lstGoodsDetail, connection);
+        List<MjrStockTransDetailDTO> normalImport = Lists.newArrayList();
+        List<MjrStockTransDetailDTO> retrievalImport = Lists.newArrayList();
+        if (!DataUtil.isMapNullOrEmpty(exportedSerialInTrans)) {
+            for (MjrStockTransDetailDTO i: lstGoodsDetail) {
+                if (isRetrievalSerial(i, exportedSerialInTrans)) {
+                    i.setId(exportedSerialInTrans.get(i.getGoodsId() + "-" + i.getGoodsState() + "-" + i.getSerial()).toString());
+                    retrievalImport.add(i);
+                } else {
+                    normalImport.add(i);
+                }
+            }
+        } else {
+            normalImport = lstGoodsDetail;
+        }
+        //
+        if (!DataUtil.isListNullOrEmpty(retrievalImport)) {
+            processRetrievalSerial(mjrStockTransDTO, retrievalImport, connection);
+        }
         //
         List paramsStockTransDetail;
         List paramsStockGoodsSerial;
@@ -724,17 +883,17 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         StringBuilder sqlStockGoods = new StringBuilder();
         //STOCK_TRANS_DETAIL
         sqlStockTransDetail.append(" Insert into MJR_STOCK_TRANS_DETAIL ");
-        sqlStockTransDetail.append(" (ID,STOCK_TRANS_ID,GOODS_ID,GOODS_CODE,GOODS_STATE,IS_SERIAL,AMOUNT,SERIAL,INPUT_PRICE,CELL_CODE, total_money, unit_name, volume, weight,PRODUCE_DATE,EXPIRE_DATE,DESCRIPTION  )  ");
-        sqlStockTransDetail.append(" values  (SEQ_MJR_STOCK_TRANS_DETAIL.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?) ");
+        sqlStockTransDetail.append(" (ID,STOCK_TRANS_ID,GOODS_ID,GOODS_CODE,GOODS_STATE,IS_SERIAL,AMOUNT,SERIAL,INPUT_PRICE,CELL_CODE, total_money, unit_name, volume, weight,PRODUCE_DATE,EXPIRE_DATE,DESCRIPTION, content)  ");
+        sqlStockTransDetail.append(" values  (SEQ_MJR_STOCK_TRANS_DETAIL.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?, ?) ");
         //STOCK_GOODS_SERIAL
         sqlStockGoodsSerial.append(" Insert into MJR_STOCK_GOODS_SERIAL  ");
-        sqlStockGoodsSerial.append(" (ID,CUST_ID,STOCK_ID,GOODS_ID,GOODS_STATE,CELL_CODE,AMOUNT,SERIAL,IMPORT_DATE,CHANGED_DATE,STATUS,PARTNER_ID,IMPORT_STOCK_TRANS_ID,INPUT_PRICE, volume, weight, PRODUCE_DATE,EXPIRE_DATE,DESCRIPTION )  ");
-        sqlStockGoodsSerial.append(" values (SEQ_MJR_STOCK_GOODS_SERIAL.nextval,?,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?) ");
+        sqlStockGoodsSerial.append(" (ID,CUST_ID,STOCK_ID,GOODS_ID,GOODS_STATE,CELL_CODE,AMOUNT,SERIAL,IMPORT_DATE,CHANGED_DATE,STATUS,PARTNER_ID,IMPORT_STOCK_TRANS_ID,INPUT_PRICE, volume, weight, PRODUCE_DATE,EXPIRE_DATE,DESCRIPTION, content)  ");
+        sqlStockGoodsSerial.append(" values (SEQ_MJR_STOCK_GOODS_SERIAL.nextval,?,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?, ?) ");
         sqlStockGoodsSerial.append(" LOG ERRORS INTO ERR$_MJR_STOCK_GOODS_SERIAL REJECT LIMIT UNLIMITED ");
         //STOCK_GOODS
         sqlStockGoods.append(" Insert into MJR_STOCK_GOODS ");
-        sqlStockGoods.append(" (ID,CUST_ID,STOCK_ID,GOODS_ID,GOODS_STATE,CELL_CODE,AMOUNT,IMPORT_DATE,CHANGED_DATE,STATUS,PARTNER_ID,IMPORT_STOCK_TRANS_ID,INPUT_PRICE, volume, weight, PRODUCE_DATE,EXPIRE_DATE,DESCRIPTION)  ");
-        sqlStockGoods.append(" values  (SEQ_MJR_STOCK_GOODS.nextval,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?)  ");
+        sqlStockGoods.append(" (ID,CUST_ID,STOCK_ID,GOODS_ID,GOODS_STATE,CELL_CODE,AMOUNT,IMPORT_DATE,CHANGED_DATE,STATUS,PARTNER_ID,IMPORT_STOCK_TRANS_ID,INPUT_PRICE, volume, weight, PRODUCE_DATE,EXPIRE_DATE,DESCRIPTION, content) ");
+        sqlStockGoods.append(" values  (SEQ_MJR_STOCK_GOODS.nextval,?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?,?,?,?,?,?,to_date(?,'dd/MM/yyyy hh24:mi:ss'),to_date(?,'dd/MM/yyyy hh24:mi:ss'),?, ?)  ");
         sqlStockGoods.append(" LOG ERRORS INTO ERR$_MJR_STOCK_GOODS_SERIAL REJECT LIMIT UNLIMITED ");
         //3. TAO PREPARE STATEMENT
         try {
@@ -744,7 +903,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
             //
             int count = 0;
             //
-            for (MjrStockTransDetailDTO goods : lstGoodsDetail) {
+            for (MjrStockTransDetailDTO goods : normalImport) {
                 //
                 count++;
                 //DETAIL
@@ -775,6 +934,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
                         prstmtInsertStockGoodsSerial.executeBatch();
                         prstmtInsertStockGoods.executeBatch();
                     } catch (SQLException e) {
+                        log.error(e.toString());
                         e.printStackTrace();
                     }
                     count = 0;
@@ -786,20 +946,41 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
                     prstmtInsertStockGoodsSerial.executeBatch();
                     prstmtInsertStockGoods.executeBatch();
                 } catch (SQLException e) {
+                    log.error(e.toString());
                     e.printStackTrace();
+                    return Responses.ERROR.getName();
                 }
             }
         } catch (SQLException e) {
-            log.info(e.toString());
+            log.error(e.toString());
             return Responses.ERROR.getName();
         } finally {
-            //
             FunctionUtils.closeStatement(prstmtInsertStockTransDetail);
             FunctionUtils.closeStatement(prstmtInsertStockGoodsSerial);
             FunctionUtils.closeStatement(prstmtInsertStockGoods);
         }
 
         return Responses.SUCCESS.getName();
+    }
+
+    private List setParamsRetrievalStockGoodsSerial(MjrStockTransDTO transDetail, MjrStockTransDetailDTO goods) {
+        List<String> paramsStockTrans = Lists.newArrayList();
+        paramsStockTrans.add(goods.getCellCode() != null ? goods.getCellCode() : "");
+        paramsStockTrans.add(transDetail.getCreatedDate());
+        paramsStockTrans.add(transDetail.getCreatedDate());
+        paramsStockTrans.add(goods.getPartnerId());
+        paramsStockTrans.add(transDetail.getId());
+        paramsStockTrans.add(goods.getInputPrice());
+        paramsStockTrans.add(goods.getOutputPrice());
+        paramsStockTrans.add(Constants.STATUS.ACTIVE);
+        paramsStockTrans.add(goods.getWeight());
+        paramsStockTrans.add(goods.getVolume());
+        paramsStockTrans.add(goods.getDescription());
+        paramsStockTrans.add(goods.getProduceDate());
+        paramsStockTrans.add(goods.getExpireDate());
+        paramsStockTrans.add(goods.getContent());
+        paramsStockTrans.add(goods.getId());
+        return paramsStockTrans;
     }
 
     private List setParamsStockTransDetail(MjrStockTransDTO transDetail, MjrStockTransDetailDTO goods) {
@@ -820,6 +1001,7 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         paramsStockTrans.add(goods.getProduceDate());
         paramsStockTrans.add(goods.getExpireDate());
         paramsStockTrans.add(goods.getDescription());
+        paramsStockTrans.add(goods.getContent());
         return paramsStockTrans;
     }
 
@@ -839,18 +1021,19 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         paramsStockTrans.add(transDetail.getId());
         paramsStockTrans.add(goods.getInputPrice());
         if (!DataUtil.isNullOrEmpty(goods.getVolume())) {
-            paramsStockTrans.add(String.valueOf(Math.round(1000000 * Double.valueOf(goods.getVolume()) / Double.valueOf(goods.getAmount())) / 1000000D));
+            paramsStockTrans.add(String.valueOf(Math.round(1000000 * Double.parseDouble(goods.getVolume()) / Double.parseDouble(goods.getAmount())) / 1000000D));
         } else {
             paramsStockTrans.add(goods.getVolume());
         }
         if (!DataUtil.isNullOrEmpty(goods.getWeight())) {
-            paramsStockTrans.add(String.valueOf(Math.round(1000000 * Double.valueOf(goods.getWeight()) / Double.valueOf(goods.getAmount())) / 1000000D));
+            paramsStockTrans.add(String.valueOf(Math.round(1000000 * Double.parseDouble(goods.getWeight()) / Double.parseDouble(goods.getAmount())) / 1000000D));
         } else {
             paramsStockTrans.add(goods.getWeight());
         }
         paramsStockTrans.add(goods.getProduceDate());
         paramsStockTrans.add(goods.getExpireDate());
         paramsStockTrans.add(goods.getDescription());
+        paramsStockTrans.add(goods.getContent());
 
         return paramsStockTrans;
     }
@@ -870,18 +1053,19 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         paramsStockTrans.add(transDetail.getId());
         paramsStockTrans.add(goods.getInputPrice());
         if (!DataUtil.isNullOrEmpty(goods.getVolume())) {
-            paramsStockTrans.add(String.valueOf(Math.round(1000000 * Double.valueOf(goods.getVolume()) / Double.valueOf(goods.getAmount())) / 1000000D));
+            paramsStockTrans.add(String.valueOf(Math.round(1000000 * Double.parseDouble(goods.getVolume()) / Double.parseDouble(goods.getAmount())) / 1000000D));
         } else {
             paramsStockTrans.add(goods.getVolume());
         }
         if (!DataUtil.isNullOrEmpty(goods.getWeight())) {
-            paramsStockTrans.add(String.valueOf(Math.round(1000000 * Double.valueOf(goods.getWeight()) / Double.valueOf(goods.getAmount())) / 1000000D));
+            paramsStockTrans.add(String.valueOf(Math.round(1000000 * Double.parseDouble(goods.getWeight()) / Double.parseDouble(goods.getAmount())) / 1000000D));
         } else {
             paramsStockTrans.add(goods.getWeight());
         }
         paramsStockTrans.add(goods.getProduceDate());
         paramsStockTrans.add(goods.getExpireDate());
         paramsStockTrans.add(goods.getDescription());
+        paramsStockTrans.add(goods.getContent());
 
         return paramsStockTrans;
     }

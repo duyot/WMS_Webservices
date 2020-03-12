@@ -6,6 +6,7 @@ import com.wms.dto.MjrStockTransDTO;
 import com.wms.dto.MjrStockTransDetailDTO;
 import com.wms.dto.ResponseObject;
 import com.wms.dto.StockTransDTO;
+import com.wms.utils.JSONUtils;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,7 @@ public class StockManagementServices {
     @RequestMapping(value = "/import", produces = "application/json", method = RequestMethod.POST)
     public ResponseObject importStock(@RequestBody StockTransDTO stockTransDTO) {
         log.info("-------------------------------");
+        log.info(JSONUtils.object2JSONString(stockTransDTO));
         ResponseObject importResult = stockManagementBusiness.importStock(stockTransDTO.getMjrStockTransDTO(), stockTransDTO.getLstMjrStockTransDetail());
         log.info("Import result: " + importResult);
         return importResult;

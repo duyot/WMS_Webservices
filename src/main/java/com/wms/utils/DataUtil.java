@@ -788,5 +788,9 @@ public class DataUtil {
         return lst == null || lst.isEmpty();
     }
 
+    public static boolean isMapNullOrEmpty(Map<?,?> map) {
+        return map == null || map.isEmpty();
+    }
+
 
 }
