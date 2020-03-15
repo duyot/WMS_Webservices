@@ -31,6 +31,7 @@ public class MjrStockGoodsDTO extends BaseDTO {
     private String expireDate;
     private String description;
     private String content;
+    private String requestAmount;
 
     public MjrStockGoodsDTO(String id, String custId, String stockId, String goodsId, String goodsState, String cellCode, String amount, String importDate, String changeDate, String status, String partnerId, String importStockTransId, String inputPrice, String outputPrice, String exportDate, String exportStockTransId, String volume, String weight, String produceDate, String expireDate, String description, String content) {
         this.id = id;
@@ -234,6 +235,14 @@ public class MjrStockGoodsDTO extends BaseDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getRequestAmount() {
+        return requestAmount;
+    }
+
+    public void setRequestAmount(String requestAmount) {
+        this.requestAmount = requestAmount;
     }
 
     @Override

@@ -14,6 +14,7 @@ public class RealExportExcelDTO {
     private String cellCode;
     private String description;
     private String produceDate;
+    private String requestAmount;
 
     public RealExportExcelDTO() {
     }
@@ -108,5 +109,13 @@ public class RealExportExcelDTO {
 
     public void setProduceDate(String produceDate) {
         this.produceDate = produceDate;
+    }
+
+    public String getRequestAmount() {
+        return requestAmount;
+    }
+
+    public void setRequestAmount(String requestAmount) {
+        this.requestAmount = requestAmount;
     }
 }
