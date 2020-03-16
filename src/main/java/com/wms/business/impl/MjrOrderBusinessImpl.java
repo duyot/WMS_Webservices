@@ -259,6 +259,7 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
             realExportExcelDTO.setGoodsCode(mjrOrderDetail.getGoodsCode());
             realExportExcelDTO.setGoodsState(mjrOrderDetail.getGoodsState());
             realExportExcelDTO.setAmount(mjrStockGoods1.getAmount());
+            realExportExcelDTO.setRequestAmount(mjrStockGoods1.getRequestAmount());
             realExportExcelDTO.setWeight(mjrStockGoods1.getWeight());
             realExportExcelDTO.setVolume(mjrStockGoods1.getVolume());
             realExportExcelDTO.setCellCode(mjrStockGoods1.getCellCode());
@@ -278,6 +279,7 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
             realExportExcelDTO.setGoodsCode(mjrOrderDetail.getGoodsCode());
             realExportExcelDTO.setGoodsState(mjrOrderDetail.getGoodsState());
             realExportExcelDTO.setAmount(mjrStockGoodsSerial.getAmount());
+            realExportExcelDTO.setRequestAmount("1");
             realExportExcelDTO.setWeight(mjrStockGoodsSerial.getWeight());
             realExportExcelDTO.setVolume(mjrStockGoodsSerial.getVolume());
             realExportExcelDTO.setCellCode(mjrStockGoodsSerial.getCellCode());

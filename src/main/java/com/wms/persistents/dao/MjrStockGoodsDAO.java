@@ -164,9 +164,14 @@ public class MjrStockGoodsDAO extends BaseDAOImpl<MjrStockGoods, Long> {
             currentAmount = i.getAmount();
             if (exportAmount > currentAmount) {
                 exportAmount -= currentAmount;
+                data.setRequestAmount(currentAmount +"");
+                if (lstCurrentStockGoods.indexOf(i) + 1 == lstCurrentStockGoods.size()){
+                    data.setRequestAmount(currentAmount +exportAmount +"");
+                }
                 lstResult.add(data);
             } else {
                 data.setAmount(exportAmount + "");
+                data.setRequestAmount(exportAmount +"");
                 lstResult.add(data);
                 break;
             }
