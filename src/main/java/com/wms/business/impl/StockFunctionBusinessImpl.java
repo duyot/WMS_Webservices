@@ -100,4 +100,9 @@ public class StockFunctionBusinessImpl implements StockFunctionInterface {
         return stockFunctionDAO.getKPIStorage(custId, type, userId);
     }
 
+    @Override
+    public InventoryInfoDTO getInventoryInfor(String custId) {
+        return stockFunctionDAO.getInventoryInfor(custId);
+    }
+
 }

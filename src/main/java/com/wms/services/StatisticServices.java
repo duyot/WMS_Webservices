@@ -2,6 +2,7 @@ package com.wms.services;
 
 import com.wms.business.interfaces.StatisticBusinessInterface;
 import com.wms.dto.ChartDTO;
+import com.wms.dto.InventoryInfoDTO;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,5 +43,10 @@ public class StatisticServices {
     @RequestMapping(value = "/getKPIStorage", produces = "application/json")
     public List<ChartDTO> getKPIStorage(@RequestParam("custId") String custId, @RequestParam("type") String type, @RequestParam("userId") String userId) {
         return statisticBusinessInterface.getKPIStorage(custId, Integer.parseInt(type), userId);
+    }
+
+    @RequestMapping(value = "/getInventoryInfor", produces = "application/json")
+    public InventoryInfoDTO getInventoryInfor(@RequestParam("custId") String custId) {
+        return statisticBusinessInterface.getInventoryInfor(custId);
     }
 }

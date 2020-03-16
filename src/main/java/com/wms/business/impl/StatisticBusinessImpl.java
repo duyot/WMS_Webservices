@@ -4,10 +4,7 @@ import com.google.common.collect.Lists;
 import com.wms.base.BaseBusinessInterface;
 import com.wms.business.interfaces.StatisticBusinessInterface;
 import com.wms.business.interfaces.StockFunctionInterface;
-import com.wms.dto.ChartDTO;
-import com.wms.dto.Condition;
-import com.wms.dto.SysMailReportDTO;
-import com.wms.dto.SysStatisticTopGoodsDTO;
+import com.wms.dto.*;
 import com.wms.utils.Constants;
 import com.wms.utils.DataUtil;
 import com.wms.utils.DateTimeUtils;
@@ -106,6 +103,10 @@ public class StatisticBusinessImpl implements StatisticBusinessInterface {
             lstResult.add(data);
         }
         return lstResult;
+    }
+
+    public InventoryInfoDTO getInventoryInfor(String custId) {
+        return stockFunctionBusiness.getInventoryInfor(custId);
     }
 
     private int[] getGoodsValueFromData(String data) {

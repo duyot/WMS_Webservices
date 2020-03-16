@@ -55,4 +55,8 @@ public interface StockFunctionInterface {
     //
     List<ChartDTO> getKPIStorage(String custId, int type, String userId);
 
+    //
+    InventoryInfoDTO getInventoryInfor(String custId);
+
+
 }

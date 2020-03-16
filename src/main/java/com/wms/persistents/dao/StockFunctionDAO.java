@@ -1008,6 +1008,41 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         return Responses.SUCCESS.getName();
     }
 
+    @Transactional
+    public InventoryInfoDTO getInventoryInfor(String custId) {
+        InventoryInfoDTO inventoryInfo = new InventoryInfoDTO();
+        //
+        StringBuilder sql1 = new StringBuilder();
+        sql1.append(" select count(*) total_goods_under_limit from ")
+                .append("( ")
+                    .append("select g.code, g.name, nvl(g.amount_storage_quota,0) quota_limit , sum(nvl(t.amount, 0)) stock_amount from cat_goods g ")
+                    .append("left join mjr_stock_goods_total t on t.goods_id = g.id ")
+                    .append("where g.cust_id = :custId ")
+                    .append("group by g.id, g.code, g.name, nvl(g.amount_storage_quota,0) ")
+                .append(") s ")
+                .append(" where (s.stock_amount - s.quota_limit) < 0 ");
+
+        Query ps = getSession().createSQLQuery(sql1.toString());
+        ps.setInteger("custId", Integer.parseInt(custId));
+        BigDecimal numOfGoodsUnderLimit = (BigDecimal) ps.uniqueResult();
+        //
+        StringBuilder sql2 = new StringBuilder();
+        sql2.append(" select count(*) total_lack_goods ")
+            .append("from ")
+            .append("( ")
+                .append("select * from mjr_stock_goods_total t ")
+                .append("where t.cust_id = :custId ")
+                .append(" and t.issue_amount < 0 ")
+            .append(") ");
+        ps = getSession().createSQLQuery(sql2.toString());
+        ps.setInteger("custId", Integer.parseInt(custId));
+        BigDecimal numOfGoodsLackWithOrder = (BigDecimal) ps.uniqueResult();
+        //
+        inventoryInfo.setNumOfGoodsUnderLimit(numOfGoodsUnderLimit.toPlainString());
+        inventoryInfo.setNumOfGoodsLackWithOrder(numOfGoodsLackWithOrder.toPlainString());
+        return inventoryInfo;
+    }
+
     private List setParamsRetrievalStockGoodsSerial(MjrStockTransDTO transDetail, MjrStockTransDetailDTO goods) {
         List<String> paramsStockTrans = Lists.newArrayList();
         paramsStockTrans.add(goods.getCellCode() != null ? goods.getCellCode() : "");
