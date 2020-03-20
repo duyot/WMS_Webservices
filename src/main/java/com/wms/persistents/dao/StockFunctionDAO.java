@@ -190,6 +190,44 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
     }
 
     @Transactional
+    public List<MjrStockTransDetailDTO> getListSerialAfterImport(String custId, String orderId, String lstSerial) {
+        Session session = getSession();
+        List<MjrStockTransDetailDTO> lstResultSerial = new ArrayList<MjrStockTransDetailDTO>();
+        MjrStockTransDetailDTO stockTransDetailDTO = null;
+        StringBuilder queryStringBuilder = new StringBuilder();
+        queryStringBuilder.append("select a.GOODS_ID, a.GOODS_STATE, a.serial from ")
+                .append(" MJR_STOCK_GOODS_SERIAL a, mjr_order b,  MJR_ORDER_DETAIL c ")
+                .append("     where b.id = ? ")
+                .append(" and b.id = c.ORDER_ID ")
+                .append(" and a.status =1 ")
+                .append(" and a.GOODS_ID = c.GOODS_ID ")
+                .append(" and ( ")
+                .append(lstSerial)
+                .append(" ) ")
+                .append(" order by a.goods_id desc ");
+        try {
+            Query ps = session.createSQLQuery(queryStringBuilder.toString())
+                    .addScalar("GOODS_ID", LongType.INSTANCE)
+                    .addScalar("GOODS_STATE", StringType.INSTANCE)
+                    .addScalar("serial", StringType.INSTANCE);
+            ps.setString(0, orderId);
+
+            List<Object[]> lstData = ps.list();
+            for (Object[] i : lstData) {
+                stockTransDetailDTO = new MjrStockTransDetailDTO();
+                stockTransDetailDTO.setGoodsId(i[0] == null ? "" : String.valueOf(i[0]));
+                stockTransDetailDTO.setGoodsState(i[1] == null ? "" : String.valueOf(i[1]));
+                stockTransDetailDTO.setSerial(i[2] == null ? "" : String.valueOf(i[2]));
+                lstResultSerial.add(stockTransDetailDTO);
+            }
+        } catch (Exception e) {
+            log.error(e.toString());
+            e.printStackTrace();
+        }
+        return lstResultSerial;
+    }
+
+    @Transactional
     public List<MjrStockTransDTO> getStockTransInfo(String lstStockTransId) {
 
         Session session = getSession();

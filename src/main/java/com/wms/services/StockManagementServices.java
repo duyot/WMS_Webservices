@@ -8,6 +8,8 @@ import com.wms.dto.ResponseObject;
 import com.wms.dto.StockTransDTO;
 import com.wms.utils.JSONUtils;
 import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,5 +92,13 @@ public class StockManagementServices {
     public List<MjrStockTransDTO> getListTransSerial(String custId, String goodsId, String serial) {
         return stockFunctionBusiness.getListTransSerial(custId,  goodsId, serial);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+    @RequestMapping(value = "/getListSerialAfterImport", produces = "application/json", method = RequestMethod.GET)
+    public List<MjrStockTransDetailDTO> getListSerialAfterImport(String custId, String orderId, String lstSerial) {
+        return stockFunctionBusiness.getListSerialAfterImport(custId,  orderId, lstSerial);
+    }
+
+
 
 }
