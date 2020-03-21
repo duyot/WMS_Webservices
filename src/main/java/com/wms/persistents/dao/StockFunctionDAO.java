@@ -1053,8 +1053,8 @@ public class StockFunctionDAO extends BaseDAOImpl<SysMenu, Long> {
         StringBuilder sql1 = new StringBuilder();
         sql1.append(" select count(*) total_goods_under_limit from ")
                 .append("( ")
-                    .append("select g.code, g.name, nvl(g.amount_storage_quota,0) quota_limit , sum(nvl(t.amount, 0)) stock_amount from cat_goods g ")
-                    .append("left join mjr_stock_goods_total t on t.goods_id = g.id ")
+                    .append("select g.code, g.name, nvl(g.amount_storage_quota,0) quota_limit , sum(nvl(t.amount, 0)) stock_amount from mjr_stock_goods_total t ")
+                    .append("left join cat_goods g on t.goods_id = g.id ")
                     .append("where g.cust_id = :custId ")
                     .append("group by g.id, g.code, g.name, nvl(g.amount_storage_quota,0) ")
                 .append(") s ")
