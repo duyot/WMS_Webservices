@@ -273,11 +273,11 @@ public class MjrStockGoodsSerial extends BaseModel {
         this.description = description;
     }
 
+    @Column(name = "CONTENT")
     public String getContent() {
         return content;
     }
 
-    @Column(name = "CONTENT")
     public void setContent(String content) {
         this.content = content;
     }

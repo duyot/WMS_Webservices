@@ -291,13 +291,13 @@ public class StockGoodsInforDAO extends BaseDAOImpl<SysMenu, Long> {
         allStockGoodsQuery.append("select gt.* from (\n")
                 .append(initSelectQuery)
                 .append(stockGoodsQuery)
-                .append(initWhereQuery)
                 .append(initJoinQuery)
+                .append(initWhereQuery)
                 .append(" \n union all \n")
                 .append(initSelectQuery)
                 .append(stockGoodsSerialQuery)
-                .append(initWhereQuery)
                 .append(initJoinQuery)
+                .append(initWhereQuery)
                 .append(" \n)gt order by gt.custid, gt.stockid, gt.goodsid desc");
 
         ps = getSession().createSQLQuery(allStockGoodsQuery.toString())
