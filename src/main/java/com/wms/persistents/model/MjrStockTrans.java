@@ -41,11 +41,17 @@ public class MjrStockTrans extends BaseModel {
     private String reasonName;
     private Long reasonId;
 
+    private String deliverySenderInfo;
+    private String deliveryReceiverInfo;
+    private String deliveryDescription;
+    private Long deliveryStatus;
+
     public MjrStockTrans() {
     }
 
     public MjrStockTrans(Long id, String code, Long custId, Long stockId, String contractNumber, String invoicetNumber, Long type, byte status, Date createdDate, String createdUser, Float transMoneyTotal,
-                         Float transMoneyDiscount, Float discountAmount, Float transMoneyRequire, String description, Long partnerId, String partnerName, Long receiveId, String receiveName, Long orderId, String orderCode, Long reasonId, String reasonName) {
+                         Float transMoneyDiscount, Float discountAmount, Float transMoneyRequire, String description, Long partnerId, String partnerName, Long receiveId, String receiveName, Long orderId, String orderCode, Long reasonId, String reasonName,
+                         String deliverySenderInfo,String deliveryReceiverInfo, String deliveryDescription, Long deliveryStatus ) {
         this.id = id;
         this.code = code;
         this.custId = custId;
@@ -69,6 +75,10 @@ public class MjrStockTrans extends BaseModel {
         this.orderCode = orderCode;
         this.reasonId = reasonId;
         this.reasonName = reasonName;
+        this.deliverySenderInfo = deliverySenderInfo;
+        this.deliveryReceiverInfo = deliveryReceiverInfo;
+        this.deliveryDescription = deliveryDescription;
+        this.deliveryStatus = deliveryStatus;
     }
 
 
@@ -289,13 +299,49 @@ public class MjrStockTrans extends BaseModel {
         this.reasonId = reasonId;
     }
 
+    @Column(name = "DELIVERY_SENDER_INFO")
+    public String getDeliverySenderInfo() {
+        return deliverySenderInfo;
+    }
+
+    public void setDeliverySenderInfo(String deliverySenderInfo) {
+        this.deliverySenderInfo = deliverySenderInfo;
+    }
+
+    @Column(name = "DELIVERY_RECEIVER_INFO")
+    public String getDeliveryReceiverInfo() {
+        return deliveryReceiverInfo;
+    }
+
+    public void setDeliveryReceiverInfo(String deliveryReceiverInfo) {
+        this.deliveryReceiverInfo = deliveryReceiverInfo;
+    }
+
+    @Column(name = "DELIVERY_DESCRIPTION")
+    public String getDeliveryDescription() {
+        return deliveryDescription;
+    }
+
+    public void setDeliveryDescription(String deliveryDescription) {
+        this.deliveryDescription = deliveryDescription;
+    }
+
+    @Column(name = "DELIVERY_STATUS")
+    public Long getDeliveryStatus() {
+        return deliveryStatus;
+    }
+
+    public void setDeliveryStatus(Long deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
+    }
+
     @Override
     public MjrStockTransDTO toDTO() {
         return new MjrStockTransDTO(id == null ? "" : id + "", code, custId == null ? "" : custId + "", stockId == null ? "" : stockId + "",
                 contractNumber, invoicetNumber, type == null ? "" : type + "", status + "", createdDate == null ? "" : DateTimeUtils.convertDateTimeToString(createdDate),
                 createdUser, transMoneyTotal == null ? "" : transMoneyTotal + "", transMoneyDiscount == null ? "" : transMoneyDiscount + "", discountAmount == null ? "" : discountAmount + "",
                 transMoneyRequire == null ? "" : transMoneyRequire + "", description,
-                partnerId == null ? "" : partnerId + "", partnerName, receiveId == null ? "" : receiveId + "", receiveName, orderId == null ? "" : orderId + "", orderCode,reasonId == null ? "" : reasonId + "", reasonName
+                partnerId == null ? "" : partnerId + "", partnerName, receiveId == null ? "" : receiveId + "", receiveName, orderId == null ? "" : orderId + "", orderCode,reasonId == null ? "" : reasonId + "", reasonName,deliverySenderInfo,deliveryReceiverInfo,deliveryDescription,deliveryStatus == null ? "" : deliveryStatus + ""
         );
     }
 }
