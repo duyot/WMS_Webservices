@@ -67,12 +67,16 @@ public class MjrStockGoodsSerialDAO extends BaseDAOImpl<MjrStockGoodsSerial, Lon
         lstCon.add(new Condition("stockId", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, mjrOrderDTO.getStockId()));
         lstCon.add(new Condition("goodsId", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, goodsDetail.getGoodsId()));
         lstCon.add(new Condition("goodsState", Constants.SQL_OPERATOR.EQUAL, goodsDetail.getGoodsState()));
-        lstCon.add(new Condition("serial", Constants.SQL_OPERATOR.EQUAL, goodsDetail.getSerial()));
+//        lstCon.add(new Condition("serial", Constants.SQL_OPERATOR.EQUAL, goodsDetail.getSerial()));
         lstCon.add(new Condition("status", Constants.SQL_PRO_TYPE.BYTE, Constants.SQL_OPERATOR.EQUAL, Constants.STATUS.ACTIVE));
 
         if (!DataUtil.isStringNullOrEmpty(mjrOrderDTO.getPartnerId()) && !mjrOrderDTO.getPartnerId().equals("-1")) {
             lstCon.add(new Condition("partnerId", Constants.SQL_PRO_TYPE.LONG, Constants.SQL_OPERATOR.EQUAL, mjrOrderDTO.getPartnerId()));
         }
+        Condition limitRow = new Condition();
+        limitRow.setOperator("LIMIT");
+        limitRow.setValue((int)Double.parseDouble(goodsDetail.getAmount()));
+        lstCon.add(limitRow);
         List<MjrStockGoodsSerial> lstResultSerial = findByConditionSession(lstCon, getSession());
         lstResultSerial.forEach(e -> {
             data.add(e.toDTO());
