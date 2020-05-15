@@ -273,20 +273,19 @@ public class MjrOrderBusinessImpl extends BaseBusinessImpl<MjrOrderDTO, MjrOrder
 
     public List<RealExportExcelDTO> convertStockGoodsSerialToExcelData(List<MjrStockGoodsSerialDTO> mjrStockGoodsSerials, MjrOrderDetailDTO mjrOrderDetail) {
         List<RealExportExcelDTO> realExportExcelDTOS = new ArrayList<>();
-        for (MjrStockGoodsSerialDTO mjrStockGoodsSerial : mjrStockGoodsSerials) {
-            RealExportExcelDTO realExportExcelDTO = new RealExportExcelDTO();
-            realExportExcelDTO.setUnitName(mjrOrderDetail.getUnitName());
-            realExportExcelDTO.setGoodsCode(mjrOrderDetail.getGoodsCode());
-            realExportExcelDTO.setGoodsState(mjrOrderDetail.getGoodsState());
-            realExportExcelDTO.setAmount(mjrStockGoodsSerial.getAmount());
-            realExportExcelDTO.setRequestAmount("1");
-            realExportExcelDTO.setWeight(mjrStockGoodsSerial.getWeight());
-            realExportExcelDTO.setVolume(mjrStockGoodsSerial.getVolume());
-            realExportExcelDTO.setCellCode(mjrStockGoodsSerial.getCellCode());
-            realExportExcelDTO.setDescription(mjrStockGoodsSerial.getDescription());
-            realExportExcelDTO.setProduceDate(mjrStockGoodsSerial.getProduceDate());
-            realExportExcelDTOS.add(realExportExcelDTO);
+
+        RealExportExcelDTO realExportExcelDTO = new RealExportExcelDTO();
+        realExportExcelDTO.setUnitName(mjrOrderDetail.getUnitName());
+        realExportExcelDTO.setGoodsCode(mjrOrderDetail.getGoodsCode());
+        realExportExcelDTO.setGoodsState(mjrOrderDetail.getGoodsState());
+        realExportExcelDTO.setAmount("0" );
+        realExportExcelDTO.setRequestAmount(mjrOrderDetail.getAmount());
+        if (mjrStockGoodsSerials != null && !mjrStockGoodsSerials.isEmpty()){
+            realExportExcelDTO.setWeight(mjrStockGoodsSerials.get(0).getWeight());
+            realExportExcelDTO.setVolume(mjrStockGoodsSerials.get(0).getVolume());
+            realExportExcelDTO.setAmount(mjrStockGoodsSerials.size()+"");
         }
+        realExportExcelDTOS.add(realExportExcelDTO);
         return realExportExcelDTOS;
     }
 }
