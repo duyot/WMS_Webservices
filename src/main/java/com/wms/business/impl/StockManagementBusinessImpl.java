@@ -2,6 +2,7 @@ package com.wms.business.impl;
 
 import com.google.common.collect.Lists;
 import com.wms.base.BaseBusinessInterface;
+import com.wms.business.interfaces.RevenueBusinessInterface;
 import com.wms.business.interfaces.StockFunctionInterface;
 import com.wms.business.interfaces.StockManagementBusinessInterface;
 import com.wms.dto.*;
@@ -41,6 +42,9 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
 
     @Autowired
     BaseBusinessInterface catPartnerBusiness;
+
+    @Autowired
+    RevenueBusinessInterface revenueBusiness;
 
     @Autowired
     SessionFactory sessionFactory;
@@ -268,7 +272,22 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
                 FunctionUtils.rollback(transaction);
                 return updateExportTotalResult;
             }
-            //4. Commit
+            //4. Update Revenue
+            RevenueDTO revenueDTO = new RevenueDTO();
+            revenueDTO.setCustId(mjrStockTransDTO.getCustId());
+            revenueDTO.setStockTransCode(mjrStockTransDTO.getCode());
+            revenueDTO.setStockTransId(mjrStockTransDTO.getId());
+            revenueDTO.setPartnerId(mjrStockTransDTO.getReceiveId());
+            revenueDTO.setDescription(mjrStockTransDTO.getDescription());
+            revenueDTO.setCreatedDate(mjrStockTransDTO.getCreatedDate());
+            revenueDTO.setCreatedUser(mjrStockTransDTO.getCreatedUser());
+            revenueDTO.setAmount(mjrStockTransDTO.getTransMoneyTotal());
+            revenueDTO.setVat("-1");
+            revenueDTO.setType("1");
+            revenueDTO.setCharge("0");
+            revenueBusiness.saveBySession(revenueDTO, session);
+
+            //5. Commit
             FunctionUtils.commit(transaction);
             //
             response.setStatusCode(Responses.SUCCESS.getName());
