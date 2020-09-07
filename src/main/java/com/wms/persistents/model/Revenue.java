@@ -31,9 +31,15 @@ public class Revenue extends BaseModel {
     private Long type;
     private String createdUser;
     private Date createdDate;
+    private Long paymentStatus;
+    private Double paymentAmount;
+    private String paymentDescription;
+    private Date paymentDate;
 
     public Revenue(Long id, Long custId, Long partnerId, Double amount, Double vat, Double charge, Long stockTransId,
-                      String stockTransCode, String description, Long type, String createdUser, Date createdDate) {
+                      String stockTransCode, String description, Long type, String createdUser, Date createdDate,
+                   Long paymentStatus, Double paymentAmount, String paymentDescription, Date paymentDate
+                   ) {
         this.id = id;
         this.custId = custId;
         this.partnerId = partnerId;
@@ -46,6 +52,10 @@ public class Revenue extends BaseModel {
         this.type = type;
         this.createdUser = createdUser;
         this.createdDate = createdDate;
+        this.paymentStatus = paymentStatus;
+        this.paymentAmount = paymentAmount;
+        this.paymentDescription = paymentDescription;
+        this.paymentDate = paymentDate;
     }
 
     public Revenue() {
@@ -159,6 +169,41 @@ public class Revenue extends BaseModel {
         this.createdDate = createdDate;
     }
 
+    @Column(name = "PAYMENT_STATUS")
+    public Long getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(Long paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+    @Column(name = "PAYMENT_AMOUNT")
+    public Double getPaymentAmount() {
+        return paymentAmount;
+    }
+
+    public void setPaymentAmount(Double paymentAmount) {
+        this.paymentAmount = paymentAmount;
+    }
+
+    @Column(name = "PAYMENT_DESCRIPTION")
+    public String getPaymentDescription() {
+        return paymentDescription;
+    }
+
+    public void setPaymentDescription(String paymentDescription) {
+        this.paymentDescription = paymentDescription;
+    }
+
+    @Column(name = "PAYMENT_DATE")
+    public Date getPaymentDate() {
+        return paymentDate;
+    }
+
+    public void setPaymentDate(Date paymentDate) {
+        this.paymentDate = paymentDate;
+    }
+
     @Override
     public BaseDTO toDTO() {
         return new RevenueDTO(id == null ? "" : id + "",
@@ -171,7 +216,11 @@ public class Revenue extends BaseModel {
                 stockTransCode,description,
                 type == null ? "" : String.valueOf(type),
                 createdUser,
-                createdDate == null ? "" : DateTimeUtils.convertDateTimeToString(createdDate, Constants.DATETIME_FORMAT.ddMMyyyy)
-        );
+                createdDate == null ? "" : DateTimeUtils.convertDateTimeToString(createdDate, Constants.DATETIME_FORMAT.ddMMyyyy),
+                paymentStatus == null ? "" : String.valueOf(paymentStatus),
+                paymentAmount == null ? "" : String.valueOf(paymentAmount),
+                paymentDescription,
+                paymentDate == null ? "" : DateTimeUtils.convertDateTimeToString(paymentDate, Constants.DATETIME_FORMAT.ddMMyyyy)
+                );
     }
 }

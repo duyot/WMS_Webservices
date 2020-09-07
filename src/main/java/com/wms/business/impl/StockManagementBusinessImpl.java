@@ -285,6 +285,7 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
             revenueDTO.setVat("-1");
             revenueDTO.setType("1");
             revenueDTO.setCharge("0");
+            revenueDTO.setPaymentStatus("1");
             revenueBusiness.saveBySession(revenueDTO, session);
 
             //5. Commit

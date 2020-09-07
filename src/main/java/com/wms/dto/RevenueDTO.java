@@ -23,9 +23,16 @@ public class RevenueDTO extends BaseDTO {
     private String typeValue;
     private String createdUser;
     private String createdDate;
+    private String paymentStatus;
+    private String paymentAmount;
+    private String paymentDescription;
+    private String paymentDate;
+
 
     public RevenueDTO(String id, String custId, String partnerId, String amount, String vat, String charge, String stockTransId,
-                      String stockTransCode, String description, String type, String createdUser, String createdDate) {
+                      String stockTransCode, String description, String type, String createdUser, String createdDate,
+                      String paymentStatus, String paymentAmount, String paymentDescription, String paymentDate
+    ) {
         this.id = id;
         this.custId = custId;
         this.partnerId = partnerId;
@@ -38,6 +45,11 @@ public class RevenueDTO extends BaseDTO {
         this.type = type;
         this.createdUser = createdUser;
         this.createdDate = createdDate;
+        this.paymentStatus = paymentStatus;
+        this.paymentAmount = paymentAmount;
+        this.paymentDescription = paymentDescription;
+        this.paymentDate = paymentDate;
+
     }
 
     public RevenueDTO() {
@@ -147,6 +159,38 @@ public class RevenueDTO extends BaseDTO {
         this.createdDate = createdDate;
     }
 
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public String getPaymentAmount() {
+        return paymentAmount;
+    }
+
+    public void setPaymentAmount(String paymentAmount) {
+        this.paymentAmount = paymentAmount;
+    }
+
+    public String getPaymentDescription() {
+        return paymentDescription;
+    }
+
+    public void setPaymentDescription(String paymentDescription) {
+        this.paymentDescription = paymentDescription;
+    }
+
+    public String getPaymentDate() {
+        return paymentDate;
+    }
+
+    public void setPaymentDate(String paymentDate) {
+        this.paymentDate = paymentDate;
+    }
+
     @Override
     public String toString() {
         return "RevenueDTO{" +
@@ -162,6 +206,10 @@ public class RevenueDTO extends BaseDTO {
                 ", type='" + type + '\'' +
                 ", createdUser='" + createdUser + '\'' +
                 ", createdDate='" + createdDate + '\'' +
+                ", paymentStatus='" + paymentStatus + '\'' +
+                ", paymentAmount='" + paymentAmount + '\'' +
+                ", paymentDescription='" + paymentDescription + '\'' +
+                ", paymentDate='" + paymentDate + '\'' +
                 '}';
     }
 
@@ -178,8 +226,12 @@ public class RevenueDTO extends BaseDTO {
                 stockTransCode,description,
                 !StringUtils.validString(type) ? null : Long.valueOf(type),
                 createdUser,
-                !StringUtils.validString(createdDate) ? null : DateTimeUtils.convertStringToDate(createdDate)
-        );
+                !StringUtils.validString(createdDate) ? null : DateTimeUtils.convertStringToDate(createdDate),
+                !StringUtils.validString(paymentStatus) ? null : Long.valueOf(paymentStatus),
+                !StringUtils.validString(paymentAmount) ? null : Double.valueOf(paymentAmount),
+                paymentDescription,
+                !StringUtils.validString(paymentDate) ? null : DateTimeUtils.convertStringToDate(paymentDate)
+                );
     }
 
 }
