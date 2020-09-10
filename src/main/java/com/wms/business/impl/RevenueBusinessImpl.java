@@ -27,4 +27,9 @@ public class RevenueBusinessImpl extends BaseBusinessImpl<RevenueDTO, RevenueDAO
         this.tDTO = new RevenueDTO();
     }
 
+    @Override
+    public List<RevenueDTO> getSumRevenue(String custId, String partnerId, String startDate, String endDate) {
+        return revenueDAO.getSumRevenue(custId, partnerId, startDate, endDate);
+    }
+
 }
