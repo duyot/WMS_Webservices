@@ -16,11 +16,17 @@ public class CatStockCell extends BaseModel {
     private Long id;
     private String code;
     private Long stockId;
+    private Double maxWeight;
+    private Double maxVolume;
+    private Long manyCodes;
 
-    public CatStockCell(Long id, String code, Long stockId) {
+    public CatStockCell(Long id, String code, Long stockId, Double maxWeight, Double maxVolume, Long manyCodes) {
         this.id = id;
         this.code = code;
         this.stockId = stockId;
+        this.maxWeight = maxWeight;
+        this.maxVolume = maxVolume;
+        this.manyCodes = manyCodes;
     }
 
     public CatStockCell() {
@@ -61,8 +67,34 @@ public class CatStockCell extends BaseModel {
         this.stockId = stockId;
     }
 
+    @Column(name = "MAX_WEIGHT")
+    public Double getMaxWeight() {
+        return maxWeight;
+    }
+
+    public void setMaxWeight(Double maxWeight) {
+        this.maxWeight = maxWeight;
+    }
+    @Column(name = "MAX_VOLUME")
+    public Double getMaxVolume() {
+        return maxVolume;
+    }
+
+    public void setMaxVolume(Double maxVolume) {
+        this.maxVolume = maxVolume;
+    }
+
+    @Column(name = "MANY_CODES")
+    public Long getManyCodes() {
+        return manyCodes;
+    }
+
+    public void setManyCodes(Long manyCodes) {
+        this.manyCodes = manyCodes;
+    }
+
     @Override
     public BaseDTO toDTO() {
-        return new CatStockCellDTO(id == null ? "" : id + "", code, stockId == null ? "" : stockId + "");
+        return new CatStockCellDTO(id == null ? "" : id + "", code, stockId == null ? "" : stockId + "", maxWeight == null ? "" : maxWeight+"", maxVolume == null ? "" : maxVolume+"", manyCodes == null ? "" : manyCodes+"");
     }
 }

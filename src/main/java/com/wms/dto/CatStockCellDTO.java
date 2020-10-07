@@ -11,11 +11,17 @@ public class CatStockCellDTO extends BaseDTO {
     private String id;
     private String code;
     private String stockId;
+    private String maxWeight;
+    private String maxVolume;
+    private String manyCodes;
 
-    public CatStockCellDTO(String id, String code, String stockId) {
+    public CatStockCellDTO(String id, String code, String stockId, String maxWeight, String maxVolume, String manyCodes) {
         this.id = id;
         this.code = code;
         this.stockId = stockId;
+        this.maxWeight = maxWeight;
+        this.maxVolume = maxVolume;
+        this.manyCodes = manyCodes;
     }
 
     public CatStockCellDTO() {
@@ -45,9 +51,33 @@ public class CatStockCellDTO extends BaseDTO {
         this.stockId = stockId;
     }
 
+    public String getMaxWeight() {
+        return maxWeight;
+    }
+
+    public void setMaxWeight(String maxWeight) {
+        this.maxWeight = maxWeight;
+    }
+
+    public String getMaxVolume() {
+        return maxVolume;
+    }
+
+    public void setMaxVolume(String maxVolume) {
+        this.maxVolume = maxVolume;
+    }
+
+    public String getManyCodes() {
+        return manyCodes;
+    }
+
+    public void setManyCodes(String manyCodes) {
+        this.manyCodes = manyCodes;
+    }
+
     @Override
     public CatStockCell toModel() {
-        return new CatStockCell(!StringUtils.validString(id) ? null : Long.valueOf(id), code, !StringUtils.validString(stockId) ? null : Long.valueOf(stockId));
+        return new CatStockCell(!StringUtils.validString(id) ? null : Long.valueOf(id), code, !StringUtils.validString(stockId) ? null : Long.valueOf(stockId),!StringUtils.validString(maxWeight) ? null : Double.valueOf(maxWeight),!StringUtils.validString(maxVolume) ? null : Double.valueOf(maxVolume),!StringUtils.validString(manyCodes) ? null : Long.valueOf(manyCodes));
     }
 
     @Override
@@ -56,6 +86,9 @@ public class CatStockCellDTO extends BaseDTO {
                 "id='" + id + '\'' +
                 ", code='" + code + '\'' +
                 ", stockId='" + stockId + '\'' +
+                ", maxWeight='" + maxWeight + '\'' +
+                ", maxVolume='" + maxVolume + '\'' +
+                ", manyCodes='" + manyCodes + '\'' +
                 '}';
     }
 }
