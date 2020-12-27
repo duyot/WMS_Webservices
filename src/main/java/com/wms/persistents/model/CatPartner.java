@@ -21,8 +21,9 @@ public class CatPartner extends BaseModel {
     private String address;
     private String telNumber;
     private Long parentId;
+    private Long userManagerId;
 
-    public CatPartner(Long id, String code, String name, String address, String telNumber, byte status, Long custId, Long parentId) {
+    public CatPartner(Long id, String code, String name, String address, String telNumber, byte status, Long custId, Long parentId, Long userManagerId) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -31,6 +32,7 @@ public class CatPartner extends BaseModel {
         this.address = address;
         this.telNumber = telNumber;
         this.parentId = parentId;
+        this.userManagerId = userManagerId;
     }
 
     public CatPartner() {
@@ -116,8 +118,17 @@ public class CatPartner extends BaseModel {
         this.parentId = parentId;
     }
 
+    @Column(name = "USER_MANAGER_ID")
+    public Long getUserManagerId() {
+        return userManagerId;
+    }
+
+    public void setUserManagerId(Long userManagerId) {
+        this.userManagerId = userManagerId;
+    }
+
     @Override
     public BaseDTO toDTO() {
-        return new CatPartnerDTO(id == null ? "" : id + "", code, name, address, telNumber, status + "", custId == null ? "" : String.valueOf(custId), parentId == null ? "" : String.valueOf(parentId));
+        return new CatPartnerDTO(id == null ? "" : id + "", code, name, address, telNumber, status + "", custId == null ? "" : String.valueOf(custId), parentId == null ? "" : String.valueOf(parentId), userManagerId == null ? "" : String.valueOf(userManagerId));
     }
 }

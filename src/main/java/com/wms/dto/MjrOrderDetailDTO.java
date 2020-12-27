@@ -32,11 +32,12 @@ public class MjrOrderDetailDTO extends BaseDTO {
     private String expireDate;
     private String inputPrice;
     private String outputPrice;
+    private String content;
 
     public MjrOrderDetailDTO() {
     }
 
-    public MjrOrderDetailDTO(String id, String orderId, String goodsId, String goodsCode, String goodsState, String isSerial, String amount, String serial, String unitName, String partnerId, String totalMoney, String volume, String weight, String description,String goodsOrder,String produceDate,String expireDate,String inputPrice,String outputPrice) {
+    public MjrOrderDetailDTO(String id, String orderId, String goodsId, String goodsCode, String goodsState, String isSerial, String amount, String serial, String unitName, String partnerId, String totalMoney, String volume, String weight, String description,String goodsOrder,String produceDate,String expireDate,String inputPrice,String outputPrice, String content) {
         this.id = id;
         this.orderId = orderId;
         this.goodsId = goodsId;
@@ -56,7 +57,7 @@ public class MjrOrderDetailDTO extends BaseDTO {
         this.expireDate = expireDate;
         this.inputPrice = inputPrice;
         this.outputPrice = outputPrice;
-
+        this.content = content;
     }
 
     public String getId() {
@@ -211,6 +212,14 @@ public class MjrOrderDetailDTO extends BaseDTO {
         this.outputPrice = outputPrice;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     @Override
     public MjrOrderDetail toModel() {
         return new MjrOrderDetail(!StringUtils.validString(id) ? null : Long.valueOf(id),
@@ -227,7 +236,8 @@ public class MjrOrderDetailDTO extends BaseDTO {
                 !StringUtils.validString(produceDate) ? null :  DateTimeUtils.convertStringToDate(produceDate,"dd/MM/yyyy"),
                 !StringUtils.validString(expireDate) ? null : DateTimeUtils.convertStringToDate(expireDate,"dd/MM/yyyy"),
                 !StringUtils.validString(inputPrice) ? null : BigDecimal.valueOf(Double.valueOf(inputPrice)),
-                !StringUtils.validString(outputPrice) ? null : BigDecimal.valueOf(Double.valueOf(outputPrice))
+                !StringUtils.validString(outputPrice) ? null : BigDecimal.valueOf(Double.valueOf(outputPrice)),
+                content
                 );
     }
 

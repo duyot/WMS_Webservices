@@ -33,12 +33,13 @@ public class MjrOrderDetail extends BaseModel {
     private Date expireDate;
     private BigDecimal inputPrice;
     private BigDecimal outputPrice;
+    private String content;
 
 
     public MjrOrderDetail() {
     }
 
-    public MjrOrderDetail(Long id, Long orderId, Long goodsId, String goodsCode, String goodsState, Long isSerial, Float amount, String serial, String unitName, Long partnerId, Float totalMoney, Float volume, Float weight, String description,Long goodsOrder,Date produceDate,Date expireDate,BigDecimal inputPrice,BigDecimal outputPrice) {
+    public MjrOrderDetail(Long id, Long orderId, Long goodsId, String goodsCode, String goodsState, Long isSerial, Float amount, String serial, String unitName, Long partnerId, Float totalMoney, Float volume, Float weight, String description,Long goodsOrder,Date produceDate,Date expireDate,BigDecimal inputPrice,BigDecimal outputPrice,String content) {
         this.id = id;
         this.orderId = orderId;
         this.goodsId = goodsId;
@@ -58,6 +59,7 @@ public class MjrOrderDetail extends BaseModel {
         this.expireDate = expireDate;
         this.inputPrice = inputPrice;
         this.outputPrice = outputPrice;
+        this.content = content;
     }
 
     @Id
@@ -241,6 +243,15 @@ public class MjrOrderDetail extends BaseModel {
         this.outputPrice = outputPrice;
     }
 
+    @Column(name = "CONTENT")
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     @Override
     public MjrOrderDetailDTO toDTO() {
         return new MjrOrderDetailDTO(id == null ? "" : id + "", orderId == null ? "" : orderId + "", goodsId == null ? "" : goodsId + "",
@@ -251,7 +262,8 @@ public class MjrOrderDetail extends BaseModel {
                 produceDate == null ? "" : DateTimeUtils.convertDateToString(produceDate),
                 expireDate == null ? "" : DateTimeUtils.convertDateToString(expireDate),
                 inputPrice == null ? "" : inputPrice + "",
-                outputPrice == null ? "" : outputPrice + ""
+                outputPrice == null ? "" : outputPrice + "",
+                content
         );
     }
 

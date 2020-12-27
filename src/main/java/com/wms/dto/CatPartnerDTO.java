@@ -17,8 +17,9 @@ public class CatPartnerDTO extends BaseDTO {
     private String address;
     private String telNumber;
     private String parentId;
+    private String userManagerId;
 
-    public CatPartnerDTO(String id, String code, String name, String address, String telNumber, String status, String custId, String parentId) {
+    public CatPartnerDTO(String id, String code, String name, String address, String telNumber, String status, String custId, String parentId, String userManagerId) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -27,6 +28,8 @@ public class CatPartnerDTO extends BaseDTO {
         this.code = code;
         this.telNumber = telNumber;
         this.parentId = parentId;
+        this.userManagerId = userManagerId;
+
     }
 
     public CatPartnerDTO() {
@@ -96,11 +99,18 @@ public class CatPartnerDTO extends BaseDTO {
         this.address = address;
     }
 
+    public String getUserManagerId() {
+        return userManagerId;
+    }
+
+    public void setUserManagerId(String userManagerId) {
+        this.userManagerId = userManagerId;
+    }
 
     @Override
     public BaseModel toModel() {
         return new CatPartner(!StringUtils.validString(id) ? null : Long.valueOf(id), code, name, address, telNumber,
-                !StringUtils.validString(status) ? 0 : Byte.parseByte(status), !StringUtils.validString(custId) ? null : Long.valueOf(custId), !StringUtils.validString(parentId) ? null : Long.valueOf(parentId));
+                !StringUtils.validString(status) ? 0 : Byte.parseByte(status), !StringUtils.validString(custId) ? null : Long.valueOf(custId), !StringUtils.validString(parentId) ? null : Long.valueOf(parentId), !StringUtils.validString(userManagerId) ? null : Long.valueOf(userManagerId));
     }
 
     @Override
@@ -114,6 +124,7 @@ public class CatPartnerDTO extends BaseDTO {
                 ", status='" + status + '\'' +
                 ", custId='" + custId + '\'' +
                 ", parentId='" + parentId + '\'' +
+                ", userManagerId='" + userManagerId + '\'' +
                 '}';
     }
 }
