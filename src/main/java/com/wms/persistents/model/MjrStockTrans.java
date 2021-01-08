@@ -45,13 +45,14 @@ public class MjrStockTrans extends BaseModel {
     private String deliveryReceiverInfo;
     private String deliveryDescription;
     private Long deliveryStatus;
+    private Long userManagerId;
 
     public MjrStockTrans() {
     }
 
     public MjrStockTrans(Long id, String code, Long custId, Long stockId, String contractNumber, String invoicetNumber, Long type, byte status, Date createdDate, String createdUser, Float transMoneyTotal,
                          Float transMoneyDiscount, Float discountAmount, Float transMoneyRequire, String description, Long partnerId, String partnerName, Long receiveId, String receiveName, Long orderId, String orderCode, Long reasonId, String reasonName,
-                         String deliverySenderInfo,String deliveryReceiverInfo, String deliveryDescription, Long deliveryStatus ) {
+                         String deliverySenderInfo,String deliveryReceiverInfo, String deliveryDescription, Long deliveryStatus, Long userManagerId ) {
         this.id = id;
         this.code = code;
         this.custId = custId;
@@ -79,6 +80,7 @@ public class MjrStockTrans extends BaseModel {
         this.deliveryReceiverInfo = deliveryReceiverInfo;
         this.deliveryDescription = deliveryDescription;
         this.deliveryStatus = deliveryStatus;
+        this.userManagerId = userManagerId;
     }
 
 
@@ -335,13 +337,22 @@ public class MjrStockTrans extends BaseModel {
         this.deliveryStatus = deliveryStatus;
     }
 
+    @Column(name = "USER_MANAGER_ID")
+    public Long getUserManagerId() {
+        return userManagerId;
+    }
+
+    public void setUserManagerId(Long userManagerId) {
+        this.userManagerId = userManagerId;
+    }
+
     @Override
     public MjrStockTransDTO toDTO() {
         return new MjrStockTransDTO(id == null ? "" : id + "", code, custId == null ? "" : custId + "", stockId == null ? "" : stockId + "",
                 contractNumber, invoicetNumber, type == null ? "" : type + "", status + "", createdDate == null ? "" : DateTimeUtils.convertDateTimeToString(createdDate),
                 createdUser, transMoneyTotal == null ? "" : transMoneyTotal + "", transMoneyDiscount == null ? "" : transMoneyDiscount + "", discountAmount == null ? "" : discountAmount + "",
                 transMoneyRequire == null ? "" : transMoneyRequire + "", description,
-                partnerId == null ? "" : partnerId + "", partnerName, receiveId == null ? "" : receiveId + "", receiveName, orderId == null ? "" : orderId + "", orderCode,reasonId == null ? "" : reasonId + "", reasonName,deliverySenderInfo,deliveryReceiverInfo,deliveryDescription,deliveryStatus == null ? "" : deliveryStatus + ""
+                partnerId == null ? "" : partnerId + "", partnerName, receiveId == null ? "" : receiveId + "", receiveName, orderId == null ? "" : orderId + "", orderCode,reasonId == null ? "" : reasonId + "", reasonName,deliverySenderInfo,deliveryReceiverInfo,deliveryDescription,deliveryStatus == null ? "" : deliveryStatus + "",userManagerId == null ? "" : userManagerId + ""
         );
     }
 }

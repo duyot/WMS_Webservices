@@ -27,11 +27,12 @@ public class RevenueDTO extends BaseDTO {
     private String paymentAmount;
     private String paymentDescription;
     private String paymentDate;
-
+    private String userManagerId;
 
     public RevenueDTO(String id, String custId, String partnerId, String amount, String vat, String charge, String stockTransId,
                       String stockTransCode, String description, String type, String createdUser, String createdDate,
-                      String paymentStatus, String paymentAmount, String paymentDescription, String paymentDate
+                      String paymentStatus, String paymentAmount, String paymentDescription, String paymentDate,
+                      String userManagerId
     ) {
         this.id = id;
         this.custId = custId;
@@ -49,7 +50,7 @@ public class RevenueDTO extends BaseDTO {
         this.paymentAmount = paymentAmount;
         this.paymentDescription = paymentDescription;
         this.paymentDate = paymentDate;
-
+        this.userManagerId  = userManagerId;
     }
 
     public RevenueDTO() {
@@ -191,6 +192,14 @@ public class RevenueDTO extends BaseDTO {
         this.paymentDate = paymentDate;
     }
 
+    public String getUserManagerId() {
+        return userManagerId;
+    }
+
+    public void setUserManagerId(String userManagerId) {
+        this.userManagerId = userManagerId;
+    }
+
     @Override
     public String toString() {
         return "RevenueDTO{" +
@@ -210,6 +219,7 @@ public class RevenueDTO extends BaseDTO {
                 ", paymentAmount='" + paymentAmount + '\'' +
                 ", paymentDescription='" + paymentDescription + '\'' +
                 ", paymentDate='" + paymentDate + '\'' +
+                ", userManagerId='" + userManagerId + '\'' +
                 '}';
     }
 
@@ -230,7 +240,8 @@ public class RevenueDTO extends BaseDTO {
                 !StringUtils.validString(paymentStatus) ? null : Long.valueOf(paymentStatus),
                 !StringUtils.validString(paymentAmount) ? null : Double.valueOf(paymentAmount),
                 paymentDescription,
-                !StringUtils.validString(paymentDate) ? null : DateTimeUtils.convertStringToDate(paymentDate)
+                !StringUtils.validString(paymentDate) ? null : DateTimeUtils.convertStringToDate(paymentDate),
+                !StringUtils.validString(userManagerId) ? null : Long.valueOf(userManagerId)
                 );
     }
 

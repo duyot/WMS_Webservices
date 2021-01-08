@@ -52,6 +52,7 @@ public class MjrStockTransDTO extends BaseDTO {
     private String deliveryReceiverInfo;
     private String deliveryDescription;
     private String deliveryStatus;
+    private String userManagerId;
 
     public String getDeliverySenderInfo() {
         return deliverySenderInfo;
@@ -194,7 +195,7 @@ public class MjrStockTransDTO extends BaseDTO {
     }
 
     public MjrStockTransDTO(String id, String code, String custId, String stockId, String contractNumber, String invoiceNumber, String type, String status, String createdDate, String createdUser, String transMoneyTotal, String transMoneyDiscount, String discountAmount, String transMoneyRequire, String description, String partnerId, String partnerName, String receiveId, String receiveName, String orderId, String orderCode,String reasonId, String reasonName,
-                            String deliverySenderInfo,String deliveryReceiverInfo, String deliveryDescription, String deliveryStatus ) {
+                            String deliverySenderInfo,String deliveryReceiverInfo, String deliveryDescription, String deliveryStatus, String userManagerId ) {
         this.id = id;
         this.code = code;
         this.custId = custId;
@@ -222,6 +223,7 @@ public class MjrStockTransDTO extends BaseDTO {
         this.deliveryReceiverInfo = deliveryReceiverInfo;
         this.deliveryDescription = deliveryDescription;
         this.deliveryStatus = deliveryStatus;
+        this.userManagerId = userManagerId;
     }
 
     public String getPartnerId() {
@@ -360,6 +362,14 @@ public class MjrStockTransDTO extends BaseDTO {
         this.description = description;
     }
 
+    public String getUserManagerId() {
+        return userManagerId;
+    }
+
+    public void setUserManagerId(String userManagerId) {
+        this.userManagerId = userManagerId;
+    }
+
     @Override
     public MjrStockTrans toModel() {
         return new MjrStockTrans(!StringUtils.validString(id) ? null : Long.valueOf(id), code, !StringUtils.validString(custId) ? null : Long.valueOf(custId),
@@ -369,7 +379,7 @@ public class MjrStockTransDTO extends BaseDTO {
                 !StringUtils.validString(discountAmount) ? null : Float.valueOf(discountAmount), !StringUtils.validString(transMoneyRequire) ? null : Float.valueOf(transMoneyRequire),
                 description, !StringUtils.validString(partnerId) ? null : Long.valueOf(partnerId), partnerName, !StringUtils.validString(receiveId) ? null : Long.valueOf(receiveId), receiveName
                 , !StringUtils.validString(orderId) ? null : Long.valueOf(orderId), orderCode,!StringUtils.validString(reasonId) ? null : Long.valueOf(reasonId), reasonName,
-                deliverySenderInfo, deliveryReceiverInfo, deliveryDescription, !StringUtils.validString(deliveryStatus) ? null : Long.valueOf(deliveryStatus)
+                deliverySenderInfo, deliveryReceiverInfo, deliveryDescription, !StringUtils.validString(deliveryStatus) ? null : Long.valueOf(deliveryStatus), !StringUtils.validString(userManagerId) ? null : Long.valueOf(userManagerId)
         );
     }
 }

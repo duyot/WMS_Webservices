@@ -35,10 +35,12 @@ public class Revenue extends BaseModel {
     private Double paymentAmount;
     private String paymentDescription;
     private Date paymentDate;
+    private Long userManagerId;
 
     public Revenue(Long id, Long custId, Long partnerId, Double amount, Double vat, Double charge, Long stockTransId,
                       String stockTransCode, String description, Long type, String createdUser, Date createdDate,
-                   Long paymentStatus, Double paymentAmount, String paymentDescription, Date paymentDate
+                   Long paymentStatus, Double paymentAmount, String paymentDescription, Date paymentDate,
+                   Long userManagerId
                    ) {
         this.id = id;
         this.custId = custId;
@@ -56,6 +58,7 @@ public class Revenue extends BaseModel {
         this.paymentAmount = paymentAmount;
         this.paymentDescription = paymentDescription;
         this.paymentDate = paymentDate;
+        this.userManagerId = userManagerId;
     }
 
     public Revenue() {
@@ -204,6 +207,15 @@ public class Revenue extends BaseModel {
         this.paymentDate = paymentDate;
     }
 
+    @Column(name = "USER_MANAGER_ID")
+    public Long getUserManagerId() {
+        return userManagerId;
+    }
+
+    public void setUserManagerId(Long userManagerId) {
+        this.userManagerId = userManagerId;
+    }
+
     @Override
     public BaseDTO toDTO() {
         return new RevenueDTO(id == null ? "" : id + "",
@@ -220,7 +232,8 @@ public class Revenue extends BaseModel {
                 paymentStatus == null ? "" : String.valueOf(paymentStatus),
                 paymentAmount == null ? "" : String.valueOf(paymentAmount),
                 paymentDescription,
-                paymentDate == null ? "" : DateTimeUtils.convertDateTimeToString(paymentDate, Constants.DATETIME_FORMAT.ddMMyyyy)
+                paymentDate == null ? "" : DateTimeUtils.convertDateTimeToString(paymentDate, Constants.DATETIME_FORMAT.ddMMyyyy),
+                userManagerId == null ? "" : String.valueOf(userManagerId)
                 );
     }
 }

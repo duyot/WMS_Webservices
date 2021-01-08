@@ -282,6 +282,8 @@ public class StockManagementBusinessImpl implements StockManagementBusinessInter
             revenueDTO.setCreatedDate(mjrStockTransDTO.getCreatedDate());
             revenueDTO.setCreatedUser(mjrStockTransDTO.getCreatedUser());
             revenueDTO.setAmount(mjrStockTransDTO.getTransMoneyTotal());
+            revenueDTO.setUserManagerId(mjrStockTransDTO.getUserManagerId());
+
             revenueDTO.setVat("-1");
             revenueDTO.setType("1");
             revenueDTO.setCharge("0");
