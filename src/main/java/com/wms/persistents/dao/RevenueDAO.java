@@ -38,7 +38,7 @@ public class RevenueDAO extends BaseDAOImpl<Revenue, Long> {
         StringBuilder initSelectQuery = new StringBuilder();
         StringBuilder initWhereQuery = new StringBuilder(" WHERE 1=1 ");
 
-        initSelectQuery.append("  select a.partner_id as partnerId, sum(nvl(a.amount,0) + a.charge + nvl(decode(a.vat, -1,0),0)*nvl(a.amount,0)/100) as amount, sum(a.payment_amount) as paymentAmount\n" +
+        initSelectQuery.append("  select a.partner_id as partnerId, sum(nvl(a.amount,0) + a.charge + nvl(decode(a.vat, -1,0, a.vat),0)*nvl(a.amount,0)/100) as amount, sum(a.payment_amount) as paymentAmount\n" +
                 " from REVENUE_HISTORY a\n");
 
         if (!DataUtil.isStringNullOrEmpty(custId) && !custId.equals(Constants.STATS_ALL)) {
